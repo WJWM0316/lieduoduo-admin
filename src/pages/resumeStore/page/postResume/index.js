@@ -133,7 +133,7 @@ export default class PostResume extends Vue {
     ],
     introduce: [
       { min: 1, message: '更多介绍不得少于1个字', trigger: 'blur' },
-      { max: 250, message: '更多介绍最多输入250个字', trigger: 'blur' }
+      { max: 1000, message: '更多介绍最多输入1000个字', trigger: 'blur' }
     ],
   }
   rules4 = {

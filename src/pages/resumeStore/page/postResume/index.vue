@@ -665,7 +665,7 @@
                   style="width: 300px; float: left;margin-left: 90px;"
                   type="textarea"
                   :rows="6"
-                  placeholder="请填写更多介绍,250以内"
+                  placeholder="请填写更多介绍,1000以内"
                   v-model="form7.introduce" >
                 </el-input>
               </el-form-item>
