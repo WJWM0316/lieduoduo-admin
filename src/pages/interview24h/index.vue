@@ -246,7 +246,7 @@
 
     <ul class="h24_navigation">
       <li v-for="item in navigation" :key="item.type" :class="{active: item.active}" @click="tabClick(item.type)">{{item.msg}}</li>
-      <div class="export"><el-button type="primary" @click="download" :disabled="!canDownloadData" v-if="AdminShow == 0 || AdminShow == 2 || AdminShow == 1 || AdminShow == 4 || AdminShow == 5">导出</el-button></div>
+      <div class="export"><el-button type="primary" @click="download" :disabled="!canDownloadData" v-if="AdminShow == 0 || AdminShow == 2 || AdminShow == 1 || AdminShow == 4 || AdminShow == 5 || AdminShow===6">导出</el-button></div>
     </ul>
     <el-form ref="form" :model="form" label-width="80px" :inline="true">
       
