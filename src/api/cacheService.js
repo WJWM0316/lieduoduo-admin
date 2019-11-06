@@ -2,10 +2,10 @@
  * 管理本地存储
  */
 
-import Cache from 'web-storage-cache';
+import Cache from 'web-storage-cache'
 
-const lsCache = new Cache;
-const ssCache = new Cache({ storage: 'sessionStorage' });
+const lsCache = new Cache()
+const ssCache = new Cache({ storage: 'sessionStorage' })
 
 // 所有存储键
 const KEYS = {
@@ -31,7 +31,7 @@ const KEYS = {
   }
 }
 
-const namespace = 'zike';
+const namespace = 'zike'
 
 /* eslint-disable */
 // 为存储键增加命名空间

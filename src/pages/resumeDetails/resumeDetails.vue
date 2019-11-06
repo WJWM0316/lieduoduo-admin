@@ -4,12 +4,12 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
+import Vue from 'vue'
+import Component from 'vue-class-component'
 
 @Component({
-  name: "resumeDetails",
-  prop: ""
+  name: 'resumeDetails',
+  prop: ''
 })
 export default class resumeDetails extends Vue {}
 </script>

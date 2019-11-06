@@ -122,7 +122,7 @@ export default class reviewDetails extends Vue {
   recruiterInfo = ''
   nowImg = ''
   isCheck = false
-  needReason = '' //是否需要审核原因
+  needReason = '' // 是否需要审核原因
   form = {
     result: '',
     reason: '',
@@ -133,7 +133,7 @@ export default class reviewDetails extends Vue {
     getReviewDetailsApi(id).then(res => {
       console.log(res)
       this.personalInfo = res.data.data.applyInfo
-      this.identityInfo = res.data.data.identityInfo;
+      this.identityInfo = res.data.data.identityInfo
       console.log(this.personalInfo)
       this.recruiterInfo = res.data.data.recruiterInfo
     })
@@ -152,25 +152,25 @@ export default class reviewDetails extends Vue {
   }
   /* 去编辑身份证信息 */
   toEdit (uid) {
-    this.$router.push({path: `/check/recruitmentOfficer/editUser/${uid}`})
+    this.$router.push({ path: `/check/recruitmentOfficer/editUser/${uid}` })
   }
-  /*设置审核结果 */
+  /* 设置审核结果 */
   setResult () {
     let param = {
       review_note: this.form.reason ? `${this.form.reason};${this.form.other}` : `${this.form.other}`
     }
-    //审核人员信息
+    // 审核人员信息
     if (this.form.result === 'true') {
       identityPassApi(this.checkId).then(res => {
         this.identityInfo.status = 1
         this.isCheck = false
-        this.$message({type: 'success', message: '审核成功'})
+        this.$message({ type: 'success', message: '审核成功' })
       })
     } else {
       identityFailApi(this.checkId, param).then(res => {
         this.identityInfo.status = 2
         this.isCheck = false
-        this.$message({type: 'error', message: '信息驳回成功'})
+        this.$message({ type: 'error', message: '信息驳回成功' })
       })
     }
   }

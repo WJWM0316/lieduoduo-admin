@@ -300,21 +300,20 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import lyoutContent from "COMPONENTS/Lyout/lyoutContent/lyoutContent.vue";
-import { getAdvisorUserListApi } from "API/commont";
-
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import lyoutContent from 'COMPONENTS/Lyout/lyoutContent/lyoutContent.vue'
+import { getAdvisorUserListApi } from 'API/commont'
 import {
   interviewsList,
   recommendPay,
   refund,
   dealStatus
-} from "API/resumeStore";
-import { getResumeCodeUrlApi, getRecruiterCodeUrlApi } from "API/interview";
+} from 'API/resumeStore'
+import { getResumeCodeUrlApi, getRecruiterCodeUrlApi, getPositionCodeUrlApi } from 'API/interview'
 @Component({
-  name: "invitPro",
-  prop: "",
+  name: 'invitPro',
+  prop: '',
   components: {
     lyoutContent
   }
@@ -323,47 +322,47 @@ export default class invitPro extends Vue {
   tableHeight = 0;
   showSecond = false; /* 当选择不合适才出现第二级 */
   form = {
-    commonKey1: "",
-    dealStatusId: "",
-    interviewNotSuitTypeId: "",
-    startTime: "",
-    endTime: "",
-    isJobhunterApply: "",
+    commonKey1: '',
+    dealStatusId: '',
+    interviewNotSuitTypeId: '',
+    startTime: '',
+    endTime: '',
+    isJobhunterApply: '',
     page: 1,
     count: 20,
     followAdvisorUid: '',
     chargeStatus: ''
   };
   page = 1;
-  mobile = "";
+  mobile = '';
   searchType = {
-    key1: "company",
-    condition2: ""
+    key1: 'company',
+    condition2: ''
   };
   reason = []; /* 理由 */
   dealStatusList = []; /* 理由 */
   lastPage = 0;
-  result = "";
+  result = '';
   RusultForm = {
-    recommendId: "",
-    note: "",
-    type: "" /* 1是扣点，2是返点 */
+    recommendId: '',
+    note: '',
+    type: '' /* 1是扣点，2是返点 */
   };
   iconList = []; /* 不感兴趣标签栏 */
-  centerDialogVisible = false; //原因弹框
-  qrCode = ""; //二维码
-  tableData = []; //数据
-  dialogTitle = ""; //弹窗标题
-  iseditResult = false; //是否编辑
+  centerDialogVisible = false; // 原因弹框
+  qrCode = ''; // 二维码
+  tableData = []; // 数据
+  dialogTitle = ''; // 弹窗标题
+  iseditResult = false; // 是否编辑
 
   leftcontent = {
     total: 0,
-    title: "顾问推荐进展",
-    lastPage: "",
+    title: '顾问推荐进展',
+    lastPage: '',
     page: 1
   };
   tableHeight = 700;
-  pointsList = [{realname: '全部', id: 99}, {realname: '未扣点', id: 0}, {realname: '预扣点', id: 1}, {realname: '已扣点', id: 2}, {realname: '已返点', id: 3}]
+  pointsList = [{ realname: '全部', id: 99 }, { realname: '未扣点', id: 0 }, { realname: '预扣点', id: 1 }, { realname: '已扣点', id: 2 }, { realname: '已返点', id: 3 }]
   advisorUserList = []
   /**
    * @Author   小书包
@@ -371,40 +370,40 @@ export default class invitPro extends Vue {
    * @detail   顾问推荐 - 顾问列表
    * @return   {[type]}   [description]
    */
-  getAdvisorUserList() {
-    getAdvisorUserListApi().then(res => this.advisorUserList = res.data.data)
+  getAdvisorUserList () {
+    getAdvisorUserListApi().then(res => (this.advisorUserList = res.data.data))
   }
-  handlePageChange(nowPage) {
+  handlePageChange (nowPage) {
     // console.log(nowPage);
-    this.$refs["methods"].scrollZero();
-    this.form.page = nowPage;
-    this.getData(this.form.page);
+    this.$refs['methods'].scrollZero()
+    this.form.page = nowPage
+    this.getData(this.form.page)
   }
   /* 选择二级状态 */
-  choiceStatus(e) {
-    e == 1052 ? (this.showSecond = true) : (this.showSecond = false);
+  choiceStatus (e) {
+    e === 1052 ? (this.showSecond = true) : (this.showSecond = false)
   }
   /* 清除列表选项 */
-  resetForm(name) {
-    this.form.commonKey1 = "";
-    this.form.dealStatusId = "";
-    this.form.interviewNotSuitTypeId = "";
-    this.form.startTime = "";
-    this.form.endTime = "";
-    this.form.isJobhunterApply = false;
-    this.$refs[name].resetFields();
-    this.form.isJobhunterApply = "";
-    this.getData(1);
+  resetForm (name) {
+    this.form.commonKey1 = ''
+    this.form.dealStatusId = ''
+    this.form.interviewNotSuitTypeId = ''
+    this.form.startTime = ''
+    this.form.endTime = ''
+    this.form.isJobhunterApply = false
+    this.$refs[name].resetFields()
+    this.form.isJobhunterApply = ''
+    this.getData(1)
     // console.log(this.form);
   }
   /* 关闭二维码弹窗 */
-  closeTopic() {
+  closeTopic () {
     this.$nextTick(() => {
-      this.$refs["mobile"].style.display = "none";
-      this.$refs["qrCode"].style.display = "none";
-    });
+      this.$refs['mobile'].style.display = 'none'
+      this.$refs['qrCode'].style.display = 'none'
+    })
   }
-  forEachKeys(form, page = 1) {
+  forEachKeys (form, page = 1) {
     // 基础键，剩余键值对由用户选择
     let param = {
       page,
@@ -416,179 +415,179 @@ export default class invitPro extends Vue {
       followAdvisorUid: form.followAdvisorUid,
       chargeStatus: form.chargeStatus,
       isJobhunterApply: form.isJobhunterApply
-    };
-    param[this.searchType.key1] = this.form.commonKey1;
-    return param;
+    }
+    param[this.searchType.key1] = this.form.commonKey1
+    return param
   }
-  getData(page) {
-    if((this.form.startTime && !this.form.endTime) || (!this.form.startTime&& this.form.endTime)) {
-      this.$message({message: "面试日期必需选择区间时间", type: "warning"});
-      return;
-    } 
-    let obj = this.forEachKeys(this.form, page);
-    if(obj.isJobhunterApply === '') delete obj.isJobhunterApply
-    if(obj.dealStatusId === '') delete obj.dealStatusId
-    if(obj.company && !obj.company.trim()) delete obj.company
-    if(!obj.followAdvisorUid) delete obj.followAdvisorUid
-    if(obj.chargeStatus === '') delete obj.chargeStatus
-    if(!obj.startTime || !obj.endTime) {
+  getData (page) {
+    if ((this.form.startTime && !this.form.endTime) || (!this.form.startTime && this.form.endTime)) {
+      this.$message({ message: '面试日期必需选择区间时间', type: 'warning' })
+      return
+    }
+    let obj = this.forEachKeys(this.form, page)
+    if (obj.isJobhunterApply === '') delete obj.isJobhunterApply
+    if (obj.dealStatusId === '') delete obj.dealStatusId
+    if (obj.company && !obj.company.trim()) delete obj.company
+    if (!obj.followAdvisorUid) delete obj.followAdvisorUid
+    if (obj.chargeStatus === '') delete obj.chargeStatus
+    if (!obj.startTime || !obj.endTime) {
       delete obj.startTime
       delete obj.endTime
     }
-    if(obj.isJobhunterApply) {
+    if (obj.isJobhunterApply) {
       obj.isJobhunterApply = 1
     }
-    if(!obj.isJobhunterApply) {
+    if (!obj.isJobhunterApply) {
       delete obj.isJobhunterApply
     }
     interviewsList(obj).then(res => {
-      this.tableData = res.data.data;
-      this.leftcontent.lastPage = res.data.meta.lastPage;
-      this.leftcontent.total = res.data.meta.total;
+      this.tableData = res.data.data
+      this.leftcontent.lastPage = res.data.meta.lastPage
+      this.leftcontent.total = res.data.meta.total
       this.tableData.forEach(item => {
-        item.jobhunter.isShowMobile = false;
-        item.recrutier.isShowMobile = false;
+        item.jobhunter.isShowMobile = false
+        item.recrutier.isShowMobile = false
         if (item.interview !== null) {
           if (/(55|54|57|58|60|61|100)/.test(item.interview.status)) {
-            item.interview.isAutomatic = true;
+            item.interview.isAutomatic = true
           } else {
-            item.interview.isAutomatic = false;
+            item.interview.isAutomatic = false
           }
         }
-      });
-    });
+      })
+    })
   }
-  created() {
+  created () {
     this.dealStatus().then(() => {
-      this.getData(1);
+      this.getData(1)
       this.getAdvisorUserList()
     })
   }
-  dealStatus() {
+  dealStatus () {
     return dealStatus().then(res => {
-      this.dealStatusList = res.data.data.dealStatus;
-      this.reason = res.data.data.notSuitTypes;
-    });
+      this.dealStatusList = res.data.data.dealStatus
+      this.reason = res.data.data.notSuitTypes
+    })
   }
   /* 生成二维码 */
-  getQr(type, uid) {
+  getQr (type, uid) {
     switch (type) {
       case 1:
         // 招聘官主页
-        return getRecruiterCodeUrlApi({ id: uid });
-        break;
+        getRecruiterCodeUrlApi({ id: uid })
+        break
       case 2:
         // 简历二维码
-        return getResumeCodeUrlApi({ id: uid });
-        break;
+        getResumeCodeUrlApi({ id: uid })
+        break
       case 3:
-        if (uid === 0) return;
-        return getPositionCodeUrlApi({ id: uid });
-        break;
+        if (uid === 0) return
+        getPositionCodeUrlApi({ id: uid })
+        break
     }
   }
   // 看二维码
   /* 生成小程序码 */
   /* 展示手机 */
-  showPhone(e, mobile) {
+  showPhone (e, mobile) {
     // console.log(mobile);
-    if (this.timeout !== null) clearTimeout(this.timeout);
-    this.mobile = mobile || "用户未绑定手机";
+    if (this.timeout !== null) clearTimeout(this.timeout)
+    this.mobile = mobile || '用户未绑定手机'
     this.$nextTick(() => {
-      this.$refs["mobile"].style.display = "block";
-      this.$refs["mobile"].style.left = e.clientX + "px";
-      this.$refs["mobile"].style.top = e.clientY + window.scrollY + "px";
-    });
+      this.$refs['mobile'].style.display = 'block'
+      this.$refs['mobile'].style.left = e.clientX + 'px'
+      this.$refs['mobile'].style.top = e.clientY + window.scrollY + 'px'
+    })
   }
-  async creatLink(e, uid, index, type) {
+  async creatLink (e, uid, index, type) {
     // console.log(e);
     // console.log(uid, index, type);
     // console.log(e.clientX, e.clientY, "e");
     // console.log(window.scrollY);
-    this.qrCode = "";
+    this.qrCode = ''
     // 是否已经加载过二维码
     // console.log("this.tableData[index]", this.tableData[index]);
     if (this.tableData[index].qrCode && type === 1) {
-      this.qrCode = this.tableData[index].qrCode;
+      this.qrCode = this.tableData[index].qrCode
       this.$nextTick(() => {
-        this.$refs["qrCode"].style.display = "block";
-        this.$refs["qrCode"].style.left = e.clientX + "px";
-        this.$refs["qrCode"].style.top = e.clientY + window.scrollY + "px";
-      });
-      return;
+        this.$refs['qrCode'].style.display = 'block'
+        this.$refs['qrCode'].style.left = e.clientX + 'px'
+        this.$refs['qrCode'].style.top = e.clientY + window.scrollY + 'px'
+      })
+      return
     } else if (this.tableData[index].resumeQrCode && type === 2) {
-      this.qrCode = this.tableData[index].resumeQrCode;
+      this.qrCode = this.tableData[index].resumeQrCode
       this.$nextTick(() => {
-        this.$refs["qrCode"].style.display = "block";
-        this.$refs["qrCode"].style.left = e.clientX + "px";
-        this.$refs["qrCode"].style.top = e.clientY + window.scrollY + "px";
-      });
-      return;
+        this.$refs['qrCode'].style.display = 'block'
+        this.$refs['qrCode'].style.left = e.clientX + 'px'
+        this.$refs['qrCode'].style.top = e.clientY + window.scrollY + 'px'
+      })
+      return
     } else if (this.tableData[index].jobQrCode && type === 3) {
-      this.qrCode = this.tableData[index].jobQrCode;
+      this.qrCode = this.tableData[index].jobQrCode
       this.$nextTick(() => {
-        this.$refs["qrCode"].style.display = "block";
-        this.$refs["qrCode"].style.left = e.clientX + "px";
-        this.$refs["qrCode"].style.top = e.clientY + window.scrollY + "px";
-      });
-      return;
+        this.$refs['qrCode'].style.display = 'block'
+        this.$refs['qrCode'].style.left = e.clientX + 'px'
+        this.$refs['qrCode'].style.top = e.clientY + window.scrollY + 'px'
+      })
+      return
     }
 
     this.$nextTick(() => {
-      this.$refs["qrCode"].style.display = "block";
-      this.$refs["qrCode"].style.left = e.clientX + "px";
-      this.$refs["qrCode"].style.top = e.clientY + window.scrollY + "px";
-    });
-    let res = await this.getQr(type, uid);
+      this.$refs['qrCode'].style.display = 'block'
+      this.$refs['qrCode'].style.left = e.clientX + 'px'
+      this.$refs['qrCode'].style.top = e.clientY + window.scrollY + 'px'
+    })
+    let res = await this.getQr(type, uid)
     if (type === 1) {
-      this.qrCode = res.data.data.qrCodeUrl;
-      this.tableData[index].qrCode = res.data.data.qrCodeUrl;
+      this.qrCode = res.data.data.qrCodeUrl
+      this.tableData[index].qrCode = res.data.data.qrCodeUrl
     } else if (type === 2) {
-      this.qrCode = res.data.data.qrCodeUrl;
-      this.tableData[index].resumeQrCode = res.data.data.qrCodeUrl;
+      this.qrCode = res.data.data.qrCodeUrl
+      this.tableData[index].resumeQrCode = res.data.data.qrCodeUrl
     } else {
-      this.qrCode = res.data.data.qrCodeUrl;
-      this.tableData[index].jobQrCode = res.data.data.qrCodeUrl;
+      this.qrCode = res.data.data.qrCodeUrl
+      this.tableData[index].jobQrCode = res.data.data.qrCodeUrl
     }
   }
   /* status  是否处于编辑状态,title  标题 */
   /*  */
-  choiceType(type) {
-    return {};
+  choiceType (type) {
+    return {}
   }
   /* status 是否出现编辑弹框 */
   /* type  1 扣点  2 返点，3返点原因  4扣点原因 5 不合适原因 */
-  handleClick(status, title, id, type) {
+  handleClick (status, title, id, type) {
     // console.log(status, title, id, type);
-    this.dialogTitle = title;
-    this.centerDialogVisible = true;
-    this.iconList = [];
-    this.RusultForm.note = "";
-    let nowRow = this.tableData.filter(item => item.id === id)[0];
+    this.dialogTitle = title
+    this.centerDialogVisible = true
+    this.iconList = []
+    this.RusultForm.note = ''
+    let nowRow = this.tableData.filter(item => item.id === id)[0]
     // console.log(nowRow.chargeNote);
     switch (type) {
       case 1:
-        this.RusultForm.type = type;
-        this.RusultForm.recommendId = id;
-        this.iseditResult = status;
-        break;
+        this.RusultForm.type = type
+        this.RusultForm.recommendId = id
+        this.iseditResult = status
+        break
       case 2:
-        this.RusultForm.type = type;
-        this.RusultForm.recommendId = id;
-        this.iseditResult = status;
-        break;
+        this.RusultForm.type = type
+        this.RusultForm.recommendId = id
+        this.iseditResult = status
+        break
       case 3:
-        this.iseditResult = status;
-        this.result = nowRow.chargeNote;
-        break;
+        this.iseditResult = status
+        this.result = nowRow.chargeNote
+        break
       case 4:
-        this.iseditResult = status;
-        this.result = nowRow.chargeNote;
-        break;
+        this.iseditResult = status
+        this.result = nowRow.chargeNote
+        break
       case 5:
-        this.result = nowRow.interview.comment.extraDesc;
-        this.iconList = nowRow.interview.comment.reason.split(",");
-        break;
+        this.result = nowRow.interview.comment.extraDesc
+        this.iconList = nowRow.interview.comment.reason.split(',')
+        break
     }
 
     // [0];
@@ -607,25 +606,25 @@ export default class invitPro extends Vue {
     //
     //
   }
-  handertableHeight(e) {
-    this.tableHeight = e;
+  handertableHeight (e) {
+    this.tableHeight = e
   }
-  toPositionPath(id) {
+  toPositionPath (id) {
     // console.log(id);
     this.$router.push({
-      path: "/positionManage/positionAuditDetail",
+      path: '/positionManage/positionAuditDetail',
       query: { id }
-    });
+    })
   }
   // 确认扣返点
   // 确认扣返点
-  checkNote() {
-    if (this.RusultForm.note === "") {
+  checkNote () {
+    if (this.RusultForm.note === '') {
       this.$message({
-        message: "原因不能为空",
-        type: "warning"
-      });
-      return;
+        message: '原因不能为空',
+        type: 'warning'
+      })
+      return
     }
     if (this.RusultForm.type === 1) {
       // console.log("扣点");
@@ -633,10 +632,10 @@ export default class invitPro extends Vue {
         note: this.RusultForm.note
       }).then(res => {
         // console.log(res);
-        this.centerDialogVisible = false;
-        this.getData();
-        this.RusultForm.note = "";
-      });
+        this.centerDialogVisible = false
+        this.getData()
+        this.RusultForm.note = ''
+      })
       /* 扣点 */
     } else if (this.RusultForm.type === 2) {
       // console.log("返点"); /* 返点 */
@@ -644,10 +643,10 @@ export default class invitPro extends Vue {
         note: this.RusultForm.note
       }).then(res => {
         // console.log(res);
-        this.centerDialogVisible = false;
-        this.getData();
-        this.RusultForm.note = "";
-      });
+        this.centerDialogVisible = false
+        this.getData()
+        this.RusultForm.note = ''
+      })
     }
   }
 }

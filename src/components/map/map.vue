@@ -22,8 +22,8 @@
 </template>
 
 <script>
-  import mapSearch from './map'
-  export default mapSearch
+import mapSearch from './map'
+export default mapSearch
 </script>
 
 <style lang="less" scoped="scoped">

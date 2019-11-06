@@ -229,37 +229,29 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import ImageUploader from "@/components/imageUploader";
-import adminControl from "@/components/adminControl/index";
-import { fieldApi, uploadIdcardApi, getSalerListApi } from "API/commont";
-import { identityPassApi, identityFailApi } from "API/company";
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import ImageUploader from '@/components/imageUploader'
+import adminControl from '@/components/adminControl/index'
+import { getSalerListApi } from 'API/commont'
+import { identityPassApi, identityFailApi,
+  editAdminNameApi,
+  getRecruitersListApi
+} from 'API/company'
 import {
-  detectionMobileApi,
-  checkUserauthApi,
-  createdUserApi,
   getUserInfoApi,
   onCreatedRightApi,
   offCreatedRightApi,
   setDemandIdentityApi,
   delDemandIdentityApi
-} from "API/recruiter";
-import {
-  setCompanyInfoApi,
-  setuserInfoApi,
-  addCompanyAddressApi,
-  delCompanyAddressApi,
-  editAdminNameApi,
-  getRecruitersListApi
-} from "API/company";
-import { userInfo } from "os";
+} from 'API/recruiter'
+
 @Component({
-  name: "userInfo",
+  name: 'userInfo',
   watch: {
-    "form.result": {
-      handler(tags, oldTags) {
-        this.needReason = tags;
+    'form.result': {
+      handler (tags, oldTags) {
+        this.needReason = tags
       }
     }
   },
@@ -271,293 +263,293 @@ import { userInfo } from "os";
 export default class addUser extends Vue {
   pop = {
     isShow: false,
-    type: "position"
+    type: 'position'
   };
-  active = 0; //点击切换tab
-  AdminShow = ""; //管理员权限控制
-  needReason = ""; //审核结果
+  active = 0; // 点击切换tab
+  AdminShow = ''; // 管理员权限控制
+  needReason = ''; // 审核结果
   isCheck = false;
-  nowImg = ""; //当前大图预览显示的图片
-  isEditAdminName = false; //显示基本信息还是账户设置
+  nowImg = ''; // 当前大图预览显示的图片
+  isEditAdminName = false; // 显示基本信息还是账户设置
   showAdminWindow = false; // 是否显示招聘官弹窗
   nextAdmin = null; // 公司下一个管理员的信息
-  userInfo = ""; // 请求回来的所有用户信息
+  userInfo = ''; // 请求回来的所有用户信息
   createPositionRight = false; // 是否有职位发布权限
-  isDetection = ""; // 是否已校验身份证信息
+  isDetection = ''; // 是否已校验身份证信息
   isBindAdmin = false;
   isNewCompany = false;
   /* 身份证信息对象 */
   iDCard = {};
   /* 手机号码 */
   phone = {
-    mobile: ""
+    mobile: ''
   };
   companyInfo = {
-    realname: "",
+    realname: '',
     avatarIds: [],
     avatars: [],
-    companyEmail: "",
-    companyId: "",
-    companyInfo: "",
-    createPositionRight: "",
-    email: "",
-    gender: "",
+    companyEmail: '',
+    companyId: '',
+    companyInfo: '',
+    createPositionRight: '',
+    email: '',
+    gender: '',
     identityAuth: 0,
-    identityNum: "",
+    identityNum: '',
     isBlockCreatePosition: 0,
-    mobile: "",
-    name: "",
-    needRealNameAuth: "",
-    passportFront: "",
+    mobile: '',
+    name: '',
+    needRealNameAuth: '',
+    passportFront: '',
     passportFrontId: 0,
-    position: "",
-    status: "",
-    uid: "",
-    vkey: ""
+    position: '',
+    status: '',
+    uid: '',
+    vkey: ''
   };
   /* 身份信息 */
   personalInfo = {
-    name: "", // 姓名
-    gender: "",
-    realname: "", // 真实姓名
-    idNum: "", // 身份证号码
-    passportFront: "" // 身份证正面照片
+    name: '', // 姓名
+    gender: '',
+    realname: '', // 真实姓名
+    idNum: '', // 身份证号码
+    passportFront: '' // 身份证正面照片
   };
   companyName = {};
   saveParam = {
-    admin_uid: "",
-    group_id: ""
+    admin_uid: '',
+    group_id: ''
   };
   salesList = [];
   iconUploader = {
-    point: "",
+    point: '',
     width: 400,
-    height: "",
-    tips: "建议尺寸400X400px，JPG、PNG格式，图片小于5M。"
+    height: '',
+    tips: '建议尺寸400X400px，JPG、PNG格式，图片小于5M。'
   };
   form = {
-    result: "",
-    reason: "",
-    other: "" // 其他原因
+    result: '',
+    reason: '',
+    other: '' // 其他原因
   };
   /* 切换tab */
-  tab(e) {
-    console.log("e.target.className", e.target.className);
-    console.log("-----");
-    if (e.target.className.indexOf("userInfo") == -1) {
-      console.log("基本信息 ");
+  tab (e) {
+    console.log('e.target.className', e.target.className)
+    console.log('-----')
+    if (e.target.className.indexOf('userInfo') === -1) {
+      console.log('基本信息 ')
       this.$nextTick(() => {
-        this.userList();
-      });
-      this.isEditAdminName = true;
-    } else if (e.target.className.indexOf("editAdminName") == -1) {
-      console.log("账户设置");
+        this.userList()
+      })
+      this.isEditAdminName = true
+    } else if (e.target.className.indexOf('editAdminName') === -1) {
+      console.log('账户设置')
       this.$nextTick(() => {
-        this.getUserInfo();
-      });
-      this.isEditAdminName = false;
+        this.getUserInfo()
+      })
+      this.isEditAdminName = false
     }
   }
-  ground(e) {
-    this.$set(this.saveParam, "group_id", this.salesList[e].groupId);
-    this.$set(this.saveParam, "admin_uid", this.salesList[e].id);
+  ground (e) {
+    this.$set(this.saveParam, 'group_id', this.salesList[e].groupId)
+    this.$set(this.saveParam, 'admin_uid', this.salesList[e].id)
   }
-  async saveAdminName() {
-    console.log(this.saveParam);
-    if (this.saveParam.group_id === "") {
-      this.$message.error("请先选择跟进人");
+  async saveAdminName () {
+    console.log(this.saveParam)
+    if (this.saveParam.group_id === '') {
+      this.$message.error('请先选择跟进人')
     } else {
-      let res = await editAdminNameApi(this.$route.params.id, this.saveParam);
+      await editAdminNameApi(this.$route.params.id, this.saveParam)
       this.$message({
         showClose: true,
-        type: "success",
-        message: "保存成功"
-      });
+        type: 'success',
+        message: '保存成功'
+      })
     }
   }
-  /*设置审核结果 */
-  setResult() {
+  /* 设置审核结果 */
+  setResult () {
     let param = {
       review_note: this.form.reason
         ? `${this.form.reason};${this.form.other}`
         : `${this.form.other}`
-    };
-    //审核人员信息
-    if (this.form.result === "true") {
+    }
+    // 审核人员信息
+    if (this.form.result === 'true') {
       identityPassApi(this.checkId).then(res => {
-        this.personalInfo.identityAuth = 1;
-        this.isCheck = false;
-        this.$message({ type: "success", message: "审核成功" });
-      });
-      this.isCheck = false;
+        this.personalInfo.identityAuth = 1
+        this.isCheck = false
+        this.$message({ type: 'success', message: '审核成功' })
+      })
+      this.isCheck = false
     } else {
       identityFailApi(this.checkId, param).then(res => {
-        this.personalInfo.identityAuth = 0;
-        this.isCheck = false;
-        this.$message({ type: "error", message: "信息驳回成功" });
-      });
+        this.personalInfo.identityAuth = 0
+        this.isCheck = false
+        this.$message({ type: 'error', message: '信息驳回成功' })
+      })
     }
   }
   // 点击审核按钮
-  Review(id, type) {
-    this.type = type;
-    this.isCheck = true;
-    this.checkId = id;
+  Review (id, type) {
+    this.type = type
+    this.isCheck = true
+    this.checkId = id
   }
   /* 查看大图 */
-  showImg(imgUrl) {
-    this.nowImg = imgUrl;
+  showImg (imgUrl) {
+    this.nowImg = imgUrl
   }
   /* 隐藏大图 */
-  hiddenMask() {
-    this.nowImg = "";
+  hiddenMask () {
+    this.nowImg = ''
   }
   // 关闭移除招聘官
-  closeAdmin() {
-    this.showAdminWindow = false;
+  closeAdmin () {
+    this.showAdminWindow = false
   }
   /* 去编辑用户信息 */
-  toEdit() {
-    this.$router.push({ path: `/user/editUser/${this.$route.params.id}` });
+  toEdit () {
+    this.$router.push({ path: `/user/editUser/${this.$route.params.id}` })
   }
   /* 去查看公司审核 */
-  toCheckCompany(companyId) {
-    this.$router.push({ path: `/check/companyCheck/verify?id=${companyId}` });
+  toCheckCompany (companyId) {
+    this.$router.push({ path: `/check/companyCheck/verify?id=${companyId}` })
   }
   /* 移出公司 */
-  async removeUser() {
-    this.showAdminWindow = true;
+  async removeUser () {
+    this.showAdminWindow = true
     // this.is
-    this.isBindAdmin = true;
+    this.isBindAdmin = true
     // this.isNewCompany=false
-    this.companyInfo.realName=this.userInfo.name
+    this.companyInfo.realName = this.userInfo.name
 
-    console.log('this.companyInfo',this.companyInfo)
+    console.log('this.companyInfo', this.companyInfo)
     // console.log(this.userInfo);
-    if (!!this.companyInfo.isAdmin) {
+    if (this.companyInfo.isAdmin) {
       let param = {
         page: 1,
         count: 2
-      };
-      let res = await getRecruitersListApi(this.companyInfo.id, param);
+      }
+      let res = await getRecruitersListApi(this.companyInfo.id, param)
       res.data.data.forEach(item => {
         if (this.userInfo.uid !== item.uid) {
-          this.nextAdmin = item;
+          this.nextAdmin = item
         }
-      });
+      })
     }
   }
   /* 绑定公司 */
-  bindCompany() {
-    this.showAdminWindow = true;
-    this.isBindAdmin = false;
-    console.log(this.userInfo);
+  bindCompany () {
+    this.showAdminWindow = true
+    this.isBindAdmin = false
+    console.log(this.userInfo)
     // this.
   }
   /* 关闭弹窗 */
-  close(e) {
-    this.showAdminWindow = false;
-    if (e && e.needLoad) this.getUserInfo();
+  close (e) {
+    this.showAdminWindow = false
+    if (e && e.needLoad) this.getUserInfo()
   }
 
   /* 获取用户信息 */
-  async getUserInfo() {
-    console.log("routeId", this.$route.params.id);
-    let res = await getUserInfoApi(this.$route.params.id);
-    let userInfo = res.data.data;
-    this.userInfo = userInfo;
-    console.log("this.userInfo", this.userInfo);
+  async getUserInfo () {
+    console.log('routeId', this.$route.params.id)
+    let res = await getUserInfoApi(this.$route.params.id)
+    let userInfo = res.data.data
+    this.userInfo = userInfo
+    console.log('this.userInfo', this.userInfo)
 
-    this.isDetection = !userInfo.needRealNameAuth;
+    this.isDetection = !userInfo.needRealNameAuth
     if (userInfo.companyInfo) {
-      this.companyInfo = userInfo.companyInfo;
+      this.companyInfo = userInfo.companyInfo
     } else {
       this.companyInfo = {
-        realname: ""
-      };
+        realname: ''
+      }
     }
-    this.createPositionRight = !!userInfo.createPositionRight;
+    this.createPositionRight = !!userInfo.createPositionRight
     this.phone = {
       mobile: userInfo.mobile
-    };
-    console.log("userInfo", userInfo);
+    }
+    console.log('userInfo', userInfo)
     /* 身份信息 */
     this.personalInfo = {
       uid: userInfo.uid,
       name: userInfo.name, // 姓名
       gender: userInfo.gender,
-      realname: userInfo.realname || "", // 真实姓名
-      idNum: userInfo.identityNum || "", // 身份证号码
+      realname: userInfo.realname || '', // 真实姓名
+      idNum: userInfo.identityNum || '', // 身份证号码
       passportFront: userInfo.passportFront
         ? userInfo.passportFront.middleUrl
-        : "", // 身份证正面照片
+        : '', // 身份证正面照片
       identityAuth: userInfo.identityAuth
-    };
+    }
   }
   /* 是否需要校验身份信息 */
-  async changeDemand() {
+  async changeDemand () {
     try {
       if (!this.isDetection) {
-        await setDemandIdentityApi(this.$route.params.id);
+        await setDemandIdentityApi(this.$route.params.id)
       } else {
-        await delDemandIdentityApi(this.$route.params.id);
+        await delDemandIdentityApi(this.$route.params.id)
       }
     } catch (err) {
-      this.isDetection = !this.isDetection;
+      this.isDetection = !this.isDetection
     }
   }
   /* 改变招聘官发布职位权限 */
-  changeRight() {
+  changeRight () {
     if (!this.createPositionRight) {
       // 关闭
       offCreatedRightApi(this.$route.params.id)
         .then(res => {
-          this.$message({ type: "warning", message: "关闭发布权限成功" });
+          this.$message({ type: 'warning', message: '关闭发布权限成功' })
         })
         .catch(res => {
-          this.createPositionRight = true;
-        });
+          this.createPositionRight = true
+        })
     } else {
       // 开启
       onCreatedRightApi(this.$route.params.id)
         .then(res => {
-          this.$message({ type: "success", message: "开启发布权限成功" });
+          this.$message({ type: 'success', message: '开启发布权限成功' })
         })
         .catch(res => {
-          this.createPositionRight = false;
-        });
+          this.createPositionRight = false
+        })
     }
   }
 
-  toEditRecruiter() {
+  toEditRecruiter () {
     this.$router.push({
       path: `/user/editRecruiter/${this.$route.params.id}`,
       params: {
         isEditAdminName: false
       }
-    });
+    })
   }
-  userList() {
+  userList () {
     getSalerListApi().then(res => {
-      this.salesList = res.data.data;
-      console.log(this.salesList, "fffffffffffffffffffffffff");
-    });
+      this.salesList = res.data.data
+      console.log(this.salesList, 'fffffffffffffffffffffffff')
+    })
   }
-  mounted(e) {
-    this.isEditAdminName = Boolean(this.$route.query.isEditAdminName);
-    console.log(this.isEditAdminName);
+  mounted (e) {
+    this.isEditAdminName = Boolean(this.$route.query.isEditAdminName)
+    console.log(this.isEditAdminName)
     if (this.isEditAdminName) {
-      console.log("进入账户设置");
+      console.log('进入账户设置')
       // this.active = 1;
-      this.userList();
+      this.userList()
     } else {
-      console.log("进入基本信息");
+      console.log('进入基本信息')
 
       // this.active = 0;
-      this.getUserInfo();
+      this.getUserInfo()
     }
-    console.log("isEditAdminName", this.isEditAdminName);
-    this.AdminShow = +sessionStorage.getItem("AdminShow");
+    console.log('isEditAdminName', this.isEditAdminName)
+    this.AdminShow = +sessionStorage.getItem('AdminShow')
     // console.log("this.AdminShow", this.AdminShow);
   }
 }

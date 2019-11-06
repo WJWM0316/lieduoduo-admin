@@ -249,7 +249,7 @@
       <div class="export"><el-button type="primary" @click="download" :disabled="!canDownloadData" v-if="AdminShow == 0 || AdminShow == 2 || AdminShow == 1 || AdminShow == 4 || AdminShow == 5 || AdminShow===6">导出</el-button></div>
     </ul>
     <el-form ref="form" :model="form" label-width="80px" :inline="true">
-      
+
       <el-form-item>
         <el-input
           type="text"
@@ -377,7 +377,7 @@
               :disabled="openType !== 'resume'"
               trigger="click">
               <div>
-                <div style="text-align: center;"v-if="!model.qrCode">
+                <div style="text-align: center;" v-if="!model.qrCode">
                   <img style="height: 38px;width: 38px; margin-top: 10px;" src="../../assets/loading.gif" />
                   <div style="margin-top: 20px;">正在加载中…</div>
                 </div>
@@ -426,7 +426,7 @@
               :disabled="openType !== 'recruiter'"
               trigger="click">
               <div>
-                <div style="text-align: center;"v-if="!model.qrCode">
+                <div style="text-align: center;" v-if="!model.qrCode">
                   <img style="height: 38px;width: 38px; margin-top: 10px;" src="../../assets/loading.gif" />
                   <div style="margin-top: 20px;">正在加载中…</div>
                 </div>
@@ -460,7 +460,7 @@
               :disabled="openType !== 'position'"
               trigger="click">
               <div>
-                <div style="text-align: center;"v-if="!model.qrCode">
+                <div style="text-align: center;" v-if="!model.qrCode">
                   <img style="height: 38px;width: 38px; margin-top: 10px;" src="../../assets/loading.gif" />
                   <div style="margin-top: 20px;">正在加载中…</div>
                 </div>
@@ -497,11 +497,11 @@
         label="代客操作">
         <template slot-scope="scope" v-if="scope.row.action">
           <!-- <span class="btn_deal" @click="todoAction('modify', scope.row)">修改面试</span> -->
-          <span class="btn_deal" @click="todoAction(item.action, scope.row)" v-for="(item, index) in scope.row.action">{{item.msg}}</span>
+          <span class="btn_deal" @click="todoAction(item.action, scope.row)" v-for="(item, index) in scope.row.action" :key="index">{{item.msg}}</span>
         </template>
       </el-table-column>
     </el-table>
-    
+
     <el-pagination
       layout="prev, pager, next, slot"
       :total="total"
@@ -666,10 +666,10 @@
 </template>
 
 <script>
-import Vue from "vue"
-import Component from "vue-class-component"
-import resumePopup from "COMPONENTS/resumePopup/resumePopup.vue";
-import { getAddressListsApi } from "API/company";
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import resumePopup from 'COMPONENTS/resumePopup/resumePopup.vue'
+import { getAddressListsApi } from 'API/company'
 import mapSearch from '@/components/map'
 
 import {
@@ -688,9 +688,8 @@ import {
   getPositionCodeUrlApi,
   getInterviewFisrtStatusListsApi,
   getInterviewSecondStatusListsApi,
-  testDeleteApi,
   getInterviewComment
-} from "API/interview"
+} from 'API/interview'
 import {
   getListApi,
   openPositionApi,
@@ -698,9 +697,9 @@ import {
   editPositionAddressApi,
   getLabelPositionListApi,
   getPositionAddressApi
-} from "API/position"
-import { getSalerListApi } from "API/commont";
-import { getAccessToken, removeAccessToken } from "API/cacheService";
+} from 'API/position'
+import { getSalerListApi } from 'API/commont'
+import { getAccessToken } from 'API/cacheService'
 import { API_ROOT } from 'API/index.js'
 @Component({
   name: 'Interview24h',
@@ -710,10 +709,10 @@ import { API_ROOT } from 'API/index.js'
   },
   watch: {
     'form.areaId': {
-      handler(areaId) {
-        if(areaId) {
+      handler (areaId) {
+        if (areaId) {
           let item = this.cityLists.find(field => field.areaId === areaId)
-          if(!item) return
+          if (!item) return
           this.form.areaId = item.areaId
           this.form.areaName = item.title
         }
@@ -826,14 +825,14 @@ export default class Interview24h extends Vue {
     areaId: ''
   }
   positionManage = {
-    value: "labelId",
-    label: "name",
-    children: "children"
-  }; //职位类别的配置
+    value: 'labelId',
+    label: 'name',
+    children: 'children'
+  }; // 职位类别的配置
   mgoptions = []
   cityLists = []
-  getAddressLists() {
-    return getAddressListsApi({level: 3}).then(res => this.cityLists = res.data.data)
+  getAddressLists () {
+    return getAddressListsApi({ level: 3 }).then(res => (this.cityLists = res.data.data))
   }
   lists = []
   model = {
@@ -869,49 +868,49 @@ export default class Interview24h extends Vue {
   addressLists = []
   isLastPageOfAddress = false
   addressNum = 1
-  getQuickApplyInterview() {
+  getQuickApplyInterview () {
     let tab = this.navigation.find(field => field.active)
     let params = {
       tab_status: tab.id,
       page: this.form.page,
       count: this.pageSize
     }
-    if(this.form.companyName) {
-      params = Object.assign(params, {companyName: this.form.companyName})
+    if (this.form.companyName) {
+      params = Object.assign(params, { companyName: this.form.companyName })
     }
-    if(this.form.admin_uid) {
-      params = Object.assign(params, {admin_uid: this.form.admin_uid})
+    if (this.form.admin_uid) {
+      params = Object.assign(params, { admin_uid: this.form.admin_uid })
     }
-    if(this.form.searchType && this.form.content) {
-      params = Object.assign(params, {searchType: this.form.searchType, content: this.form.content})
+    if (this.form.searchType && this.form.content) {
+      params = Object.assign(params, { searchType: this.form.searchType, content: this.form.content })
     }
-    if((this.form.createStartTime && !this.form.createEndTime) || (!this.form.createStartTime&& this.form.createEndTime)) {
-      this.$message({message: "申请时间必需选择区间时间", type: "warning"});
-      return;
+    if ((this.form.createStartTime && !this.form.createEndTime) || (!this.form.createStartTime && this.form.createEndTime)) {
+      this.$message({ message: '申请时间必需选择区间时间', type: 'warning' })
+      return
     } else {
-      if(this.form.createStartTime && this.form.createEndTime) {
-        params = Object.assign(params, {createStartTime: this.form.createStartTime, createEndTime: this.form.createEndTime})
+      if (this.form.createStartTime && this.form.createEndTime) {
+        params = Object.assign(params, { createStartTime: this.form.createStartTime, createEndTime: this.form.createEndTime })
       }
     }
-    if(this.form.status) {
-      params = Object.assign(params, {status: this.form.status})
+    if (this.form.status) {
+      params = Object.assign(params, { status: this.form.status })
     }
     // 已经选择职位类型
-    if(this.form.positionLabel) {
-      params = Object.assign(params, {positionLabel: this.form.positionLabel})
+    if (this.form.positionLabel) {
+      params = Object.assign(params, { positionLabel: this.form.positionLabel })
     }
     // 已经选择城市
-    if(this.form.areaId) {
-      params = Object.assign(params, {areaId: this.form.areaId})
+    if (this.form.areaId) {
+      params = Object.assign(params, { areaId: this.form.areaId })
     }
-    if(this.form.status === 52) {
-      params = Object.assign(params, {last_status: this.form.last_status})
+    if (this.form.status === 52) {
+      params = Object.assign(params, { last_status: this.form.last_status })
     }
     return getQuickApplyInterviewApi(params).then(res => {
       let infos = res.data
       this.total = infos.meta.total
       this.lists = infos.data
-      this.$router.push({query: {...params}})
+      this.$router.push({ query: { ...params } })
     })
   }
   /**
@@ -920,56 +919,56 @@ export default class Interview24h extends Vue {
    * @detail   关闭弹窗
    * @param    {[type]}   index [description]
    */
-  close() {
+  close () {
     let item = this.model.item
-    switch(this.model.type) {
+    switch (this.model.type) {
       case 'recipe':
         this.model.title = '确定约面'
         this.model.show = false
-        break;
+        break
       case 'improper':
         this.model.show = false
-        break;
+        break
       case 'arrange':
         this.model.title = '安排面试'
         this.model.show = false
-        break;
+        break
       case 'modify':
         this.model.title = '修改面试时间'
         this.model.show = false
-        break;
+        break
       case 'preview':
         this.model.title = '查看面试'
         this.model.show = false
-        break;
+        break
       case 'position':
         this.model.type = this.model.beforeType
         this.model.title = this.model.beforeTitle
-        break;
+        break
       case 'address':
         let actionList = item.action.map(field => field.action)
-        if(actionList.includes('arrange')) {
+        if (actionList.includes('arrange')) {
           this.model.type = 'arrange'
           this.model.title = '安排面试'
         } else {
           this.model.type = 'modify'
           this.model.title = '修改面试时间'
         }
-        break;
+        break
       case 'reason':
         this.model.show = false
         // this.model.position = this.model.defaultPosition
-        break;
+        break
       case 'present':
         this.model.show = false
-        break;
+        break
       case 'add_address':
         this.model.type = 'address'
         break
       case 'edit_address':
         this.getSimplepageAddressesLists({
-           mobile: item.recruiterInfo.mobile
-         }).then(() => {
+          mobile: item.recruiterInfo.mobile
+        }).then(() => {
           this.model.show = true
           this.model.title = '选择地址'
           this.model.btnTxt = '返回'
@@ -977,7 +976,7 @@ export default class Interview24h extends Vue {
           this.setAddressDomScroll({
             mobile: item.recruiterInfo.mobile
           })
-         })
+        })
         break
       default:
         break
@@ -989,21 +988,21 @@ export default class Interview24h extends Vue {
    * @detail   弹窗确定
    * @param    {[type]}   index [description]
    */
-  confirm() {
+  confirm () {
     let dateList = this.model.dateLists
-    if(dateList.length) dateList = dateList.map(field => field.appointmentTime).join(',')
+    if (dateList.length) dateList = dateList.map(field => field.appointmentTime).join(',')
     let data = this.model.item
-    switch(this.model.type) {
+    switch (this.model.type) {
       case 'arrange':
-        if(!this.model.position.positionId) {
+        if (!this.model.position.positionId) {
           this.$message.error('请选择一个职位')
           return
         }
-        if(!this.model.address.addressId) {
+        if (!this.model.address.addressId) {
           this.$message.error('请选择一个地址')
           return
         }
-        if(!dateList.length) {
+        if (!dateList.length) {
           this.$message.error('请至少添加一个约面时间')
           return
         }
@@ -1017,7 +1016,7 @@ export default class Interview24h extends Vue {
         }).then(() => {
           this.model.show = false
         })
-        break;
+        break
       case 'modify':
         this.model.show = false
         this.setInterviewInfo({
@@ -1028,25 +1027,25 @@ export default class Interview24h extends Vue {
           interviewTime: dateList,
           positionId: this.model.position.positionId
         })
-        break;
+        break
       case 'preview':
         this.model.show = false
-        break;
+        break
       case 'improper':
-        this.getLabelComment({status: data.status}).then(() => {
+        this.getLabelComment({ status: data.status }).then(() => {
           this.model.type = 'reason'
           this.model.title = '选择不合适原因'
         })
-        break;
+        break
       case 'position':
         let positionItem = this.positionLists.find(field => field.active)
         // 该职位处于下线状态
-        if(!positionItem.status) {
+        if (!positionItem.status) {
           this.$confirm('确认开放该职位进行约面吗？', '开放职位约面', {
             confirmButtonText: '确定',
             cancelButtonText: '取消'
           }).then(() => {
-            this.openPosition({id: positionItem.id}).then(() => {
+            this.openPosition({ id: positionItem.id }).then(() => {
               this.model.position.name = positionItem.positionName
               this.model.position.positionId = positionItem.id
               this.model.type = this.model.beforeType
@@ -1061,14 +1060,14 @@ export default class Interview24h extends Vue {
           this.model.type = this.model.beforeType
           this.model.title = this.model.beforeTitle
         }
-        break;
+        break
       case 'address':
         let addressItem = this.addressLists.find(field => field.active)
         let actionList = data.action.map(field => field.action)
-        if(addressItem) {
+        if (addressItem) {
           this.model.address.addressName = addressItem.address
           this.model.address.addressId = addressItem.id
-          if(actionList.includes('arrange')) {
+          if (actionList.includes('arrange')) {
             this.model.type = 'arrange'
             this.model.title = '安排面试'
           } else {
@@ -1078,7 +1077,7 @@ export default class Interview24h extends Vue {
         } else {
           this.$message('请选择一个地址')
         }
-        break;
+        break
       case 'edit_address':
         this.editPositionAddress(this.form.address).then(() => {
           this.addressLists = []
@@ -1094,7 +1093,7 @@ export default class Interview24h extends Vue {
             })
           })
         })
-        break;
+        break
       case 'reason':
         let reason = this.model.reason.map(field => field.id).join(',')
         this.refuseJobhunterUidInterview({
@@ -1105,7 +1104,7 @@ export default class Interview24h extends Vue {
         }).then(() => {
           this.model.show = false
         })
-        break;
+        break
       case 'present':
         this.setUserInterviewAttend({
           interviewId: data.interviewId,
@@ -1114,7 +1113,7 @@ export default class Interview24h extends Vue {
           this.model.show = false
           this.init()
         })
-        break;
+        break
       case 'add_address':
         this.createPositionAddress(this.form.address).then(() => {
           this.addressLists = []
@@ -1130,7 +1129,7 @@ export default class Interview24h extends Vue {
             })
           })
         })
-        break;
+        break
       default:
         break
     }
@@ -1141,7 +1140,7 @@ export default class Interview24h extends Vue {
    * @detail   列表搜索
    * @param    {[type]}   index [description]
    */
-  search() {
+  search () {
     this.getQuickApplyInterview()
   }
   /**
@@ -1150,7 +1149,7 @@ export default class Interview24h extends Vue {
    * @detail   设置不合适item激活
    * @param    {[type]}   index [description]
    */
-  setReason(index) {
+  setReason (index) {
     this.reasonList[index].active = !this.reasonList[index].active
     this.model.reason = this.reasonList.filter(field => field.active)
   }
@@ -1160,8 +1159,8 @@ export default class Interview24h extends Vue {
    * @detail   获取选中的职位
    * @return   {[type]}         [description]
    */
-  getPosition(index) {
-    this.positionLists.map((field, i) => field.active = i === index ? true : false)
+  getPosition (index) {
+    this.positionLists.map((field, i) => (field.active = i === index))
   }
   /**
    * @Author   小书包
@@ -1169,10 +1168,10 @@ export default class Interview24h extends Vue {
    * @detail   获取选中的地址
    * @return   {[type]}         [description]
    */
-  getAddress(index) {
+  getAddress (index) {
     this.addressLists.map((field, i) => {
       field.active = false
-      if(i === index) {
+      if (i === index) {
         field.active = true
         this.model.position.positionId = field.id
         this.model.position.positionName = field.positionName
@@ -1185,8 +1184,8 @@ export default class Interview24h extends Vue {
    * @detail   tab切换
    * @return   {[type]}        [description]
    */
-  tabClick(type) {
-    this.navigation.map(field => field.active = type === field.type ? true : false)
+  tabClick (type) {
+    this.navigation.map(field => (field.active = type === field.type))
     this.form.content = ''
     this.getQuickApplyInterview().then(() => {
       this.form.tab_status = this.$route.query.tab_status
@@ -1198,7 +1197,7 @@ export default class Interview24h extends Vue {
    * @detail   分页获取数据
    * @return   {[type]}        [description]
    */
-  pageChange(page) {
+  pageChange (page) {
     this.form.page = page
     this.getQuickApplyInterview()
   }
@@ -1208,11 +1207,11 @@ export default class Interview24h extends Vue {
    * @detail   待办项
    * @return   {[type]}              [description]
    */
-  todoAction(type, item) {
-    let data = item ? item : this.model.item
+  todoAction (type, item) {
+    let data = item || this.model.item
     this.form.realname = data.recruiterInfo.realname
     this.form.mobile = data.recruiterInfo.mobile
-    this.model.item = data ? data : this.model.item
+    this.model.item = data || this.model.item
     this.model.beforeType = this.model.type
     this.model.beforeTitle = this.model.title
     this.model.dateLists = []
@@ -1223,20 +1222,20 @@ export default class Interview24h extends Vue {
     this.model.interviewId = data.interviewId
     // this.model.dateLists.push({active: true, value: data.handleEndTime})
     let reason = this.model.reason.map(field => field.id).join(',')
-    switch(type) {
+    switch (type) {
       case 'recipe':
         this.model.type = type
-        this.confirmInterview({interviewId: data.interviewId})
-        break;
+        this.confirmInterview({ interviewId: data.interviewId })
+        break
       case 'improper':
-        this.getLabelComment({status: data.status}).then(() => {
+        this.getLabelComment({ status: data.status }).then(() => {
           this.model.type = type
           this.model.show = true
           this.model.title = '不合适'
           this.model.item = data
           this.model.showFooter = true
         })
-        break;
+        break
       case 'arrange':
         this.model.type = type
         this.model.show = true
@@ -1245,10 +1244,10 @@ export default class Interview24h extends Vue {
         this.model.position.positionId = data.positionId
         this.model.address.addressName = data.address
         this.model.address.addressId = data.addressId
-        break;
+        break
       case 'modify':
         let dateLists1 = data.arrangementInfo.appointmentList
-        dateLists1.map(field => field.active = false)
+        dateLists1.map(field => (field.active = false))
         this.model.type = type
         this.model.show = true
         this.model.title = '修改面试时间'
@@ -1257,23 +1256,23 @@ export default class Interview24h extends Vue {
         this.model.address.addressName = data.address
         this.model.address.addressId = data.addressId
         this.model.dateLists = dateLists1
-        break;
+        break
       case 'add_address':
         this.model.type = 'add_address'
         this.model.show = true
         this.model.showMap = true
         this.model.title = '新增地址'
-        break;
+        break
       case 'preview':
         this.model.show = true
         this.model.title = '查看面试'
         this.model.type = type
         this.model.showConfirmBtn = false
         this.model.btnTxt = '返回'
-        if(data.arrangementInfo) {
-          if(data.arrangementInfo.appointmentList) {
+        if (data.arrangementInfo) {
+          if (data.arrangementInfo.appointmentList) {
             let dateLists2 = data.arrangementInfo.appointmentList
-            dateLists2.map(field => field.active = false)
+            dateLists2.map(field => (field.active = false))
             this.model.dateLists = dateLists2
           } else {
             this.model.dateLists.push({
@@ -1287,7 +1286,7 @@ export default class Interview24h extends Vue {
           this.model.address.addressName = data.address
           this.model.address.addressId = data.addressId
         }
-        break;
+        break
       case 'position':
         this.positionLists = []
         this.positionNum = 1
@@ -1303,14 +1302,14 @@ export default class Interview24h extends Vue {
             recruiter: data.recruiterInfo.uid
           })
         })
-        break;
+        break
       case 'address':
         this.addressLists = []
         this.addressNum = 1
         this.isLastPageOfAddress = false
         this.getSimplepageAddressesLists({
-           mobile: data.recruiterInfo.mobile
-         }).then(() => {
+          mobile: data.recruiterInfo.mobile
+        }).then(() => {
           this.model.show = true
           this.model.title = '选择地址'
           this.model.btnTxt = '返回'
@@ -1318,8 +1317,8 @@ export default class Interview24h extends Vue {
           this.setAddressDomScroll({
             mobile: data.recruiterInfo.mobile
           })
-         })
-        break;
+        })
+        break
       case 'reason':
         this.model.show = true
         this.model.title = '选择不合适原因'
@@ -1331,7 +1330,7 @@ export default class Interview24h extends Vue {
           reason,
           extra: this.model.extra
         })
-        break;
+        break
       case 'withdraw':
         this.interviewRetract({
           jobhunterUid: data.jobhunterInfo.uid,
@@ -1344,7 +1343,7 @@ export default class Interview24h extends Vue {
         this.model.type = type
         break
       case 'evaluation':
-        this.setUserInterviewComment({interviewId: data.interviewId}).then(() => this.init())
+        this.setUserInterviewComment({ interviewId: data.interviewId }).then(() => this.init())
         break
       case 'viewReason':
         this.sayResult(data.interviewId).then(() => {
@@ -1359,8 +1358,8 @@ export default class Interview24h extends Vue {
     }
   }
   /* 说出不合适原因 */
-  sayResult(interviewId) {
-    return getInterviewComment(interviewId).then(res => this.model.refuseReason = res.data.data.reason)
+  sayResult (interviewId) {
+    return getInterviewComment(interviewId).then(res => (this.model.refuseReason = res.data.data.reason))
   }
   /**
    * @Author   小书包
@@ -1368,7 +1367,7 @@ export default class Interview24h extends Vue {
    * @detail   切换搜索类型
    * @return   {[type]}   [description]
    */
-  changeSearch() {
+  changeSearch () {
     this.form.content = ''
   }
   /**
@@ -1378,7 +1377,7 @@ export default class Interview24h extends Vue {
    * @param    {[type]}   e [description]
    * @return   {[type]}     [description]
    */
-  getTime(e) {
+  getTime (e) {
     this.model.dateLists.push({
       appointment: e,
       active: false,
@@ -1391,8 +1390,8 @@ export default class Interview24h extends Vue {
    * @detail   设置面试时间
    * @return   {[type]}         [description]
    */
-  selectTime(index) {
-    this.model.dateLists.map((field, i) => field.active = index === i ? true : false)
+  selectTime (index) {
+    this.model.dateLists.map((field, i) => (field.active = index === i))
   }
   /**
    * @Author   小书包
@@ -1400,7 +1399,7 @@ export default class Interview24h extends Vue {
    * @detail   删除时间
    * @return   {[type]}         [description]
    */
-  deleteTime(index) {
+  deleteTime (index) {
     this.model.dateLists.splice(index, 1)
   }
   /**
@@ -1409,19 +1408,19 @@ export default class Interview24h extends Vue {
    * @detail   初始化页面
    * @return   {[type]}   [description]
    */
-  init() {
+  init () {
     let query = this.$route.query
     this.form = Object.assign(this.form, query)
     this.form.areaId = Number(this.form.areaId)
-    if(!this.form.areaId) this.form.areaId = ''
-    if(this.form.status) this.form.status = Number(this.form.status)
-    if(this.form.last_status) this.form.last_status = Number(this.form.last_status)
-    if(query.tab_status) {
-      this.navigation.map(field => field.active = query.tab_status == field.id ? true : false)
+    if (!this.form.areaId) this.form.areaId = ''
+    if (this.form.status) this.form.status = Number(this.form.status)
+    if (this.form.last_status) this.form.last_status = Number(this.form.last_status)
+    if (query.tab_status) {
+      this.navigation.map(field => (field.active = query.tab_status === field.id))
     } else {
       this.navigation[0].active = true
     }
-    if(this.form.admin_uid) this.form.admin_uid = Number(this.form.admin_uid)
+    if (this.form.admin_uid) this.form.admin_uid = Number(this.form.admin_uid)
     this.getQuickApplyInterview()
     this.getInterviewFisrtStatusLists()
     this.getSalerList()
@@ -1432,7 +1431,7 @@ export default class Interview24h extends Vue {
    * @detail   不合适撤回
    * @return   {[type]}          [description]
    */
-  interviewRetract(params) {
+  interviewRetract (params) {
     return interviewRetractApi(params).then(() => this.init())
   }
   /**
@@ -1441,7 +1440,7 @@ export default class Interview24h extends Vue {
    * @detail   确定约面
    * @return   {[type]}          [description]
    */
-  confirmInterview(params) {
+  confirmInterview (params) {
     return confirmInterviewApi(params).then(() => this.init())
   }
   /**
@@ -1450,13 +1449,13 @@ export default class Interview24h extends Vue {
    * @detail   获取不合适标签
    * @return   {[type]}   [description]
    */
-  getLabelComment(params) {
+  getLabelComment (params) {
     // 代表过程中的状态
     let pending = [11, 12, 21, 31, 32, 41]
     let api = pending.includes(Number(params.status)) ? getInterviewNotSuitReasonApi : getInterviewCommentReasonApi
     return api(params).then(res => {
       let reasonList = res.data.data
-      reasonList.map(field => field.active = false)
+      reasonList.map(field => (field.active = false))
       this.reasonList = reasonList
     })
   }
@@ -1466,7 +1465,7 @@ export default class Interview24h extends Vue {
    * @detail   标记不合适
    * @return   {[type]}          [description]
    */
-  refuseJobhunterUidInterview(params) {
+  refuseJobhunterUidInterview (params) {
     return refuseJobhunterUidInterviewApi(params).then(() => this.init())
   }
   /**
@@ -1475,7 +1474,7 @@ export default class Interview24h extends Vue {
    * @detail   修改面试时间
    * @param    {[type]}   param [description]
    */
-  setInterviewInfo(param) {
+  setInterviewInfo (param) {
     return setInterviewInfoApi(param).then(() => this.init())
   }
   /**
@@ -1484,7 +1483,7 @@ export default class Interview24h extends Vue {
    * @detail   获取职位列表
    * @return   {[type]}   [description]
    */
-  getPositionList(data) {
+  getPositionList (data) {
     let params = {
       page: this.positionNum,
       count: this.pageSize,
@@ -1494,9 +1493,9 @@ export default class Interview24h extends Vue {
     return getListApi(params).then(res => {
       let infos = res.data
       let list = infos.data
-      list.map(field => field.active = false)
+      list.map(field => (field.active = false))
       this.positionLists = this.positionLists.concat(list)
-      this.isLastPageOfPosition = (res.data.meta && res.data.meta.nextPageUrl) ? false : true
+      this.isLastPageOfPosition = !((res.data.meta && res.data.meta.nextPageUrl))
       this.positionNum++
     })
   }
@@ -1506,7 +1505,7 @@ export default class Interview24h extends Vue {
    * @detail   获取地址列表
    * @return   {[type]}   [description]
    */
-  getSimplepageAddressesLists(data) {
+  getSimplepageAddressesLists (data) {
     let params = {
       page: this.addressNum,
       count: this.pageSize
@@ -1515,9 +1514,9 @@ export default class Interview24h extends Vue {
     return getSimplepageAddressesListsApi(params).then(res => {
       let infos = res.data
       let list = infos.data
-      list.map(field => field.active = false)
+      list.map(field => (field.active = false))
       this.addressLists = this.addressLists.concat(list)
-      this.isLastPageOfAddress = (res.data.meta && res.data.meta.nextPageUrl) ? false : true
+      this.isLastPageOfAddress = !((res.data.meta && res.data.meta.nextPageUrl))
       this.addressNum++
     })
   }
@@ -1527,14 +1526,14 @@ export default class Interview24h extends Vue {
    * @detail   设置地址dom的滚动加载
    * @return   {[type]}   [description]
    */
-  setAddressDomScroll(params) {
+  setAddressDomScroll (params) {
     return new Promise((resolve, reject) => {
       let dom = document.getElementById('scroll_div_ul_address')
       dom.onscroll = () => {
         let wholeHeight = dom.scrollHeight
         let scrollTop = dom.scrollTop
         let divHeight = dom.clientHeight
-        if(scrollTop + divHeight >= wholeHeight) this.getSimplepageAddressesLists(params).then(() => resolve())
+        if (scrollTop + divHeight >= wholeHeight) this.getSimplepageAddressesLists(params).then(() => resolve())
       }
     })
   }
@@ -1544,14 +1543,14 @@ export default class Interview24h extends Vue {
    * @detail   设置职位dom的滚动加载
    * @return   {[type]}   [description]
    */
-  setPositionDomScroll(params) {
+  setPositionDomScroll (params) {
     return new Promise((resolve, reject) => {
       let dom = document.getElementById('scroll_div_ul_position')
       dom.onscroll = () => {
         let wholeHeight = dom.scrollHeight
         let scrollTop = dom.scrollTop
         let divHeight = dom.clientHeight
-        if(scrollTop + divHeight >= wholeHeight) this.getPositionList(params).then(() => resolve())
+        if (scrollTop + divHeight >= wholeHeight) this.getPositionList(params).then(() => resolve())
       }
     })
   }
@@ -1562,7 +1561,7 @@ export default class Interview24h extends Vue {
    * @param    {[type]}   params [description]
    * @return   {[type]}          [description]
    */
-  openPosition(params) {
+  openPosition (params) {
     return openPositionApi(params)
   }
   /**
@@ -1571,7 +1570,7 @@ export default class Interview24h extends Vue {
    * @detail   设置候选人是否到场
    * @param    {[type]}   params [description]
    */
-  setUserInterviewAttend(params) {
+  setUserInterviewAttend (params) {
     return setUserInterviewAttendApi(params)
   }
   /**
@@ -1579,7 +1578,7 @@ export default class Interview24h extends Vue {
    * @DateTime 2019-08-02
    * @detail   评价面试
    */
-  setUserInterviewComment(params) {
+  setUserInterviewComment (params) {
     return setUserInterviewCommentApi(params)
   }
   /**
@@ -1588,9 +1587,9 @@ export default class Interview24h extends Vue {
    * @detail   显示简历
    * @return   {[type]}       [description]
    */
-  showResume(data) {
-    if (this.AdminShow == 3 || this.AdminShow == 4) {
-      this.$message({message: '用户暂无权限'})
+  showResume (data) {
+    if (this.AdminShow === 3 || this.AdminShow === 4) {
+      this.$message({ message: '用户暂无权限' })
     } else {
       this.model.resumeId = String(data.jobhunterInfo.uid)
       this.model.showResume = true
@@ -1613,10 +1612,10 @@ export default class Interview24h extends Vue {
    * @detail   获取招聘官主页二维码
    * @return   {[type]}         [description]
    */
-  getRecruiterCodeUrl(uid) {
+  getRecruiterCodeUrl (uid) {
     this.model.qrCode = ''
     this.openType = 'recruiter'
-    return getRecruiterCodeUrlApi({id: uid}).then(res => this.model.qrCode = res.data.data.qrCodeUrl)
+    return getRecruiterCodeUrlApi({ id: uid }).then(res => (this.model.qrCode = res.data.data.qrCodeUrl))
   }
   /**
    * @Author   小书包
@@ -1624,10 +1623,10 @@ export default class Interview24h extends Vue {
    * @detail   获取招简历二维码
    * @return   {[type]}         [description]
    */
-  getResumeCodeUrl(uid) {
+  getResumeCodeUrl (uid) {
     this.model.qrCode = ''
     this.openType = 'resume'
-    return getResumeCodeUrlApi({id: uid}).then(res => this.model.qrCode = res.data.data.qrCodeUrl)
+    return getResumeCodeUrlApi({ id: uid }).then(res => (this.model.qrCode = res.data.data.qrCodeUrl))
   }
   /**
    * @Author   小书包
@@ -1635,19 +1634,19 @@ export default class Interview24h extends Vue {
    * @detail   获取招职位二维码
    * @return   {[type]}         [description]
    */
-  getPositionCodeUrl(uid) {
+  getPositionCodeUrl (uid) {
     this.model.qrCode = ''
     this.openType = 'position'
-    return getPositionCodeUrlApi({id: uid}).then(res => this.model.qrCode = res.data.data.qrCodeUrl)
+    return getPositionCodeUrlApi({ id: uid }).then(res => (this.model.qrCode = res.data.data.qrCodeUrl))
   }
-  showCallback() {}
+  showCallback () {}
   /**
    * @Author   小书包
    * @DateTime 2019-08-02
    * @detail   地图组件点击取消
    * @return   {[type]}   [description]
    */
-  popCancel() {
+  popCancel () {
     this.model.showMap = !this.model.showMap
   }
   /**
@@ -1656,7 +1655,7 @@ export default class Interview24h extends Vue {
    * @detail   地图组件点击确定
    * @param    {[type]}   e [description]
    */
-  addAdress(e) {
+  addAdress (e) {
     let item = this.model.item
     this.form.address = {
       mobile: item.recruiterInfo.mobile,
@@ -1673,7 +1672,7 @@ export default class Interview24h extends Vue {
    * @detail   创建职位地址
    * @return   {[type]}          [description]
    */
-  createPositionAddress(params) {
+  createPositionAddress (params) {
     return createPositionAddressApi(params)
   }
   /**
@@ -1682,8 +1681,8 @@ export default class Interview24h extends Vue {
    * @detail   编辑职位地址
    * @return   {[type]}          [description]
    */
-  editPositionAddress(params) {
-    if(!params.areaName) {
+  editPositionAddress (params) {
+    if (!params.areaName) {
       delete params.areaName
       params.areaId = this.form.address.areaId
     }
@@ -1695,7 +1694,7 @@ export default class Interview24h extends Vue {
    * @detail   获取职位地址
    * @return   {[type]}          [description]
    */
-  getPositionAddress(params) {
+  getPositionAddress (params) {
     return getPositionAddressApi(params)
   }
   /**
@@ -1704,10 +1703,10 @@ export default class Interview24h extends Vue {
    * @detail   编辑职位
    * @return   {[type]}         [description]
    */
-  editAddress(index) {
+  editAddress (index) {
     let item = this.addressLists.find((field, i) => i === index)
     let data = this.model.item
-    this.getPositionAddress({id: item.id}).then(res => {
+    this.getPositionAddress({ id: item.id }).then(res => {
       let infos = res.data.data
       this.form.address = {
         mobile: data.recruiterInfo.mobile,
@@ -1724,8 +1723,8 @@ export default class Interview24h extends Vue {
       this.model.title = '编辑地址'
     })
   }
-  reset() {
-    this.navigation.map((field, index) => field.active = index === 0 ? true : false)
+  reset () {
+    this.navigation.map((field, index) => (field.active = index === 0))
     this.form = {
       companyName: '',
       searchType: '',
@@ -1757,8 +1756,8 @@ export default class Interview24h extends Vue {
    * @detail   获取面试状态一级列表
    * @return   {[type]}   [description]
    */
-  getInterviewFisrtStatusLists() {
-    let query = this.$route.query
+  getInterviewFisrtStatusLists () {
+    // let query = this.$route.query
     return getInterviewFisrtStatusListsApi().then(res0 => {
       getInterviewSecondStatusListsApi().then(res1 => {
         this.statusChildLists = res1.data.data
@@ -1772,10 +1771,10 @@ export default class Interview24h extends Vue {
    * @detail   跳转职位详情
    * @return   {[type]}      [description]
    */
-  readPosition(id) {
-    window.open(`/positionManage/positionAuditDetail?id=${id}`, '_blank');
+  readPosition (id) {
+    window.open(`/positionManage/positionAuditDetail?id=${id}`, '_blank')
   }
-  hide() {
+  hide () {
     this.openType = ''
   }
   /**
@@ -1784,10 +1783,10 @@ export default class Interview24h extends Vue {
    * @detail   获取销售列表
    * @return   {[type]}   [description]
    */
-  getSalerList() {
-    getSalerListApi().then(res => this.saleLists = res.data.data)
+  getSalerList () {
+    getSalerListApi().then(res => (this.saleLists = res.data.data))
   }
-  download() {
+  download () {
     this.$confirm('是否导出该列表数据？', '提示', {
       confirmButtonText: '是',
       cancelButtonText: '否',
@@ -1795,42 +1794,42 @@ export default class Interview24h extends Vue {
     }).then(() => {
       let date = new Date()
       let downloadName = `24h急速反馈-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}.xlsx`
-      let url = `${API_ROOT}/interview/quickApply?isExport=1` 
+      let url = `${API_ROOT}/interview/quickApply?isExport=1`
       let tab = this.navigation.find(field => field.active)
 
       url += `&tab_status=${tab.id}`
 
-      if(this.form.companyName) {
+      if (this.form.companyName) {
         url += `&companyName=${this.form.companyName}`
       }
-      if(this.form.admin_uid) {
+      if (this.form.admin_uid) {
         url += `&admin_uid=${this.form.admin_uid}`
       }
-      if(this.form.searchType && this.form.content) {
+      if (this.form.searchType && this.form.content) {
         url += `&searchType=${this.form.searchType}&content=${this.form.content}`
       }
-      if(this.form.status) {
+      if (this.form.status) {
         url += `&status=${this.form.status}`
       }
-      if(this.form.status === 52) {
+      if (this.form.status === 52) {
         url += `&last_status=${this.form.last_status}`
       }
-      if(this.form.positionLabel) {
+      if (this.form.positionLabel) {
         url += `&positionLabel=${this.form.positionLabel}`
       }
       // 已经选择城市
-      if(this.form.areaId) {
+      if (this.form.areaId) {
         url += `&areaId=${this.form.areaId}`
       }
-      if(this.form.createStartTime && this.form.createEndTime) {
-          url += `&createStartTime=${this.form.createStartTime}&createEndTime=${this.form.createEndTime}`
+      if (this.form.createStartTime && this.form.createEndTime) {
+        url += `&createStartTime=${this.form.createStartTime}&createEndTime=${this.form.createEndTime}`
       }
       url = url.replace(/\s*/g, '')
       let xmlResquest = new XMLHttpRequest()
       xmlResquest.open('get', url, true)
-      xmlResquest.setRequestHeader('Content-type', 'application/json')
-      xmlResquest.setRequestHeader('Authorization-Admin', getAccessToken())
-      xmlResquest.responseType = 'blob'
+      xmlResquest.setRequestHeader('Content-type', 'application/json')
+      xmlResquest.setRequestHeader('Authorization-Admin', getAccessToken())
+      xmlResquest.responseType = 'blob'
       this.canDownloadData = false
       xmlResquest.onload = () => {
         let content = xmlResquest.response
@@ -1849,30 +1848,30 @@ export default class Interview24h extends Vue {
       this.$message({
         type: 'info',
         message: '已取消导出'
-      })        
+      })
     })
   }
-  type(e) {
-    this.form.positionLabel = e[e.length - 1];
+  type (e) {
+    this.form.positionLabel = e[e.length - 1]
   }
-  ManageList() {
+  ManageList () {
     getLabelPositionListApi().then(res => {
-      this.mgoptions = res.data.data;
+      this.mgoptions = res.data.data
       this.mgoptions.forEach(item => {
         item.children.forEach(item1 => {
           item1.children.forEach(item2 => {
-            let result = JSON.stringify(item2.children);
-            if (result === "[]") delete item2.children;
-          });
-        });
-      });
-    });
+            let result = JSON.stringify(item2.children)
+            if (result === '[]') delete item2.children
+          })
+        })
+      })
+    })
   }
-  mounted() {
+  mounted () {
     this.getAddressLists()
     this.init()
     this.ManageList()
-    this.AdminShow = +sessionStorage.getItem("AdminShow");
+    this.AdminShow = +sessionStorage.getItem('AdminShow')
     // testDeleteApi()
   }
 }

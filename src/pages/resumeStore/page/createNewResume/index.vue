@@ -163,31 +163,30 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
+import Vue from 'vue'
+import Component from 'vue-class-component'
 import {
-  createOrder,
-  searchId,
   createResume,
   haveMobile
-} from "API/resumeStore";
-import { getLabelPositionListApi } from "API/position";
-import { getCityApi } from "API/company";
-import { fieldApi, uploadApi } from "API/commont";
-import { getAccessToken } from "API/cacheService";
-const packjson = require("../../../../../package.json");
-let canPush = 0; /* 0 规定 1 跳转注册页 2 去新建微简历 */
+} from 'API/resumeStore'
+import { getLabelPositionListApi } from 'API/position'
+import { getCityApi } from 'API/company'
+import { fieldApi, uploadApi } from 'API/commont'
+import { getAccessToken } from 'API/cacheService'
+const packjson = require('../../../../../package.json')
+// eslint-disable-next-line no-unused-vars
+let canPush = 0 /* 0 规定 1 跳转注册页 2 去新建微简历 */
 let Sumbitform = {
-  name: "",
-  gender: "",
-  mobile: ""
-};
+  name: '',
+  gender: '',
+  mobile: ''
+}
 @Component({
-  name: "OrderDetail"
+  name: 'OrderDetail'
 })
 export default class OrderDetail extends Vue {
-  checkMobileVal = ""; /* 校验手机号码 */
-  uploadApi = "";
+  checkMobileVal = ''; /* 校验手机号码 */
+  uploadApi = '';
   isFocus = false;
   dialogVisible = false;
   fileList = [];
@@ -204,333 +203,333 @@ export default class OrderDetail extends Vue {
   minSalary = []; /* 最小薪资 */
   maxSalary = []; /* 最大薪资 */
   isShowmsg = false;
-  getCityList = []; //省市列表
-  resumeAttachId = ""; /* 附件id */
+  getCityList = []; // 省市列表
+  resumeAttachId = ''; /* 附件id */
   headers = {};
-  resumeAttachId = "";
+  resumeAttachId = '';
   form = {
-    mobile: "" /* 手机号 */,
-    avatar: "" /* 头像附件id */,
-    gender: "" /* 性别，未知0，男1，女2 */,
-    name: "" /* 姓名 */,
-    birth: "" /* 出生年月(时间戳) */,
-    startWorkYear: "" /* 参加工作年份(时间戳) */,
-    lastCompany: "" /* 最近任职公司 */,
-    lastPosition: "" /* 最近任职职位*/,
-    expectCityNum: "" /* 期望城市，城市编号 */,
-    expectPositionId: "" /* 期望职位id*/,
-    expectSalaryCeil: "" /* 期望月薪上限，单位k */,
-    expectSalaryFloor: "" /* 期望月薪下限，单位k*/,
-    expectFieldIds: "" /* 期望领域ids，逗号分隔 */,
-    resumeAttachId: "" /* 简历附件id */
+    mobile: '' /* 手机号 */,
+    avatar: '' /* 头像附件id */,
+    gender: '' /* 性别，未知0，男1，女2 */,
+    name: '' /* 姓名 */,
+    birth: '' /* 出生年月(时间戳) */,
+    startWorkYear: '' /* 参加工作年份(时间戳) */,
+    lastCompany: '' /* 最近任职公司 */,
+    lastPosition: '' /* 最近任职职位 */,
+    expectCityNum: '' /* 期望城市，城市编号 */,
+    expectPositionId: '' /* 期望职位id */,
+    expectSalaryCeil: '' /* 期望月薪上限，单位k */,
+    expectSalaryFloor: '' /* 期望月薪下限，单位k */,
+    expectFieldIds: '' /* 期望领域ids，逗号分隔 */,
+    resumeAttachId: '' /* 简历附件id */
   };
   validate_Name = (rule, value, callback) => {
-    if (value === "") {
-      callback(new Error("姓名不能为空"));
+    if (value === '') {
+      callback(new Error('姓名不能为空'))
     } else {
-      callback();
+      callback()
     }
   };
   validate_Birth = (rule, value, callback) => {
     if (!value) {
-      callback(new Error("出生年月不能为空"));
+      callback(new Error('出生年月不能为空'))
     } else {
-      callback();
+      callback()
     }
   };
   validate_lastCompany = (rule, value, callback) => {
     // console.log(value);
     if (!value) {
-      callback(new Error("请输入最近任职公司"));
+      callback(new Error('请输入最近任职公司'))
     } else {
-      callback();
+      callback()
     }
   };
   validate_startWorkYear = (rule, value, callback) => {
-    console.log(value, "startWorkYear");
+    console.log(value, 'startWorkYear')
     if (!value) {
-      callback(new Error("请输入工作时间"));
+      callback(new Error('请输入工作时间'))
     } else {
-      callback();
+      callback()
     }
   };
   rules = {
-    name: [{ required: true, validator: this.validate_Name, trigger: "blur" }],
-    mobile: [{ required: true, message: "请输入手机号码", trigger: "blur" }],
-    gender: [{ required: true, message: "请选择性别", trigger: "change" }],
+    name: [{ required: true, validator: this.validate_Name, trigger: 'blur' }],
+    mobile: [{ required: true, message: '请输入手机号码', trigger: 'blur' }],
+    gender: [{ required: true, message: '请选择性别', trigger: 'change' }],
     birth: [
       {
         required: true,
         validator: this.validate_Birth,
-        trigger: "blur"
+        trigger: 'blur'
       }
     ],
     startWorkYear: [
       {
-        type: "date",
+        type: 'date',
         required: true,
         validator: this.validate_startWorkYear,
-        trigger: "blur"
+        trigger: 'blur'
       }
     ],
     lastCompany: [
-      { required: true, message: "请选择最近任职的公司", trigger: "blur" }
+      { required: true, message: '请选择最近任职的公司', trigger: 'blur' }
     ],
     lastPosition: [
-      { required: true, message: "请选择最近的工作职位", trigger: "blur" }
+      { required: true, message: '请选择最近的工作职位', trigger: 'blur' }
     ],
     expectCityNum: [
-      { required: true, message: "请选择你期望的城市", trigger: "blur" }
+      { required: true, message: '请选择你期望的城市', trigger: 'blur' }
     ],
     expectPositionId: [
-      { required: true, message: "请选择期望的职位", trigger: "change" }
+      { required: true, message: '请选择期望的职位', trigger: 'change' }
     ],
     expectSalaryCeil: [
       {
-        type: "date",
+        type: 'date',
         required: true,
-        message: "请选择期望的最高月薪",
-        trigger: "blur"
+        message: '请选择期望的最高月薪',
+        trigger: 'blur'
       }
     ],
     expectSalaryFloor: [
-      { required: true, message: "请选择期望的最低月薪", trigger: "blur" }
+      { required: true, message: '请选择期望的最低月薪', trigger: 'blur' }
     ],
     expectFieldIds: [
-      { required: true, message: "请选择你期望的领域", trigger: "change" }
+      { required: true, message: '请选择你期望的领域', trigger: 'change' }
     ]
   };
   options = [];
   sumbitRusult = false;
-  itemList = ["新建微简历"];
+  itemList = ['新建微简历'];
   // 修改用户
-  saveUser() {
-    let value = this.canform.mobile;
+  saveUser () {
+    let value = this.canform.mobile
     if (!value) {
       this.$message({
-        message: "请输入手机号码"
-      });
+        message: '请输入手机号码'
+      })
     } else if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(value)) {
       this.$message({
-        message: "请输入正确的手机号码"
-      });
+        message: '请输入正确的手机号码'
+      })
     } else {
       haveMobile(value).then(res => {
         if (!res.data.data.userExist) {
-          canPush = 1;
+          canPush = 1
           this.$message({
-            message: "该用户不存在，请去创建用户"
-          });
+            message: '该用户不存在，请去创建用户'
+          })
           this.$nextTick(() => {
             this.$router.push({
-              path: "/user/addUser",
+              path: '/user/addUser',
               query: {
                 create_resume: true
               }
-            });
-          });
+            })
+          })
         } else if (res.data.data.userExist && res.data.data.haveCard) {
           this.$message({
-            message: "该手机号已创建简历，不能再次创建"
-          });
+            message: '该手机号已创建简历，不能再次创建'
+          })
         } else {
           // 满足需求
-          canPush = 2;
+          canPush = 2
           let param = {
             gender: String(res.data.data.cardInfo.gender),
             name: res.data.data.cardInfo.name,
             mobile: value
-          };
-          this.form = { ...this.form, ...param };
-          this.dialogVisible = false;
+          }
+          this.form = { ...this.form, ...param }
+          this.dialogVisible = false
         }
-      });
+      })
     }
   }
-  goPath(e) {
+  goPath (e) {
     this.$router.push({
-      path: "/resumeStore/recommendList/OrderDetail",
+      path: '/resumeStore/recommendList/OrderDetail',
       query: {
         id: this.resultmsg.id
       }
-    });
+    })
   }
   /* 上传文件 */
-  handleFileSuccess(e) {
-    console.log(e);
+  handleFileSuccess (e) {
+    console.log(e)
   }
   /* 修改手机号码 */
-  editMoile() {
-    this.showClose = true;
-    this.dialogVisible = true;
-    this.closeModel = true;
+  editMoile () {
+    this.showClose = true
+    this.dialogVisible = true
+    this.closeModel = true
   }
-  verificationMobile() {
-    console.log(this.checkMobileVal);
+  verificationMobile () {
+    console.log(this.checkMobileVal)
   }
-  changeTimeStamp(e, type) {
-    this.form[type] = parseInt(e / 1000);
+  changeTimeStamp (e, type) {
+    this.form[type] = parseInt(e / 1000)
   }
   /* 文件上传成功 */
-  uploadImg(e) {
-    console.log(e);
+  uploadImg (e) {
+    console.log(e)
   }
   /* 选择文件 */
-  beforeUpload(e) {
-    this.form.resumeAttachId = e.data[0].id;
+  beforeUpload (e) {
+    this.form.resumeAttachId = e.data[0].id
   }
-  UploadImage(param) {
-    console.log(param);
-    let name = param.file.name.split(".")[1];
-    let type = /(jpg|gif|png|peg|bmp)/.test(name) ? "img" : "doc";
-    const formData = new FormData();
-    formData.append("Authorization", sessionStorage.getItem("adminToken")); //
-    formData.append("attach_type", type);
-    formData.append("img1", param.file);
+  UploadImage (param) {
+    console.log(param)
+    let name = param.file.name.split('.')[1]
+    let type = /(jpg|gif|png|peg|bmp)/.test(name) ? 'img' : 'doc'
+    const formData = new FormData()
+    formData.append('Authorization', sessionStorage.getItem('adminToken')) //
+    formData.append('attach_type', type)
+    formData.append('img1', param.file)
     uploadApi(formData).then(res => {
-      const resumeAttachId = res.data.data[0].id;
-      this.form.resumeAttachId = resumeAttachId;
-    });
+      const resumeAttachId = res.data.data[0].id
+      this.form.resumeAttachId = resumeAttachId
+    })
   }
   /* 验证手机号码 */
-  checkMobile(e) {
+  checkMobile (e) {
     if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(e)) {
       this.$message({
-        message: "格式有误，请重新输入有效11位手机号",
-        type: "warning"
-      });
+        message: '格式有误，请重新输入有效11位手机号',
+        type: 'warning'
+      })
     } else {
       haveMobile(e).then(res => {
-        console.log(res);
+        console.log(res)
         if (!res.data.data.userExist) {
           this.$message({
-            message: "该用户不存在，请去创建用户",
-            type: "warning"
-          });
-          this.showClose = false;
-          this.dialogVisible = false;
-          this.closeModel = false;
-          this.$router.push({ path: "/user/addUser" });
+            message: '该用户不存在，请去创建用户',
+            type: 'warning'
+          })
+          this.showClose = false
+          this.dialogVisible = false
+          this.closeModel = false
+          this.$router.push({ path: '/user/addUser' })
         } else if (res.data.data.userExist && res.data.data.haveCard) {
           this.$message({
-            message: "该手机号已创建简历，不能再次创建",
-            type: "warning"
-          });
+            message: '该手机号已创建简历，不能再次创建',
+            type: 'warning'
+          })
         } else {
-          this.form.mobile = e;
-          this.dialogVisible = false;
-          this.nowUserMsg = res.data.data.cardInfo;
+          this.form.mobile = e
+          this.dialogVisible = false
+          this.nowUserMsg = res.data.data.cardInfo
         }
         // if(res)
-      });
+      })
     }
   }
-  choiceMax(e) {
-    console.log(e);
+  choiceMax (e) {
+    console.log(e)
   }
-  submitForm(form) {
-    this.changeTimeStamp(this.form.birth, "birth");
-    this.changeTimeStamp(this.form.startWorkYear, "startWorkYear");
+  submitForm (form) {
+    this.changeTimeStamp(this.form.birth, 'birth')
+    this.changeTimeStamp(this.form.startWorkYear, 'startWorkYear')
     // console.log(this.form.expectFieldIds);
-    this.form.expectFieldIds = [...this.form.expectFieldIds].join(",");
+    this.form.expectFieldIds = [...this.form.expectFieldIds].join(',')
     this.$refs[form].validate(valid => {
       if (valid) {
         createResume(this.form.mobile, this.form).then(res => {
-          console.log(res);
+          console.log(res)
           this.$message({
-            message: "创建成功",
-            type: "success"
-          });
+            message: '创建成功',
+            type: 'success'
+          })
           this.$router.push({
-            path: "/resumeStore/list",
+            path: '/resumeStore/list',
             meta: {
               keepAlive: false
             }
-          });
-        });
+          })
+        })
       } else {
-        console.log(this.form);
-        return false;
+        console.log(this.form)
+        return false
       }
-    });
+    })
   }
-  choicePostion(e) {
-    this.form.expectPositionId = e[e.length - 1];
+  choicePostion (e) {
+    this.form.expectPositionId = e[e.length - 1]
   }
   /* 选择最小薪资 */
-  choiceMin(val) {
-    let length = 2 * +val;
-    let firstVal = +val + 1;
-    this.maxSalary = [];
+  choiceMin (val) {
+    let length = 2 * +val
+    // let firstVal = +val + 1
+    this.maxSalary = []
     for (let i = +val; i < length; i++) {
-      this.maxSalary.push(parseInt(+i + 1));
+      this.maxSalary.push(parseInt(+i + 1))
     }
   }
-  type(e) {
-    this.form.expectCityNum = e[e.length - 1];
+  type (e) {
+    this.form.expectCityNum = e[e.length - 1]
   }
-  ClickTab(index) {
-    let result = this.itemList[index].name.indexOf("详情") != -1;
-    result ? (this.isCreate = 0) : (this.isCreate = 1);
+  ClickTab (index) {
+    let result = this.itemList[index].name.indexOf('详情') !== -1
+    result ? (this.isCreate = 0) : (this.isCreate = 1)
   }
-  CityData() {
+  CityData () {
     getCityApi().then(res => {
-      this.getCityList = res.data.data;
+      this.getCityList = res.data.data
       this.getCityList.forEach(item => {
         item.children.forEach(item1 => {
-          let result = JSON.stringify(item1.children);
-          if (result === "[]") delete item1.children;
-        });
-      });
-    });
+          let result = JSON.stringify(item1.children)
+          if (result === '[]') delete item1.children
+        })
+      })
+    })
   }
   // 期待职位
-  ManageList() {
+  ManageList () {
     getLabelPositionListApi().then(res => {
-      this.options = res.data.data;
+      this.options = res.data.data
       this.options.forEach(item => {
         item.children.forEach(item1 => {
           item1.children.forEach(item2 => {
-            let result = JSON.stringify(item2.children);
-            if (result === "[]") delete item2.children;
-          });
-        });
-      });
-    });
+            let result = JSON.stringify(item2.children)
+            if (result === '[]') delete item2.children
+          })
+        })
+      })
+    })
   }
-  field() {
+  field () {
     fieldApi().then(res => {
-      this.fieldList = res.data.data;
-      console.log("行业", this.fieldList);
-    });
+      this.fieldList = res.data.data
+      console.log('行业', this.fieldList)
+    })
   }
-  getUploadParam() {
+  getUploadParam () {
     this.uploadParam = {
-      Authorization: sessionStorage.getItem("adminToken"),
-      attach_type: "doc",
-      img1: ""
-    };
-    this.headers = {
-      "Authorization-Admin": getAccessToken(),
-      "Admin-Version": packjson.lieduoduoversion
-    };
-  }
-  created() {
-    this.getUploadParam();
-    this.form.mobile = JSON.parse(this.$route.query.userInfo).mobile;
-    this.form.gender = String(JSON.parse(this.$route.query.userInfo).gender);
-    this.form.name = JSON.parse(this.$route.query.userInfo).name;
-    this.salary();
-    this.field();
-    this.CityData();
-    this.ManageList();
-  }
-  salary() {
-    let minSalary = new Array(60);
-    for (var i = 0; i < minSalary.length; i++) {
-      minSalary[i] = i + 1;
+      Authorization: sessionStorage.getItem('adminToken'),
+      attach_type: 'doc',
+      img1: ''
     }
-    this.minSalary = minSalary;
+    this.headers = {
+      'Authorization-Admin': getAccessToken(),
+      'Admin-Version': packjson.lieduoduoversion
+    }
+  }
+  created () {
+    this.getUploadParam()
+    this.form.mobile = JSON.parse(this.$route.query.userInfo).mobile
+    this.form.gender = String(JSON.parse(this.$route.query.userInfo).gender)
+    this.form.name = JSON.parse(this.$route.query.userInfo).name
+    this.salary()
+    this.field()
+    this.CityData()
+    this.ManageList()
+  }
+  salary () {
+    let minSalary = new Array(60)
+    for (var i = 0; i < minSalary.length; i++) {
+      minSalary[i] = i + 1
+    }
+    this.minSalary = minSalary
   }
 }
 </script>

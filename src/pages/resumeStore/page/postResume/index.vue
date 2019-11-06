@@ -21,41 +21,39 @@
             <div class="line_blo">
               <div class="row_blo">
                 <span class="label_name">姓名:</span>
-                <div class="label_value">{{editMsg.name}}</div>   
+                <div class="label_value">{{editMsg.name}}</div>
               </div>
               <div class="row_blo">
                 <span class="label_name">性别:</span>
-                <div class="label_value">{{editMsg.gender === 1 ? '男' : '女'}}</div>              
+                <div class="label_value">{{editMsg.gender === 1 ? '男' : '女'}}</div>
               </div>
             </div>
 
             <div class="line_blo">
               <div class="row_blo">
                 <span class="label_name">出生年月:</span>
-                <div class="label_value" v-if="editMsg.birth">{{time(editMsg.birth*1000)}}</div>          
+                <div class="label_value" v-if="editMsg.birth">{{time(editMsg.birth*1000)}}</div>
               </div>
               <div class="row_blo">
                 <span class="label_name">参加工作时间:</span>
-                <div class="label_value" v-if="editMsg.startWorkYear">{{time(editMsg.startWorkYear*1000)}}</div>              
+                <div class="label_value" v-if="editMsg.startWorkYear">{{time(editMsg.startWorkYear*1000)}}</div>
               </div>
             </div>
             <div class="line_blo">
               <div class="row_blo">
                 <span class="label_name">求职状态:</span>
-                <div class="label_value" v-if="editMsg.jobStatus">{{editMsg.jobStatus | getJobStatus}}</div>      
+                <div class="label_value" v-if="editMsg.jobStatus">{{editMsg.jobStatus | getJobStatus}}</div>
               </div>
-
-              
 
               <div class="row_blo">
                 <span class="label_name">微信号:</span>
-                <div class="label_value">{{editMsg.wechat}}</div>              
+                <div class="label_value">{{editMsg.wechat}}</div>
               </div>
             </div>
             <div class="line_blo">
               <div class="row_blo">
                 <span class="label_name">自我描述:</span>
-                <div class="label_value">{{editMsg.signature}}</div>              
+                <div class="label_value">{{editMsg.signature}}</div>
               </div>
             </div>
           </div>
@@ -113,7 +111,7 @@
             </el-form-item>
 
             <el-form-item label-width="80px" label="微信号" class="formItem" prop="wechat">
-                
+
               <el-input placeholder="请输入微信号" v-model="form1.wechat"></el-input>
             </el-form-item>
 
@@ -143,7 +141,7 @@
                   <span class="label_name">个性标签:</span>
                   <div class="label_value formItem">
                     <div class="selectedList selectCont">
-                      <div class="selected_span" v-for="item, index in editMsg.personalizedLabels" >{{item.labelName}}</div>
+                      <div class="selected_span" v-for="(item, index) in editMsg.personalizedLabels" :key="index">{{item.labelName}}</div>
                     </div>
                   </div>
                 </div>
@@ -223,12 +221,12 @@
 
               <el-form-item label-width="110px" label="已选择职业标签" class="formItem" >
                 <div class="selectedList">
-                  <div class="selected_span" v-for="item, index in selectedJobList" @click="deleteLabel('job',index)">{{item.name || item.labelName}}</div>
+                  <div class="selected_span" v-for="(item, index) in selectedJobList" @click="deleteLabel('job',index)" :key="index">{{item.name || item.labelName}}</div>
                 </div>
               </el-form-item>
               <el-form-item label-width="110px" label="已选择生活标签" class="formItem" >
                 <div class="selectedList">
-                  <div class="selected_span" v-for="item, index in selectedLifeList" @click="deleteLabel('life',index)">{{item.name || item.labelName}}</div>
+                  <div class="selected_span" v-for="(item, index) in selectedLifeList" @click="deleteLabel('life',index)" :key="index">{{item.name || item.labelName}}</div>
                 </div>
               </el-form-item>
 
@@ -311,7 +309,7 @@
                 <el-button size="medium" type="primary" @click="handleSubmit(3)">确定</el-button>
               </el-form-item>
             </el-form>
-            <div class="infoCont" v-for="item,index in editMsg.expects"  v-else >
+            <div class="infoCont" v-for="(item,index) in editMsg.expects" :key="index"  v-else>
               <span class="info_edit" v-if="!isEditForm3" @click="setEdit(3,item)">编辑</span>
               <span class="info_delete" v-if="!isEditForm3 && editMsg.expects.length>1" @click="setDelete(3,item)">删除</span>
               <div class="line_blo">
@@ -327,17 +325,16 @@
               <div class="line_blo">
                 <div class="row_blo">
                   <span class="label_name">期望薪资:</span>
-                  <div class="label_value" v-if="item.salaryFloor">{{item.salaryFloor}}k-{{item.salaryCeil}}k</div>   
+                  <div class="label_value" v-if="item.salaryFloor">{{item.salaryFloor}}k-{{item.salaryCeil}}k</div>
                 </div>
                 <div class="row_blo">
                   <span class="label_name">期望领域:</span>
                   <div class="label_value" v-if="item.fields">
-                    <span class="value_span" v-for="item2 in item.fields">{{item2.field}}</span>
-                  </div>              
+                    <span class="value_span" v-for="(item2,index) in item.fields" :key="index">{{item2.field}}</span>
+                  </div>
                 </div>
               </div>
             </div>
-            
 
             <h4 class="classifyTitle">
               工作经历
@@ -379,7 +376,7 @@
                   style="width: 100%;"
                 ></el-date-picker>
               </el-form-item>
-              <el-form-item  label-width="80px" label="结束时间" class="formItem" prop="endTime"> 
+              <el-form-item  label-width="80px" label="结束时间" class="formItem" prop="endTime">
                   <el-date-picker
                     type="date"
                     placeholder="选择日期"
@@ -423,7 +420,7 @@
                 <el-button size="medium" type="primary" @click="handleSubmit(4)">确定</el-button>
               </el-form-item>
             </el-form>
-            <div class="infoCont" v-for="item,index in editMsg.careers" v-else>
+            <div class="infoCont" v-for="(item,index) in editMsg.careers" :key="index" v-else>
               <span class="info_edit" v-if="!isEditForm4" @click="setEdit(4,item)">编辑</span>
               <span class="info_delete" v-if="!isEditForm4 && editMsg.careers.length>1" @click="setDelete(4,item)">删除</span>
               <div class="line_blo">
@@ -440,32 +437,32 @@
               <div class="line_blo">
                 <div class="row_blo">
                   <span class="label_name">职位名称:</span>
-                  <div class="label_value">{{item.position}}</div>   
+                  <div class="label_value">{{item.position}}</div>
                 </div>
                 <div class="row_blo">
                   <span class="label_name">开始时间:</span>
-                  <div class="label_value">{{item.startTimeDesc}}</div>              
+                  <div class="label_value">{{item.startTimeDesc}}</div>
                 </div>
               </div>
 
               <div class="line_blo">
                 <div class="row_blo">
                   <span class="label_name">结束时间:</span>
-                  <div class="label_value">{{item.endTimeDesc}}</div>   
+                  <div class="label_value">{{item.endTimeDesc}}</div>
                 </div>
                 <div class="row_blo">
                   <span class="label_name">技能标签:</span>
                   <div class="label_value">
-                    <span class="value_span" v-for="item2 in item.technicalLabels"> {{item2.labelName}}  </span>
-                  </div>   
+                    <span class="value_span" v-for="(item2,index) in item.technicalLabels" :key="index"> {{item2.labelName}}  </span>
+                  </div>
                 </div>
               </div>
               <div class="line_blo">
                 <div class="row_blo">
                   <span class="label_name">工作内容:</span>
-                  <div class="label_value">{{item.duty}}</div>              
+                  <div class="label_value">{{item.duty}}</div>
                 </div>
-                
+
               </div>
             </div>
 
@@ -492,7 +489,7 @@
                   style="width: 100%;"
                 ></el-date-picker>
               </el-form-item>
-              <el-form-item  label-width="80px" label="结束时间" class="formItem" prop="endTime"> 
+              <el-form-item  label-width="80px" label="结束时间" class="formItem" prop="endTime">
                   <el-date-picker
                     type="date"
                     placeholder="选择日期"
@@ -527,7 +524,7 @@
                 <el-button size="medium" type="primary" @click="handleSubmit(5)">确定</el-button>
               </el-form-item>
             </el-form>
-            <div class="infoCont" v-for="item,index in editMsg.projects" v-else>
+            <div class="infoCont" v-for="(item,index) in editMsg.projects" :key="index"  v-else>
               <span class="info_edit" v-if="!isEditForm5" @click="setEdit(5,item)">编辑</span>
               <span class="info_delete" v-if="!isEditForm5 && editMsg.projects.length>1" @click="setDelete(5,item)">删除</span>
               <div class="line_blo">
@@ -543,25 +540,24 @@
               <div class="line_blo">
                 <div class="row_blo">
                   <span class="label_name">开始时间:</span>
-                  <div class="label_value">{{item.startTimeDesc}}</div>   
+                  <div class="label_value">{{item.startTimeDesc}}</div>
                 </div>
                 <div class="row_blo">
                   <span class="label_name">结束时间:</span>
-                  <div class="label_value">{{item.endTimeDesc}}</div>              
+                  <div class="label_value">{{item.endTimeDesc}}</div>
                 </div>
               </div>
               <div class="line_blo">
                 <div class="row_blo">
                   <span class="label_name">项目描述:</span>
-                  <div class="label_value">{{item.description}}</div>   
+                  <div class="label_value">{{item.description}}</div>
                 </div>
                 <div class="row_blo">
                   <span class="label_name">项目链接:</span>
-                  <div class="label_value">{{item.link}}</div>              
+                  <div class="label_value">{{item.link}}</div>
                 </div>
               </div>
             </div>
-
 
             <h4 class="classifyTitle">
               教育经历
@@ -619,7 +615,7 @@
                 <el-button size="medium" type="primary" @click="handleSubmit(6)">确定</el-button>
               </el-form-item>
             </el-form>
-            <div class="infoCont" v-for="item,index in editMsg.educations" v-else>
+            <div class="infoCont" v-for="(item,index) in editMsg.educations" :key="index" v-else>
               <span class="info_edit" v-if="!isEditForm6" @click="setEdit(6,item)">编辑</span>
               <span class="info_delete" v-if="!isEditForm6 && editMsg.educations.length>1" @click="setDelete(6,item)">删除</span>
               <div class="line_blo">
@@ -635,25 +631,25 @@
               <div class="line_blo">
                 <div class="row_blo">
                   <span class="label_name">开始时间:</span>
-                  <div class="label_value">{{item.startTimeDesc}}</div>   
+                  <div class="label_value">{{item.startTimeDesc}}</div>
                 </div>
                 <div class="row_blo">
                   <span class="label_name">结束时间:</span>
-                  <div class="label_value">{{item.endTimeDesc}}</div>              
+                  <div class="label_value">{{item.endTimeDesc}}</div>
                 </div>
               </div>
               <div class="line_blo">
                 <div class="row_blo">
                   <span class="label_name">在校经历:</span>
-                  <div class="label_value">{{item.experience}}</div>   
+                  <div class="label_value">{{item.experience}}</div>
                 </div>
                 <div class="row_blo">
                   <span class="label_name">专业:</span>
-                  <div class="label_value">{{item.major}}</div>              
+                  <div class="label_value">{{item.major}}</div>
                 </div>
               </div>
             </div>
-            
+
             <h4 class="classifyTitle">
               更多介绍
               <span class="edit_span" v-if="!isEditForm7" @click="setEdit(7)">编辑</span>
@@ -688,7 +684,6 @@
                 </ul>
               </el-form-item>
 
-
               <el-form-item class="formItem submit">
                 <el-button size="medium" @click="handleCancle('7')">取消</el-button>
                 <el-button size="medium" type="primary" @click="handleSubmit(7)">确定</el-button>
@@ -699,14 +694,14 @@
                 <div class="row_blo">
                   <span class="label_name">更多介绍:</span>
                   <div class="label_value" v-if="editMsg.moreIntroduce">{{editMsg.moreIntroduce.introduce}}</div>
-                </div>            
+                </div>
               </div>
               <div class="line_blo">
                 <div class="row_blo">
                   <span class="label_name">介绍图片:</span>
                   <div class="label_value pics" v-if="editMsg.moreIntroduce">
-                    <img v-for="item,index in editMsg.moreIntroduce.imgs" :src="item.middleUrl"  />
-                  </div>   
+                    <img v-for="(item,index) in editMsg.moreIntroduce.imgs" :key="index" :src="item.middleUrl"  />
+                  </div>
                 </div>
               </div>
             </div>
@@ -741,7 +736,7 @@
                 <div class="row_blo">
                   <span class="label_name">附件简历:</span>
                   <div class="label_value" v-if="editMsg.resumeAttach">{{editMsg.resumeAttach.fileName}}</div>
-                </div>            
+                </div>
               </div>
             </div>
           </template>
@@ -770,7 +765,6 @@
 import PostResume from './index'
 export default PostResume
 </script>
-
 
 <style lang='less' scoped>
 @import "./index.less";

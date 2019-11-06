@@ -275,15 +275,15 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import List from "@/components/list";
-import { getSalerListApi, getCompanyCustomerLevelRangeApi } from "API/commont";
-import { templistApi, companyTempUserList, setCompanyCompanyLevelApi } from "API/company";
-import { getAccessToken, removeAccessToken } from "API/cacheService";
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import List from '@/components/list'
+import { getSalerListApi, getCompanyCustomerLevelRangeApi } from 'API/commont'
+import { templistApi, setCompanyCompanyLevelApi } from 'API/company'
+import { getAccessToken } from 'API/cacheService'
 import { API_ROOT } from 'API/index.js'
 @Component({
-  name: "course-list",
+  name: 'course-list',
   components: {
     List
   }
@@ -293,77 +293,77 @@ export default class companyCheck extends Vue {
   toggle = false;
   total = 0; // 筛查结果数量
   pageCount = 0; // 请求回的数据共几页
-  AdminShow = ""; //权限字段，限制搜索
+  AdminShow = ''; // 权限字段，限制搜索
   form = {
-    wherefrom: "",
-    is_license: "",
-    admin_uid: "",
-    keyword: "",
-    status: "",
-    auth_status: "",
-    start: "",
-    end: "",
-    sstart: "",
-    send: "",
+    wherefrom: '',
+    is_license: '',
+    admin_uid: '',
+    keyword: '',
+    status: '',
+    auth_status: '',
+    start: '',
+    end: '',
+    sstart: '',
+    send: '',
     page: 1,
     count: 20,
     customer_level: ''
   };
   fields = [
-     // {
-     //   prop: 'index',
-     //   label: '序号',
-     //   width: 50
-     // },
+    // {
+    //   prop: 'index',
+    //   label: '序号',
+    //   width: 50
+    // },
     {
-      prop: "companyName",
-      label: "申请信息",
+      prop: 'companyName',
+      label: '申请信息',
       width: 400
     },
     {
-      prop: "realName",
-      label: "提交人",
+      prop: 'realName',
+      label: '提交人',
       width: 100,
-      align: "left"
+      align: 'left'
     },
     {
-      prop: "customer_level",
-      label: "客户等级",
+      prop: 'customer_level',
+      label: '客户等级',
       width: 200,
-      align: "left"
+      align: 'left'
     },
     {
-      prop: "adminName",
-      label: "跟进销售",
+      prop: 'adminName',
+      label: '跟进销售',
       width: 200,
-      align: "left"
+      align: 'left'
     },
     {
-      prop: "status",
-      label: "公司认证状态",
+      prop: 'status',
+      label: '公司认证状态',
       width: 200
     },
     {
-      prop: "authStatus",
-      label: "身份认证状态",
+      prop: 'authStatus',
+      label: '身份认证状态',
       width: 200
     },
     {
-      prop: "createdAt",
-      label: "申请时间",
+      prop: 'createdAt',
+      label: '申请时间',
       width: 200
     },
     {
-      prop: "id",
-      fixed: "right",
-      label: "操作"
+      prop: 'id',
+      fixed: 'right',
+      label: '操作'
     }
   ];
   list = [];
   companyCustomerLevelRange = []
-  change(index, value) {
+  change (index, value) {
     let item = this.list.find((field, i) => index === i)
-    setCompanyCompanyLevelApi({id: item.id, customerLevel: value})
+    setCompanyCompanyLevelApi({ id: item.id, customerLevel: value })
   }
   /**
    * @Author   小书包
@@ -371,81 +371,81 @@ export default class companyCheck extends Vue {
    * @detail   获取跟进销售列表
    * @return   {[type]}   [description]
    */
-  getCompanyCustomerLevelRange() {
-    getCompanyCustomerLevelRangeApi().then(res => this.companyCustomerLevelRange = res.data.data)
+  getCompanyCustomerLevelRange () {
+    getCompanyCustomerLevelRangeApi().then(res => (this.companyCustomerLevelRange = res.data.data))
   }
-  onSubmit(e) {
-    this.form.page = 1;
-    this.getTemplist();
+  onSubmit (e) {
+    this.form.page = 1
+    this.getTemplist()
   }
   // 搜索公司
-  search() {
-    this.onSubmit();
+  search () {
+    this.onSubmit()
   }
-  addCompany() {
+  addCompany () {
     this.$router.push({
-      path: "/index/createCompany",
+      path: '/index/createCompany',
       query: {
         isCreated: true,
         from: 'cp'
       }
-    });
+    })
   }
-  check(id) {
-    this.$route.meta.scrollY = window.scrollY;
+  check (id) {
+    this.$route.meta.scrollY = window.scrollY
     this.$router.push({
-      path: "/check/companyCheck/verify",
+      path: '/check/companyCheck/verify',
       query: { id: id }
-    });
+    })
   }
   /* 翻页 */
-  handlePageChange(nowPage) {
-    this.$route.meta.scrollY = 0;
-    window.scrollTo(0, 0);
-    this.form.page = nowPage;
-    this.getTemplist();
+  handlePageChange (nowPage) {
+    this.$route.meta.scrollY = 0
+    window.scrollTo(0, 0)
+    this.form.page = nowPage
+    this.getTemplist()
   }
   /* 请求审核列表 */
-  getTemplist() {
+  getTemplist () {
     let params = {
       page: this.form.page,
       count: this.form.count
     }
-    if(this.form.keyword) {
-      params = Object.assign(params, {keyword: this.form.keyword})
+    if (this.form.keyword) {
+      params = Object.assign(params, { keyword: this.form.keyword })
     }
-    if((this.form.start && !this.form.end) || (!this.form.start && this.form.end)) {
-      this.$message({message: "申请时间必须选择开始时间和结束时间", type: "warning"});
-      return;
+    if ((this.form.start && !this.form.end) || (!this.form.start && this.form.end)) {
+      this.$message({ message: '申请时间必须选择开始时间和结束时间', type: 'warning' })
+      return
     } else {
-      if(this.form.start && this.form.end) {
-        params = Object.assign(params, {start: this.form.start, end: this.form.end})
+      if (this.form.start && this.form.end) {
+        params = Object.assign(params, { start: this.form.start, end: this.form.end })
       } else {
         if ((this.form.sstart && !this.form.send) || (!this.form.sstart && this.form.send)) {
-           this.$message({message: "提交时间必须选择开始时间和结束时间", type: "warning"});
-            return;
+          this.$message({ message: '提交时间必须选择开始时间和结束时间', type: 'warning' })
+          return
         } else {
-          params = Object.assign(params, {start: this.form.sstart, end: this.form.send})
+          params = Object.assign(params, { start: this.form.sstart, end: this.form.send })
         }
       }
     }
-    if(this.form.status) {
-      params = Object.assign(params, {status: this.form.status})
+    if (this.form.status) {
+      params = Object.assign(params, { status: this.form.status })
     }
-    if(this.form.auth_status) {
-      params = Object.assign(params, {auth_status: this.form.auth_status})
+    if (this.form.auth_status) {
+      params = Object.assign(params, { auth_status: this.form.auth_status })
     }
-    if(this.form.admin_uid) {
-      params = Object.assign(params, {admin_uid: this.form.admin_uid})
+    if (this.form.admin_uid) {
+      params = Object.assign(params, { admin_uid: this.form.admin_uid })
     }
-    if(this.form.is_license) {
-      params = Object.assign(params, {is_license: this.form.is_license})
+    if (this.form.is_license) {
+      params = Object.assign(params, { is_license: this.form.is_license })
     }
-    if(this.form.wherefrom) {
-      params = Object.assign(params, {wherefrom: this.form.wherefrom})
+    if (this.form.wherefrom) {
+      params = Object.assign(params, { wherefrom: this.form.wherefrom })
     }
-    if(this.form.customer_level !== '') {
-      params = Object.assign(params, {customer_level: this.form.customer_level})
+    if (this.form.customer_level !== '') {
+      params = Object.assign(params, { customer_level: this.form.customer_level })
     }
     templistApi(params).then(res => {
       let list = res.data.data
@@ -453,38 +453,38 @@ export default class companyCheck extends Vue {
         field.customer_level = [].concat(this.companyCustomerLevelRange)
         field.customerVevelValue = field.customerLevel
       })
-      this.list = list;
-      this.total = res.data.meta.total;
-      this.pageCount = res.data.meta.lastPage;
-    });
+      this.list = list
+      this.total = res.data.meta.total
+      this.pageCount = res.data.meta.lastPage
+    })
   }
 
   /* 清除列表选项 */
-  resetForm(name) {
-    this.form.sstart = undefined;
-    this.form.send = undefined;
-    this.$refs[name].resetFields();
+  resetForm (name) {
+    this.form.sstart = undefined
+    this.form.send = undefined
+    this.$refs[name].resetFields()
   }
   /* 去选择跟进销售 */
-  toEditSaller(id) {
-    this.$route.meta.scrollY = window.scrollY;
+  toEditSaller (id) {
+    this.$route.meta.scrollY = window.scrollY
     this.$router.push({
       path: `/check/companyCheck/${id}`,
       query: { isEditSaller: true }
-    });
+    })
   }
-  created() {
-    this.userList();
-    this.AdminShow = +sessionStorage.getItem("AdminShow");
-    this.getTemplist();
+  created () {
+    this.userList()
+    this.AdminShow = +sessionStorage.getItem('AdminShow')
+    this.getTemplist()
     this.getCompanyCustomerLevelRange()
   }
-  userList() {
+  userList () {
     getSalerListApi().then(res => {
-      this.userList = res.data.data;
-    });
+      this.userList = res.data.data
+    })
   }
-  download() {
+  download () {
     this.$confirm('是否导出该列表数据?', '提示', {
       confirmButtonText: '是',
       cancelButtonText: '否',
@@ -493,45 +493,45 @@ export default class companyCheck extends Vue {
       let date = new Date()
       let downloadName = `公司审核管理-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}.xlsx`
       let url = `${API_ROOT}/company/templist?isExport=1`
-      
-      if(this.form.keyword) {
+
+      if (this.form.keyword) {
         url += `&keyword=${this.form.keyword}`
       }
-    
-      if((this.form.start && !this.form.end) || (!this.form.start && this.form.end)) {
-        this.$message({message: "申请时间必须选择开始时间和结束时间", type: "warning"});
+
+      if ((this.form.start && !this.form.end) || (!this.form.start && this.form.end)) {
+        this.$message({ message: '申请时间必须选择开始时间和结束时间', type: 'warning' })
       } else {
-        if(this.form.start && this.form.end) {
+        if (this.form.start && this.form.end) {
           url += `&start=${this.form.start}&end=${this.form.end}`
         }
       }
-      if(this.form.sstart && this.form.send) {
-          url += `&start=${this.form.sstart}&end=${this.form.send}`
+      if (this.form.sstart && this.form.send) {
+        url += `&start=${this.form.sstart}&end=${this.form.send}`
       }
-      if(this.form.status) {
+      if (this.form.status) {
         url += `&status=${this.form.status}`
       }
-      if(this.form.auth_status) {
+      if (this.form.auth_status) {
         url += `&auth_status=${this.form.auth_status}`
       }
-      if(this.form.admin_uid) {
+      if (this.form.admin_uid) {
         url += `&admin_uid=${this.form.admin_uid}`
       }
-      if(this.form.is_license) {
+      if (this.form.is_license) {
         url += `&is_license=${this.form.is_license}`
       }
-      if(this.form.wherefrom) {
+      if (this.form.wherefrom) {
         url += `&wherefrom=${this.form.wherefrom}`
       }
-      if(this.form.customer_level !== '') {
+      if (this.form.customer_level !== '') {
         url += `&customer_level=${this.form.customer_level}`
       }
       url = url.replace(/\s*/g, '')
       let xmlResquest = new XMLHttpRequest()
       xmlResquest.open('get', url, true)
-      xmlResquest.setRequestHeader('Content-type', 'application/json')
-      xmlResquest.setRequestHeader('Authorization-Admin', getAccessToken())
-      xmlResquest.responseType = 'blob'
+      xmlResquest.setRequestHeader('Content-type', 'application/json')
+      xmlResquest.setRequestHeader('Authorization-Admin', getAccessToken())
+      xmlResquest.responseType = 'blob'
       this.canDownloadData = false
       xmlResquest.onload = () => {
         let content = xmlResquest.response
@@ -550,9 +550,8 @@ export default class companyCheck extends Vue {
       this.$message({
         type: 'info',
         message: '已取消导出'
-      });          
+      })
     })
-    
   }
 }
 </script>

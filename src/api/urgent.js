@@ -1,6 +1,5 @@
 import { request } from './index.js'
 
-
 /* 获取急聘职位列表 */
 export const getUrgencyListApi = data => request({
   url: '/urgency/list',
@@ -21,7 +20,6 @@ export const editUrgencyApi = data => request({
   type: 'put',
   data
 })
-
 
 /* 获取急聘职位详情 */
 export const getUrgencyApi = data => request({

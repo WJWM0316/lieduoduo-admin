@@ -8,14 +8,14 @@ const router = new Router({
   mode: 'history',
   routes,
   // linkActiveClass:'pathactive',
-  scrollBehavior(to, from, savedPosition) {
+  scrollBehavior (to, from, savedPosition) {
     if (to.hash) {
       return {
         selector: to.hash
       }
     } else {
-      return savedPosition ? savedPosition : { x: 0, y: 0 }
-    } 
+      return savedPosition || { x: 0, y: 0 }
+    }
   }
 })
 
@@ -31,4 +31,3 @@ router.beforeEach((to, from, next) => {
 })
 
 export default router
-

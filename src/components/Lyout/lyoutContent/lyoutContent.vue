@@ -38,68 +38,68 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
+import Vue from 'vue'
+import Component from 'vue-class-component'
 
 @Component({
-  name: "lyoutContent",
+  name: 'lyoutContent',
   props: {
     isShowbtn: {
-      //是否显示右侧按钮
+      // 是否显示右侧按钮
       type: Boolean,
       default: false
     },
     leftcontent: {
-      //标题，以及数据量
+      // 标题，以及数据量
       type: Object,
       default: {
-        title: "标题",
+        title: '标题',
         total: 0
       }
     },
     lastPage: {
       type: String,
-      default: ""
+      default: ''
     }
   }
 })
 export default class lyoutContent extends Vue {
   tableHeight = 0; /* table高度 */
-  scrollZero() {
-    window.scrollTo(0, 0);
-    const el = document.getElementById("lyoutScroll");
+  scrollZero () {
+    window.scrollTo(0, 0)
+    const el = document.getElementById('lyoutScroll')
     // console.log(el);
-    el.scrollTop = 0;
+    el.scrollTop = 0
   }
   /* 监听布局高度，以改变table高度,兼容其他浏览器 */
-  clientHeight() {
-    let lyoutHeight = document.getElementById("lyoutScroll").offsetHeight;
-    console.log("lyoutHeight", lyoutHeight);
-    let isMaxHeight = (lyoutHeight > 800) & (lyoutHeight < 900) ? true : false;
-    let centerHeight = (lyoutHeight > 700) & (lyoutHeight < 800) ? true : false;
-    let isMixHeight = (lyoutHeight > 600) & (lyoutHeight < 700) ? true : false;
-    let ismaxMix = (lyoutHeight > 400) & (lyoutHeight < 600) ? true : false;
-    this.lyoutHeight = lyoutHeight;
+  clientHeight () {
+    let lyoutHeight = document.getElementById('lyoutScroll').offsetHeight
+    console.log('lyoutHeight', lyoutHeight)
+    let isMaxHeight = !!((lyoutHeight > 800) & (lyoutHeight < 900))
+    let centerHeight = !!((lyoutHeight > 700) & (lyoutHeight < 800))
+    let isMixHeight = !!((lyoutHeight > 600) & (lyoutHeight < 700))
+    let ismaxMix = !!((lyoutHeight > 400) & (lyoutHeight < 600))
+    this.lyoutHeight = lyoutHeight
     /* 主要为了定table高度,屏幕高度值在几个区间浮动 */
     if (isMaxHeight) {
-      this.tableHeight = 637;
+      this.tableHeight = 637
     } else if (centerHeight) {
-      this.tableHeight = 800;
+      this.tableHeight = 800
     } else if (isMixHeight) {
-      this.tableHeight = 500;
+      this.tableHeight = 500
     } else if (ismaxMix) {
-      this.tableHeight = 400;
+      this.tableHeight = 400
     } else {
-      this.tableHeight = 260;
+      this.tableHeight = 260
     }
-    this.$emit("handertableHeight", this.tableHeight);
+    this.$emit('handertableHeight', this.tableHeight)
     // }else if()
     // console.log("table高度", this.tableHeight);
   }
-  handlePageChange(nowPage) {
-    this.$emit("handlePageChange", nowPage);
+  handlePageChange (nowPage) {
+    this.$emit('handlePageChange', nowPage)
   }
-  mounted() {
+  mounted () {
     // this.$nextTick(() => this.clientHeight())
   }
 }

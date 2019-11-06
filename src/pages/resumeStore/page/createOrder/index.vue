@@ -104,11 +104,11 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import { createOrder, searchId } from "API/resumeStore";
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { createOrder, searchId } from 'API/resumeStore'
 @Component({
-  name: "OrderDetail"
+  name: 'OrderDetail'
 })
 export default class OrderDetail extends Vue {
   isFocus = false;
@@ -116,135 +116,135 @@ export default class OrderDetail extends Vue {
   isShowForm = false;
   isShowmsg = false;
   form = {
-    positionId: "",
-    vkeys: ""
+    positionId: '',
+    vkeys: ''
   };
   httpStatus = 0;
   postionObj = {
-    positionName: "",
-    city: "",
-    emolumentMin: "",
-    emolumentMax: "",
+    positionName: '',
+    city: '',
+    emolumentMin: '',
+    emolumentMax: '',
     companyInfo: {
-      companyName: ""
+      companyName: ''
     },
     recruiterInfo: {
-      name: ""
+      name: ''
     }
   };
   rules = {
     positionId: [
-      { type: "number", message: "id必须为数字" },
-      { type: "number", trigger: "blur", validator: this.verification_id }
+      { type: 'number', message: 'id必须为数字' },
+      { type: 'number', trigger: 'blur', validator: this.verification_id }
     ]
   };
   sumbitRusult=false;
   resultmsg = {
-    succeedNum: "",
-    failNum: ""
-  }; //成功后的订单
+    succeedNum: '',
+    failNum: ''
+  }; // 成功后的订单
   tableData = [];
   dialogVisible = false;
-  itemList = ["新建推荐单"];
-  goPath(e) {
+  itemList = ['新建推荐单'];
+  goPath (e) {
     this.$router.push({
-      path: "/resumeStore/recommendList/OrderDetail",
-      query:{
-        id:this.resultmsg.id
+      path: '/resumeStore/recommendList/OrderDetail',
+      query: {
+        id: this.resultmsg.id
       }
-    });
+    })
   }
-  checkId(id) {
+  checkId (id) {
     // 6512
     searchId(id)
       .then(res => {
-        this.postionObj = res.data.data;
-        this.isShowmsg = true;
+        this.postionObj = res.data.data
+        this.isShowmsg = true
       })
       .catch(err => {
-        this.httpStatus = err.data.httpStatus;
-        if (JSON.stringify(err.data.data) === "[]") {
-          this.isShowmsg = false;
+        this.httpStatus = err.data.httpStatus
+        if (JSON.stringify(err.data.data) === '[]') {
+          this.isShowmsg = false
         } else {
-          this.postionObj = err.data.data;
-          this.isShowmsg = true;
+          this.postionObj = err.data.data
+          this.isShowmsg = true
         }
-      });
+      })
   }
-  handleClose(done) {
-    this.dialogVisible = false;
+  handleClose (done) {
+    this.dialogVisible = false
   }
-  onSubmit(status) {
-    let reg = /^[a-zA-Z0-9,]+$/;
-    if (status === "up") {
-      if (this.form.positionId === "") return;
-      if (this.httpStatus === 400) return;
-      else if (this.form.vkeys === "") {
+  onSubmit (status) {
+    let reg = /^[a-zA-Z0-9,]+$/
+    if (status === 'up') {
+      if (this.form.positionId === '') return
+      if (this.httpStatus === 400) return
+      if (this.form.vkeys === '') {
         this.$message({
-          message: "简历编号不可为空",
-          type: "warning"
-        });
+          message: '简历编号不可为空',
+          type: 'warning'
+        })
       } else if (!reg.test(this.form.vkeys)) {
         this.$message({
-          message: "不可输除逗号以外的其他标点符号和特殊符号",
-          type: "warning"
-        });
+          message: '不可输除逗号以外的其他标点符号和特殊符号',
+          type: 'warning'
+        })
       } else {
-        console.log("成功通过");
+        console.log('成功通过')
         createOrder(this.form.positionId, { vkeys: this.form.vkeys })
           .then(res => {
             this.$nextTick(() => {
-              this.isShowForm = true;
-            });
-            this.resultmsg = res.data.data.list;
-            this.tableData = res.data.data.result;
-            this.sumbitRusult=true
+              this.isShowForm = true
+            })
+            this.resultmsg = res.data.data.list
+            this.tableData = res.data.data.result
+            this.sumbitRusult = true
             // this.operating(this.nowResumeMsg.uid, { action: "删除", desc: "简历附件" });
-            console.log(res);
+            console.log(res)
           })
           .catch(err => {
-            this.isShowForm = true;
+            this.isShowForm = true
             if (err.data.data.list === null) {
-              console.log("-----");
-              this.$set(this.resultmsg, "failNum", err.data.data.result.length);
-              this.$set(this.resultmsg, "succeedNum", 0);
+              console.log('-----')
+              this.$set(this.resultmsg, 'failNum', err.data.data.result.length)
+              this.$set(this.resultmsg, 'succeedNum', 0)
               // this.resultmsg.failNum = res.data.data.result.length;
-              console.log(this.resultmsg);
+              console.log(this.resultmsg)
             }
-            this.tableData = err.data.data.result;
-            console.log(this.tableData);
-          });
+            this.tableData = err.data.data.result
+            console.log(this.tableData)
+          })
       }
     } else {
     }
   }
-  ClickTab(index) {
-    let result = this.itemList[index].name.indexOf("详情") != -1;
-    result ? (this.isCreate = 0) : (this.isCreate = 1);
+  ClickTab (index) {
+    let result = this.itemList[index].name.indexOf('详情') !== -1
+    result ? (this.isCreate = 0) : (this.isCreate = 1)
   }
-  checkFrom() {
-    let { frompostion } = this.$route.query;
-    let obj = JSON.parse(this.$route.query.obj);
+  checkFrom () {
+    let { frompostion } = this.$route.query
+    let obj = JSON.parse(this.$route.query.obj)
     if (frompostion) {
-      this.form.positionId = obj.id;
-      this.postionObj = obj;
-      this.isShowmsg = true;
+      this.form.positionId = obj.id
+      this.postionObj = obj
+      this.isShowmsg = true
     }
   }
-  created() {
-    this.checkFrom();
+  created () {
+    this.checkFrom()
     if (this.$route.query.isCreate) {
-      this.itemList.splice(this.Index(), 1);
+      this.itemList.splice(this.Index(), 1)
     }
   }
-  Index() {
-    let indexOf = 0;
+  Index () {
+    let indexOf = 0
     for (let i = 0; i < this.itemList.length; i++) {
-      if (this.itemList[i].name.indexOf("详情") != -1) {
-        indexOf = i;
+      if (this.itemList[i].name.indexOf('详情') !== -1) {
+        indexOf = i
       }
     }
-    return indexOf;
+    return indexOf
   }
 }
 </script>

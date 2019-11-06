@@ -241,76 +241,76 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
+import Vue from 'vue'
+import Component from 'vue-class-component'
 import {
   recommendDetail,
   resultList,
   recommendPay,
   refund
-} from "API/resumeStore";
-import { getResumeCodeUrlApi, getRecruiterCodeUrlApi } from "API/interview";
+} from 'API/resumeStore'
+import { getResumeCodeUrlApi, getRecruiterCodeUrlApi, getPositionCodeUrlApi } from 'API/interview'
 @Component({
-  name: "OrderDetail",
-  prop: ""
+  name: 'OrderDetail',
+  prop: ''
 })
 export default class OrderDetail extends Vue {
   // itemList = ["推荐单详情"];
-  isCreate = false; //是否创建
-  isShowForm = false; //是否展示原因
-  iseditResult = false; //如果是编辑就弹出编辑弹框，否则是原因弹框
-  dialogTitle = "返点"; //弹框标题,四种情况 弹框唯一
-  centerDialogVisible = false; //原因弹框
-  baseMsg = {}; //基础信息
-  textarea2 = ""; //原因
-  nowSuccessNum = 0; //成功数
-  nowFailNum = 0; //失败数
-  qrCode = ""; //二维码
-  mobile = "";
-  result = "";
+  isCreate = false; // 是否创建
+  isShowForm = false; // 是否展示原因
+  iseditResult = false; // 如果是编辑就弹出编辑弹框，否则是原因弹框
+  dialogTitle = '返点'; // 弹框标题,四种情况 弹框唯一
+  centerDialogVisible = false; // 原因弹框
+  baseMsg = {}; // 基础信息
+  textarea2 = ''; // 原因
+  nowSuccessNum = 0; // 成功数
+  nowFailNum = 0; // 失败数
+  qrCode = ''; // 二维码
+  mobile = '';
+  result = '';
   isAutomatic = true; /* 是否系统自动   false 显示操作栏 true 不显示操作栏 */
   iconList = []; /* 不感兴趣标签栏 */
   tableData = [];
   RusultForm = {
-    recommendId: "",
-    note: "",
-    type: "" /* 1是扣点，2是返点 */
+    recommendId: '',
+    note: '',
+    type: '' /* 1是扣点，2是返点 */
   };
-  closeForm() {
-    this.isShowForm = !this.isShowForm;
+  closeForm () {
+    this.isShowForm = !this.isShowForm
   }
   /* status 是否出现编辑弹框 */
   /* type  1 扣点  2 返点，3返点原因  4扣点原因 5 不合适原因 */
-  handleClick(status, title, id, type) {
+  handleClick (status, title, id, type) {
     // console.log(status, title, id, type);
-    this.dialogTitle = title;
-    this.centerDialogVisible = true;
-    this.iconList = [];
-    let nowRow = this.tableData.filter(item => item.id === id)[0];
+    this.dialogTitle = title
+    this.centerDialogVisible = true
+    this.iconList = []
+    let nowRow = this.tableData.filter(item => item.id === id)[0]
     // console.log(nowRow.chargeNote);
     switch (type) {
       case 1:
-        this.RusultForm.type = type;
-        this.RusultForm.recommendId = id;
-        this.iseditResult = status;
-        break;
+        this.RusultForm.type = type
+        this.RusultForm.recommendId = id
+        this.iseditResult = status
+        break
       case 2:
-        this.RusultForm.type = type;
-        this.RusultForm.recommendId = id;
-        this.iseditResult = status;
-        break;
+        this.RusultForm.type = type
+        this.RusultForm.recommendId = id
+        this.iseditResult = status
+        break
       case 3:
-        this.iseditResult = status;
-        this.result = nowRow.chargeNote;
-        break;
+        this.iseditResult = status
+        this.result = nowRow.chargeNote
+        break
       case 4:
-        this.iseditResult = status;
-        this.result = nowRow.chargeNote;
-        break;
+        this.iseditResult = status
+        this.result = nowRow.chargeNote
+        break
       case 5:
-        this.result = nowRow.interview.comment.extraDesc;
-        this.iconList = nowRow.interview.comment.reason.split(",");
-        break;
+        this.result = nowRow.interview.comment.extraDesc
+        this.iconList = nowRow.interview.comment.reason.split(',')
+        break
     }
 
     // [0];
@@ -318,7 +318,7 @@ export default class OrderDetail extends Vue {
     //
     // if (nowRow.interview.comment !== ""&&type===undefined) {
     //   console.log("点击原因");
-    //d
+    // d
     //
     // } else {
     //   console.log("点击扣返点");
@@ -330,31 +330,31 @@ export default class OrderDetail extends Vue {
     //
   }
   /* 关闭二维码弹窗 */
-  closeTopic() {
+  closeTopic () {
     this.$nextTick(() => {
-      this.$refs["mobile"].style.display = "none";
-      this.$refs["qrCode"].style.display = "none";
-    });
+      this.$refs['mobile'].style.display = 'none'
+      this.$refs['qrCode'].style.display = 'none'
+    })
   }
   /* 展示手机 */
-  showPhone(e, mobile) {
+  showPhone (e, mobile) {
     // console.log(mobile);
-    if (this.timeout !== null) clearTimeout(this.timeout);
-    this.mobile = mobile || "用户未绑定手机";
+    if (this.timeout !== null) clearTimeout(this.timeout)
+    this.mobile = mobile || '用户未绑定手机'
     this.$nextTick(() => {
-      this.$refs["mobile"].style.display = "block";
-      this.$refs["mobile"].style.left = e.clientX + "px";
-      this.$refs["mobile"].style.top = e.clientY + window.scrollY + "px";
-    });
+      this.$refs['mobile'].style.display = 'block'
+      this.$refs['mobile'].style.left = e.clientX + 'px'
+      this.$refs['mobile'].style.top = e.clientY + window.scrollY + 'px'
+    })
   }
   // 确认扣返点
-  checkNote() {
-    if (this.RusultForm.note === "") {
+  checkNote () {
+    if (this.RusultForm.note === '') {
       this.$message({
-        message: "原因不能为空",
-        type: "warning"
-      });
-      return;
+        message: '原因不能为空',
+        type: 'warning'
+      })
+      return
     }
     if (this.RusultForm.type === 1) {
       // console.log("扣点");
@@ -362,10 +362,10 @@ export default class OrderDetail extends Vue {
         note: this.RusultForm.note
       }).then(res => {
         // console.log(res);
-        this.centerDialogVisible = false;
-        this.getData();
-        this.RusultForm.note = "";
-      });
+        this.centerDialogVisible = false
+        this.getData()
+        this.RusultForm.note = ''
+      })
       /* 扣点 */
     } else if (this.RusultForm.type === 2) {
       // console.log("返点"); /* 返点 */
@@ -373,129 +373,129 @@ export default class OrderDetail extends Vue {
         note: this.RusultForm.note
       }).then(res => {
         // console.log(res);
-        this.centerDialogVisible = false;
-        this.getData();
-        this.RusultForm.note = "";
-      });
+        this.centerDialogVisible = false
+        this.getData()
+        this.RusultForm.note = ''
+      })
     }
     // console.log(this.RusultForm);
   }
-  created() {
-    this.getData();
+  created () {
+    this.getData()
   }
   /* 生成二维码 */
-  getQr(type, uid) {
+  getQr (type, uid) {
     switch (type) {
       case 1:
         // 招聘官主页
-        return getRecruiterCodeUrlApi({ id: uid });
-        break;
+        getRecruiterCodeUrlApi({ id: uid })
+        break
       case 2:
         // 简历二维码
-        return getResumeCodeUrlApi({ id: uid });
-        break;
+        getResumeCodeUrlApi({ id: uid })
+        break
       case 3:
-        if (uid === 0) return;
-        return getPositionCodeUrlApi({ id: uid });
-        break;
+        if (uid === 0) return
+        getPositionCodeUrlApi({ id: uid })
+        break
     }
   }
-  toPositionPath(id) {
+  toPositionPath (id) {
     // console.log(id);
     this.$router.push({
-      path: "/positionManage/positionAuditDetail",
+      path: '/positionManage/positionAuditDetail',
       query: { id }
-    });
+    })
   }
-  seeRusult() {
-    const { id } = this.$route.query;
-    this.isShowForm = true;
+  seeRusult () {
+    const { id } = this.$route.query
+    this.isShowForm = true
     resultList(id).then(res => {
       // console.log(res);
-      this.resultList = res.data.data;
+      this.resultList = res.data.data
       this.nowSuccessNum = this.resultList.filter(
         item => item.isSuccess === 1
-      ).length;
+      ).length
       this.nowFailNum = this.resultList.filter(
         item => item.isSuccess === 0
-      ).length;
+      ).length
       this.resultList.forEach(item => {
         if (item.isSuccess) {
-          item.reason = "推荐成功";
+          item.reason = '推荐成功'
         }
-      });
+      })
       // console.log(this.resultList);
-    });
+    })
   }
   // 看二维码
   /* 生成小程序码 */
-  async creatLink(e, uid, index, type) {
-    console.log("e", e.clientX);
-    this.qrCode = "";
+  async creatLink (e, uid, index, type) {
+    console.log('e', e.clientX)
+    this.qrCode = ''
     // 是否已经加载过二维码
-    console.log("this.tableData[index]", this.tableData[index]);
+    console.log('this.tableData[index]', this.tableData[index])
     if (this.tableData[index].qrCode && type === 1) {
-      this.qrCode = this.tableData[index].qrCode;
+      this.qrCode = this.tableData[index].qrCode
       this.$nextTick(() => {
-        this.$refs["qrCode"].style.display = "block";
-        this.$refs["qrCode"].style.left = e.clientX + "px";
-        this.$refs["qrCode"].style.top = e.clientY + window.scrollY + "px";
-      });
-      return;
+        this.$refs['qrCode'].style.display = 'block'
+        this.$refs['qrCode'].style.left = e.clientX + 'px'
+        this.$refs['qrCode'].style.top = e.clientY + window.scrollY + 'px'
+      })
+      return
     } else if (this.tableData[index].resumeQrCode && type === 2) {
-      this.qrCode = this.tableData[index].resumeQrCode;
+      this.qrCode = this.tableData[index].resumeQrCode
       this.$nextTick(() => {
-        this.$refs["qrCode"].style.display = "block";
-        this.$refs["qrCode"].style.left = e.clientX + "px";
-        this.$refs["qrCode"].style.top = e.clientY + window.scrollY + "px";
-      });
-      return;
+        this.$refs['qrCode'].style.display = 'block'
+        this.$refs['qrCode'].style.left = e.clientX + 'px'
+        this.$refs['qrCode'].style.top = e.clientY + window.scrollY + 'px'
+      })
+      return
     } else if (this.tableData[index].jobQrCode && type === 3) {
-      this.qrCode = this.tableData[index].jobQrCode;
+      this.qrCode = this.tableData[index].jobQrCode
       this.$nextTick(() => {
-        this.$refs["qrCode"].style.display = "block";
-        this.$refs["qrCode"].style.left = e.clientX + "px";
-        this.$refs["qrCode"].style.top = e.clientY + window.scrollY + "px";
-      });
-      return;
+        this.$refs['qrCode'].style.display = 'block'
+        this.$refs['qrCode'].style.left = e.clientX + 'px'
+        this.$refs['qrCode'].style.top = e.clientY + window.scrollY + 'px'
+      })
+      return
     }
 
     this.$nextTick(() => {
-      this.$refs["qrCode"].style.display = "block";
-      this.$refs["qrCode"].style.left = e.clientX + "px";
-      this.$refs["qrCode"].style.top = e.clientY + window.scrollY + "px";
-    });
-    let res = await this.getQr(type, uid);
+      this.$refs['qrCode'].style.display = 'block'
+      this.$refs['qrCode'].style.left = e.clientX + 'px'
+      this.$refs['qrCode'].style.top = e.clientY + window.scrollY + 'px'
+    })
+    let res = await this.getQr(type, uid)
     if (type === 1) {
-      this.qrCode = res.data.data.qrCodeUrl;
-      this.tableData[index].qrCode = res.data.data.qrCodeUrl;
+      this.qrCode = res.data.data.qrCodeUrl
+      this.tableData[index].qrCode = res.data.data.qrCodeUrl
     } else if (type === 2) {
-      this.qrCode = res.data.data.qrCodeUrl;
-      this.tableData[index].resumeQrCode = res.data.data.qrCodeUrl;
+      this.qrCode = res.data.data.qrCodeUrl
+      this.tableData[index].resumeQrCode = res.data.data.qrCodeUrl
     } else {
-      this.qrCode = res.data.data.qrCodeUrl;
-      this.tableData[index].jobQrCode = res.data.data.qrCodeUrl;
+      this.qrCode = res.data.data.qrCodeUrl
+      this.tableData[index].jobQrCode = res.data.data.qrCodeUrl
     }
   }
-  getData() {
-    let { id } = this.$route.query;
+  getData () {
+    let { id } = this.$route.query
     // console.log(id);
     recommendDetail(id).then(res => {
       // console.log(res);
-      this.baseMsg = res.data.data.listInfo;
-      this.tableData = res.data.data.recommends;
+      this.baseMsg = res.data.data.listInfo
+      this.tableData = res.data.data.recommends
       this.tableData.forEach(item => {
-          item.jobhunter.isShowMobile = false;
-        item.recrutier.isShowMobile = false;
+        item.jobhunter.isShowMobile = false
+        item.recrutier.isShowMobile = false
         if (item.interview !== null) {
           if (/(55|54|57|58|60|61)/.test(item.interview.status)) {
-            item.interview.isAutomatic = true;
+            item.interview.isAutomatic = true
           } else {
-            item.interview.isAutomatic = false;
+            item.interview.isAutomatic = false
           }
         }
-      });
-    });
+      })
+    })
   }
 }
 </script>

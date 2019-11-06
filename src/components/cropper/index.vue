@@ -1,38 +1,38 @@
 <template>
-	<div id="zike-cropper">
+  <div id="zike-cropper">
     <div class="upload-image click-item" role="button" @click="onSelectFile" :class="{'zike-btn-selected': hasUploaded}">
       <i  class="icon iconfont icon-update"></i> {{ btnTxt }}
       <input type="file" id="uplaod-file" ref="hiddenFile" name="file" @change="onFileChange" style="display: none;" :accept="accept"/>
     </div>
-		<div class="cropper-alert-mask" :class="{show: flag.imgHasLoad}">
-	    <div class="cropper-alert" :class="{show: flag.imgHasLoad}">
+    <div class="cropper-alert-mask" :class="{show: flag.imgHasLoad}">
+      <div class="cropper-alert" :class="{show: flag.imgHasLoad}">
         <div class="modal-position">{{tips}}</div>
         <i class="el-icon-close" @click="flag.imgHasLoad=false"></i>
-	      <div class="cropper">
-	        <div class="cropper-box" id="cropperBox">
-	          <img id="uploadPreview" style="width:100px;height:100px;"/>
-	        </div>
-	        <div class="cropper-res-wrap">
-	          <div :class="{'radiu': picShape === 'radiu'}" class="cropper-res" id="cropperRes">
-	            <img style="width:100px;height:100px;"  />
-	          </div>
+        <div class="cropper">
+          <div class="cropper-box" id="cropperBox">
+            <img id="uploadPreview" style="width:100px;height:100px;"/>
+          </div>
+          <div class="cropper-res-wrap">
+            <div :class="{'radiu': picShape === 'radiu'}" class="cropper-res" id="cropperRes">
+              <img style="width:100px;height:100px;"  />
+            </div>
             <!-- <p class="label-tips">{{tips}}</p> -->
             <p class="label-tips">图片预览</p>
-	        </div>
-	      </div>
-	      <div class="cropper-btns-wrap">
+          </div>
+        </div>
+        <div class="cropper-btns-wrap">
           <el-button @click="flag.imgHasLoad=false">取消</el-button>
           <el-button type="primary" :disabled="flag.btnTips.disable" @click="finishCropImage">{{ flag.btnTips.value }}</el-button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import Cropper from 'cropperjs'
-
+import { mapActions } from 'vuex'
 @Component({
   methods: {
     ...mapActions([
@@ -77,7 +77,6 @@ import Cropper from 'cropperjs'
   }
 })
 export default class ComponentCropper extends Vue {
-
   // 初始化裁剪对象
   cropper = null
   // 裁剪设置
@@ -93,7 +92,7 @@ export default class ComponentCropper extends Vue {
   /**
    * 用户点击头像
    */
-  onSelectFile() {
+  onSelectFile () {
     const el = this.$refs.hiddenFile
     if (!el) return
     el.click()
@@ -104,7 +103,7 @@ export default class ComponentCropper extends Vue {
    * 用户选择好文件了
    * @param  {Event} e  文件改变事件
    */
-  onFileChange(e) {
+  onFileChange (e) {
     const files = e.target.files
     const len = files.length
     const fileName = files[0].name
@@ -151,7 +150,7 @@ export default class ComponentCropper extends Vue {
    * @detail   加载裁剪工具
    * @return   {[type]}   [description]
    */
-  loadCropper() {
+  loadCropper () {
     const image = document.querySelector('#cropperBox > img')
     const options = {
       aspectRatio: 1 / 1,
@@ -166,7 +165,7 @@ export default class ComponentCropper extends Vue {
    * @detail   完成裁剪，并输出裁剪结果，然后上传
    * @return   {[type]}   [description]
    */
-  finishCropImage() {
+  finishCropImage () {
     this.flag.btnTips.value = '确定'
     this.flag.btnTips.disable = true
     const croppedCanvas = this.cropper.getCroppedCanvas()
@@ -194,9 +193,12 @@ export default class ComponentCropper extends Vue {
   }
 
   // dataUrl 转 blob
-  dataURLtoBlob(dataurl) {
-    let arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1]
-    let bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n)
+  dataURLtoBlob (dataurl) {
+    let arr = dataurl.split(',')
+    let mime = arr[0].match(/:(.*?);/)[1]
+    let bstr = atob(arr[1])
+    let n = bstr.length
+    let u8arr = new Uint8Array(n)
     while (n--) {
       u8arr[n] = bstr.charCodeAt(n)
     }
@@ -219,13 +221,13 @@ export default class ComponentCropper extends Vue {
     while (n--) {
       u8arr[n] = bstr.charCodeAt(n)
     }
-    return new File([u8arr], `${filename}.${suffix}`, {type: mime})
+    return new File([u8arr], `${filename}.${suffix}`, { type: mime })
   }
 
   // 获取文件后缀名
-  getFileExt(filename) {
+  getFileExt (filename) {
     const tem = filename.split('.')
-    return tem[tem.length-1]
+    return tem[tem.length - 1]
   }
 }
 </script>
@@ -248,8 +250,8 @@ export default class ComponentCropper extends Vue {
     font-size: 14px;
     border-radius: 4px;
     color: #354048;
-		background-color: #FFE266;
-		border-color: #FFE266;
+    background-color: #FFE266;
+    border-color: #FFE266;
     color: #354048;
     margin-right: 8px;
   }

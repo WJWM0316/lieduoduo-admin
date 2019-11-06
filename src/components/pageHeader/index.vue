@@ -106,23 +106,23 @@
 }
 </style>
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import { getAccessToken, removeAccessToken } from "API/cacheService";
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { removeAccessToken } from 'API/cacheService'
 
 @Component({
   watch: {
     $route: {
-      handler(route) {
-        this.avar = sessionStorage.getItem("avar");
-        this.userName = sessionStorage.getItem("name");
-        this.nowLinkName = route.meta.title;
+      handler (route) {
+        this.avar = sessionStorage.getItem('avar')
+        this.userName = sessionStorage.getItem('name')
+        this.nowLinkName = route.meta.title
         if (route.meta.haveParent) {
-          this.haveParent = true;
-          this.parentPath = route.meta.parentPath;
-          this.parentName = route.meta.parentName;
+          this.haveParent = true
+          this.parentPath = route.meta.parentPath
+          this.parentName = route.meta.parentName
         } else {
-          this.haveParent = false;
+          this.haveParent = false
         }
       },
       immediate: true
@@ -130,23 +130,23 @@ import { getAccessToken, removeAccessToken } from "API/cacheService";
   }
 })
 export default class ComponentHeader extends Vue {
-  nowLinkName = "";
+  nowLinkName = '';
   haveParent = false;
-  parentPath = "";
-  parentName = "";
-  avar = "";
-  userName = "";
+  parentPath = '';
+  parentName = '';
+  avar = '';
+  userName = '';
   isShow = false;
-  toLogin() {
-    removeAccessToken();
-    this.isShow = false;
-    sessionStorage.removeItem("isShowResumeHandle");
+  toLogin () {
+    removeAccessToken()
+    this.isShow = false
+    sessionStorage.removeItem('isShowResumeHandle')
     this.$router.push({
-      path: "/login"
-    });
+      path: '/login'
+    })
   }
-  showExit() {
-    this.isShow = !this.isShow;
+  showExit () {
+    this.isShow = !this.isShow
   }
 }
 </script>

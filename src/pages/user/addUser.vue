@@ -124,10 +124,10 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import ImageUploader from "@/components/imageUploader";
-import { fieldApi, uploadIdcardApi } from "API/commont";
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import ImageUploader from '@/components/imageUploader'
+import { uploadIdcardApi } from 'API/commont'
 import {
   detectionMobileApi,
   checkUserauthApi,
@@ -135,17 +135,13 @@ import {
   getUserInfoApi,
   editUserauthApi,
   editUserApi
-} from "API/recruiter";
+} from 'API/recruiter'
 import {
-  setCompanyInfoApi,
-  setIdentityInfoApi,
-  addCompanyAddressApi,
-  delCompanyAddressApi,
   getApplyUserInfoApi,
   editApplyUserInfoApi
-} from "API/company";
+} from 'API/company'
 @Component({
-  name: "addUser",
+  name: 'addUser',
   components: {
     ImageUploader
   }
@@ -153,56 +149,56 @@ import {
 export default class addUser extends Vue {
   isEdit = false; // 是否编辑用户，默认为创建用户
   editIdentityAuth = 0; // 编辑用户的身份验证状态，默认未提交
-  checkUid = "";
+  checkUid = '';
   pop = {
     isShow: false,
-    type: "position"
+    type: 'position'
   };
   isDetection = false; // 是否已校验身份证信息
   /* 身份证信息对象 */
   iDCard = {};
   /* 手机号码 */
   phone = {
-    mobile: ""
+    mobile: ''
   };
   /* 身份信息 */
   personalInfo = {
-    name: "", // 姓名
-    gender: "",
-    realname: "", // 真实姓名
-    idNum: "", // 身份证号码
-    passportFront: "" // 身份证正面照片
+    name: '', // 姓名
+    gender: '',
+    realname: '', // 真实姓名
+    idNum: '', // 身份证号码
+    passportFront: '' // 身份证正面照片
   };
   iconUploader = {
-    point: "",
+    point: '',
     width: 400,
-    height: "",
-    tips: "建议尺寸400X400px，JPG、PNG格式，图片小于5M。"
+    height: '',
+    tips: '建议尺寸400X400px，JPG、PNG格式，图片小于5M。'
   };
   form = {
-    icon3: "" // 身份证正面
+    icon3: '' // 身份证正面
   };
   /* 自定义校验手机规则 */
   phoneRule = (rule, value, callback) => {
     detectionMobileApi({ mobile: this.phone.mobile }).then(res => {
       if (res.data.data.isExisted) {
-        callback(new Error("号码已经被注册"));
+        callback(new Error('号码已经被注册'))
       } else {
-        callback();
+        callback()
       }
-    });
+    })
   };
   // 校验手机
   mobile = {
     mobile: [
       {
         required: true,
-        message: "请输入正确的手机号码",
-        trigger: "blur",
+        message: '请输入正确的手机号码',
+        trigger: 'blur',
         min: 11,
         max: 11
       },
-      { validator: this.phoneRule, trigger: "blur" }
+      { validator: this.phoneRule, trigger: 'blur' }
     ]
   };
   // 身份信息表单验证
@@ -210,72 +206,72 @@ export default class addUser extends Vue {
     name: [
       {
         required: true,
-        message: "请输入姓名，要求2-20个字",
-        trigger: "blur",
+        message: '请输入姓名，要求2-20个字',
+        trigger: 'blur',
         max: 20,
         min: 2
       }
     ],
-    gender: [{ required: true, message: "请选择性别", trigger: "blur" }]
+    gender: [{ required: true, message: '请选择性别', trigger: 'blur' }]
   };
   /* 调用创建或编辑 */
-  editOrCreat(userInfo) {
+  editOrCreat (userInfo) {
     if (this.isEdit) {
       if (this.$route.query.isFromCheck) {
         let param = {
           real_name: this.personalInfo.name,
           gender: this.personalInfo.gender
-        };
-        return editApplyUserInfoApi(this.$route.params.id, param);
+        }
+        return editApplyUserInfoApi(this.$route.params.id, param)
       } else {
-        const uid = this.$route.params.id;
-        return editUserApi(uid, userInfo);
+        const uid = this.$route.params.id
+        return editUserApi(uid, userInfo)
       }
     } else {
-      return createdUserApi(userInfo);
+      return createdUserApi(userInfo)
     }
   }
   /* 创建或编辑用户 */
-  saveUser() {
-    let newUser = {};
+  saveUser () {
+    let newUser = {}
     if (this.isDetection) {
-      newUser = Object.assign({}, this.personalInfo, this.phone);
+      newUser = Object.assign({}, this.personalInfo, this.phone)
     } else {
       let param = {
         real_name: this.personalInfo.name,
         name: this.personalInfo.name,
         gender: this.personalInfo.gender
-      };
-      newUser = Object.assign({}, param, this.phone);
+      }
+      newUser = Object.assign({}, param, this.phone)
     }
-    this.$refs["personalInfo"].validate(async valid => {
+    this.$refs['personalInfo'].validate(async valid => {
       if (valid) {
-        let create_resume = this.$route.query.create_resume || false;
+        let create_resume = this.$route.query.create_resume || false
         let up_router = sessionStorage.getItem(
-          "up_router"
-        ); /* 如果需要取上级路由，需要在上级路由缓存该路由path */
+          'up_router'
+        ) /* 如果需要取上级路由，需要在上级路由缓存该路由path */
         this.editOrCreat(newUser).then(res => {
           this.$message({
-            message: this.isEdit ? "编辑成功" : "用户创建成功",
-            type: "success"
-          });
+            message: this.isEdit ? '编辑成功' : '用户创建成功',
+            type: 'success'
+          })
           if (this.isEdit) {
             /* 常规操作 处于编辑状态回退到user页面 */
             this.$router.replace({
               path: `/user`,
               query: { isNeedLoad: true }
-            });
+            })
           } else {
             // 其余页面 进入创建用户界面 统一通过up_router 缓存上一级页面，进行回退，需要特殊处理的 下方判断
             let userInfo = {
               mobile: newUser.mobile,
               name: newUser.real_name,
               gender: newUser.gender
-            };
+            }
             if (create_resume) {
               let name = `createNewResume`
               let resumeType = this.$route.query.resumetype === 2
-              if(resumeType) {
+              if (resumeType) {
                 userInfo.uid = newUser.uid
                 name = `postResume`
               }
@@ -285,7 +281,7 @@ export default class addUser extends Vue {
                 query: {
                   userInfo: JSON.stringify(userInfo)
                 }
-              });
+              })
             } else {
               this.$router.replace({
                 path: up_router,
@@ -293,84 +289,84 @@ export default class addUser extends Vue {
                   userInfo: JSON.stringify(userInfo),
                   id: this.$route.query.id
                 }
-              });
+              })
             }
           }
-        });
+        })
       } else {
-        return false;
+        return false
       }
-    });
+    })
   }
 
   /* 上传身份证图片 */
-  handleIconLoaded(e) {
-    let formData = new FormData();
-    formData.append("attach_type", "img");
-    formData.append("img", e);
+  handleIconLoaded (e) {
+    let formData = new FormData()
+    formData.append('attach_type', 'img')
+    formData.append('img', e)
     uploadIdcardApi(formData)
       .then(res => {
-        let { idCardInfo, file } = res.data.data[0];
-        this.personalInfo.realname = idCardInfo.name;
-        this.personalInfo.idNum = idCardInfo.num;
-        this.personalInfo.passportFront = file.id;
+        let { idCardInfo, file } = res.data.data[0]
+        this.personalInfo.realname = idCardInfo.name
+        this.personalInfo.idNum = idCardInfo.num
+        this.personalInfo.passportFront = file.id
       })
-      .catch(err => {
-        this.form.icon3 = "";
-      });
+      .catch(() => {
+        this.form.icon3 = ''
+      })
   }
 
-  checkUserauth(param) {
+  checkUserauth (param) {
     if (this.isEdit) {
-      let uid = "";
+      let uid = ''
       if (this.$route.query.isFromCheck) {
-        uid = this.checkUid;
+        uid = this.checkUid
       } else {
-        uid = this.$route.params.id;
+        uid = this.$route.params.id
       }
-      return editUserauthApi(uid, param);
+      return editUserauthApi(uid, param)
     } else {
-      return checkUserauthApi(param);
+      return checkUserauthApi(param)
     }
   }
 
   /* 身份证信息校验 */
-  async detectionInfo() {
+  async detectionInfo () {
     if (!this.personalInfo.passportFront) {
-      this.$message.error(`请上传正确清晰的身份证图片`);
-      return;
+      this.$message.error(`请上传正确清晰的身份证图片`)
+      return
     }
     let param = {
       realname: this.personalInfo.realname,
       idNum: this.personalInfo.idNum,
       passportFront: this.personalInfo.passportFront
-    };
-    let res = await this.checkUserauth(param);
+    }
+    let res = await this.checkUserauth(param)
     if (res.data.data.pass) {
-      if (!this.isEdit) this.isDetection = true;
+      if (!this.isEdit) this.isDetection = true
       this.$message({
-        message: "身份证信息校验成功，校验有效时间为15分钟，请及时提交创建",
-        type: "success"
-      });
+        message: '身份证信息校验成功，校验有效时间为15分钟，请及时提交创建',
+        type: 'success'
+      })
     } else {
-      this.$message.error(`信息校验失败，请确认上传信息无误`);
+      this.$message.error(`信息校验失败，请确认上传信息无误`)
     }
   }
-  getApplyUserInfo() {
+  getApplyUserInfo () {
     if (this.$route.query.isFromCheck) {
-      return getApplyUserInfoApi(this.$route.params.id);
+      return getApplyUserInfoApi(this.$route.params.id)
     } else {
-      return getUserInfoApi(this.$route.params.id);
+      return getUserInfoApi(this.$route.params.id)
     }
   }
-  /*获取编辑用户的信息 */
-  async getUserInfo() {
-    const isFromCheck = this.$route.query.isFromCheck;
-    let res = await this.getApplyUserInfo();
-    let eidtUser = res.data.data;
-    this.editIdentityAuth = eidtUser.identityAuth || eidtUser.identityInfo;
+  /* 获取编辑用户的信息 */
+  async getUserInfo () {
+    const isFromCheck = this.$route.query.isFromCheck
+    let res = await this.getApplyUserInfo()
+    let eidtUser = res.data.data
+    this.editIdentityAuth = eidtUser.identityAuth || eidtUser.identityInfo
     /* 手机号码 */
-    this.phone.mobile = eidtUser.mobile;
+    this.phone.mobile = eidtUser.mobile
     /* 身份信息 */
     this.personalInfo = {
       name: eidtUser.name || eidtUser.realName, // 姓名
@@ -384,26 +380,26 @@ export default class addUser extends Vue {
       passportFront: !isFromCheck
         ? eidtUser.passportFrontId
         : eidtUser.passportFront // 身份证正面照片
-    };
+    }
     if (this.$route.query.isFromCheck) {
-      this.checkUid = eidtUser.uid;
+      this.checkUid = eidtUser.uid
       this.form.icon3 = eidtUser.identityInfo.passportFrontInfo
         ? eidtUser.identityInfo.passportFrontInfo.url
-        : "";
+        : ''
     } else {
       this.form.icon3 = eidtUser.passportFront
         ? eidtUser.passportFront.url
-        : "";
+        : ''
     }
   }
 
-  created() {
-    if (!this.$route.params.id) return;
-    this.isEdit = true;
+  created () {
+    if (!this.$route.params.id) return
+    this.isEdit = true
     if (this.$route.query.isFromCheck) {
-      this.getUserInfo();
+      this.getUserInfo()
     } else {
-      this.getUserInfo();
+      this.getUserInfo()
     }
   }
 }

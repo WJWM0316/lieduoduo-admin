@@ -1,6 +1,5 @@
 import { request } from './index.js'
 
-
 /* 招聘官审核列表 */
 export const getRecruiterListApi = data => request({
   url: '/applyjoin/newList',
@@ -113,7 +112,6 @@ export const getRecruiterLabelApi = data => request({
   type: 'get'
 })
 
-
 /* 获取招聘官个人标签 */
 export const editUsermanageInfosApi = data => request({
   url: `/usermanage/recruiter/${data.uid}`,
@@ -140,7 +138,6 @@ export const getRecruiterLabelsListsApi = data => request({
   url: `/recruiter/label/${data.uid}`,
   type: 'get'
 })
-
 
 /* 创建职业技能标签 */
 export const addProfessionalSkillsLabelApi = data => request({

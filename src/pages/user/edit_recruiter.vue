@@ -50,7 +50,7 @@
             style="width: 400px;"
           ></el-input>
         </el-form-item>
-        
+
         <el-form-item label="接收简历邮箱">
           <el-input
             v-model="userInfos.email"
@@ -60,7 +60,7 @@
             style="width: 400px;"
           ></el-input>
         </el-form-item>
-        
+
         <el-form-item label="微信">
           <el-input
             v-model="userInfos.wechat"
@@ -70,7 +70,7 @@
             style="width: 400px;"
           ></el-input>
         </el-form-item>
-        
+
         <el-form-item label="个性签名">
           <el-input
             type="textarea"
@@ -81,7 +81,7 @@
             v-model="userInfos.signature">
           </el-input>
         </el-form-item>
-        
+
         <el-form-item v-if="editBaseInfos">
           <el-button type="primary" @click="saveUser">保存</el-button>
           <el-button @click="todoAction('editBaseInfos')">取消</el-button>
@@ -104,7 +104,7 @@
           </ul>
           <el-button type="text" @click="todoAction('skills')">{{userInfos.skillLabels.length ? '编辑' : '添加'}}</el-button>
         </el-form-item>
-        
+
         <el-form-item label="职业素养">
           <ul class="label_ul" v-if="userInfos.literacyLabels.length">
             <li
@@ -115,11 +115,11 @@
           </ul>
           <el-button type="text" @click="todoAction('literacy')">{{userInfos.literacyLabels.length ? '编辑' : '添加'}}</el-button>
         </el-form-item>
-        
+
         <el-form-item label="自定义">
           <el-button type="text" @click="todoAction('customize')">添加</el-button>
         </el-form-item>
-        
+
         <el-form-item label="生活标签">
           <ul class="label_ul" v-if="userInfos.lifeLabels.length">
             <li
@@ -168,7 +168,7 @@
         <el-form-item style="margin-left: 150px;" v-if="userInfos.companyInfo">
           公司全称：{{userInfos.companyInfo.companyName}}
         </el-form-item>
-        
+
         <el-form-item style="margin-left: 100px;">
           是否可以发布职位
           <el-switch
@@ -189,7 +189,7 @@
     </div>
 
     <el-dialog :title="model.title" :visible.sync="model.show" width="580px">
-      
+
       <div class="html_content_box" v-if="model.type === 'skills'">
         <div class="m_h1">已选择标签：</div>
         <ul class="label_ul_dialog" v-if="model.selected.length">
@@ -219,7 +219,7 @@
           <li :class="{active: item.active}" v-for="(item, index) in model.list" :key="index" @click="getLabelItem(index, item)">{{item.name}}</li>
         </ul>
       </div>
-      
+
       <div class="html_content_box" v-if="model.type === 'life'">
         <div class="m_h1">已选择标签：</div>
         <ul class="label_ul_dialog" v-if="model.selected.length">
@@ -238,7 +238,7 @@
       <div class="html_content_box_01" v-if="model.type === 'customize' || model.type === 'customize_life'">
         <el-input v-model="model.value2" placeholder="请输入标签名称" maxlength="6"></el-input>
       </div>
-      
+
       <span slot="footer" class="dialog-footer">
         <el-button @click="close">取 消</el-button>
         <el-button type="primary" @click="confirm">确 定</el-button>
@@ -265,27 +265,21 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import ImageUploader from "@/components/imageUploader";
-import adminControl from "@/components/adminControl/index";
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import ImageUploader from '@/components/imageUploader'
+import adminControl from '@/components/adminControl/index'
 
 import {
-  fieldApi,
   uploadApi,
   getLabelProfessionalLiteracyListApi,
   getLabelProfessionalSkillsListApi
-} from "API/commont";
-import { getListApi, getLabelPositionListApi } from "API/position";
+} from 'API/commont'
 import {
   upload_api
 } from '@/api/index.js'
 import {
-  detectionMobileApi,
-  checkUserauthApi,
-  createdUserApi,
   getUserInfoApi,
-  editUserauthApi,
   editUserApi,
   closePublicPosisionApi,
   openPublicPosisionApi,
@@ -300,26 +294,20 @@ import {
   setRecruiterLabelsApi,
   getLifeLabelsListsApi,
   addLifeLabelsApi
-} from "API/recruiter";
+} from 'API/recruiter'
 
 import {
-  setCompanyInfoApi,
-  setIdentityInfoApi,
-  addCompanyAddressApi,
-  delCompanyAddressApi,
-  getApplyUserInfoApi,
   editApplyUserInfoApi,
-  setuserInfoApi,
-  editAdminNameApi,
   getRecruitersListApi
-} from "API/company";
-import { getAccessToken, removeAccessToken } from "@/api/cacheService.js";
+} from 'API/company'
+import { getAccessToken } from '@/api/cacheService.js'
 // 邮箱
+// eslint-disable-next-line no-useless-escape
 export const emailReg = /^([a-zA-Z0-9]+[_|\_|\.|\-]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[-_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,8}$/
 export const wechatReg = /^.{2,20}$/
 
 @Component({
-  name: "EditRecruiter",
+  name: 'EditRecruiter',
   components: {
     ImageUploader,
     adminControl
@@ -335,35 +323,35 @@ export default class EditRecruiter extends Vue {
   editBelongCompany = false
   lifeLabelsLists = []
   companyInfo = {
-    realname: "",
+    realname: '',
     avatarIds: [],
     avatars: [],
-    companyEmail: "",
-    companyId: "",
-    companyInfo: "",
-    createPositionRight: "",
-    email: "",
-    gender: "",
+    companyEmail: '',
+    companyId: '',
+    companyInfo: '',
+    createPositionRight: '',
+    email: '',
+    gender: '',
     identityAuth: 0,
-    identityNum: "",
+    identityNum: '',
     isBlockCreatePosition: 0,
-    mobile: "",
-    name: "",
-    needRealNameAuth: "",
-    passportFront: "",
+    mobile: '',
+    name: '',
+    needRealNameAuth: '',
+    passportFront: '',
     passportFrontId: 0,
-    position: "",
-    status: "",
-    uid: "",
-    vkey: ""
+    position: '',
+    status: '',
+    uid: '',
+    vkey: ''
   }
   /* 身份信息 */
   personalInfo = {
-    name: "", // 姓名
-    gender: "",
-    realname: "", // 真实姓名
-    idNum: "", // 身份证号码
-    passportFront: "" // 身份证正面照片
+    name: '', // 姓名
+    gender: '',
+    realname: '', // 真实姓名
+    idNum: '', // 身份证号码
+    passportFront: '' // 身份证正面照片
   }
   model = {
     show: false,
@@ -380,7 +368,7 @@ export default class EditRecruiter extends Vue {
     },
     width: 400,
     height: 400,
-    tips: "建议尺寸400X400px，JPG、PNG格式，图片小于5M。",
+    tips: '建议尺寸400X400px，JPG、PNG格式，图片小于5M。',
     limit: 6
   }
   /* 身份信息 */
@@ -401,198 +389,151 @@ export default class EditRecruiter extends Vue {
   labelProfessionalLiteracyList = []
   labelProfessionalSkillsList = []
   // 关闭移除招聘官
-  closeAdmin() {
+  closeAdmin () {
     this.showAdminWindow = false
   }
   /* 获取用户信息 */
-  async getUserInfo() {
-    let res = await getUserInfoApi(this.$route.params.id);
-    let userInfo = res.data.data;
-    this.userInfo = userInfo;
-    this.isDetection = !userInfo.needRealNameAuth;
+  async getUserInfo () {
+    let res = await getUserInfoApi(this.$route.params.id)
+    let userInfo = res.data.data
+    this.userInfo = userInfo
+    this.isDetection = !userInfo.needRealNameAuth
     if (userInfo.companyInfo) {
-      this.companyInfo = userInfo.companyInfo;
+      this.companyInfo = userInfo.companyInfo
     } else {
       this.companyInfo = {
-        realname: ""
-      };
+        realname: ''
+      }
     }
-    this.createPositionRight = !!userInfo.createPositionRight;
+    this.createPositionRight = !!userInfo.createPositionRight
     this.phone = {
       mobile: userInfo.mobile
-    };
+    }
     /* 身份信息 */
     this.personalInfo = {
       uid: userInfo.uid,
       name: userInfo.name, // 姓名
       gender: userInfo.gender,
-      realname: userInfo.realname || "", // 真实姓名
-      idNum: userInfo.identityNum || "", // 身份证号码
+      realname: userInfo.realname || '', // 真实姓名
+      idNum: userInfo.identityNum || '', // 身份证号码
       passportFront: userInfo.passportFront
         ? userInfo.passportFront.middleUrl
-        : "", // 身份证正面照片
+        : '', // 身份证正面照片
       identityAuth: userInfo.identityAuth
-    };
+    }
   }
   /* 移出公司 */
-  async removeUser() {
-    this.showAdminWindow = true;
-    this.isBindAdmin = true;
-    this.companyInfo.realName=this.userInfo.name
-    if (!!this.companyInfo.isAdmin) {
+  async removeUser () {
+    this.showAdminWindow = true
+    this.isBindAdmin = true
+    this.companyInfo.realName = this.userInfo.name
+    if (this.companyInfo.isAdmin) {
       let param = {
         page: 1,
         count: 2
-      };
-      let res = await getRecruitersListApi(this.companyInfo.id, param);
+      }
+      let res = await getRecruitersListApi(this.companyInfo.id, param)
       res.data.data.forEach(item => {
         if (this.userInfo.uid !== item.uid) {
-          this.nextAdmin = item;
+          this.nextAdmin = item
         }
-      });
+      })
     }
   }
   /* 绑定公司 */
-  bindCompany() {
-    this.showAdminWindow = true;
-    this.isBindAdmin = false;
+  bindCompany () {
+    this.showAdminWindow = true
+    this.isBindAdmin = false
   }
-  setRecruiterBrief() {
-    if(this.userInfos.brief.trim() && (this.userInfos.brief.trim().length < 6 || this.userInfos.brief.trim().length > 5000)) {
+  setRecruiterBrief () {
+    if (this.userInfos.brief.trim() && (this.userInfos.brief.trim().length < 6 || this.userInfos.brief.trim().length > 5000)) {
       this.$message({
         message: '请输入有效的个人简介',
         type: 'warning'
       })
       return
     }
-    setRecruiterBriefApi({uid: this.$route.params.id, brief: this.userInfos.brief}).then(() => {
+    setRecruiterBriefApi({ uid: this.$route.params.id, brief: this.userInfos.brief }).then(() => {
       this.editUserBreif = !this.editUserBreif
     })
   }
-  switchPublicBtn(e) {
+  switchPublicBtn (e) {
     let funcApi = e === 'y' ? openPublicPosisionApi : closePublicPosisionApi
-    funcApi({uid: this.$route.params.id})
+    funcApi({ uid: this.$route.params.id })
   }
-  removeLabelItem(index) {
-    if(this.model.selected.length < 2) {
+  removeLabelItem (index) {
+    if (this.model.selected.length < 2) {
       this.$message({
         message: '至少选择一个标签',
         type: 'warning'
-      });
+      })
       return
     }
     let item = this.model.selected.splice(index, 1)
     this.model.value3 = ''
     this.labelProfessionalLiteracyList.map(field => {
-      if(field.labelId === item[0].labelId) field.active = false
+      if (field.labelId === item[0].labelId) field.active = false
     })
     this.model.list = [].concat(this.labelProfessionalLiteracyList)
   }
-  removeLifeItem(index, item) {
+  removeLifeItem (index, item) {
     console.log(index, item)
-    if(this.model.selected.length < 2) {
+    if (this.model.selected.length < 2) {
       this.$message({
         message: '至少选择一个标签',
         type: 'warning'
-      });
+      })
       return
     }
     this.model.selected.splice(index, 1)
-    if(item.source === 'diy') {
+    if (item.source === 'diy') {
       this.userInfos.lifeLabels.map(field => {
-        if(field.labelId === item.labelId) field.delete = 'true'
+        if (field.labelId === item.labelId) field.delete = 'true'
       })
     }
     let lifeLabelsLists = [].concat(this.lifeLabelsLists)
     lifeLabelsLists[0].children.map((e, i) => {
-      if(item.labelId === e.labelId) e.active = false
+      if (item.labelId === e.labelId) e.active = false
     })
     lifeLabelsLists[1].children.map((e, i) => {
-      if(item.labelId === e.labelId) e.active = false
+      if (item.labelId === e.labelId) e.active = false
     })
     this.lifeLabelsLists = lifeLabelsLists
   }
-  getRecruiterBaseInfo() {
-    return getRecruiterBaseInfoApi({uid: this.$route.params.id})
-          .then(res => {
-            let userInfos = res.data.data
-            this.userInfos = Object.assign(this.userInfos, userInfos)
-            if(userInfos.avatars.length) this.model.avatar = userInfos.avatars[0]
-          })
+  getRecruiterBaseInfo () {
+    return getRecruiterBaseInfoApi({ uid: this.$route.params.id })
+      .then(res => {
+        let userInfos = res.data.data
+        this.userInfos = Object.assign(this.userInfos, userInfos)
+        if (userInfos.avatars.length) this.model.avatar = userInfos.avatars[0]
+      })
   }
-  getRecruiterBrief() {
-    return getRecruiterBriefApi({uid: this.$route.params.id})
-          .then(res => this.userInfos = Object.assign(this.userInfos, {brief: res.data.data.brief}))
+  getRecruiterBrief () {
+    return getRecruiterBriefApi({ uid: this.$route.params.id })
+      .then(res => (this.userInfos = Object.assign(this.userInfos, { brief: res.data.data.brief })))
   }
-  getRecruiterLabel() {
-    return getRecruiterLabelApi({uid: this.$route.params.id})
-          .then(res => this.userInfos = Object.assign(this.userInfos, {label: res.data.data}))
+  getRecruiterLabel () {
+    return getRecruiterLabelApi({ uid: this.$route.params.id })
+      .then(res => (this.userInfos = Object.assign(this.userInfos, { label: res.data.data })))
   }
-  getRecruiterLabelsLists() {
-    return getRecruiterLabelsListsApi({uid: this.$route.params.id}).then(res => {
+  getRecruiterLabelsLists () {
+    return getRecruiterLabelsListsApi({ uid: this.$route.params.id }).then(res => {
       let literacyLabels = []
       let lifeLabels = []
       let skillLabels = []
       let list = res.data.data
       list.map(field => {
         field.active = true
-        if(field.type === 'label_professional_literacy') literacyLabels.push(field)
-        if(field.type === 'label_life') lifeLabels.push(field)
-        if(field.type === 'label_professional_skills') skillLabels.push(field)
+        if (field.type === 'label_professional_literacy') literacyLabels.push(field)
+        if (field.type === 'label_life') lifeLabels.push(field)
+        if (field.type === 'label_professional_skills') skillLabels.push(field)
       })
       this.userInfos.literacyLabels = literacyLabels
       this.userInfos.lifeLabels = lifeLabels
       this.userInfos.skillLabels = skillLabels
     })
   }
-  addRecruiterLabel(data) {
-    return addRecruiterLabelApi(data)
-  }
-  getUserInfo() {
-    let funcApi = this.$route.query.isFromCheck ? getApplyUserInfoApi : getUserInfoApi
-    let isFromCheck = this.$route.query.isFromCheck
-    return funcApi(this.$route.params.id).then(res => {
-
-      let userInfos = res.data.data
-      this.userInfo = userInfos;
-      this.isDetection = !userInfos.needRealNameAuth;
-      if (userInfos.companyInfo) {
-        this.companyInfo = userInfos.companyInfo;
-      } else {
-        this.companyInfo = {realname: ''};
-      }
-      this.createPositionRight = !!userInfos.createPositionRight;
-      this.phone = {mobile: userInfos.mobile };
-      /* 身份信息 */
-      this.personalInfo = {
-        uid: userInfos.uid,
-        name: userInfos.name, // 姓名
-        gender: userInfos.gender,
-        realname: userInfos.realname || "", // 真实姓名
-        idNum: userInfos.identityNum || "", // 身份证号码
-        passportFront: userInfos.passportFront
-          ? userInfos.passportFront.middleUrl
-          : "", // 身份证正面照片
-        identityAuth: userInfos.identityAuth
-      };
-      let params = {
-        uid: userInfos.uid,
-        name: userInfos.name,
-        gender: userInfos.gender,
-        wechat: userInfos.wechat,
-        signature: userInfos.signature,
-        position: userInfos.position,
-        email: userInfos.email,
-        companyEmail: userInfos.companyEmail,
-        avatars: userInfos.avatars,
-        createPositionRight: String(userInfos.createPositionRight),
-        companyInfo: userInfos.companyInfo
-      }
-      this.userInfos = Object.assign(this.userInfos, params)
-      this.companyInfo = userInfos.companyInfo
-    })
-  }
-  getLifeLabelsLists() {
+  getLifeLabelsLists () {
     return getLifeLabelsListsApi().then(res => {
       let lifeLabelsLists = res.data.data
       lifeLabelsLists[0].children.map(field => {
@@ -606,26 +547,26 @@ export default class EditRecruiter extends Vue {
       this.lifeLabelsLists = lifeLabelsLists
     })
   }
-  todoAction(type) {
+  todoAction (type) {
     let literacyLabels = this.userInfos.literacyLabels.map(field => field.labelId)
-    switch(type) {
+    switch (type) {
       case 'literacy':
         let literacy = [].concat(this.userInfos.skillLabels)
-        if(literacy.length >= 3) {
-          this.$message({message: '最多只能添加三个技能标签', type: 'warning'})
+        if (literacy.length >= 3) {
+          this.$message({ message: '最多只能添加三个技能标签', type: 'warning' })
           return
         }
         this.model.show = true
         this.model.title = '添加职业素养标签'
         this.model.type = 'literacy'
         this.model.selected = [].concat(this.userInfos.skillLabels, this.userInfos.literacyLabels)
-        this.labelProfessionalLiteracyList.map(field => field.active = literacyLabels.includes(field.labelId) ? true : false)
+        this.labelProfessionalLiteracyList.map(field => (field.active = !!literacyLabels.includes(field.labelId)))
         this.model.list = this.labelProfessionalLiteracyList
-        break;
+        break
       case 'customize':
         let customize = [].concat(this.userInfos.skillLabels, this.userInfos.literacyLabels)
-        if(customize.length >= 3) {
-          this.$message({message: '最多只能添加三个技能标签', type: 'warning'})
+        if (customize.length >= 3) {
+          this.$message({ message: '最多只能添加三个技能标签', type: 'warning' })
           return
         }
         this.model.show = true
@@ -634,19 +575,19 @@ export default class EditRecruiter extends Vue {
         break
       case 'skills':
         let skills = [].concat(this.userInfos.literacyLabels)
-        if(skills.length >= 3) {
-          this.$message({message: '最多只能添加三个技能标签', type: 'warning'})
+        if (skills.length >= 3) {
+          this.$message({ message: '最多只能添加三个技能标签', type: 'warning' })
           return
         }
-        let skillsList =  [].concat(this.labelProfessionalSkillsList[0].children)
+        let skillsList = [].concat(this.labelProfessionalSkillsList[0].children)
         let temSkillsLists = [].concat(this.userInfos.skillLabels, this.userInfos.literacyLabels)
         let temSkillsListsId = []
-        if(temSkillsLists.length) {
+        if (temSkillsLists.length) {
           temSkillsLists.map(field => temSkillsListsId.push(field.labelId))
         }
         skillsList.map(field => {
           field.active = false
-          if(temSkillsListsId.includes(field.labelId)) {
+          if (temSkillsListsId.includes(field.labelId)) {
             field.active = true
           }
         })
@@ -658,8 +599,8 @@ export default class EditRecruiter extends Vue {
         break
       case 'customize_life':
         let customize_life = [].concat(this.userInfos.lifeLabels)
-        if(customize_life.length >= 3) {
-          this.$message({message: '最多只能添加三个生活标签', type: 'warning'})
+        if (customize_life.length >= 3) {
+          this.$message({ message: '最多只能添加三个生活标签', type: 'warning' })
           return
         }
         this.model.show = true
@@ -669,18 +610,18 @@ export default class EditRecruiter extends Vue {
       case 'life':
         let temLifeLists = [].concat(this.userInfos.lifeLabels)
         let temLifeListsId = []
-        if(temLifeLists.length) {
+        if (temLifeLists.length) {
           temLifeListsId = temLifeLists.map(field => field.labelId)
         }
         this.lifeLabelsLists[0].children.map(field => {
           field.active = false
-          if(temLifeListsId.includes(field.labelId)) {
+          if (temLifeListsId.includes(field.labelId)) {
             field.active = true
           }
         })
         this.lifeLabelsLists[1].children.map(field => {
           field.active = false
-          if(temLifeListsId.includes(field.labelId)) {
+          if (temLifeListsId.includes(field.labelId)) {
             field.active = true
           }
         })
@@ -702,19 +643,19 @@ export default class EditRecruiter extends Vue {
         break
     }
   }
-  confirm() {
+  confirm () {
     let skillLabels = []
     let literacyLabels = []
     let lifeLabels = []
     // 设置默认值
     this.userInfos.literacyLabels.map(item => {
-      literacyLabels.push({labelId: item.labelId, source: item.source})
+      literacyLabels.push({ labelId: item.labelId, source: item.source })
     })
     this.userInfos.lifeLabels.map(item => {
-      lifeLabels.push({labelId: item.labelId, source: item.source})
+      lifeLabels.push({ labelId: item.labelId, source: item.source })
     })
     this.userInfos.skillLabels.map(item => {
-      skillLabels.push({labelId: item.labelId, source: item.source})
+      skillLabels.push({ labelId: item.labelId, source: item.source })
     })
     let data = {
       uid: this.$route.params.id,
@@ -722,44 +663,44 @@ export default class EditRecruiter extends Vue {
       literacyLabels,
       lifeLabels
     }
-    switch(this.model.type) {
+    switch (this.model.type) {
       case 'literacy':
         data.literacyLabels = []
         data.skillLabels = []
         this.model.selected.map(item => {
-          if(item.type === 'label_professional_skills') {
-            data.skillLabels.push({labelId: item.labelId, source: item.source})
+          if (item.type === 'label_professional_skills') {
+            data.skillLabels.push({ labelId: item.labelId, source: item.source })
           } else {
-            data.literacyLabels.push({labelId: item.labelId, source: item.source})
+            data.literacyLabels.push({ labelId: item.labelId, source: item.source })
           }
         })
         this.setRecruiterLabels(data)
-        break;
+        break
       case 'life':
         data.lifeLabels = []
-        this.model.selected.map(item => data.lifeLabels.push({labelId: item.labelId, source: item.source}))
+        this.model.selected.map(item => data.lifeLabels.push({ labelId: item.labelId, source: item.source }))
         this.setRecruiterLabels(data)
-        break;
+        break
       case 'skills':
         data.literacyLabels = []
         data.skillLabels = []
         this.model.selected.map(item => {
-          if(item.type === 'label_professional_skills') {
-            data.skillLabels.push({labelId: item.labelId, source: item.source})
+          if (item.type === 'label_professional_skills') {
+            data.skillLabels.push({ labelId: item.labelId, source: item.source })
           } else {
-            data.literacyLabels.push({labelId: item.labelId, source: item.source})
+            data.literacyLabels.push({ labelId: item.labelId, source: item.source })
           }
         })
         this.setRecruiterLabels(data)
-        break;
+        break
       case 'customize':
-        addProfessionalSkillsLabelApi({uid: this.$route.params.id, name: this.model.value2}).then(res => {
+        addProfessionalSkillsLabelApi({ uid: this.$route.params.id, name: this.model.value2 }).then(res => {
           skillLabels.push(res.data.data)
           this.setRecruiterLabels(data)
         })
-        break;
+        break
       case 'customize_life':
-        addLifeLabelsApi({uid: this.$route.params.id, name: this.model.value2}).then(res => {
+        addLifeLabelsApi({ uid: this.$route.params.id, name: this.model.value2 }).then(res => {
           lifeLabels.push(res.data.data)
           this.setRecruiterLabels(data)
         })
@@ -771,20 +712,20 @@ export default class EditRecruiter extends Vue {
     this.userInfos.literacyLabels.map(field => delete field.delete)
     this.userInfos.lifeLabels.map(field => delete field.delete)
   }
-  setRecruiterLabels(data) {
+  setRecruiterLabels (data) {
     return setRecruiterLabelsApi(data).then(() => {
       this.model.show = false
       this.getRecruiterLabelsLists()
     })
   }
-  close() {
+  close () {
     this.model.show = false
-    this.showAdminWindow = false;
+    this.showAdminWindow = false
     this.userInfos.skillLabels.map(field => delete field.delete)
     this.userInfos.literacyLabels.map(field => delete field.delete)
     this.userInfos.lifeLabels.map(field => delete field.delete)
   }
-  saveUser() {
+  saveUser () {
     let params = {
       uid: this.$route.params.id,
       name: this.userInfos.name,
@@ -795,24 +736,24 @@ export default class EditRecruiter extends Vue {
       email: this.userInfos.email,
       companyEmail: this.userInfos.companyEmail
     }
-    if(this.userInfos.avatars.length) {
-      params = Object.assign(params, {avatars: this.userInfos.avatars.map(field => field.id).join(',')})
+    if (this.userInfos.avatars.length) {
+      params = Object.assign(params, { avatars: this.userInfos.avatars.map(field => field.id).join(',') })
     }
-    if(!emailReg.test(params.email)) {
+    if (!emailReg.test(params.email)) {
       this.$message({
         message: '请输入有效邮箱',
         type: 'warning'
       })
       return
     }
-    if(params.wechat && !wechatReg.test(params.wechat)) {
+    if (params.wechat && !wechatReg.test(params.wechat)) {
       this.$message({
         message: '请输入有效的微信号',
         type: 'warning'
       })
       return
     }
-    if(params.signature.trim() && (params.signature.trim().length < 6 || params.signature.trim().length > 30)) {
+    if (params.signature.trim() && (params.signature.trim().length < 6 || params.signature.trim().length > 30)) {
       this.$message({
         message: '请输入有效的个性签名',
         type: 'warning'
@@ -823,48 +764,48 @@ export default class EditRecruiter extends Vue {
       this.editBaseInfos = !this.editBaseInfos
     })
   }
-  getLabelProfessionalLiteracyList() {
-    return getLabelProfessionalLiteracyListApi().then(res => this.labelProfessionalLiteracyList = res.data.data)
+  getLabelProfessionalLiteracyList () {
+    return getLabelProfessionalLiteracyListApi().then(res => (this.labelProfessionalLiteracyList = res.data.data))
   }
-  getLabelProfessionalSkillsList() {
-    return getLabelProfessionalSkillsListApi().then(res => this.labelProfessionalSkillsList = res.data.data.labelProfessionalSkills)
+  getLabelProfessionalSkillsList () {
+    return getLabelProfessionalSkillsListApi().then(res => (this.labelProfessionalSkillsList = res.data.data.labelProfessionalSkills))
   }
-  createLabelProfessionalSkills() {
-    return createLabelProfessionalSkillsApi({uid: this.$route.params.id})
+  createLabelProfessionalSkills () {
+    return createLabelProfessionalSkillsApi({ uid: this.$route.params.id })
   }
-  getLabelItem(index, item) {
+  getLabelItem (index, item) {
     let selected = this.model.selected
     let result = this.labelProfessionalLiteracyList[index]
     let list = [].concat(this.labelProfessionalLiteracyList)
-    if(this.model.selected.length > 2) {
-      if(!result.active) {
-        this.$message({message: '最多只能添加三个标签', type: 'warning'})
+    if (this.model.selected.length > 2) {
+      if (!result.active) {
+        this.$message({ message: '最多只能添加三个标签', type: 'warning' })
       } else {
         list[index].active = false
         this.model.list = list
         selected.map((field, i) => {
-          if(item.labelId === field.labelId) {
+          if (item.labelId === field.labelId) {
             selected.splice(i, 1)
           }
         })
         this.model.selected = selected
       }
     } else {
-      if(!result.active) {
+      if (!result.active) {
         list[index].active = !list[index].active
         item.active = true
         selected.push(item)
         this.model.list = list
         this.model.selected = selected
       } else {
-        if(selected.length < 2) {
-          this.$message({message: '至少选择一个标签', type: 'warning'})
+        if (selected.length < 2) {
+          this.$message({ message: '至少选择一个标签', type: 'warning' })
           return
         }
         list[index].active = false
         this.model.list = list
         selected.map((field, i) => {
-          if(item.labelId === field.labelId) {
+          if (item.labelId === field.labelId) {
             selected.splice(i, 1)
           }
         })
@@ -872,39 +813,39 @@ export default class EditRecruiter extends Vue {
       }
     }
   }
-  getSkillsItem(index, item) {
+  getSkillsItem (index, item) {
     let list = [].concat(this.model.list)
     let selected = this.model.selected
     let result = this.model.list[index]
-    if(this.model.selected.length > 2) {
-      if(!result.active) {
-        this.$message({message: '最多只能添加三个标签', type: 'warning'})
+    if (this.model.selected.length > 2) {
+      if (!result.active) {
+        this.$message({ message: '最多只能添加三个标签', type: 'warning' })
       } else {
         list[index].active = false
         this.model.list = list
         selected.map((field, i) => {
-          if(item.labelId === field.labelId) {
+          if (item.labelId === field.labelId) {
             selected.splice(i, 1)
           }
         })
         this.model.selected = selected
       }
     } else {
-      if(!result.active) {
+      if (!result.active) {
         list[index].active = !list[index].active
         item.active = true
         selected.push(item)
         this.model.list = list
         this.model.selected = selected
       } else {
-        if(selected.length < 2) {
-          this.$message({message: '至少选择一个标签', type: 'warning'})
+        if (selected.length < 2) {
+          this.$message({ message: '至少选择一个标签', type: 'warning' })
           return
         }
         list[index].active = false
         this.model.list = list
         selected.map((field, i) => {
-          if(item.labelId === field.labelId) {
+          if (item.labelId === field.labelId) {
             selected.splice(i, 1)
           }
         })
@@ -912,42 +853,42 @@ export default class EditRecruiter extends Vue {
       }
     }
   }
-  getLifeLabel(type, index, item) {
+  getLifeLabel (type, index, item) {
     let lifeLabelsLists = this.lifeLabelsLists
     let selected = this.model.selected
-    switch(type) {
+    switch (type) {
       case 'xingge':
         selected = this.model.selected
-        if(selected.length > 2) {
-          if(!item.active) {
-            this.$message({message: '最多只能添加三个标签', type: 'warning'})
+        if (selected.length > 2) {
+          if (!item.active) {
+            this.$message({ message: '最多只能添加三个标签', type: 'warning' })
           } else {
             lifeLabelsLists[0].children[index].active = !lifeLabelsLists[0].children[index].active
             lifeLabelsLists[0].children[index].source = 'system'
             this.lifeLabelsLists = lifeLabelsLists
             selected.map((field, i) => {
-              if(item.labelId === field.labelId) {
+              if (item.labelId === field.labelId) {
                 selected.splice(i, 1)
               }
             })
             this.model.selected = selected
           }
         } else {
-          if(!item.active) {
+          if (!item.active) {
             lifeLabelsLists[0].children[index].active = !lifeLabelsLists[0].children[index].active
             item.active = true
             selected.push(item)
             this.lifeLabelsLists = lifeLabelsLists
             this.model.selected = selected
           } else {
-            if(selected.length < 2) {
-              this.$message({message: '至少选择一个标签', type: 'warning'})
+            if (selected.length < 2) {
+              this.$message({ message: '至少选择一个标签', type: 'warning' })
               return
             }
             lifeLabelsLists[0].children[index].active = false
             this.lifeLabelsLists = lifeLabelsLists
             selected.map((field, i) => {
-              if(item.labelId === field.labelId) {
+              if (item.labelId === field.labelId) {
                 selected.splice(i, 1)
               }
             })
@@ -957,36 +898,36 @@ export default class EditRecruiter extends Vue {
         break
       case 'shenghuo':
         selected = this.model.selected
-        if(selected.length > 2) {
-          if(!item.active) {
-            this.$message({message: '最多只能添加三个标签', type: 'warning'})
+        if (selected.length > 2) {
+          if (!item.active) {
+            this.$message({ message: '最多只能添加三个标签', type: 'warning' })
           } else {
             lifeLabelsLists[1].children[index].active = !lifeLabelsLists[1].children[index].active
             lifeLabelsLists[1].children[index].source = 'system'
             this.lifeLabelsLists = lifeLabelsLists
             selected.map((field, i) => {
-              if(item.labelId === field.labelId) {
+              if (item.labelId === field.labelId) {
                 selected.splice(i, 1)
               }
             })
             this.model.selected = selected
           }
         } else {
-          if(!item.active) {
+          if (!item.active) {
             lifeLabelsLists[1].children[index].active = !lifeLabelsLists[1].children[index].active
             item.active = true
             selected.push(item)
             this.lifeLabelsLists = lifeLabelsLists
             this.model.selected = selected
           } else {
-            if(selected.length < 2) {
-              this.$message({message: '至少选择一个标签', type: 'warning'})
+            if (selected.length < 2) {
+              this.$message({ message: '至少选择一个标签', type: 'warning' })
               return
             }
             lifeLabelsLists[1].children[index].active = false
             this.lifeLabelsLists = lifeLabelsLists
             selected.map((field, i) => {
-              if(item.labelId === field.labelId) {
+              if (item.labelId === field.labelId) {
                 selected.splice(i, 1)
               }
             })
@@ -998,88 +939,48 @@ export default class EditRecruiter extends Vue {
         break
     }
   }
-  changeSkills(e) {
+  changeSkills (e) {
     let item = this.labelProfessionalSkillsList.find(field => field.labelId === e)
     let list = item.children
     let temSkillsLists = [].concat(this.userInfos.skillLabels, this.userInfos.literacyLabels)
     let temSkillsListsId = []
-    if(temSkillsLists.length) {
+    if (temSkillsLists.length) {
       temSkillsLists.map(field => temSkillsListsId.push(field.labelId))
     }
     list.map(field => {
       field.source = 'system'
-      if(temSkillsListsId.includes(field.labelId)) field.active = true
+      if (temSkillsListsId.includes(field.labelId)) field.active = true
     })
     this.model.list = list
   }
-  removeSkills(index, data) {
-    if(this.model.selected.length < 2) {
+  removeSkills (index, data) {
+    if (this.model.selected.length < 2) {
       this.$message({
         message: '至少选择一个标签',
         type: 'warning'
-      });
+      })
       return
     }
     let item = this.model.selected.splice(index, 1)
-    if(data.type === 'label_professional_skills') {
+    if (data.type === 'label_professional_skills') {
       this.userInfos.skillLabels.map(field => {
-        if(field.labelId === data.labelId) field.delete = 'true'
+        if (field.labelId === data.labelId) field.delete = 'true'
       })
     } else {
       this.userInfos.literacyLabels.map(field => {
-        if(field.labelId === data.labelId) field.delete = 'true'
+        if (field.labelId === data.labelId) field.delete = 'true'
       })
     }
     this.model.value3 = ''
     this.model.list.map(field => {
-      if(field.labelId === item[0].labelId) field.active = false
+      if (field.labelId === item[0].labelId) field.active = false
     })
   }
-  getSkillsItem(index, item) {
-    let list = [].concat(this.model.list)
-    let selected = this.model.selected
-    let result = this.model.list[index]
-    if(this.model.selected.length > 2) {
-      if(!result.active) {
-        this.$message({message: '最多只能添加三个标签', type: 'warning'})
-      } else {
-        list[index].active = false
-        this.model.list = list
-        selected.map((field, i) => {
-          if(item.labelId === field.labelId) {
-            selected.splice(i, 1)
-          }
-        })
-        this.model.selected = selected
-      }
-    } else {
-      if(!result.active) {
-        list[index].active = !list[index].active
-        item.active = true
-        selected.push(item)
-        this.model.list = list
-        this.model.selected = selected
-      } else {
-        if(selected.length < 2) {
-          this.$message({message: '至少选择一个标签', type: 'warning'})
-          return
-        }
-        list[index].active = false
-        this.model.list = list
-        selected.map((field, i) => {
-          if(item.labelId === field.labelId) {
-            selected.splice(i, 1)
-          }
-        })
-        this.model.selected = selected
-      }
-    }
-  }
-  handleAvatarLoaded(e) {
+  handleAvatarLoaded (e) {
     let formData = new FormData()
     formData.append('attach_type', 'img')
     formData.append('img', e)
-    uploadApi(formData).then(res => this.model.avatar = res.data.data[0])
+    uploadApi(formData).then(res => (this.model.avatar = res.data.data[0]))
   }
   /**
    * @Author   小书包
@@ -1087,7 +988,7 @@ export default class EditRecruiter extends Vue {
    * @detail  点击选择图片
    * @return   {[type]}   [description]
    */
-  handleChooseImage(dom) {
+  handleChooseImage (dom) {
     document.querySelector(dom).click()
     document.querySelector(dom).value = ''
   }
@@ -1097,7 +998,7 @@ export default class EditRecruiter extends Vue {
    * @detail   处理选中的图片
    * @return   {[type]}   [description]
    */
-  handleChangeImage(dom) {
+  handleChangeImage (dom) {
     let fileLists = document.querySelector(dom).files
     fileLists = Array.from(fileLists).slice(0, this.model.limit - this.userInfos.avatars.length)
     Array.from(fileLists).map((file, index) => {
@@ -1115,7 +1016,7 @@ export default class EditRecruiter extends Vue {
       // 成功读取
       reader.onload = (res) => {
         let isLt5M = file.size / 1024 / 1024 > 5
-        if(isLt5M) {
+        if (isLt5M) {
           this.$message.error('上传的图片大小是5MB~')
           return false
         }
@@ -1125,7 +1026,7 @@ export default class EditRecruiter extends Vue {
       formData.append(`img${index + 1}`, file)
       formData.append('attach_type', 'img')
       this.xhr = new XMLHttpRequest()
-      if(this.userInfos.avatars.length !== this.model.limit) {
+      if (this.userInfos.avatars.length !== this.model.limit) {
         this.handleUploadImage(formData)
       }
     })
@@ -1136,7 +1037,7 @@ export default class EditRecruiter extends Vue {
    * @detail   上传选中的图片
    * @return   {[type]}         [description]
    */
-  handleUploadImage(formData) {
+  handleUploadImage (formData) {
     this.xhr.open('post', upload_api, true)
     this.xhr.setRequestHeader('Authorization-Admin', getAccessToken())
     // 上传成功
@@ -1155,21 +1056,21 @@ export default class EditRecruiter extends Vue {
    * @detail   取消某一张图片上传
    * @return   {[type]}        [description]
    */
-  handleRemoveUploadImage(index) {
+  handleRemoveUploadImage (index) {
     this.userInfos.avatars.splice(index, 1)
   }
-  editUsermanageInfos(userInfo) {
+  editUsermanageInfos (userInfo) {
     let uid = this.$route.params.id
     let funcApi = this.$route.query.isFromCheck ? editApplyUserInfoApi : editUserApi
-    let tem = {real_name: userInfo.name, gender: userInfo.gender }
+    let tem = { real_name: userInfo.name, gender: userInfo.gender }
     let params = this.$route.query.isFromCheck ? tem : userInfo
     return funcApi(uid, params)
   }
-  refresh() {
+  refresh () {
     this.showAdminWindow = false
     this.init()
   }
-  init() {
+  init () {
     this.getUserInfo()
     this.getLabelProfessionalLiteracyList()
     this.getLabelProfessionalSkillsList()
@@ -1179,12 +1080,7 @@ export default class EditRecruiter extends Vue {
     this.getRecruiterLabelsLists()
     this.getLifeLabelsLists()
   }
-  /* 绑定公司 */
-  bindCompany() {
-    this.showAdminWindow = true
-    this.isBindAdmin = false
-  }
-  created() {
+  created () {
     this.init()
   }
 }

@@ -86,7 +86,7 @@
             <el-option label="职位" value="3"></el-option>
           </el-select>
         </el-input>
-      </el-form-item>      
+      </el-form-item>
       <el-form-item label="上架/下架">
         <el-select v-model="form.is_online" placeholder="全部状态">
           <el-option label="上架" value="1"></el-option>
@@ -204,7 +204,7 @@
             v-model="scope.row.canDisplay"
             trigger="click">
             <div>
-              <div style="text-align: center;"v-if="!form.qrCode">
+              <div style="text-align: center;" v-if="!form.qrCode">
                 <img style="height: 38px;width: 38px; margin-top: 10px;" src="../../assets/loading.gif" />
                 <div style="margin-top: 20px;">正在加载中…</div>
               </div>
@@ -218,7 +218,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <el-pagination
       layout="prev, pager, next, slot"
       :total="total"
@@ -234,11 +234,11 @@
 </template>
 
 <script>
-import Vue from "vue"
-import Component from "vue-class-component"
-import { getListApi, getLabelPositionListApi } from "API/position";
-import { getAdvertListApi, deleteAdvertApi } from "API/advertisement";
-import { getPositionCodeUrlApi } from "API/interview";
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { getLabelPositionListApi } from 'API/position'
+import { getAdvertListApi, deleteAdvertApi } from 'API/advertisement'
+import { getPositionCodeUrlApi } from 'API/interview'
 
 @Component({
   name: 'advertisement'
@@ -266,92 +266,92 @@ export default class Advertisement extends Vue {
   lists = []
   options = [];
   positionManage = {
-    value: "labelId",
-    label: "name",
-    children: "children"
-  }; //职位类别的配置
-  ManageList() {
+    value: 'labelId',
+    label: 'name',
+    children: 'children'
+  }; // 职位类别的配置
+  ManageList () {
     getLabelPositionListApi().then(res => {
-      this.options = res.data.data;
+      this.options = res.data.data
       this.options.forEach(item => {
         item.children.forEach(item1 => {
           item1.children.forEach(item2 => {
-            let result = JSON.stringify(item2.children);
-            if (result === "[]") delete item2.children;
-          });
-        });
-      });
-    });
+            let result = JSON.stringify(item2.children)
+            if (result === '[]') delete item2.children
+          })
+        })
+      })
+    })
   }
-  type(e) {
-    this.form.type = e[e.length - 1];
+  type (e) {
+    this.form.type = e[e.length - 1]
   }
-  getAdvertList() {
+  getAdvertList () {
     let params = {
       count: this.pageSize,
       page: this.form.page
     }
-    if(this.form.is_online) {
-      params = Object.assign(params, {is_online: this.form.is_online})
+    if (this.form.is_online) {
+      params = Object.assign(params, { is_online: this.form.is_online })
     }
-    if(this.form.type) {
-      params = Object.assign(params, {type: this.form.type})
+    if (this.form.type) {
+      params = Object.assign(params, { type: this.form.type })
     }
-    if(this.form.status) {
-      params = Object.assign(params, {status: this.form.status})
+    if (this.form.status) {
+      params = Object.assign(params, { status: this.form.status })
     }
-    if(this.form.name) {
-      params = Object.assign(params, {name: this.form.name})
+    if (this.form.name) {
+      params = Object.assign(params, { name: this.form.name })
     }
-    if(this.form.name2) {
-      params = Object.assign(params, {name2: this.form.name2})
+    if (this.form.name2) {
+      params = Object.assign(params, { name2: this.form.name2 })
     }
-    if(this.form.wherefrom) {
-      params = Object.assign(params, {wherefrom: this.form.wherefrom})
+    if (this.form.wherefrom) {
+      params = Object.assign(params, { wherefrom: this.form.wherefrom })
     }
     console.log(this.form)
     getAdvertListApi(params).then(res => {
       let infos = res.data
       let lists = infos.data
       this.total = infos.meta.total
-      lists.map(field => field.canDisplay = false)
+      lists.map(field => (field.canDisplay = false))
       this.lists = lists
-      if(this.form.name) {
-        params = Object.assign(params, {select1: this.form.select1})
+      if (this.form.name) {
+        params = Object.assign(params, { select1: this.form.select1 })
       }
-      if(this.form.name2) {
-        params = Object.assign(params, {select2: this.form.select2})
+      if (this.form.name2) {
+        params = Object.assign(params, { select2: this.form.select2 })
       }
-      this.$router.push({query: {...params}})
+      this.$router.push({ query: { ...params } })
     })
   }
-  tabClick(type) {
-    this.navigation.map(field => field.active = type === field.type ? true : false)
+  tabClick (type) {
+    this.navigation.map(field => (field.active = type === field.type))
     this.form.position_id = ''
     this.getAdvertList()
   }
-  search() {
+  search () {
     this.getAdvertList()
   }
-  pageChange(page) {
+  pageChange (page) {
     this.form.page = page
     this.getAdvertList()
   }
-  todoAction(type, data) {
-    switch(type) {
+  todoAction (type, data) {
+    switch (type) {
       case 'add':
-        this.$router.push({name: 'advertisement_post'})
+        this.$router.push({ name: 'advertisement_post' })
         break
       case 'delete':
         this.$confirm('移出广告职位管理吗？', '移出', {
           confirmButtonText: '确定',
           cancelButtonText: '取消'
         }).then(() => {
-          deleteAdvertApi({id: data.aid}).then(() => this.getAdvertList())
+          deleteAdvertApi({ id: data.aid }).then(() => this.getAdvertList())
         }).catch(() => {})
         break
       case 'edit':
-        this.$router.push({name: 'advertisement_edit', query: {id: data.aid}})
+        this.$router.push({ name: 'advertisement_edit', query: { id: data.aid } })
         break
       case 'view':
         this.$router.push({
@@ -364,9 +364,9 @@ export default class Advertisement extends Vue {
         break
       case 'create':
         if (!data.isRecommend) {
-          this.$message({message: '没开通服务'})
+          this.$message({ message: '没开通服务' })
         } else if (data.isOnline === 2) {
-          this.$message({message: '职位已下线'})
+          this.$message({ message: '职位已下线' })
         } else {
           let obj = JSON.stringify(data)
           this.$router.push({
@@ -376,27 +376,27 @@ export default class Advertisement extends Vue {
               frompostion: true,
               isFocus: true
             }
-          });
+          })
         }
         break
       default:
         break
     }
   }
-  getPositionCodeUrl(uid) {
+  getPositionCodeUrl (uid) {
     this.lists.map(field => {
       field.canDisplay = false
-      if(field.uid === uid) field.canDisplay = true
+      if (field.uid === uid) field.canDisplay = true
     })
     this.form.qrCode = ''
-    return getPositionCodeUrlApi({id: uid}).then(res => this.form.qrCode = res.data.data.qrCodeUrl)
+    return getPositionCodeUrlApi({ id: uid }).then(res => (this.form.qrCode = res.data.data.qrCodeUrl))
   }
-  init() {
+  init () {
     let query = this.$route.query
     this.form = Object.assign(this.form, query)
-    if(this.form.is_online) this.form.is_online = Number(this.form.is_online)
+    if (this.form.is_online) this.form.is_online = Number(this.form.is_online)
   }
-  reset() {
+  reset () {
     this.form = {
       page: 1,
       position_id: '',
@@ -405,13 +405,13 @@ export default class Advertisement extends Vue {
       count: 20
     }
     let obj = {}
-    obj.stopPropagation = () =>{}
+    obj.stopPropagation = () => {}
     this.$refs.cascader.inputValue = ''
     // this.$refs.cascader.clearValue(obj)
     this.getAdvertList()
   }
-  mounted() {
-    this.AdminShow = +sessionStorage.getItem("AdminShow");
+  mounted () {
+    this.AdminShow = +sessionStorage.getItem('AdminShow')
     this.init()
     this.getAdvertList()
     this.ManageList()

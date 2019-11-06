@@ -166,114 +166,114 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import lyoutContent from "COMPONENTS/Lyout/lyoutContent/lyoutContent.vue";
-import { recommendList, userList } from "API/resumeStore";
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import lyoutContent from 'COMPONENTS/Lyout/lyoutContent/lyoutContent.vue'
+import { recommendList, userList } from 'API/resumeStore'
 @Component({
-  name: "recommendList",
-  prop: "",
+  name: 'recommendList',
+  prop: '',
   components: {
     lyoutContent
   }
 })
 export default class recommend extends Vue {
-  tableHeight = ""; /* table栏显示高度，需计算 */
+  tableHeight = ''; /* table栏显示高度，需计算 */
   tableData = [];
-  key1 = "companyName";
+  key1 = 'companyName';
   page = 1;
   userList = [];
   lastPage = 20;
   form = {
-    advisorUid: "",
-    commonKey1: "" /* 公共键  批次或者公司名*/,
-    startTime: "",
-    endTime: "",
+    advisorUid: '',
+    commonKey1: '' /* 公共键  批次或者公司名 */,
+    startTime: '',
+    endTime: '',
     page: 1,
     count: 20
   };
   tableData = [];
   searchType = {
-    key1: "company" /* 第一个搜索条件的默认键 */,
-    key2: "position" /* 第二个搜索条件的默认键 */
+    key1: 'company' /* 第一个搜索条件的默认键 */,
+    key2: 'position' /* 第二个搜索条件的默认键 */
   };
   leftcontent = {
     total: 0,
-    title: "推荐列表",
-    lastPage: "",
-    page: 1 //当前显示页
+    title: '推荐列表',
+    lastPage: '',
+    page: 1 // 当前显示页
   };
-  toTabBlock() {
+  toTabBlock () {
     this.$router.push({
-      path: "/resumeStore/recommendList/createOrder"
-    });
+      path: '/resumeStore/recommendList/createOrder'
+    })
   }
-  checkType(e) {
+  checkType (e) {
     // 创建键值
-    this.form[`${e}`] = "";
+    this.form[`${e}`] = ''
   }
   /* 清除列表选项 */
-  resetForm(name) {
-    this.form.startTime = "";
-    this.form.endTime = "";
-    this.form.commonKey1 = "";
-    this.form.commonKey2 = "";
-    this.form.page = 1;
-    this.form.isJobhunterApply = false;
-    this.$refs[name].resetFields();
+  resetForm (name) {
+    this.form.startTime = ''
+    this.form.endTime = ''
+    this.form.commonKey1 = ''
+    this.form.commonKey2 = ''
+    this.form.page = 1
+    this.form.isJobhunterApply = false
+    this.$refs[name].resetFields()
   }
-  handertableHeight(e) {
-    this.tableHeight = e;
+  handertableHeight (e) {
+    this.tableHeight = e
   }
-  handleClick(row) {
+  handleClick (row) {
     this.$router.push({
-      path: "/resumeStore/recommendList/OrderDetail",
+      path: '/resumeStore/recommendList/OrderDetail',
       query: {
         id: row.id
       }
-    });
+    })
   }
-  forEachKeys(form, page) {
+  forEachKeys (form, page) {
     // 基础键，剩余键值对由用户选择
-    console.log("form.page", form.page);
+    console.log('form.page', form.page)
     let param = {
       count: 20,
       page: page,
       endTime: form.endTime,
       startTime: form.startTime,
       advisorUid: this.form.advisorUid
-    };
-    param[this.searchType.key1] = this.form.commonKey1;
-    param[this.searchType.key2] = this.form.commonKey2;
-    return param;
+    }
+    param[this.searchType.key1] = this.form.commonKey1
+    param[this.searchType.key2] = this.form.commonKey2
+    return param
   }
-  getData(page) {
-    if((this.form.startTime && !this.form.endTime) || (!this.form.startTime&& this.form.endTime)) {
-      this.$message({message: "创建时间必需选择区间时间", type: "warning"});
-      return;
-    } 
-    let obj = this.forEachKeys(this.form, page);
+  getData (page) {
+    if ((this.form.startTime && !this.form.endTime) || (!this.form.startTime && this.form.endTime)) {
+      this.$message({ message: '创建时间必需选择区间时间', type: 'warning' })
+      return
+    }
+    let obj = this.forEachKeys(this.form, page)
     recommendList(obj).then(res => {
-      this.tableData = res.data.data;
-      this.leftcontent.lastPage = res.data.meta.lastPage;
-      this.leftcontent.total = res.data.meta.total;
-    });
-  }
-  handlePageChange(nowPage) {
-    // console.log(nowPage);
-    this.$refs["methods"].scrollZero();
-    this.form.page = nowPage;
-    this.getData(this.form.page);
-  }
-  created() {
-    this.getList().then(() => {
-      this.getData(1);
+      this.tableData = res.data.data
+      this.leftcontent.lastPage = res.data.meta.lastPage
+      this.leftcontent.total = res.data.meta.total
     })
   }
-  getList() {
+  handlePageChange (nowPage) {
+    // console.log(nowPage);
+    this.$refs['methods'].scrollZero()
+    this.form.page = nowPage
+    this.getData(this.form.page)
+  }
+  created () {
+    this.getList().then(() => {
+      this.getData(1)
+    })
+  }
+  getList () {
     return userList().then(res => {
-      this.userList = res.data.data;
-    });
+      this.userList = res.data.data
+    })
   }
 }
 </script>

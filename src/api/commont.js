@@ -1,6 +1,5 @@
 import { request } from './index.js'
 
-
 /* 行业领域 */
 export const fieldApi = data => request({
   url: '/label/field',

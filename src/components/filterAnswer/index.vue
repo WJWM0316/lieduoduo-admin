@@ -46,11 +46,11 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
+import Vue from 'vue'
+import Component from 'vue-class-component'
 
 @Component({
-  name: "filterAnswer",
+  name: 'filterAnswer',
   props: {
     /* 搜索label */
     labelName: {
@@ -68,8 +68,8 @@ export default class filterAnswer extends Vue {
   allCheckList = []; /* 全选中 */
   nowCheckList = [
     {
-      labelId: "0",
-      value: "不限条件",
+      labelId: '0',
+      value: '不限条件',
       status: false
     }
   ]; /* 当前选中 */
@@ -80,33 +80,33 @@ export default class filterAnswer extends Vue {
   moreQuqery = 1;
   cityOptions = [
     {
-      labelId: "completeExpect",
-      value: "求职意向",
+      labelId: 'completeExpect',
+      value: '求职意向',
       status: false
     },
     {
-      labelId: "completeCareer",
-      value: "工作经历",
+      labelId: 'completeCareer',
+      value: '工作经历',
       status: false
     },
     {
-      labelId: "completeEducation",
-      value: "教育经历",
+      labelId: 'completeEducation',
+      value: '教育经历',
       status: false
     },
     {
-      labelId: "completeProject",
-      value: "项目经历",
+      labelId: 'completeProject',
+      value: '项目经历',
       status: false
     },
     {
-      labelId: "completeMoreIntro",
-      value: "更多介绍",
+      labelId: 'completeMoreIntro',
+      value: '更多介绍',
       status: false
     },
     {
-      labelId: "completeResumeAttach",
-      value: "简历附件",
+      labelId: 'completeResumeAttach',
+      value: '简历附件',
       status: false
     }
   ];
@@ -115,100 +115,100 @@ export default class filterAnswer extends Vue {
   /* type  勾选全部 还是不限 */
   /*  */
   /* 全部条件 */
-  allreason() {
-    this.nowCheckList = [];
-    this.noreason = 0;
-    this.cities.map(item => (item.status = true));
-    this.nowCheckList = [...this.cities];
-    this.nowCheckList.map(item => item.labelId).join(",");
-    let checkObj = {};
+  allreason () {
+    this.nowCheckList = []
+    this.noreason = 0
+    this.cities.map(item => (item.status = true))
+    this.nowCheckList = [...this.cities]
+    this.nowCheckList.map(item => item.labelId).join(',')
+    let checkObj = {}
     this.cities.forEach(item => {
       if (item.status) {
-        checkObj[item.labelId] = 1;
+        checkObj[item.labelId] = 1
       }
-    });
-    this.$emit("returnKeys", checkObj);
+    })
+    this.$emit('returnKeys', checkObj)
   }
   /* 不限条件 */
-  noReason() {
-    this.nowCheckList = [];
-    this.noreason = 1;
-    this.cities.map(item => (item.status = false));
+  noReason () {
+    this.nowCheckList = []
+    this.noreason = 1
+    this.cities.map(item => (item.status = false))
     this.nowCheckList.push({
-      labelId: "0",
+      labelId: '0',
       status: false,
-      value: "不限条件"
-    });
+      value: '不限条件'
+    })
   }
-  delateArr(index) {
+  delateArr (index) {
     for (let i = 0; i < this.nowCheckList.length; i++) {
       if (this.cities[index].labelId === this.nowCheckList[i].labelId) {
-        let delateobj = this.nowCheckList[i];
-        this.nowCheckList.splice(i, 1);
+        // let delateobj = this.nowCheckList[i]
+        this.nowCheckList.splice(i, 1)
       }
     }
   }
   /* 单选 */
-  checkReason(index) {
-    this.cities[index].status = !this.cities[index].status;
-    console.log(this.nowCheckList);
+  checkReason (index) {
+    this.cities[index].status = !this.cities[index].status
+    console.log(this.nowCheckList)
     for (let i = 0; i < this.nowCheckList.length; i++) {
-      if (this.nowCheckList[i].labelId == "0") {
-        console.log(this.nowCheckList[i]);
-        this.nowCheckList.splice(i, 1);
+      if (this.nowCheckList[i].labelId === '0') {
+        console.log(this.nowCheckList[i])
+        this.nowCheckList.splice(i, 1)
       }
     }
     if (this.cities[index].status) {
-      this.noreason = 3;
-      this.nowCheckList.push(this.cities[index]);
+      this.noreason = 3
+      this.nowCheckList.push(this.cities[index])
     } else {
-      this.noreason = 3;
-      this.delateArr(index);
+      this.noreason = 3
+      this.delateArr(index)
     }
 
-    let checkObj = {};
+    let checkObj = {}
     this.cities.forEach(item => {
       if (item.status) {
-        checkObj[item.labelId] = 1;
+        checkObj[item.labelId] = 1
       }
-    });
-    this.$emit("returnKeys", checkObj);
+    })
+    this.$emit('returnKeys', checkObj)
   }
   /* 单选 */
-  removeAarry(_arr, _obj) {
-    console.log("fsddfsfs");
-    var length = _arr.length;
+  removeAarry (_arr, _obj) {
+    console.log('fsddfsfs')
+    var length = _arr.length
     for (var i = 0; i < length; i++) {
-      if (_arr[i] == _obj) {
-        if (i == 0) {
-          _arr.shift(); //删除并返回数组的第一个元素
-          return _arr;
-        } else if (i == length - 1) {
-          _arr.pop(); //删除并返回数组的最后一个元素
-          return _arr;
+      if (_arr[i] === _obj) {
+        if (i === 0) {
+          _arr.shift() // 删除并返回数组的第一个元素
+          return _arr
+        } else if (i === length - 1) {
+          _arr.pop() // 删除并返回数组的最后一个元素
+          return _arr
         } else {
-          _arr.splice(i, 1); //删除下标为i的元素
-          console.log(_arr);
-          return _arr;
+          _arr.splice(i, 1) // 删除下标为i的元素
+          console.log(_arr)
+          return _arr
         }
       }
     }
   }
   /*  */
   /* 清空状态 */
-  resetCheck() {
+  resetCheck () {
     for (let i = 0; i < this.cities.length; i++) {
-      this.cities[i].status = false;
+      this.cities[i].status = false
     }
   }
   // 显示
-  showSelect() {
-    this.startSelect = true;
+  showSelect () {
+    this.startSelect = true
     // this.resetCheck();
   }
   // 关闭
-  closeSelect() {
-    this.startSelect = false;
+  closeSelect () {
+    this.startSelect = false
   }
 }
 </script>

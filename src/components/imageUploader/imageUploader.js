@@ -1,11 +1,11 @@
-import Vue from "vue";
-import Component from "vue-class-component";
+import Vue from 'vue'
+import Component from 'vue-class-component'
 
 @Component({
-  name: "image-uploader",
+  name: 'image-uploader',
   model: {
-    prop: "src",
-    event: "input"
+    prop: 'src',
+    event: 'input'
   },
   props: {
     // 提示文本
@@ -27,13 +27,13 @@ import Component from "vue-class-component";
     // 图片路径
     src: {
       type: String,
-      default: ""
+      default: ''
     },
 
     // 文件接收类型
     accept: {
       type: String,
-      default: "image/png,image/jpeg"
+      default: 'image/png,image/jpeg'
     },
 
     // 文件最大大小，单位M
@@ -54,13 +54,13 @@ import Component from "vue-class-component";
     // 上传的文件类型
     type: {
       type: String,
-      default: ""
+      default: ''
     }
   },
   watch: {
     src: {
-      handler(val, oldVal) {
-        this.previewSrc = val;
+      handler (val, oldVal) {
+        this.previewSrc = val
       },
       immediate: true
     }
@@ -76,54 +76,54 @@ export default class ImageUploader extends Vue {
    * 图片容器宽度
    * @return {String}
    */
-  get imageWidth() {
-    const width = this.width.toString();
-    return width.substr(width.length - 2) === "px" ? width : width + "px";
+  get imageWidth () {
+    const width = this.width.toString()
+    return width.substr(width.length - 2) === 'px' ? width : width + 'px'
   }
 
   /**
    * 图片容器高度
    * @return {String}
    */
-  get imageHeight() {
-    const height = this.height.toString();
-    return height.substr(height.length - 2) === "px" ? height : height + "px";
+  get imageHeight () {
+    const height = this.height.toString()
+    return height.substr(height.length - 2) === 'px' ? height : height + 'px'
   }
 
-  mounted() {
-    this.fileInput = this.$refs.fileInput;
+  mounted () {
+    this.fileInput = this.$refs.fileInput
   }
 
   /**
    * 获取单个图片的url
    * @param {Object} file
    */
-  getImageURL(file) {
+  getImageURL (file) {
     return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
+      const fileReader = new FileReader()
       fileReader.onload = event => resolve(event.target.result)
       fileReader.onerror = event => reject(event)
-      fileReader.readAsDataURL(file);
-    });
+      fileReader.readAsDataURL(file)
+    })
   }
 
   /* 预览图片 */
-  preview(url) {
-    this.nowImg = url;
+  preview (url) {
+    this.nowImg = url
   }
 
-  hiddenMask() {
-    this.nowImg = "";
+  hiddenMask () {
+    this.nowImg = ''
   }
 
   /**
    * 清除文件域已选择的文件
    * @param {HTMLInputElement} fileInput
    */
-  clearFileInput(fileInput) {
-    fileInput = fileInput || this.fileInput;
+  clearFileInput (fileInput) {
+    fileInput = fileInput || this.fileInput
     if (fileInput) {
-      fileInput.value = "";
+      fileInput.value = ''
     }
   }
 
@@ -131,45 +131,45 @@ export default class ImageUploader extends Vue {
    * 选择文件
    * @param {Object} event
    */
-  handleChangeFile(event) {
-    let file = null;
-    const files = event.target.files;
+  handleChangeFile (event) {
+    let file = null
+    const files = event.target.files
     if (!files || files.length <= 0) {
-      this.clearFileInput(event.target);
-      return;
+      this.clearFileInput(event.target)
+      return
     }
-    file = files[0];
+    file = files[0]
     // 判断文件类型
     if (!/^image\//.test(file.type)) {
-      this.$message.error("图片文件格式不正确");
-      this.clearFileInput(event.target);
-      return;
+      this.$message.error('图片文件格式不正确')
+      this.clearFileInput(event.target)
+      return
     }
     // 判断文件大小
     if (file.size > 1024 * 1024 * this.maxFileSize) {
-      this.$message.error(`图片文件大小不能超过${this.maxFileSize}M`);
-      this.clearFileInput(event.target);
-      return;
+      this.$message.error(`图片文件大小不能超过${this.maxFileSize}M`)
+      this.clearFileInput(event.target)
+      return
     }
 
-    this.$emit("before-load", file);
+    this.$emit('before-load', file)
     this.getImageURL(file).then(url => {
-      file.preview = url;
-      file.uploadType = this.type;
-      this.previewSrc = url;
-      this.$emit("input", this.previewSrc);
-      this.$emit("loaded", file);
+      file.preview = url
+      file.uploadType = this.type
+      this.previewSrc = url
+      this.$emit('input', this.previewSrc)
+      this.$emit('loaded', file)
     })
-    .catch(e => {
-      this.$emit("load-error", e);
-      this.clearFileInput(event.target);
-    });
+      .catch(e => {
+        this.$emit('load-error', e)
+        this.clearFileInput(event.target)
+      })
   }
 
   /**
    * 点击选择文件按钮
    */
-  handleChoose() {
+  handleChoose () {
     //  $(this.$refs.fileInput).click()
   }
 }

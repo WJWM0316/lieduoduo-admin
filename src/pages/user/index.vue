@@ -297,15 +297,14 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import List from "@/components/list";
-import { getUserListApi } from "API/recruiter";
-import { getRecruiterCodeUrlApi } from "API/interview";
-import { companyTempUserList } from "API/company";
-import { getSalerListApi } from "API/commont";
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import List from '@/components/list'
+import { getUserListApi } from 'API/recruiter'
+import { getRecruiterCodeUrlApi } from 'API/interview'
+import { getSalerListApi } from 'API/commont'
 @Component({
-  name: "userList",
+  name: 'userList',
   components: {
     List
   }
@@ -313,254 +312,250 @@ import { getSalerListApi } from "API/commont";
 export default class user extends Vue {
   total = 0;
   pageCount = 0;
-  qrCode = "";
-  salerLis = []; //跟进人销售名单
-  AdminShow = ""; //权限字段，限制搜索
+  qrCode = '';
+  salerLis = []; // 跟进人销售名单
+  AdminShow = ''; // 权限字段，限制搜索
   form = {
-    admin_uid: "", //跟进人
-    keyword: "",
-    status: "",
-    auth_status: "",
-    createTimeStart: "",
-    createTimeEnd: "",
-    role: "99",
-    createPositionRight: "99", // 发布职位权益
-    idAuth: "99",
-    companyName: "",
-    mobile: "",
-    name: "",
+    admin_uid: '', // 跟进人
+    keyword: '',
+    status: '',
+    auth_status: '',
+    createTimeStart: '',
+    createTimeEnd: '',
+    role: '99',
+    createPositionRight: '99', // 发布职位权益
+    idAuth: '99',
+    companyName: '',
+    mobile: '',
+    name: '',
     page: 1,
     count: 20
   };
   searchType = {
-    condition1: "companyName",
-    condition2: "mobile",
-    keyword1: "",
-    keyword2: ""
+    condition1: 'companyName',
+    condition2: 'mobile',
+    keyword1: '',
+    keyword2: ''
   };
   /* 搜索关键字 */
   keyword = [
-    { label: "公司名字", value: "companyName" },
-    { label: "手机号", value: "mobile" },
-    { label: "人名", value: "userName" }
+    { label: '公司名字', value: 'companyName' },
+    { label: '手机号', value: 'mobile' },
+    { label: '人名', value: 'userName' }
   ];
   fields = [
     {
-      prop: "index",
-      label: "用户ID",
+      prop: 'index',
+      label: '用户ID',
       width: 80
     },
     {
-      prop: "name",
-      label: "个人信息",
+      prop: 'name',
+      label: '个人信息',
       width: 200
     },
     {
-      prop: "companyName",
-      label: "所属公司",
-      align: "left",
+      prop: 'companyName',
+      label: '所属公司',
+      align: 'left',
       width: 300
     },
     {
-      prop: "createPositionRight",
-      label: "发布职位权益",
+      prop: 'createPositionRight',
+      label: '发布职位权益',
       width: 150
     },
     {
-      prop: "adminName",
-      label: "跟进人",
+      prop: 'adminName',
+      label: '跟进人',
       width: 150
     },
     {
-      prop: "identityAuth",
-      label: "身份认证状态",
+      prop: 'identityAuth',
+      label: '身份认证状态',
       width: 220
     },
     {
-      prop: "createdAt",
-      label: "创建时间"
+      prop: 'createdAt',
+      label: '创建时间'
     },
     {
-      prop: "id",
-      fixed: "right",
+      prop: 'id',
+      fixed: 'right',
       width: 150,
-      label: "操作"
+      label: '操作'
     }
   ];
   list = [];
   /* 添加用户 */
-  addUser() {
-    sessionStorage.setItem("up_router", this.$route.path);
-    this.$route.meta.scrollY = window.scrollY;
-    this.$router.push({ path: "/user/addUser" });
+  addUser () {
+    sessionStorage.setItem('up_router', this.$route.path)
+    this.$route.meta.scrollY = window.scrollY
+    this.$router.push({ path: '/user/addUser' })
   }
-  mounted() {
-    console.log("1231");
-    this.AdminShow = +sessionStorage.getItem("AdminShow");
-    this.getSalerList();
+  mounted () {
+    console.log('1231')
+    this.AdminShow = +sessionStorage.getItem('AdminShow')
+    this.getSalerList()
   }
   /* 选择变更 */
-  changeProvince(e) {}
-  toCompany(companyId) {
-    this.$router.push({ path: `/index/companyInfo?id=${companyId}` });
+  changeProvince (e) {}
+  toCompany (companyId) {
+    this.$router.push({ path: `/index/companyInfo?id=${companyId}` })
   }
-  onSubmit(e) {
-    this.form.page = 1;
-    let searchCondition = {};
-    if (this.searchType.condition1 && this.searchType.keyword1)
-      searchCondition[this.searchType.condition1] = this.searchType.keyword1;
-    if (this.searchType.condition2 && this.searchType.keyword2)
-      searchCondition[this.searchType.condition2] = this.searchType.keyword2;
-    let searchForm = Object.assign({}, this.form, searchCondition);
-    if (searchForm.createTimeStart !== "" && searchForm.createTimeEnd === "") {
+  onSubmit (e) {
+    this.form.page = 1
+    let searchCondition = {}
+    if (this.searchType.condition1 && this.searchType.keyword1) { searchCondition[this.searchType.condition1] = this.searchType.keyword1 }
+    if (this.searchType.condition2 && this.searchType.keyword2) { searchCondition[this.searchType.condition2] = this.searchType.keyword2 }
+    let searchForm = Object.assign({}, this.form, searchCondition)
+    if (searchForm.createTimeStart !== '' && searchForm.createTimeEnd === '') {
       this.$message({
-        message: "创建时间必须选择开始时间和结束时间",
-        type: "warning"
-      });
-      return;
+        message: '创建时间必须选择开始时间和结束时间',
+        type: 'warning'
+      })
+      return
     } else if (
-      searchForm.createTimeStart === "" &&
-      searchForm.createTimeEnd !== ""
+      searchForm.createTimeStart === '' &&
+      searchForm.createTimeEnd !== ''
     ) {
       this.$message({
-        message: "创建时间必须选择开始时间和结束时间",
-        type: "warning"
-      });
-      return;
+        message: '创建时间必须选择开始时间和结束时间',
+        type: 'warning'
+      })
+      return
     }
-    this.getRecruiterList(searchForm);
+    this.getRecruiterList(searchForm)
   }
   // 获取销售人员名单
-  async getSalerList() {
-    let res = await getSalerListApi({ pageCount: 50 });
-    this.salerLis = res.data.data;
+  async getSalerList () {
+    let res = await getSalerListApi({ pageCount: 50 })
+    this.salerLis = res.data.data
   }
   // 添加跟进人
-  toEditAdminName(uid) {
-    this.$route.meta.scrollY = window.scrollY;
+  toEditAdminName (uid) {
+    this.$route.meta.scrollY = window.scrollY
     this.$router.push({
       path: `/user/userInfo/${uid}`,
       query: { isEditAdminName: true }
-    });
+    })
   }
   // 搜索地址
-  search() {
-    this.onSubmit();
+  search () {
+    this.onSubmit()
   }
   /* 重置筛选 */
-  resetForm(name) {
+  resetForm (name) {
     this.searchType = {
-      condition1: "companyName",
-      condition2: "mobile",
-      keyword1: "",
-      keyword2: ""
-    };
-    this.form.createTimeEnd = "";
-    this.$refs[name].resetFields();
+      condition1: 'companyName',
+      condition2: 'mobile',
+      keyword1: '',
+      keyword2: ''
+    }
+    this.form.createTimeEnd = ''
+    this.$refs[name].resetFields()
   }
   /* 请求招聘官审核列表 */
-  getRecruiterList(newForm) {
+  getRecruiterList (newForm) {
     getUserListApi(newForm || this.form).then(res => {
-      this.list = res.data.data;
-      this.total = res.data.meta.total;
-      this.pageCount = res.data.meta.lastPage;
-    });
+      this.list = res.data.data
+      this.total = res.data.meta.total
+      this.pageCount = res.data.meta.lastPage
+    })
   }
   /* 翻页 */
-  handlePageChange(nowPage) {
-    this.$route.meta.scrollY = 0;
-    window.scrollTo(0, 0);
-    this.form.page = nowPage;
-    console.log(this.form);
-    let searchCondition = {};
-    if (this.searchType.condition1 && this.searchType.keyword1)
-      searchCondition[this.searchType.condition1] = this.searchType.keyword1;
-    if (this.searchType.condition2 && this.searchType.keyword2)
-      searchCondition[this.searchType.condition2] = this.searchType.keyword2;
-    let searchForm = Object.assign({}, this.form, searchCondition);
-    if (searchForm.createTimeStart !== "" && searchForm.createTimeEnd === "") {
+  handlePageChange (nowPage) {
+    this.$route.meta.scrollY = 0
+    window.scrollTo(0, 0)
+    this.form.page = nowPage
+    console.log(this.form)
+    let searchCondition = {}
+    if (this.searchType.condition1 && this.searchType.keyword1) { searchCondition[this.searchType.condition1] = this.searchType.keyword1 }
+    if (this.searchType.condition2 && this.searchType.keyword2) { searchCondition[this.searchType.condition2] = this.searchType.keyword2 }
+    let searchForm = Object.assign({}, this.form, searchCondition)
+    if (searchForm.createTimeStart !== '' && searchForm.createTimeEnd === '') {
       this.$message({
-        message: "创建时间必须选择开始时间和结束时间",
-        type: "warning"
-      });
-      return;
+        message: '创建时间必须选择开始时间和结束时间',
+        type: 'warning'
+      })
+      return
     } else if (
-      searchForm.createTimeStart === "" &&
-      searchForm.createTimeEnd !== ""
+      searchForm.createTimeStart === '' &&
+      searchForm.createTimeEnd !== ''
     ) {
       this.$message({
-        message: "创建时间必须选择开始时间和结束时间",
-        type: "warning"
-      });
-      return;
+        message: '创建时间必须选择开始时间和结束时间',
+        type: 'warning'
+      })
+      return
     }
-    this.getRecruiterList(searchForm);
+    this.getRecruiterList(searchForm)
   }
   /* 查看相应的招聘官审核详情 */
-  check(id) {
-    this.$route.meta.scrollY = window.scrollY;
+  check (id) {
+    this.$route.meta.scrollY = window.scrollY
     this.$router.push({
       path: `/user/userInfo/${id}`,
       query: {
         isEditAdminName: false
       }
-    });
+    })
   }
   /* 生成职位详情小程序码 */
-  async creatLink(e, data, index) {
-    this.qrCode = "";
+  async creatLink (e, data, index) {
+    this.qrCode = ''
     if (data.isRecruiter !== 1) {
-      this.$refs["qrCode"].style.display = "none";
-      this.$message.error(`该用户不是招聘官,暂无招聘官主页`);
-      return;
+      this.$refs['qrCode'].style.display = 'none'
+      this.$message.error(`该用户不是招聘官,暂无招聘官主页`)
+      return
     }
     // 是否已经加载过二维码
     if (this.list[index].qrCode) {
-      this.qrCode = this.list[index].qrCode;
+      this.qrCode = this.list[index].qrCode
       this.$nextTick(() => {
-        this.$refs["qrCode"].style.display = "block";
-        this.$refs["qrCode"].style.left = e.clientX + "px";
-        this.$refs["qrCode"].style.top = e.clientY + window.scrollY + "px";
-      });
-      return;
+        this.$refs['qrCode'].style.display = 'block'
+        this.$refs['qrCode'].style.left = e.clientX + 'px'
+        this.$refs['qrCode'].style.top = e.clientY + window.scrollY + 'px'
+      })
+      return
     }
 
     this.$nextTick(() => {
-      this.$refs["qrCode"].style.display = "block";
-      this.$refs["qrCode"].style.left = e.clientX + "px";
-      this.$refs["qrCode"].style.top = e.clientY + window.scrollY + "px";
-    });
-    let res = await this.getQr(data.uid);
-    this.qrCode = res.data.data.qrCodeUrl;
-    this.list[index].qrCode = res.data.data.qrCodeUrl;
+      this.$refs['qrCode'].style.display = 'block'
+      this.$refs['qrCode'].style.left = e.clientX + 'px'
+      this.$refs['qrCode'].style.top = e.clientY + window.scrollY + 'px'
+    })
+    let res = await this.getQr(data.uid)
+    this.qrCode = res.data.data.qrCodeUrl
+    this.list[index].qrCode = res.data.data.qrCodeUrl
   }
 
   /* 生成二维码 */
-  getQr(id) {
-    return getRecruiterCodeUrlApi({ id: id });
+  getQr (id) {
+    return getRecruiterCodeUrlApi({ id: id })
   }
   /* 关闭二维码弹窗 */
-  //hiddenQr () {
+  // hiddenQr () {
   //  this.$nextTick(() => {
   //    this.$refs['qrCode'].style.display = 'none'
   //  })
-  //}
+  // }
   /* 关闭浮窗 */
-  closeTopic() {
+  closeTopic () {
     this.$nextTick(() => {
-      this.$refs["qrCode"].style.display = "none";
-    });
+      this.$refs['qrCode'].style.display = 'none'
+    })
   }
 
-  created() {
-    this.getRecruiterList();
+  created () {
+    this.getRecruiterList()
   }
-  activated() {
-    this.getRecruiterList();
-    let that = this;
-    setTimeout(function() {
-      window.scrollTo(0, that.$route.meta.scrollY);
-    }, 300);
+  activated () {
+    this.getRecruiterList()
+    let that = this
+    setTimeout(function () {
+      window.scrollTo(0, that.$route.meta.scrollY)
+    }, 300)
   }
 }
 </script>

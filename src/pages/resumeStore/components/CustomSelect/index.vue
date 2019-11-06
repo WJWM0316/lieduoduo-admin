@@ -30,11 +30,11 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
+import Vue from 'vue'
+import Component from 'vue-class-component'
 
 @Component({
-  name: "CustomSelect",
+  name: 'CustomSelect',
   props: {
     /* 类型 */
     SubpType: {
@@ -57,80 +57,80 @@ import Component from "vue-class-component";
   }
 })
 export default class CustomSelect extends Vue {
-  workExpLower = ""; //最小年限
-  workExpUpper = ""; //最大年限
-  isStudent = ""; // 在校生、无工作经验。无工作经验时，该值为1，否则为0。该值为1时，忽略工作经验
-  checkTime = "请选择";
+  workExpLower = ''; // 最小年限
+  workExpUpper = ''; // 最大年限
+  isStudent = ''; // 在校生、无工作经验。无工作经验时，该值为1，否则为0。该值为1时，忽略工作经验
+  checkTime = '请选择';
   isCheck = false;
 
   // 显示
-  showSelect() {
-    this.isCheck = true;
+  showSelect () {
+    this.isCheck = true
   }
   // 隐藏
-  closeSelect() {
-    this.isCheck = false;
+  closeSelect () {
+    this.isCheck = false
   }
   // 初始化
 
-  clearValue() {
-    this.checkTime = "请选择";
+  clearValue () {
+    this.checkTime = '请选择'
   }
-  choice(item, index) {
+  choice (item, index) {
     let obj = {
       SubpType: this.SubpType,
       isStudent: undefined,
-      min: "",
-      max: "",
-      value: ""
-    };
+      min: '',
+      max: '',
+      value: ''
+    }
 
     if (item === undefined) {
-      /*自定义 字段 */
-      console.log("我点击了确认");
-      this.workExpLower = document.getElementById("minYear").value;
-      this.workExpUpper = document.getElementById("maxYear").value;
+      /* 自定义 字段 */
+      console.log('我点击了确认')
+      this.workExpLower = document.getElementById('minYear').value
+      this.workExpUpper = document.getElementById('maxYear').value
       if (/\d/.test(this.workExpLower) && /\d/.test(this.workExpUpper)) {
         if (+this.workExpUpper > +this.workExpLower) {
-          this.checkTime = `${this.workExpLower}~${this.workExpUpper}`;
-          obj.isStudent = "";
-          obj.min = this.workExpLower;
-          obj.max = this.workExpUpper;
-          obj.value = `${obj.min}-${obj.max}`;
+          this.checkTime = `${this.workExpLower}~${this.workExpUpper}`
+          obj.isStudent = ''
+          obj.min = this.workExpLower
+          obj.max = this.workExpUpper
+          obj.value = `${obj.min}-${obj.max}`
         }
       }
     } else if (item.isSection) {
       /* 点击了有价格区间的item */
-      obj.isStudent = undefined;
-      obj.min = item.min;
-      obj.max = item.max;
-      obj.value = `${obj.min}-${obj.max}`;
+      obj.isStudent = undefined
+      obj.min = item.min
+      obj.max = item.max
+      obj.value = `${obj.min}-${obj.max}`
     } else if (!item.isSection) {
       /*   特殊字段处理， 如 无   不限 */
-      console.log("this.SubType", this.SubpType);
-      if (this.SubpType === "work") { 
-        if (item.text === "不限") {
-          obj.isStudent = 0;
-          obj.value = `不限`;
-        } else if (item.text === "无限制") {
-          obj.isStudent = 1;
-          obj.value = `无限制`;
-        }else if (item.text === "无经验") {
-          obj.isStudent = 1;
-          obj.value = `无经验`;
+      console.log('this.SubType', this.SubpType)
+      if (this.SubpType === 'work') {
+        if (item.text === '不限') {
+          obj.isStudent = 0
+          obj.value = `不限`
+        } else if (item.text === '无限制') {
+          obj.isStudent = 1
+          obj.value = `无限制`
+        } else if (item.text === '无经验') {
+          obj.isStudent = 1
+          obj.value = `无经验`
         }
       } else {
-        if (item.text === "不限") {
-          obj.value = `不限`;
-        } else if (item.text === "无限制") {
-          obj.value = `无限制`;
+        if (item.text === '不限') {
+          obj.value = `不限`
+        } else if (item.text === '无限制') {
+          obj.value = `无限制`
         }
       }
     }
-    this.closeSelect();
-    this.isCheck = false;
-    console.log(obj, "sdf");
-    this.$emit("callback", obj);
+    this.closeSelect()
+    this.isCheck = false
+    console.log(obj, 'sdf')
+    this.$emit('callback', obj)
   }
 }
 </script>

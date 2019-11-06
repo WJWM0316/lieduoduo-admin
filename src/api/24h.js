@@ -1,6 +1,5 @@
 import { request } from './index.js'
 
-
 /* 获取24h反馈职位列表 */
 export const getRapidlySurfaceListApi = data => request({
   url: '/rapidly/surface',
@@ -21,7 +20,6 @@ export const editRapidlySurfaceApi = data => request({
   type: 'put',
   data
 })
-
 
 /* 获取24h反馈职位 */
 export const getRapidlySurfaceApi = data => request({

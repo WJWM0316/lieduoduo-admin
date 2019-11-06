@@ -56,13 +56,13 @@
 </template>
 
 <script>
-import Vue from "vue"
-import Component from "vue-class-component"
+import Vue from 'vue'
+import Component from 'vue-class-component'
 import {
   addUrgencyApi,
   editUrgencyApi,
   getUrgencyApi
-} from "API/urgent";
+} from 'API/urgent'
 @Component({
   name: 'UrgentPost'
 })
@@ -73,37 +73,41 @@ export default class Urgent extends Vue {
     end_time: '',
     positions: ''
   }
-  onSubmit() {
+  onSubmit () {
     let params = {}
     // params.start_time = Date.parse(this.form.start_time) / 1000
     // params.end_time = Date.parse(this.form.end_time) / 1000
     params.start_time = this.form.start_time
     params.end_time = this.form.end_time
     params.positions = this.form.positions
+    // eslint-disable-next-line prefer-promise-reject-errors
     let startTime = new Promise((resolve, reject) => !this.form.start_time ? reject('请选择开始时间') : resolve())
+    // eslint-disable-next-line prefer-promise-reject-errors
     let endTime = new Promise((resolve, reject) => !this.form.end_time ? reject('请选择结束时间') : resolve())
+    // eslint-disable-next-line prefer-promise-reject-errors
     let positions = new Promise((resolve, reject) => !this.form.positions ? reject('请添加职位') : resolve())
+    // eslint-disable-next-line prefer-promise-reject-errors
     let repeatPosition = new Promise((resolve, reject) => this.hasDuplicates(params.positions) ? reject('请不要重复添加职位') : resolve())
     let api = this.$route.name === 'urgent_edit' ? 'editAction' : 'addAction'
-    if(this.form.id) {
-      params = Object.assign(params, {id: this.form.id})
+    if (this.form.id) {
+      params = Object.assign(params, { id: this.form.id })
     }
-    if(Reflect.has(this.form, 'is_online')) {
-      params = Object.assign(params, {is_online: this.form.is_online})
+    if (Reflect.has(this.form, 'is_online')) {
+      params = Object.assign(params, { is_online: this.form.is_online })
     }
-    if(Reflect.has(this.form, 'sort')) {
-      params = Object.assign(params, {sort: this.form.sort})
+    if (Reflect.has(this.form, 'sort')) {
+      params = Object.assign(params, { sort: this.form.sort })
     }
-    Promise.all([repeatPosition,positions, startTime, endTime]).then(() => this[api](params)).catch(err => this.$message.error(err))
+    Promise.all([repeatPosition, positions, startTime, endTime]).then(() => this[api](params)).catch(err => this.$message.error(err))
   }
-  addAction(params) {
-    addUrgencyApi(params).then(() => this.$router.push({name: 'urgent'}))
+  addAction (params) {
+    addUrgencyApi(params).then(() => this.$router.push({ name: 'urgent' }))
   }
-  editAction(params) {
-    editUrgencyApi(params).then(() => this.$router.push({name: 'urgent'}))
+  editAction (params) {
+    editUrgencyApi(params).then(() => this.$router.push({ name: 'urgent' }))
   }
-  getUrgency() {
-    getUrgencyApi({id: this.$route.query.id}).then(res => {
+  getUrgency () {
+    getUrgencyApi({ id: this.$route.query.id }).then(res => {
       let infos = res.data.data
       let form = {
         start_time: infos.startTime,
@@ -117,7 +121,7 @@ export default class Urgent extends Vue {
       this.form = form
     })
   }
-  reset() {
+  reset () {
     this.$confirm('', '退出将不保存更改的内容, 是否继续?', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
@@ -127,13 +131,13 @@ export default class Urgent extends Vue {
       this.$router.go(-1)
     }).catch(() => {})
   }
-  hasDuplicates(str) {
+  hasDuplicates (str) {
     let arr = String(str).split(',')
-    return arr.filter(( e , i ) => arr.lastIndexOf(e) !== i  &&  i === arr.indexOf(e)).length > 0
+    return arr.filter((e, i) => arr.lastIndexOf(e) !== i && i === arr.indexOf(e)).length > 0
   }
-  created() {
-    if(this.$route.name === 'urgent_edit') this.getUrgency()
-    if(this.$route.name === 'urgent_post') this.canEditFormData = false
+  created () {
+    if (this.$route.name === 'urgent_edit') this.getUrgency()
+    if (this.$route.name === 'urgent_post') this.canEditFormData = false
   }
 }
 </script>

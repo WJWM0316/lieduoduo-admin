@@ -255,7 +255,7 @@
                 <el-button class="" @click.stop="editResume(item)" v-if="isShowResumeHandle">编辑简历</el-button>
                 <el-button @click.stop="seereResume(index)" v-show="item.resumeAttach!=null&&isSales">查看简历附件</el-button>
               </div>
-              
+
             </div>
           </div>
           <div class="tabList" v-if="item.resumeLabels.length>0">
@@ -344,15 +344,15 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import lyoutContent from "COMPONENTS/Lyout/lyoutContent/lyoutContent.vue";
-import resumePopup from "COMPONENTS/resumePopup/resumePopup";
-import CustomSelect from "../../components/CustomSelect/index.vue";
-import filterAnswer from "COMPONENTS/filterAnswer/index.vue";
-import { getLabelPositionListApi } from "API/position";
-import { getCityApi } from "API/company";
-import { fieldApi } from "API/commont";
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import lyoutContent from 'COMPONENTS/Lyout/lyoutContent/lyoutContent.vue'
+import resumePopup from 'COMPONENTS/resumePopup/resumePopup'
+import CustomSelect from '../../components/CustomSelect/index.vue'
+import filterAnswer from 'COMPONENTS/filterAnswer/index.vue'
+import { getLabelPositionListApi } from 'API/position'
+import { getCityApi } from 'API/company'
+import { fieldApi } from 'API/commont'
 import {
   GetResumeAPI,
   degreeListAPI,
@@ -363,21 +363,20 @@ import {
   haveMobile,
   getResumeLevelApi,
   setResumeLevelApi
-} from "API/resumeStore.js";
-
-let lock = false;
-let canPush = 0; /* 0 规定 1 跳转注册页 2 去新建微简历 */
-let Sumbitform = {
-  name: "",
-  gender: "",
-  uid: '',
-  mobile: ""
-};
-import { getAccessToken, removeAccessToken } from "API/cacheService";
+} from 'API/resumeStore.js'
+import { getAccessToken } from 'API/cacheService'
 import { API_ROOT } from 'API/index.js'
 
+let canPush = 0 /* 0 规定 1 跳转注册页 2 去新建微简历 */
+let Sumbitform = {
+  name: '',
+  gender: '',
+  uid: '',
+  mobile: ''
+}
+
 @Component({
-  name: "resumeStore",
+  name: 'resumeStore',
   components: {
     lyoutContent,
     CustomSelect,
@@ -386,8 +385,8 @@ import { API_ROOT } from 'API/index.js'
   },
   watch: {
     '$route': {
-      handler() {
-        this.isShowResumeHandle = sessionStorage.getItem('isShowResumeHandle') === 'false' ? false : true
+      handler () {
+        this.isShowResumeHandle = sessionStorage.getItem('isShowResumeHandle') !== 'false'
       },
       immediate: true
     }
@@ -400,52 +399,48 @@ export default class resumeStore extends Vue {
   nowCheckListTab = []; /* 添加标签数组 */
   dialogVisible = false;
   closeSelectStore = false;
-  diyTabName = ""; /* 自定义标签名 */
+  diyTabName = ''; /* 自定义标签名 */
   resumeLevel = []
   needWorkProps = {
-    value: "labelId",
-    label: "name",
-    children: "children"
+    value: 'labelId',
+    label: 'name',
+    children: 'children'
   };
   labelStorePage = {
     page: 1,
     count: 100,
     haveData: 1 /* 总页数 */
   };
-  typeList = ["简历详情", "历史记录"];
-  resumeId = ""; /* 简历详情id */
+  typeList = ['简历详情', '历史记录'];
+  resumeId = ''; /* 简历详情id */
   leftcontent = {
     total: 0,
-    title: "简历库",
-    lastPage: "",
-    page: 1 //当前显示页
+    title: '简历库',
+    lastPage: '',
+    page: 1 // 当前显示页
   };
   canform = Sumbitform;
   validate_mobile = (rule, value, callback) => {
     if (!value) {
-      callback(new Error("请输入手机号码"));
+      callback(new Error('请输入手机号码'))
     } else if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(value)) {
-      callback(new Error("请输入正确的手机号码"));
+      callback(new Error('请输入正确的手机号码'))
     } else {
       haveMobile(value).then(res => {
         if (!res.data.data.userExist) {
-          canPush = 1;
-          callback(new Error("该用户不存在，请去创建用户"));
-        } 
-        // else if (res.data.data.userExist && res.data.data.haveCard) {
-        //   callback(new Error("该手机号已创建简历，不能再次创建"));
-        // } 
-        else {
-          canPush = 2;
+          canPush = 1
+          callback(new Error('该用户不存在，请去创建用户'))
+        } else {
+          canPush = 2
           Sumbitform = {
             uid: res.data.data.cardInfo.uid,
             gender: res.data.data.cardInfo.gender,
             name: res.data.data.cardInfo.name,
             mobile: value
-          };
-          callback();
+          }
+          callback()
         }
-      });
+      })
     }
   };
   rules = {
@@ -453,7 +448,7 @@ export default class resumeStore extends Vue {
       {
         required: true,
         validator: this.validate_mobile,
-        trigger: ["blur", "change"]
+        trigger: ['blur', 'change']
       }
     ]
   };
@@ -461,193 +456,192 @@ export default class resumeStore extends Vue {
   /* 简历来源 */
   Completion = [
     {
-      labelId: "0",
-      value: "不限条件"
+      labelId: '0',
+      value: '不限条件'
     },
     {
-      labelId: "1",
-      value: "全部条件"
+      labelId: '1',
+      value: '全部条件'
     },
     {
-      labelId: "completeExpect",
-      value: "求职意向"
+      labelId: 'completeExpect',
+      value: '求职意向'
     },
     {
-      labelId: "completeCareer",
-      value: "工作经历"
+      labelId: 'completeCareer',
+      value: '工作经历'
     },
     {
-      labelId: "completeEducation",
-      value: "教育经历"
+      labelId: 'completeEducation',
+      value: '教育经历'
     },
     {
-      labelId: "completeProject",
-      value: "项目经历"
+      labelId: 'completeProject',
+      value: '项目经历'
     },
     {
-      labelId: "completeMoreIntro",
-      value: "更多介绍"
+      labelId: 'completeMoreIntro',
+      value: '更多介绍'
     },
     {
-      labelId: "completeResumeAttach",
-      value: "附件简历"
+      labelId: 'completeResumeAttach',
+      value: '附件简历'
     }
   ];
   /* isSection 表示是否有价格区间 */
   workLiftList = [
     {
-      text: "不限",
+      text: '不限',
       isSection: false
     },
     {
-      text: "无经验",
+      text: '无经验',
       isSection: false
     },
     {
-      min: "3",
-      max: "5",
-      text: "3-5",
+      min: '3',
+      max: '5',
+      text: '3-5',
       isSection: true
     }
   ];
   AgeList = [
     {
-      text: "不限",
+      text: '不限',
       isSection: false
     },
     {
-      min: "20",
-      max: "25",
-      text: "20-25",
+      min: '20',
+      max: '25',
+      text: '20-25',
       isSection: true
     },
     {
-      min: "25",
-      max: "30",
-      text: "25-30",
+      min: '25',
+      max: '30',
+      text: '25-30',
       isSection: true
     },
     {
-      min: "30",
-      max: "35",
-      text: "30-35",
+      min: '30',
+      max: '35',
+      text: '30-35',
       isSection: true
     }
   ];
   MoneyList = [
     {
-      text: "不限",
+      text: '不限',
       isSection: false
     },
     {
-      min: "3",
-      max: "5",
-      text: "3K-5K",
+      min: '3',
+      max: '5',
+      text: '3K-5K',
       isSection: true
     },
     {
-      min: "5",
-      max: "8",
-      text: "5K-8K",
+      min: '5',
+      max: '8',
+      text: '5K-8K',
       isSection: true
     },
     {
-      min: "8",
-      max: "12",
-      text: "8K-12K",
+      min: '8',
+      max: '12',
+      text: '8K-12K',
       isSection: true
     }
   ];
   searchType = {
-    commonKey1: "expectPosition"
+    commonKey1: 'expectPosition'
   };
-  isShowSearch = true; //显示搜索区域
+  isShowSearch = true; // 显示搜索区域
   nowResumeMsg = {
     moreIntroduce: {
-      introduce: ""
+      introduce: ''
     }
   }; /* 简历详情 */
-  comexpectFieldId = "";
+  comexpectFieldId = '';
   searchList = []; /* 简历标签 */
   fieldList = []; /* 期望行业 */
-  options = []; //期待职位信息
-  itemList = []; //简历数组
-  historyList = []; //历史记录数组
-  degreeList = []; //学历列表
-  getCityList = []; //省市列表
-  jobhuntStatusList = []; //求职状态
+  options = []; // 期待职位信息
+  itemList = []; // 简历数组
+  historyList = []; // 历史记录数组
+  degreeList = []; // 学历列表
+  getCityList = []; // 省市列表
+  jobhuntStatusList = []; // 求职状态
   form = {
-    keyword: "" /* 模糊搜索 */,
-    name: "",
-    keyword: "", //关键字
-    expectPositionId: "", //期望职位类型id
-    expectPosition: "",
-    expectCityNum: "", //期望城市编号
-    skillLabel: "", //工作技能标签名
-    jobStatus: "", //求职状态。 在职暂不考虑1，离职随时到岗2，在职月内到岗3，在职考虑机会4
-    degree: "", //最高学历，初中及以下5，中专/中技10，高中15，大专20，本科25，硕士30，博士35，默认本科
-    isStudent: "", //在校生、无工作经验。无工作经验时，该值为1，否则为0。该值为1时，忽略工作经验
-    updateTimeLower: "" /* 简历更新时间下限 */,
-    updateTimeUpper: "" /*简历更新时间上限  */,
-    visitTimeLower: "" /* 最近访问时间下限 */,
-    visitTimeUpper: "" /* 最近访问时间上限 */,
-    workExpLower: "", //工作经验下限，单位“年”
-    workExpUpper: "", //工作经验上限，单位“年”
-    salaryLower: "" /* 薪资下限 */,
-    salaryUpper: "" /* 薪资上限 */,
-    ageLower: "" /* 年龄下限 */,
-    ageUpper: "" /* 年龄上限*/,
-    wherefrom: "" /* 10:平台用户在小程序上自行创建简历，20:后台用户创建 */,
-    resumeLabel: "", //简历标签名
-    count: 20, //每页条数
+    keyword: '' /* 模糊搜索 */,
+    name: '',
+    expectPositionId: '', // 期望职位类型id
+    expectPosition: '',
+    expectCityNum: '', // 期望城市编号
+    skillLabel: '', // 工作技能标签名
+    jobStatus: '', // 求职状态。 在职暂不考虑1，离职随时到岗2，在职月内到岗3，在职考虑机会4
+    degree: '', // 最高学历，初中及以下5，中专/中技10，高中15，大专20，本科25，硕士30，博士35，默认本科
+    isStudent: '', // 在校生、无工作经验。无工作经验时，该值为1，否则为0。该值为1时，忽略工作经验
+    updateTimeLower: '' /* 简历更新时间下限 */,
+    updateTimeUpper: '' /* 简历更新时间上限  */,
+    visitTimeLower: '' /* 最近访问时间下限 */,
+    visitTimeUpper: '' /* 最近访问时间上限 */,
+    workExpLower: '', // 工作经验下限，单位“年”
+    workExpUpper: '', // 工作经验上限，单位“年”
+    salaryLower: '' /* 薪资下限 */,
+    salaryUpper: '' /* 薪资上限 */,
+    ageLower: '' /* 年龄下限 */,
+    ageUpper: '' /* 年龄上限 */,
+    wherefrom: '' /* 10:平台用户在小程序上自行创建简历，20:后台用户创建 */,
+    resumeLabel: '', // 简历标签名
+    count: 20, // 每页条数
     expectFieldId: [], /* 期望行业 */
     resumeGrades: ''
   };
   tabList = []; /* 标签栏 */
   isSales = 0; /* 权限字段 */
   historyCount = 1;
-  nowCheck = 0; //当前点击详情上方的tab
-  nowIndex = ""; //当前点击的简历索引
+  nowCheck = 0; // 当前点击详情上方的tab
+  nowIndex = ''; // 当前点击的简历索引
   isShowbtn = false;
-  isShow = false; //展示简历详情
+  isShow = false; // 展示简历详情
   closeWork = false; /* 关闭工作经验弹框 */
   CompletionDisabled = false;
   TabShow = true;
-  isShowResumeHandle = true  //是否展示简历编辑添加按钮
+  isShowResumeHandle = true // 是否展示简历编辑添加按钮
   /* 完整度 */
-  CompletionCheck(e) {
+  CompletionCheck (e) {
     /* 不限条件 0  全部条件1 */
-    let isAll = e.includes("1");
-    let empty = e.includes("0");
+    let isAll = e.includes('1')
+    let empty = e.includes('0')
     if (empty || isAll) {
-      this.CompletionDisabled = true;
+      this.CompletionDisabled = true
     }
   }
-  closeSelect() {
-    this.closeSelectStore = false;
-    const el = document.getElementById("TabStore");
-    el.removeEventListener("scroll", this.handleScroll);
+  closeSelect () {
+    this.closeSelectStore = false
+    const el = document.getElementById('TabStore')
+    el.removeEventListener('scroll', this.handleScroll)
   }
 
-  createResume() {
-    this.dialogVisible = true;
-    this.canform.mobile = "";
+  createResume () {
+    this.dialogVisible = true
+    this.canform.mobile = ''
   }
 
-  createResume2() {
+  createResume2 () {
     this.$router.push({
-      path: "/resumeStore/list/postResume",
+      path: '/resumeStore/list/postResume',
       query: {
         isEdit: 0
       }
     })
   }
-  getResumeLevel() {
-    return getResumeLevelApi().then(res => this.resumeLevel = res.data.data)
+  getResumeLevel () {
+    return getResumeLevelApi().then(res => (this.resumeLevel = res.data.data))
   }
-  editResume(item) {
+  editResume (item) {
     this.$router.push({
-      path: "/resumeStore/list/postResume",
+      path: '/resumeStore/list/postResume',
       query: {
         isEdit: 1,
         userInfo: JSON.stringify({
@@ -657,14 +651,14 @@ export default class resumeStore extends Vue {
     })
   }
 
-  checkMobile(form) {
+  checkMobile (form) {
     this.$refs[form].validate(valid => {
       if (valid) {
         if (canPush === 2) {
-          this.dialogVisible = false;
+          this.dialogVisible = false
           this.$router.push({
             // path: "/resumeStore/list/createNewResume",
-            path: "/resumeStore/list/postResume",
+            path: '/resumeStore/list/postResume',
             query: {
               isEdit: 0,
               userInfo: JSON.stringify(Sumbitform)
@@ -673,10 +667,10 @@ export default class resumeStore extends Vue {
         }
       } else {
         if (canPush) {
-          sessionStorage.setItem("up_router", this.$route.path);
+          sessionStorage.setItem('up_router', this.$route.path)
           this.$nextTick(() => {
             this.$router.push({
-              path: "/user/addUser",
+              path: '/user/addUser',
               query: {
                 create_resume: true,
                 resumetype: 2
@@ -687,212 +681,212 @@ export default class resumeStore extends Vue {
         }
         return false
       }
-    });
+    })
   }
-  handleScroll(e, event) {
-    const el = document.getElementById("TabStore");
-    const offsetHeight = el.offsetHeight;
-    const scrollTop = el.scrollTop;
-    const scrollHeight = el.scrollHeight;
-    if (scrollTop + offsetHeight == scrollHeight) {
-      this.Tabresumelist();
+  handleScroll (e, event) {
+    const el = document.getElementById('TabStore')
+    const offsetHeight = el.offsetHeight
+    const scrollTop = el.scrollTop
+    const scrollHeight = el.scrollHeight
+    if (scrollTop + offsetHeight === scrollHeight) {
+      this.Tabresumelist()
     }
   }
-  addTab() {
-    let nowCheckList = this.nowCheckListTab.concat();
-    this.nowCheckListTab = nowCheckList;
-    this.closeSelectStore = true;
-    this.Tabresumelist();
+  addTab () {
+    let nowCheckList = this.nowCheckListTab.concat()
+    this.nowCheckListTab = nowCheckList
+    this.closeSelectStore = true
+    this.Tabresumelist()
     this.$nextTick(() => {
-      const el = document.getElementById("TabStore");
-      el.addEventListener("scroll", this.handleScroll);
-    });
+      const el = document.getElementById('TabStore')
+      el.addEventListener('scroll', this.handleScroll)
+    })
   }
   /* 标签库 */
-  Tabresumelist() {
+  Tabresumelist () {
     if (this.labelStorePage.haveData) {
       resumelist({ count: 100, page: this.labelStorePage.page++ }).then(res => {
-        this.tabList = [...this.tabList, ...res.data.data];
-        this.labelStorePage.haveData = res.data.meta.haveData;
-        let isStatus = this.nowCheckListTab.map(item => item.id);
+        this.tabList = [...this.tabList, ...res.data.data]
+        this.labelStorePage.haveData = res.data.meta.haveData
+        let isStatus = this.nowCheckListTab.map(item => item.id)
         this.tabList.map(item =>
-          item.id === isStatus.includes(item.id) ? true : false
-        );
-      });
+          item.id === isStatus.includes(item.id)
+        )
+      })
     }
   }
   /* 删除已选择的标签 */
-  delateTab(index) {
-    this.resetStoreStatus(index);
-    this.nowCheckListTab.splice(index, 1);
+  delateTab (index) {
+    this.resetStoreStatus(index)
+    this.nowCheckListTab.splice(index, 1)
   }
   /* 重置标签库 */
-  resetStoreStatus(index) {
+  resetStoreStatus (index) {
     for (let i = 0; i < this.tabList.length; i++) {
       if (this.nowCheckListTab[index].id === this.tabList[i].id) {
-        this.tabList[i].status = false;
+        this.tabList[i].status = false
       }
     }
   }
 
   /* 点击确认 */
-  checkTab() {
-    this.searchList = this.nowCheckListTab;
+  checkTab () {
+    this.searchList = this.nowCheckListTab
     this.form.resumeLabelIds = this.nowCheckListTab
       .map(item => item.id)
-      .join(",");
-    this.closeSelectStore = false;
+      .join(',')
+    this.closeSelectStore = false
   }
   /* 选择标签 */
-  choiceTab(index) {
+  choiceTab (index) {
     let isCheck = this.nowCheckListTab.filter(
       item => item.name === this.tabList[index].name
-    );
-    if (isCheck.length > 0) return;
-    if (this.nowCheckListTab.length >= 15) return;
+    )
+    if (isCheck.length > 0) return
+    if (this.nowCheckListTab.length >= 15) return
     if (!this.tabList[index].status) {
       let param = {
         status: !this.tabList[index].status,
         name: this.tabList[index].name,
         id: this.tabList[index].id
-      };
+      }
       this.$nextTick(() => {
-        this.tabList[index].status = true;
-        this.nowCheckListTab.push(param);
-      });
+        this.tabList[index].status = true
+        this.nowCheckListTab.push(param)
+      })
     } else {
       this.$nextTick(() => {
-        this.tabList[index].status = false;
-      });
+        this.tabList[index].status = false
+      })
     }
   }
 
   // 时间选择器
-  TimeResult(e) {
+  TimeResult (e) {
     /* workExpLower 最小年限 workExpUpper 最大 */
-    let { SubpType, isStudent, min, max } = e;
-    this.form.isStudent = isStudent == undefined ? "" : isStudent;
-    this.form.workExpLower = min == undefined ? "" : min;
-    this.form.workExpUpper = max == undefined ? "" : max;
-    this.$refs["diywork"].checkTime = e.value;
-    this.$refs["diywork"].closeSelect();
+    let { isStudent, min, max } = e
+    this.form.isStudent = isStudent === undefined ? '' : isStudent
+    this.form.workExpLower = min === undefined ? '' : min
+    this.form.workExpUpper = max === undefined ? '' : max
+    this.$refs['diywork'].checkTime = e.value
+    this.$refs['diywork'].closeSelect()
   }
-  MoneyChoice(e) {
-    let { SubpType, isStudent, min, max } = e;
-    this.form.isStudent = isStudent == undefined ? "" : isStudent;
-    this.form.salaryLower = min == undefined ? "" : min;
-    this.form.salaryUpper = max == undefined ? "" : max;
-    this.$refs["Money"].checkTime = e.value;
-    this.$refs["Money"].closeSelect();
+  MoneyChoice (e) {
+    let { isStudent, min, max } = e
+    this.form.isStudent = isStudent === undefined ? '' : isStudent
+    this.form.salaryLower = min === undefined ? '' : min
+    this.form.salaryUpper = max === undefined ? '' : max
+    this.$refs['Money'].checkTime = e.value
+    this.$refs['Money'].closeSelect()
   }
-  AgeChoice(e) {
-    let { SubpType, isStudent, min, max } = e;
-    this.form.isStudent = isStudent == undefined ? "" : isStudent;
-    this.form.ageLower = min == undefined ? "" : min;
-    this.form.ageUpper = max == undefined ? "" : max;
-    this.$refs["age"].checkTime = e.value;
-    this.$refs["age"].closeSelect();
+  AgeChoice (e) {
+    let { isStudent, min, max } = e
+    this.form.isStudent = isStudent === undefined ? '' : isStudent
+    this.form.ageLower = min === undefined ? '' : min
+    this.form.ageUpper = max === undefined ? '' : max
+    this.$refs['age'].checkTime = e.value
+    this.$refs['age'].closeSelect()
   }
 
   /* 手动关闭事件 */
-  closeSubEvent() {
-    this.closelift = false;
-    this.$refs["diywork"].closeSelect();
-    this.$refs["Money"].closeSelect();
-    this.$refs["age"].closeSelect();
-    this.$refs["Satisfaction"].closeSelect();
+  closeSubEvent () {
+    this.closelift = false
+    this.$refs['diywork'].closeSelect()
+    this.$refs['Money'].closeSelect()
+    this.$refs['age'].closeSelect()
+    this.$refs['Satisfaction'].closeSelect()
   }
-  checkType(e) {
-    this.form[`${e}`] = "";
+  checkType (e) {
+    this.form[`${e}`] = ''
   }
-  delateSearch(index) {
-    this.searchList.splice(index, 1);
-    this.nowCheckListTab = this.searchList;
+  delateSearch (index) {
+    this.searchList.splice(index, 1)
+    this.nowCheckListTab = this.searchList
     this.form.resumeLabelIds = this.nowCheckListTab
       .map(item => item.id)
-      .join(",");
+      .join(',')
   }
   /* 清除列表选项 */
-  resetForm(name) {
-    this.$refs.Satisfaction.noReason();
-    this.$refs[name].resetFields();
-    this.form.page = 1;
+  resetForm (name) {
+    this.$refs.Satisfaction.noReason()
+    this.$refs[name].resetFields()
+    this.form.page = 1
     for (let key in this.form) {
-      this.form[key] = null;
+      this.form[key] = null
     }
-    this.comexpectFieldId = [];
-    this.searchList = [];
-    this.form.expectFieldId = "";
-    this.form.keyword = "";
-    this.form.isStudent = "";
-    this.form.workExpLower = "";
-    this.form.workExpUpper = "";
-    this.form.expectCityNum = "";
-    this.form.updateTimeUpper = "";
-    this.form.visitTimeUpper = "";
+    this.comexpectFieldId = []
+    this.searchList = []
+    this.form.expectFieldId = ''
+    this.form.keyword = ''
+    this.form.isStudent = ''
+    this.form.workExpLower = ''
+    this.form.workExpUpper = ''
+    this.form.expectCityNum = ''
+    this.form.updateTimeUpper = ''
+    this.form.visitTimeUpper = ''
     this.$nextTick(() => {
-      let obj = {};
-      obj.stopPropagation = () => {};
+      let obj = {}
+      obj.stopPropagation = () => {}
       this.$refs.cascader.inputValue = ''
       this.$refs.cityChoice.inputValue = ''
       // this.$refs.cascader.clearCheckedNodes(obj);
       // this.$refs.cityChoice.clearValue(obj);
-      this.$refs.diywork.clearValue();
-      this.$refs.Money.clearValue();
-      this.$refs.age.clearValue();
-    });
+      this.$refs.diywork.clearValue()
+      this.$refs.Money.clearValue()
+      this.$refs.age.clearValue()
+    })
   }
   // 查看操作
-  async operating(uid, param) {
-    await addHistory(uid, param);
+  async operating (uid, param) {
+    await addHistory(uid, param)
   }
-  type(e) {
-    this.form.expectPositionId = e[e.length - 1];
+  type (e) {
+    this.form.expectPositionId = e[e.length - 1]
   }
-  choiceCity(e) {
-    this.form.expectCityNum = e[e.length - 1];
+  choiceCity (e) {
+    this.form.expectCityNum = e[e.length - 1]
   }
   // 查询按钮
-  onSubmit() {
-    if((this.form.updateTimeLower && !this.form.updateTimeUpper) || (!this.form.updateTimeLower&& this.form.updateTimeUpper)) {
-      this.$message({message: "更新时间必需选择区间时间", type: "warning"});
-      return;
+  onSubmit () {
+    if ((this.form.updateTimeLower && !this.form.updateTimeUpper) || (!this.form.updateTimeLower && this.form.updateTimeUpper)) {
+      this.$message({ message: '更新时间必需选择区间时间', type: 'warning' })
+      return
     }
-    if((this.form.visitTimeLower && !this.form.visitTimeUpper) || (!this.form.visitTimeLower&& this.form.visitTimeUpper)) {
-      this.$message({message: "访问时间必需选择区间时间", type: "warning"});
-      return;
+    if ((this.form.visitTimeLower && !this.form.visitTimeUpper) || (!this.form.visitTimeLower && this.form.visitTimeUpper)) {
+      this.$message({ message: '访问时间必需选择区间时间', type: 'warning' })
+      return
     }
-    this.form.page = 1;
-    this.getData();
+    this.form.page = 1
+    this.getData()
   }
   // 请求历史记录
-  history(uid, form) {
+  history (uid, form) {
     GetResumeHistory(uid, form).then(res => {
-      this.historyList = res.data.data;
-    });
+      this.historyList = res.data.data
+    })
   }
   /* 满意度 */
-  returnKeys(obj) {
-    this.form = { ...this.form, ...obj };
+  returnKeys (obj) {
+    this.form = { ...this.form, ...obj }
   }
   // 点击切换
-  check(index) {
-    this.nowCheck = +index;
-    this.historyCount = 1;
-    this.historyList = [];
+  check (index) {
+    this.nowCheck = +index
+    this.historyCount = 1
+    this.historyList = []
     if (this.nowCheck === 1) {
       this.history(this.nowResumeMsg.uid, {
         page: this.historyCount,
         count: 20
-      });
+      })
     } else if (this.nowCheck === 0) {
       this.operating(this.nowResumeMsg.uid, {
-        action: "查看",
-        desc: "简历附件"
-      });
+        action: '查看',
+        desc: '简历附件'
+      })
     }
   }
-  download() {
+  download () {
     this.$confirm('是否导出该列表数据？', '提示', {
       confirmButtonText: '是',
       cancelButtonText: '否',
@@ -901,69 +895,69 @@ export default class resumeStore extends Vue {
       let date = new Date()
       let downloadName = `简历列表-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}.xlsx`
       let url = `${API_ROOT}/resume/export?p=1`
-      if(this.form.keyword) {
+      if (this.form.keyword) {
         url += `&keyword=${this.form.keyword}`
       }
-      if(this.form.expectPositionId) {
+      if (this.form.expectPositionId) {
         url += `&expectPositionId=${this.form.expectPositionId}`
       }
-      if(this.form.expectCityNum) {
+      if (this.form.expectCityNum) {
         url += `&expectCityNum=${this.form.expectCityNum}`
       }
-      if(this.comexpectFieldId.length > 0) {
+      if (this.comexpectFieldId.length > 0) {
         url += `&expectFieldId=${this.comexpectFieldId.join(',')}`
       }
-      if(this.form.salaryLower) {
+      if (this.form.salaryLower) {
         url += `&salaryLower=${this.form.salaryLower}&salaryUpper=${this.form.salaryUpper}`
       }
-      if(this.form.wherefrom) {
+      if (this.form.wherefrom) {
         url += `&wherefrom=${this.form.wherefrom}`
       }
-      if(this.form.ageLower) {
+      if (this.form.ageLower) {
         url += `&ageLower=${this.form.ageLower}&ageUpper=${this.form.ageUpper}`
       }
-      if(this.form.jobStatus) {
+      if (this.form.jobStatus) {
         url += `&jobStatus=${this.form.jobStatus}`
       }
-      if(this.form.degree) {
+      if (this.form.degree) {
         url += `&degree=${this.form.degree}`
       }
-      if(this.form.workExpLower) {
+      if (this.form.workExpLower) {
         url += `&workExpLower=${this.form.workExpLower}&workExpUpper=${this.form.workExpUpper}`
       }
-      if(this.form.visitTimeLower) {
+      if (this.form.visitTimeLower) {
         url += `&visitTimeLower=${this.form.visitTimeLower}&visitTimeUpper=${this.form.visitTimeUpper}`
       }
-      if(this.form.completeCareer) {
+      if (this.form.completeCareer) {
         url += `&completeCareer=${this.form.completeCareer}`
       }
-      if(this.form.completeEducation) {
+      if (this.form.completeEducation) {
         url += `&completeEducation=${this.form.completeEducation}`
       }
-      if(this.form.completeExpect) {
+      if (this.form.completeExpect) {
         url += `&completeExpect=${this.form.completeExpect}`
       }
-      if(this.form.completeMoreIntro) {
+      if (this.form.completeMoreIntro) {
         url += `&completeMoreIntro=${this.form.completeMoreIntro}`
       }
-      if(this.form.completeProject) {
+      if (this.form.completeProject) {
         url += `&completeProject=${this.form.completeProject}`
       }
-      if(this.form.completeResumeAttach) {
+      if (this.form.completeResumeAttach) {
         url += `&completeResumeAttach=${this.form.completeResumeAttach}`
       }
-      if(this.form.resumeGrades) {
+      if (this.form.resumeGrades) {
         url += `&resumeGrades=${this.form.resumeGrades}`
       }
-      if(this.form.updateTimeLower && this.form.updateTimeUpper) {
+      if (this.form.updateTimeLower && this.form.updateTimeUpper) {
         url += `&updateTimeLower=${this.form.updateTimeLower}&updateTimeUpper=${this.form.updateTimeUpper}`
       }
       url = url.replace(/\s*/g, '')
       let xmlResquest = new XMLHttpRequest()
       xmlResquest.open('get', url, true)
-      xmlResquest.setRequestHeader('Content-type', 'application/json')
-      xmlResquest.setRequestHeader('Authorization-Admin', getAccessToken())
-      xmlResquest.responseType = 'blob'
+      xmlResquest.setRequestHeader('Content-type', 'application/json')
+      xmlResquest.setRequestHeader('Authorization-Admin', getAccessToken())
+      xmlResquest.responseType = 'blob'
       this.canDownloadData = false
       xmlResquest.onload = () => {
         let content = xmlResquest.response
@@ -982,152 +976,149 @@ export default class resumeStore extends Vue {
       this.$message({
         type: 'info',
         message: '已取消导出'
-      })         
+      })
     })
-    
   }
-  created() {
-    let AdminShow = Number(+sessionStorage.getItem("AdminShow"));
+  created () {
+    let AdminShow = Number(+sessionStorage.getItem('AdminShow'))
     this.ManageList().then(() => {
-      this.degreeData();
-      this.jobhuntStatus();
-      this.CityData();
-      this.getData();
-      this.field();
+      this.degreeData()
+      this.jobhuntStatus()
+      this.CityData()
+      this.getData()
+      this.field()
       this.getResumeLevel()
     })
-    this.isSales = /(3|4)/.test(AdminShow) ? false : true;
+    this.isSales = !/(3|4)/.test(AdminShow)
     this.AdminShow = AdminShow
   }
-  field() {
-    fieldApi().then(res => this.fieldList = res.data.data);
+  field () {
+    fieldApi().then(res => (this.fieldList = res.data.data))
   }
-  CityData() {
+  CityData () {
     getCityApi().then(res => {
-      this.getCityList = res.data.data;
+      this.getCityList = res.data.data
       this.getCityList.forEach(item => {
         item.children.forEach(item1 => {
-          let result = JSON.stringify(item1.children);
-          if (result === "[]") delete item1.children;
-        });
-      });
-    });
+          let result = JSON.stringify(item1.children)
+          if (result === '[]') delete item1.children
+        })
+      })
+    })
   }
   // 期待职位
-  ManageList() {
+  ManageList () {
     return getLabelPositionListApi().then(res => {
-      this.options = res.data.data;
+      this.options = res.data.data
       this.options.forEach(item => {
         item.children.forEach(item1 => {
           item1.children.forEach(item2 => {
-            let result = JSON.stringify(item2.children);
-            if (result === "[]") delete item2.children;
-          });
-        });
-      });
-    });
+            let result = JSON.stringify(item2.children)
+            if (result === '[]') delete item2.children
+          })
+        })
+      })
+    })
   }
-  jobhuntStatus() {
+  jobhuntStatus () {
     jobhuntStatusAPI().then(res => {
-      this.jobhuntStatusList = res.data.data;
-    });
+      this.jobhuntStatusList = res.data.data
+    })
   }
   /* 查看简历附件 */
-  seereResume(index) {
-    let AdminShow = +sessionStorage.getItem("AdminShow");
-    AdminShow = /(3|4)/.test(AdminShow) ? false : true;
+  seereResume (index) {
+    let AdminShow = +sessionStorage.getItem('AdminShow')
+    AdminShow = !/(3|4)/.test(AdminShow)
     if (!AdminShow) {
       this.$message({
-        message: "暂无权限",
-        type: "warning"
-      });
-      return;
+        message: '暂无权限',
+        type: 'warning'
+      })
+      return
     }
-    let uid = this.itemList[index].uid;
-    this.seeFiles(this.itemList[index], uid);
+    let uid = this.itemList[index].uid
+    this.seeFiles(this.itemList[index], uid)
   }
-  seeFiles(fileObJ, uid) {
-    let File = fileObJ.resumeAttach;
+  seeFiles (fileObJ, uid) {
+    let File = fileObJ.resumeAttach
 
     if (File === null) {
-      this.$message.error("此人未上传简历附件");
+      this.$message.error('此人未上传简历附件')
     } else {
-      let uid = fileObJ.uid;
-      let type = File.extension;
-      this.operating(uid, { action: "查看", desc: "简历附件" });
+      let uid = fileObJ.uid
+      let type = File.extension
+      this.operating(uid, { action: '查看', desc: '简历附件' })
       this.$nextTick(() => {
         if (/(png|jpg)/.test(type)) {
-          window.open(File.url);
+          window.open(File.url)
         } else if (/(pdf)/.test(type)) {
-          window.open(File.url);
+          window.open(File.url)
         } else if (/(doc|docx)/.test(type)) {
           window.open(
             `https://view.officeapps.live.com/op/view.aspx?src=${File.url}`
-          );
+          )
         } else {
           this.$message({
-            message: "格式不支持",
-            type: "warning"
-          });
+            message: '格式不支持',
+            type: 'warning'
+          })
         }
-      });
+      })
     }
   }
   // 学历列表
-  degreeData() {
+  degreeData () {
     degreeListAPI().then(res => {
-      this.degreeList = res.data.data;
-    });
+      this.degreeList = res.data.data
+    })
   }
 
-  
-
-  getDetail(uid, index) {
-    this.resumeId = String(uid);
-    this.showArrow = true;
-    this.nowIndex = index;
+  getDetail (uid, index) {
+    this.resumeId = String(uid)
+    this.showArrow = true
+    this.nowIndex = index
     this.$nextTick(() => {
-      let AdminShow = +sessionStorage.getItem("AdminShow");
-      this.$refs["resume"].testingAdmin(AdminShow);
-      this.$refs["resume"].getResume();
-      this.$refs["resume"].showMark();
-      this.$refs["resume"].initResume();
-      this.$refs["resume"].nowIndex = index;
-      this.$refs["resume"].operating(uid, {
-        action: "查看",
-        desc: "简历"
-      });
-    });
+      let AdminShow = +sessionStorage.getItem('AdminShow')
+      this.$refs['resume'].testingAdmin(AdminShow)
+      this.$refs['resume'].getResume()
+      this.$refs['resume'].showMark()
+      this.$refs['resume'].initResume()
+      this.$refs['resume'].nowIndex = index
+      this.$refs['resume'].operating(uid, {
+        action: '查看',
+        desc: '简历'
+      })
+    })
   }
   /* 切换简历 */
-  SwitchResume(e) {
-    this.resumeId = String(e);
+  SwitchResume (e) {
+    this.resumeId = String(e)
     this.$nextTick(() => {
-      this.$refs["resume"].getResume();
-    });
+      this.$refs['resume'].getResume()
+    })
   }
-  getData() {
+  getData () {
     this.comexpectFieldId.length > 0
-      ? (this.form.expectFieldId = this.comexpectFieldId.join(","))
-      : (this.form.expectFieldId = []);
+      ? (this.form.expectFieldId = this.comexpectFieldId.join(','))
+      : (this.form.expectFieldId = [])
     let params = this.form
-    if(params.resumeGrades == '') delete params.resumeGrades
+    if (params.resumeGrades === '') delete params.resumeGrades
     GetResumeAPI(params).then(res => {
-      this.itemList = res.data.data;
-      this.leftcontent.total = parseInt(res.data.meta.total);
-      this.leftcontent.lastPage = parseInt(res.data.meta.lastPage);
-    });
+      this.itemList = res.data.data
+      this.leftcontent.total = parseInt(res.data.meta.total)
+      this.leftcontent.lastPage = parseInt(res.data.meta.lastPage)
+    })
   }
   // 翻页
   /* 翻页 */
-  handlePageChange(nowPage) {
-    this.$refs["methods"].scrollZero();
-    this.form.page = nowPage;
-    this.form.page = nowPage;
-    this.getData();
+  handlePageChange (nowPage) {
+    this.$refs['methods'].scrollZero()
+    this.form.page = nowPage
+    this.form.page = nowPage
+    this.getData()
   }
-  changeGrade(e, uid) {
-    setResumeLevelApi({grade: e, uid})
+  changeGrade (e, uid) {
+    setResumeLevelApi({ grade: e, uid })
   }
 }
 </script>
