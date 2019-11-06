@@ -1,0 +1,29 @@
+@side-width: 200px;
+@logo-height: 130px;
+.app-aside {
+  width: @side-width;
+  height: 100vh;
+  background: #3e294d;
+  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 201;
+  .el-menu {
+    height: calc(100vh - @logo-height);
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: @side-width;
+    text-align: left;
+    margin-right: -12px;
+    box-sizing: border-box;
+    border-right: none;
+  }
+}
+.logo {
+  padding: 40px 0;
+  height: 130px;
+  box-sizing: border-box;
+  text-align: center;
+}

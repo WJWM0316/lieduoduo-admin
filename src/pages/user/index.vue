@@ -302,7 +302,7 @@ import Component from 'vue-class-component'
 import List from '@/components/list'
 import { getUserListApi } from 'API/recruiter'
 import { getRecruiterCodeUrlApi } from 'API/interview'
-import { getSalerListApi } from 'API/commont'
+import { getSalerListApi } from 'API/common'
 @Component({
   name: 'userList',
   components: {
@@ -563,7 +563,6 @@ export default class user extends Vue {
 <style lang="less" scoped="scoped">
 .officerManage {
   /*padding: 22px;*/
-  margin-left: 200px;
   .container {
     min-width: 1000px;
     margin: 22px;

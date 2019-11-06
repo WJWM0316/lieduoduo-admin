@@ -120,7 +120,6 @@ export default class editRecruiter extends Vue {
 
 <style lang="less" scoped="scoped">
 .createCompany {
-  margin-left: 200px;
   padding: 22px;
   .header {
     padding-right: 20px;

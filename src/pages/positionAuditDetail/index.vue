@@ -2,7 +2,7 @@
   <!--审核页面-->
   <div class="checkPage">
     <!--公司认证信息-->
-    <div class="commont companyInfo">
+    <div class="common companyInfo">
       <!--头部-->
       <div class="header">
         <div class="left">
@@ -169,7 +169,6 @@ export default class checkPage extends Vue {
 
 <style lang="less" scoped="scoped">
 .checkPage {
-  margin-left: 200px;
   padding: 22px 22px 22px 22px;
   position: relative;
 }
@@ -198,7 +197,7 @@ export default class checkPage extends Vue {
     height: 90%;
   }
 }
-.commont {
+.common {
   width: 100%;
   .header {
     background-color: #f4f4f4;

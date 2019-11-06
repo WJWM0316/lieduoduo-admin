@@ -231,7 +231,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import ImageUploader from '@/components/imageUploader'
 import adminControl from '@/components/adminControl/index'
-import { getSalerListApi } from 'API/commont'
+import { getSalerListApi } from 'API/common'
 import { identityPassApi, identityFailApi,
   editAdminNameApi,
   getRecruitersListApi
@@ -601,7 +601,6 @@ export default class addUser extends Vue {
   border-radius: 4px;
 }
 .createCompany {
-  margin-left: 200px;
   padding: 22px;
   .header {
     padding-right: 20px;

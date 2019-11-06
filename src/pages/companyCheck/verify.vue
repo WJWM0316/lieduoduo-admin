@@ -2,7 +2,7 @@
   <!--审核页面-->
   <div class="checkPage">
     <!--公司认证信息-->
-    <div class="commont companyInfo">
+    <div class="common companyInfo">
       <!--头部-->
       <div class="header" :class="{edit : isEdit}">
         <div class="left" v-if="!isEdit">
@@ -115,7 +115,7 @@
     </div>
 
     <!--人员认证信息-->
-    <div class="commont companyInfo">
+    <div class="common companyInfo">
       <!--头部-->
       <div class="header" :class="{edit : isEdit}">
         <div class="left" v-if="!isEdit">
@@ -350,7 +350,7 @@ export default class checkPage extends Vue {
   /* 去编辑公司信息 */
   toEdit () {
     let checkId = this.$route.query.id
-    this.$router.push({ path: `/check/companyCheck/${checkId}`, query: { from: 'cp' } })
+    this.$router.push({ path: `/check/companyCheck/check/${checkId}`, query: { from: 'cp' } })
   }
 
   mounted () {
@@ -430,7 +430,6 @@ img {
   max-height: 90%;
 }
 .checkPage {
-  margin-left: 200px;
   padding: 22px;
   position: relative;
   .del {
@@ -459,7 +458,7 @@ img {
 .el-form-item__content {
   text-align: left;
 }
-.commont {
+.common {
   width: 100%;
   .header {
     background-color: #f4f4f4;

@@ -117,7 +117,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import ImageUploader from '@/components/imageUploader'
-import { fieldApi, uploadApi } from 'API/commont'
+import { fieldApi, uploadApi } from 'API/common'
 import { getCompanyInfoApi, editCompanyApi, addCompanyAddressApi, delCompanyAddressApi } from 'API/company'
 import { TMap } from '../../util/js/TMap.js'
 // import mapSearch from '@/components/map'
@@ -458,7 +458,6 @@ export default class editCompany extends Vue {
 
 <style lang="less" scoped="scoped">
 .editCompanyInfo{
-  margin-left: 200px;
   padding: 22px;
 }
 .header{

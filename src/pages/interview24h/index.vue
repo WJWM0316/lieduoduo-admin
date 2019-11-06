@@ -698,7 +698,7 @@ import {
   getLabelPositionListApi,
   getPositionAddressApi
 } from 'API/position'
-import { getSalerListApi } from 'API/commont'
+import { getSalerListApi } from 'API/common'
 import { getAccessToken } from 'API/cacheService'
 import { API_ROOT } from 'API/index.js'
 @Component({

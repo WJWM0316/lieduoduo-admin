@@ -127,7 +127,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import ImageUploader from '@/components/imageUploader'
-import { uploadIdcardApi } from 'API/commont'
+import { uploadIdcardApi } from 'API/common'
 import {
   detectionMobileApi,
   checkUserauthApi,
@@ -407,7 +407,6 @@ export default class addUser extends Vue {
 
 <style lang="less" scoped="scoped">
 .createCompany {
-  margin-left: 200px;
   padding: 22px;
   .header {
     padding-right: 20px;

@@ -81,15 +81,25 @@ export function getAccessToken() {
 
 export function removeAccessToken() {
   lsCache.delete(KEYS.token)
-  ssCache.delete(KEYS.userInfo)
 }
 
 export function saveUserInfo(userInfos, expiredIn) {
   lsCache.set(KEYS.userInfo, userInfos, { exp: expiredIn })
 }
 
-export function getUserInfo(userInfos, expiredIn) {
+export function getUserInfo() {
   return lsCache.get(KEYS.userInfo)
+}
+
+export function removeUserInfo () {
+  lsCache.delete(KEYS.userInfo)
+}
+
+// 移除用户所有记录
+export function clear() {
+  removeAccessToken()
+  removeUserInfo()
+  sessionStorage.clear()
 }
 
 export const cachedUserInfo = new CommonStorage(KEYS.userInfo, 60 * 60 * 24 * 7 * 1000, 'sessionStorage')

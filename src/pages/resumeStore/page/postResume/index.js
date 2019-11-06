@@ -17,7 +17,7 @@ import {
   setLabelsApi, setEducationApi, setProjectApi, setBaseInfoApi, setIntroduceApi, setAttachResumeApi, setExpectApi, setCareerApi } from 'API/resume'
 import { professionalSkillsApi, getLabelPositionListApi } from 'API/position'
 import { getCityApi } from 'API/company'
-import { fieldApi, uploadApi } from 'API/commont'
+import { fieldApi, uploadApi } from 'API/common'
 import { getAccessToken } from 'API/cacheService'
 import ImageUploader from '@/components/imageUploader'
 // eslint-disable-next-line no-unused-vars
@@ -235,7 +235,7 @@ export default class PostResume extends Vue {
       wechat: '', // 微信号
       signature: '' // 个性签名
     }
-  // form2
+    // form2
     professionalSkillsList = [] // 职业技能列表
     professionalLiteracyList = []
     optionsSkills = []
@@ -251,7 +251,7 @@ export default class PostResume extends Vue {
       skillLabels: [], // 职业技能
       lifeLabels: [] // 生活标签
     }
-  // form3
+    // form3
     isEditForm3 = false
     form3cityNum = []
     form3positionId = []
@@ -263,7 +263,7 @@ export default class PostResume extends Vue {
       salaryFloor: '',
       fieldIds: '' // 期望领域ids，逗号分隔
     }
-  // form4
+    // form4
     isEditForm4 = false
     form4 = {
       company: '', // 公司名称
@@ -274,7 +274,7 @@ export default class PostResume extends Vue {
       duty: '', // 工作内容
       labelIds: '' // 技能标签ids，多个id以逗号分隔
     }
-  // form5
+    // form5
     isEditForm5 = false
     form5 = {
       name: '', // 项目名称
@@ -284,7 +284,7 @@ export default class PostResume extends Vue {
       description: '', // 项目描述
       link: '' // 项目链接
     }
-  // form6
+    // form6
     isEditForm6 = false
     degreeList = [] // 学历
     form6 = {
@@ -295,14 +295,14 @@ export default class PostResume extends Vue {
       endTime: '', // 结束时间
       experience: '' // 在校经历
     }
-  // form7
+    // form7
     isEditForm7 = false
     introImgList = []
     form7 = {
       introduce: '', // 介绍文本
       attachIds: '' // 图片附件ids，多个id以逗号分隔
     }
-  // form8
+    // form8
     isEditForm8 = false
     form8 = {
       attach_resume: '', // 介绍文本
@@ -361,7 +361,7 @@ export default class PostResume extends Vue {
         this.editMsg = res.data.data
       })
     }
-  // 添加类型
+    // 添加类型
     addBlock (type) {
       if (this.handleStatus === 'add') return
       if (type) {
@@ -381,7 +381,7 @@ export default class PostResume extends Vue {
       this[name] = false
     }
 
-  // 点击提交
+    // 点击提交
     handleSubmit (type) {
       let name = `form${type}`
       this.$refs[name].validate(valid => {
@@ -391,9 +391,9 @@ export default class PostResume extends Vue {
       })
     }
 
-  /**
-   * 保存课程
-   */
+    /**
+    * 保存课程
+    */
     async saveInfo (type) {
       type = String(type)
       try {
@@ -591,10 +591,10 @@ export default class PostResume extends Vue {
       }
     }
 
-  /**
-   * 将表单数据转换成提交服务器的格式
-   * @param {*} form
-   */
+    /**
+     * 将表单数据转换成提交服务器的格式
+     * @param {*} form
+    */
     transformData (form) {
       let name = `form${form}`
       const newForm = Object.assign({}, this[name] || {})
@@ -653,9 +653,9 @@ export default class PostResume extends Vue {
       return newForm
     }
 
-  // form1
+    // form1
 
-  /* 求职状态 */
+    /* 求职状态 */
     getJobhuntStatus () {
       jobhuntStatusAPI().then(res => {
         this.jobhuntStatus = res.data.data
@@ -674,17 +674,17 @@ export default class PostResume extends Vue {
         }
       })
     }
-  // form1
-  // form6
+    // form1
+    // form6
     /* 学历 */
     getDegreeList () {
       degreeListAPI().then(res => {
         this.degreeList = res.data.data
       })
     }
-  // form6
+    // form6
 
-  // form7
+    // form7
     /**
      * @detail   处理选中的图片
      */
@@ -759,9 +759,9 @@ export default class PostResume extends Vue {
     handleRemoveUploadImage (index) {
       this.introImgList.splice(index, 1)
     }
-  // form7
+    // form7
 
-  // 修改用户
+    // 修改用户
     saveUser () {
       let value = this.canform.mobile
       if (!value) {
@@ -828,7 +828,7 @@ export default class PostResume extends Vue {
         }
       })
     }
-  /* 修改手机号码 */
+    /* 修改手机号码 */
     editMoile () {
       this.showClose = true
       this.dialogVisible = true
@@ -872,7 +872,7 @@ export default class PostResume extends Vue {
         this.form8.attach_name = msg.fileName
       })
     }
-  /* 验证手机号码 */
+    /* 验证手机号码 */
     checkMobile (e) {
       if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(e)) {
         this.$message({
@@ -1008,16 +1008,16 @@ export default class PostResume extends Vue {
       })
       this.selectedLifeList.push(res)
     }
-  // 编辑删除标签
+    // 编辑删除标签
     deleteLabel (type, index) {
       let name = type === 'job' ? `selectedJobList` : 'selectedLifeList'
       this[name].splice(index, 1)
     }
-  // 工作经历 =》 职位类别
+    // 工作经历 =》 职位类别
     changePostion1 (e) {
       this.setProfessionalSkills()
     }
-  /* 选择最小薪资 */
+    /* 选择最小薪资 */
     changeMin (val) {
       let length = 2 * +val
       // let firstVal = +val + 1
@@ -1050,7 +1050,7 @@ export default class PostResume extends Vue {
         })
       })
     }
-  // 职业技能
+    // 职业技能
     getProfessionalSkills () {
       return professionalSkillsApi().then(res => {
         this.professionalSkillsList = res.data.data.labelProfessionalSkills
@@ -1069,7 +1069,7 @@ export default class PostResume extends Vue {
       this.optionsSkills = options
     }
 
-  // 期待职位
+    // 期待职位
     manageList () {
       getLabelPositionListApi().then(res => {
         this.options = res.data.data
@@ -1084,7 +1084,7 @@ export default class PostResume extends Vue {
       })
     }
 
-  // 行业
+    // 行业
     getField () {
       fieldApi().then(res => {
         this.fieldList = res.data.data

@@ -691,7 +691,6 @@ export default class application extends Vue {
 @import "../../style/iconfont.less";
 @import "./index.less";
 .application {
-  margin-left: 200px;
   .container {
     min-width: 1000px;
     margin: 22px;
