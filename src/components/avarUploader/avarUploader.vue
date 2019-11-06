@@ -52,19 +52,19 @@ export default class avarUploader extends Vue {
 
     this.$emit('before-load', file)
     this.getImageURL(file)
-        .then(url => {
-          file.preview = url
-          file.uploadType = this.type
-          this.previewSrc = url
-          // this.$emit('input', this.previewSrc)
-          // this.$emit('loaded', file)
-          this.handleIconLoaded(file)
-          // this.clearFileInput(event.target)
-        }).catch(e => {
-          console.log('获取图片文件报错', e)
-          this.$emit('load-error', e)
-          // this.clearFileInput(event.target)
-        })
+      .then(url => {
+        file.preview = url
+        file.uploadType = this.type
+        this.previewSrc = url
+        // this.$emit('input', this.previewSrc)
+        // this.$emit('loaded', file)
+        this.handleIconLoaded(file)
+        // this.clearFileInput(event.target)
+      }).catch(e => {
+        console.log('获取图片文件报错', e)
+        this.$emit('load-error', e)
+        // this.clearFileInput(event.target)
+      })
   }
   /**
    * 获取单个图片的url
@@ -122,4 +122,3 @@ export default class avarUploader extends Vue {
   }
 }
 </style>
-

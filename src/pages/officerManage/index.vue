@@ -32,11 +32,11 @@
                 <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="form.end" style="width: 100%;"></el-date-picker>
               </el-col>
             </el-form-item>
-            
+
             <!--用于代替清除结束时间-->
             <el-form-item label-width="1px" label="" prop="end">
             </el-form-item>
-        
+
             <el-form-item label-width="120px" label="加入审核状态" prop="status">
               <el-select v-model="form.status" placeholder="全部状态">
                 <el-option label="管理员-审核中" value="0"></el-option>
@@ -59,7 +59,7 @@
                 <el-option label="人工" value="2"></el-option>
               </el-select>
             </el-form-item>
-            
+
             <el-form-item class="btn">
               <el-button type="primary" @click="onSubmit">查询</el-button>
               <el-button @click.stop="resetForm('form')">重置</el-button>
@@ -146,11 +146,11 @@ import { getRecruiterCodeUrlApi } from 'API/interview'
     List
   }
 })
-export default class officerManage extends Vue{
+export default class officerManage extends Vue {
   total = 0
   pageCount = 0
   qrCode = ''
-  form =  {
+  form = {
     keyword: '',
     status: '',
     auth_status: '',
@@ -166,64 +166,64 @@ export default class officerManage extends Vue{
   searchType = {
     condition1: 'company_name',
     condition2: 'mobile',
-    keyword1:'',
+    keyword1: '',
     keyword2: ''
   }
   /* 搜索关键字 */
   keyword = [
-    {label: '公司名字', value: 'company_name'},
-    {label: '手机号', value: 'mobile'},
-    {label: '人名', value: 'real_name'}
+    { label: '公司名字', value: 'company_name' },
+    { label: '手机号', value: 'mobile' },
+    { label: '人名', value: 'real_name' }
   ]
   fields = [
     {
       prop: 'index',
-      label: '序号',
+      label: '序号'
       // width: 60
     },
     {
       prop: 'realName',
-      label: '申请信息',
+      label: '申请信息'
       // width: 150
     },
     {
       prop: 'userEmail',
-      label: '邮箱',
+      label: '邮箱'
       // width: 220
     },
     {
       prop: 'userPosition',
-      label: '公司职务',
+      label: '公司职务'
       // width: 150
     },
     {
       prop: 'companyName',
-      label: '加入公司',
+      label: '加入公司'
       // width: 220
     },
     {
       prop: 'statusDesc',
-      label: '加入审核状态',
+      label: '加入审核状态'
       // width: 150
     },
     {
       prop: 'authStatus',
-      label: '身份认证状态',
+      label: '身份认证状态'
       // width: 150
     },
     {
       prop: 'auditMode',
-      label: '身份审核模式',
+      label: '身份审核模式'
       // width: 150
     },
     {
       prop: 'createdAt',
-      label: '申请时间',
+      label: '申请时间'
       // width: 200
     },
     {
       prop: 'id',
-      fixed: "right",
+      fixed: 'right',
       // width: 150,
       label: '操作'
     }
@@ -235,18 +235,18 @@ export default class officerManage extends Vue{
     if (this.searchType.condition1 && this.searchType.keyword1) searchCondition[this.searchType.condition1] = this.searchType.keyword1
     if (this.searchType.condition2 && this.searchType.keyword2) searchCondition[this.searchType.condition2] = this.searchType.keyword2
     let searchForm = Object.assign({}, this.form, searchCondition)
-    if (searchForm.start !== "" && searchForm.end === "") {
+    if (searchForm.start !== '' && searchForm.end === '') {
       this.$message({
-        message: "申请时间必须选择开始时间和结束时间",
-        type: "warning"
-      });
-      return;
-    } else if (searchForm.start === "" && searchForm.end !== "") {
+        message: '申请时间必须选择开始时间和结束时间',
+        type: 'warning'
+      })
+      return
+    } else if (searchForm.start === '' && searchForm.end !== '') {
       this.$message({
-        message: "申请时间必须选择开始时间和结束时间",
-        type: "warning"
-      });
-      return;
+        message: '申请时间必须选择开始时间和结束时间',
+        type: 'warning'
+      })
+      return
     }
     this.getRecruiterList(searchForm)
   }
@@ -259,7 +259,7 @@ export default class officerManage extends Vue{
     this.searchType = {
       condition1: 'company_name',
       condition2: 'mobile',
-      keyword1:'',
+      keyword1: '',
       keyword2: ''
     }
     this.$refs[name].resetFields()
@@ -284,14 +284,14 @@ export default class officerManage extends Vue{
     this.$route.meta.scrollY = window.scrollY
     this.$router.push({
       path: '/check/recruitmentOfficer/reviewDetails',
-      query: {id: id}
+      query: { id: id }
     })
   }
   /* 生成职位详情小程序码 */
   async creatLink (e, data, index) {
     this.qrCode = ''
     if (data.status !== 1) {
-      this.$message.error(`招聘官未通过审核,暂无招聘官页`);
+      this.$message.error(`招聘官未通过审核,暂无招聘官页`)
       return
     }
     // 是否已经加载过二维码
@@ -304,7 +304,7 @@ export default class officerManage extends Vue{
       })
       return
     }
-    
+
     this.$nextTick(() => {
       this.$refs['qrCode'].style.display = 'block'
       this.$refs['qrCode'].style.left = e.clientX + 'px'
@@ -314,10 +314,10 @@ export default class officerManage extends Vue{
     this.qrCode = res.data.data.qrCodeUrl
     this.list[index].qrCode = res.data.data.qrCodeUrl
   }
-  
+
   /* 生成二维码 */
-  getQr ( id) {
-    return getRecruiterCodeUrlApi({id: id})
+  getQr (id) {
+    return getRecruiterCodeUrlApi({ id: id })
   }
   /* 关闭浮窗 */
   closeTopic () {
@@ -325,7 +325,7 @@ export default class officerManage extends Vue{
       this.$refs['qrCode'].style.display = 'none'
     })
   }
-  
+
   created () {
     this.getRecruiterList()
   }

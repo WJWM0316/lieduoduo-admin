@@ -76,15 +76,15 @@
       <el-form-item label="职位ID">
         <el-input v-model="form.position_id"></el-input>
       </el-form-item>
-    
+
       <el-form-item label="上架时间">
         <el-date-picker type="datetime" placeholder="选择日期" v-model="form.start_time" style="width: 100%;" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
       </el-form-item>
-      
+
       <el-form-item label="截止时间">
         <el-date-picker type="datetime" placeholder="选择日期" v-model="form.end_time" style="width: 100%;" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
       </el-form-item>
-      
+
       <el-form-item label="上架状态">
         <el-select v-model="form.is_online" placeholder="全部状态">
           <el-option
@@ -178,7 +178,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <el-pagination
       layout="prev, pager, next, slot"
       :total="total"
@@ -195,13 +195,13 @@
 </template>
 
 <script>
-import Vue from "vue"
-import Component from "vue-class-component"
+import Vue from 'vue'
+import Component from 'vue-class-component'
 import {
   getRapidlySurfaceListApi
-} from "API/24h";
+} from 'API/24h'
 @Component({
-  name: 'H24',
+  name: 'H24'
   // watch: {
   //   '$route': {
   //     handler() {
@@ -232,7 +232,7 @@ export default class H24 extends Vue {
       type: 'processing',
       msg: '进行中',
       active: false,
-      id:'1'
+      id: '1'
     },
     {
       type: 'notStarted',
@@ -264,51 +264,51 @@ export default class H24 extends Vue {
     is_online: ''
   }
   lists = []
-  getRapidlySurfaceList() {
+  getRapidlySurfaceList () {
     let tab = this.navigation.find(field => field.active)
     let params = {
       count: this.pageSize,
       page: this.form.page,
       tab: tab.id
     }
-    if(this.form.position_id) {
-      params = Object.assign(params, {position_id: this.form.position_id})
+    if (this.form.position_id) {
+      params = Object.assign(params, { position_id: this.form.position_id })
     }
-    if(this.form.start_time) {
-      params = Object.assign(params, {start_time: this.form.start_time})
+    if (this.form.start_time) {
+      params = Object.assign(params, { start_time: this.form.start_time })
     }
-    if(this.form.end_time) {
-      params = Object.assign(params, {end_time: this.form.end_time})
+    if (this.form.end_time) {
+      params = Object.assign(params, { end_time: this.form.end_time })
     }
-    if(this.form.is_online) {
-      params = Object.assign(params, {is_online: this.form.is_online})
+    if (this.form.is_online) {
+      params = Object.assign(params, { is_online: this.form.is_online })
     }
     getRapidlySurfaceListApi(params).then(res => {
       let infos = res.data
       this.total = infos.meta.total
       this.lists = infos.data
-      this.$router.push({query: {...params}})
+      this.$router.push({ query: { ...params } })
     })
   }
-  tabClick(type) {
-    this.navigation.map(field => field.active = type === field.type ? true : false)
+  tabClick (type) {
+    this.navigation.map(field => (field.active = type === field.type))
     this.form.position_id = ''
     this.getRapidlySurfaceList()
   }
-  search() {
+  search () {
     this.getRapidlySurfaceList()
   }
-  pageChange(page) {
+  pageChange (page) {
     this.form.page = page
     this.getRapidlySurfaceList()
   }
-  todoAction(type, data) {
-    switch(type) {
+  todoAction (type, data) {
+    switch (type) {
       case 'add':
-        this.$router.push({name: 'h24_post'})
+        this.$router.push({ name: 'h24_post' })
         break
       case 'edit':
-        this.$router.push({name: 'h24_edit', query: {id: data.id}})
+        this.$router.push({ name: 'h24_edit', query: { id: data.id } })
         break
       case 'view':
         this.$router.push({
@@ -324,18 +324,18 @@ export default class H24 extends Vue {
         break
     }
   }
-  init() {
+  init () {
     let query = this.$route.query
     this.form = Object.assign(this.form, query)
-    if(this.form.is_online) this.form.is_online = Number(this.form.is_online)
-    if(query.tab) {
-      this.navigation.map(field => field.active = query.tab == field.id ? true : false)
+    if (this.form.is_online) this.form.is_online = Number(this.form.is_online)
+    if (query.tab) {
+      this.navigation.map(field => (field.active = query.tab === field.id))
     } else {
       this.navigation[0].active = true
     }
   }
-  reset() {
-    this.navigation.map((field, index) => field.active = index === 0 ? true : false)
+  reset () {
+    this.navigation.map((field, index) => (field.active = index === 0))
     this.form = {
       page: 1,
       position_id: '',
@@ -345,7 +345,7 @@ export default class H24 extends Vue {
     }
     this.getRapidlySurfaceList()
   }
-  mounted() {
+  mounted () {
     this.init()
     this.getRapidlySurfaceList()
   }

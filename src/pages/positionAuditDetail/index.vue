@@ -52,7 +52,7 @@
         <div class="item">
           <span class="lable">团队亮点：</span>
 
-          <span v-for="item,index in positionData.lightspotInfo">{{item}}</span>
+          <span v-for="(item,index) in positionData.lightspotInfo" :key="index">{{item}}</span>
         </div>
         <div class="title">其他信息</div>
 
@@ -70,7 +70,7 @@
         </div>
         <div class="item">
           <span class="lable">技能要求：</span>
-          <span v-for="item,index in positionData.skillsLabel">{{item.name}}{{index === positionData.skillsLabel.length - 1 ? '' : '、'}}</span>
+          <span v-for="(item,index) in positionData.skillsLabel" :key="index">{{item.name}}{{index === positionData.skillsLabel.length - 1 ? '' : '、'}}</span>
         </div>
 
         <div class="item">
@@ -98,72 +98,71 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import { getCompanyInfo, temppassApi, tempfailApi } from "API/company";
-import { getPositionApi, auditPositionApi } from "API/position";
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { getPositionApi, auditPositionApi } from 'API/position'
 
 @Component({
-  name: "checkPage"
+  name: 'checkPage'
 })
 export default class checkPage extends Vue {
   AdminShow = 0;
-  companyInfo = "";
-  personalInfo = "";
-  nowImg = "";
+  companyInfo = '';
+  personalInfo = '';
+  nowImg = '';
   isCheck = false; // 审核蒙层
-  checkId = "";
+  checkId = '';
   form = {
-    result: ""
+    result: ''
   };
   positionData = {};
   /* 点击审核按钮 */
-  Review(id) {
-    this.isCheck = true;
-    this.checkId = id;
+  Review (id) {
+    this.isCheck = true
+    this.checkId = id
   }
-  showImg(imgUrl) {
-    this.nowImg = imgUrl;
+  showImg (imgUrl) {
+    this.nowImg = imgUrl
   }
-  hiddenMask() {
-    this.nowImg = "";
+  hiddenMask () {
+    this.nowImg = ''
   }
-  toPostPosition(type) {
-    let query = {};
-    if (type === "add") {
+  toPostPosition (type) {
+    let query = {}
+    if (type === 'add') {
     } else {
-      let id = this.$route.query.id;
-      query.id = id;
+      let id = this.$route.query.id
+      query.id = id
     }
     this.$router.push({
-      path: "/positionManage/positionPost",
+      path: '/positionManage/positionPost',
       query: query
-    });
+    })
   }
-  /*设置审核结果 */
-  setResult() {
+  /* 设置审核结果 */
+  setResult () {
     auditPositionApi({ id: this.checkId, action: this.form.result })
       .then(res => {
-        this.$message.success("成功");
-        this.isCheck = false;
-        this.getPosition();
+        this.$message.success('成功')
+        this.isCheck = false
+        this.getPosition()
       })
       .catch(err => {
-        this.$message.success(err.msg);
-      });
+        this.$message.success(err.msg)
+      })
   }
-  created() {
-    this.AdminShow = +sessionStorage.getItem("AdminShow");
-    this.getPosition();
+  created () {
+    this.AdminShow = +sessionStorage.getItem('AdminShow')
+    this.getPosition()
   }
 
-  getPosition() {
-    const { id } = this.$route.query;
+  getPosition () {
+    const { id } = this.$route.query
     getPositionApi({
       id: id
     }).then(res => {
-      this.positionData = res.data.data;
-    });
+      this.positionData = res.data.data
+    })
   }
 }
 </script>
@@ -179,11 +178,11 @@ export default class checkPage extends Vue {
   text-align: left;
   width: 100%;
 
-  white-space: pre-wrap;       
-  white-space: -moz-pre-wrap;  
-  white-space: -pre-wrap;      
-  white-space: -o-pre-wrap;    
-  word-wrap: break-word;   
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
 }
 .mask {
   position: fixed;

@@ -1,6 +1,5 @@
 import { request } from './index.js'
 
-
 /* 公司审核列表 */
 export const login = data => request({
   url: '/auth/login',
@@ -225,12 +224,12 @@ export const deleteRecruiterApi = (companyId, uid) => request({
   type: 'delete'
 })
 /* 编辑公司审核表跟进人 */
-export const editCheckCompanyFollowUserApi = (companyId, uid,groupId) => request({
+export const editCheckCompanyFollowUserApi = (companyId, uid, groupId) => request({
   url: `/company/company_temp_add_to_follow_user/${companyId}?admin_uid=${uid}&groupId=${groupId}`,
   type: 'put'
 })
 /* 用户表设置跟进人 */
-export const editAdminNameApi = (uid,data) => request({
+export const editAdminNameApi = (uid, data) => request({
   url: `/usermanage/save_admin_uid_to_user/${uid}`,
   type: 'put',
   data
@@ -246,7 +245,7 @@ export const getApplyUserInfoApi = (uid) => request({
   type: 'get'
 })
 /* 获取审核表里的人员申请信息 */
-export const editApplyUserInfoApi = (uid,data) => request({
+export const editApplyUserInfoApi = (uid, data) => request({
   url: `/company/update_company_apply_user_info/${uid}`,
   type: 'put',
   data
@@ -254,9 +253,8 @@ export const editApplyUserInfoApi = (uid,data) => request({
 /* 审核表跟进人接口 */
 export const companyTempUserList = () => request({
   url: `/company/company_temp_user_list`,
-  type: 'get',
+  type: 'get'
 })
-
 
 /* 设置客户等级 */
 export const setCompanyCustomerLevelApi = data => request({

@@ -24,80 +24,81 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { sendEmailApi } from 'API/company'
 @Component({
-    name: 'email',
-    props: {
-        companyName: {
-            type: String
-        }
+  name: 'email',
+  props: {
+    companyName: {
+      type: String
     }
+  }
 })
 export default class emailCheck extends Vue {
     timer = null // 倒计时定时器
     countdown = 60
     isSend = false
     form = {
-        email: '',
-        code: '',
-        company_id: 0
+      email: '',
+      code: '',
+      company_id: 0
     }
     rule = {
-        email: [
-            { required: true, message: '请输入邮箱', trigger: 'blur' },
-            { required: true, message: '请输入正确的邮箱', trigger: 'blur', validator:this.emailRule }
-        ]
+      email: [
+        { required: true, message: '请输入邮箱', trigger: 'blur' },
+        { required: true, message: '请输入正确的邮箱', trigger: 'blur', validator: this.emailRule }
+      ]
     }
     save () {
-        if (!this.form.email || !this.form.code) return
-        let param = Object.assign({}, this.form, {company_name: this.companyName})
-        this.$emit('save', param)
+      if (!this.form.email || !this.form.code) return
+      let param = Object.assign({}, this.form, { company_name: this.companyName })
+      this.$emit('save', param)
     }
     cancel () {
-        this.$emit('close')
+      this.$emit('close')
     }
-    emailRule=(rule,value,callback)=>{
+    emailRule=(rule, value, callback) => {
     //    const emailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
-    const emailReg = /^([a-zA-Z0-9]+[_|\_|\.|\-]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[-_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,8}$/;
-        if (!value) {
-            return callback(new Error('邮箱不能为空'))
+      // eslint-disable-next-line no-useless-escape
+      const emailReg = /^([a-zA-Z0-9]+[_|\_|\.|\-]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[-_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,8}$/
+      if (!value) {
+        return callback(new Error('邮箱不能为空'))
+      }
+      setTimeout(() => {
+        if (emailReg.test(value)) {
+          callback()
+        } else {
+          callback(new Error('请输入正确的邮箱格式'))
         }
-        setTimeout(() => {
-            if (emailReg.test(value)) {
-                callback()
-                } else {
-                    callback(new Error('请输入正确的邮箱格式'))
-                }
-            }, 100) 
+      }, 100)
     }
     /* 发送校验 */
     sendEmail () {
-        if (!this.form.email) {
-            this.$message({
-                type: 'error',
-                message: '请输入有效邮箱'
-            })
-            return
-        }
-        let param = {
-            email: this.form.email,
-            company_id: this.form.company_id,
-            company_name: this.companyName
-        }
-        sendEmailApi(param).then(res => {
-            this.isSend = true
-            this.$message({
-              message: '邮件已发送到邮箱，邮件有效期为10分钟，请及时登陆查看',
-              type: 'success'
-            })
-            let that = this
-            this.timer = setInterval(function () {
-                --that.countdown
-                if (that.countdown <= 0) {
-                    that.countdown = 60
-                    that.isSend = false
-                    clearInterval(that.timer)
-                }
-            }, 1000)
+      if (!this.form.email) {
+        this.$message({
+          type: 'error',
+          message: '请输入有效邮箱'
         })
+        return
+      }
+      let param = {
+        email: this.form.email,
+        company_id: this.form.company_id,
+        company_name: this.companyName
+      }
+      sendEmailApi(param).then(res => {
+        this.isSend = true
+        this.$message({
+          message: '邮件已发送到邮箱，邮件有效期为10分钟，请及时登陆查看',
+          type: 'success'
+        })
+        let that = this
+        this.timer = setInterval(function () {
+          --that.countdown
+          if (that.countdown <= 0) {
+            that.countdown = 60
+            that.isSend = false
+            clearInterval(that.timer)
+          }
+        }, 1000)
+      })
     }
 }
 </script>

@@ -312,21 +312,21 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import { getCompanyListApi, getCityApi, setCompanyCustomerLevelApi } from "API/company";
-import { rightInfoApi, getSalerListApi, getCompanyCustomerLevelRangeApi, getAdvisorUserListApi } from "API/commont";
-import { getAccessToken, removeAccessToken } from "API/cacheService";
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { getCompanyListApi, getCityApi, setCompanyCustomerLevelApi } from 'API/company'
+import { rightInfoApi, getSalerListApi, getCompanyCustomerLevelRangeApi, getAdvisorUserListApi } from 'API/commont'
+import { getAccessToken } from 'API/cacheService'
 import { API_ROOT } from 'API/index.js'
-import List from "@/components/list";
+import List from '@/components/list'
 Component.registerHooks([
-  "beforeRouteEnter",
-  "beforeRouteLeave",
-  "beforeRouteUpdate" // for vue-router 2.2+
-]);
+  'beforeRouteEnter',
+  'beforeRouteLeave',
+  'beforeRouteUpdate' // for vue-router 2.2+
+])
 
 @Component({
-  name: "companyLibrary",
+  name: 'companyLibrary',
   components: {
     List
   }
@@ -335,7 +335,7 @@ export default class indexPage extends Vue {
   canDownloadData = true
   total = 0; // 筛查结果数量
   pageCount = 0; // 请求回的数据共几页
-  AdminShow = ""; //权限字段，限制搜索
+  AdminShow = ''; // 权限字段，限制搜索
   form = {
     high_quality:'0',
     wherefrom: "",
@@ -346,11 +346,11 @@ export default class indexPage extends Vue {
     exportEnd: undefined,
     page: 1,
     count: 20,
-    area_id: "",
-    firstAreaId: "",
-    equity: "",
-    status: "",
-    adminUid: "",
+    area_id: '',
+    firstAreaId: '',
+    equity: '',
+    status: '',
+    adminUid: '',
     customer_level: '',
     advisorUid: '',
     searchType: 'keyword',
@@ -361,76 +361,76 @@ export default class indexPage extends Vue {
   };
   rightList = []; // 权益列表
   salerLis = []; // 销售人员列表
-  //firstAreaId = ''
+  // firstAreaId = ''
   firstAreaIdList = [];
   cityLable = [];
   list = [];
   fields = [
     {
-      prop: "id",
-      label: "公司ID",
+      prop: 'id',
+      label: '公司ID',
       width: 100
     },
     {
-      prop: "companyName",
-      label: "申请信息",
+      prop: 'companyName',
+      label: '申请信息',
       width: 350
       //    align: 'left'
     },
     {
-      prop: "address",
-      label: "地区",
+      prop: 'address',
+      label: '地区',
       width: 150
     },
     {
-      prop: "rtVersionName",
-      label: "权益类型",
+      prop: 'rtVersionName',
+      label: '权益类型',
       width: 100
     },
     {
-      prop: "customer_level",
-      label: "客户等级",
+      prop: 'customer_level',
+      label: '客户等级',
       width: 200,
-      align: "left"
+      align: 'left'
     },
     {
-      prop: "expiredDesc",
-      label: "权益截止时间",
+      prop: 'expiredDesc',
+      label: '权益截止时间',
       width: 200
     },
     {
-      prop: "adminName",
-      label: "跟进销售",
+      prop: 'adminName',
+      label: '跟进销售',
       width: 100
     },
     {
-      prop: "advisorName",
-      label: "跟进顾问",
+      prop: 'advisorName',
+      label: '跟进顾问',
       width: 100
     },
     {
-      prop: "statusDesc",
-      label: "状态",
+      prop: 'statusDesc',
+      label: '状态',
       width: 100
     },
     {
-      prop: "check",
-      fixed: "right",
+      prop: 'check',
+      fixed: 'right',
       width: 200,
-      label: "操作"
+      label: '操作'
     }
   ];
   companyCustomerLevelRange = []
   advisorUserList = []
-  changeSearchMethods(e) {
+  changeSearchMethods (e) {
     this.form.content = ''
     this.form.keyword = ''
     this.form.mobile = ''
     this.form.companyId = ''
   }
-  change(index, value) {
+  change (index, value) {
     let item = this.list.find((field, i) => index === i)
-    setCompanyCustomerLevelApi({id: item.id, customerLevel: value})
+    setCompanyCustomerLevelApi({ id: item.id, customerLevel: value })
   }
   /**
    * @Author   小书包
@@ -438,7 +438,7 @@ export default class indexPage extends Vue {
    * @detail   获取跟进人列表
    * @return   {[type]}   [description]
    */
-  getCompanyCustomerLevelRange() {
+  getCompanyCustomerLevelRange () {
     getCompanyCustomerLevelRangeApi().then((res) => {
       let arr = res.data.data
       arr.map((v, k) => {
@@ -453,7 +453,7 @@ export default class indexPage extends Vue {
    * @detail   顾问推荐 - 顾问列表
    * @return   {[type]}   [description]
    */
-  getAdvisorUserList() {
+  getAdvisorUserList () {
     getAdvisorUserListApi().then((res) => {
       let arr = res.data.data
       arr.map((v, k) => {
@@ -468,67 +468,67 @@ export default class indexPage extends Vue {
    * @detail   获取公司数据
    * @return   {[type]}           [description]
    */
-  getCompanyList(newForm) {
+  getCompanyList (newForm) {
     this.form[this.form.searchType] = this.form.content
     let params = {
       page: this.form.page,
       count: this.form.count
     }
-    if(this.form.wherefrom) {
-      params = Object.assign(params, {wherefrom: this.form.wherefrom})
+    if (this.form.wherefrom) {
+      params = Object.assign(params, { wherefrom: this.form.wherefrom })
     }
-    if(this.form.customer_level !== '') {
-      params = Object.assign(params, {customer_level: this.form.customer_level})
+    if (this.form.customer_level !== '') {
+      params = Object.assign(params, { customer_level: this.form.customer_level })
     }
-    if(this.form.advisorUid) {
-      params = Object.assign(params, {advisorUid: this.form.advisorUid})
+    if (this.form.advisorUid) {
+      params = Object.assign(params, { advisorUid: this.form.advisorUid })
     }
-    if(this.form.adminUid) {
-      params = Object.assign(params, {adminUid: this.form.adminUid})
+    if (this.form.adminUid) {
+      params = Object.assign(params, { adminUid: this.form.adminUid })
     }
-    if(this.form.status) {
-      params = Object.assign(params, {status: this.form.status})
+    if (this.form.status) {
+      params = Object.assign(params, { status: this.form.status })
     }
-    if(this.form.is_license) {
-      params = Object.assign(params, {is_license: this.form.is_license})
+    if (this.form.is_license) {
+      params = Object.assign(params, { is_license: this.form.is_license })
     }
-    if(this.form.equity) {
-      params = Object.assign(params, {equity: this.form.equity})
+    if (this.form.equity) {
+      params = Object.assign(params, { equity: this.form.equity })
     }
-    if(this.form.keyword) {
-      params = Object.assign(params, {keyword: this.form.keyword})
+    if (this.form.keyword) {
+      params = Object.assign(params, { keyword: this.form.keyword })
     }
-    if(this.form.companyId) {
-      params = Object.assign(params, {companyId: this.form.companyId})
+    if (this.form.companyId) {
+      params = Object.assign(params, { companyId: this.form.companyId })
     }
-    if(this.form.mobile) {
-      params = Object.assign(params, {mobile: this.form.mobile})
+    if (this.form.mobile) {
+      params = Object.assign(params, { mobile: this.form.mobile })
     }
-    if((this.form.start && !this.form.end) || (!this.form.start&& this.form.end)) {
-      this.$message({message: "权益截止时间必需选择区间时间", type: "warning"});
-      return;
+    if ((this.form.start && !this.form.end) || (!this.form.start && this.form.end)) {
+      this.$message({ message: '权益截止时间必需选择区间时间', type: 'warning' })
+      return
     } else {
-      if(this.form.start && this.form.end) {
-        params = Object.assign(params, {start: this.form.start, end: this.form.end})
+      if (this.form.start && this.form.end) {
+        params = Object.assign(params, { start: this.form.start, end: this.form.end })
       }
     }
-    if((this.form.exportStart && !this.form.exportEnd) || (!this.form.exportStart&& this.form.exportEnd)) {
-      this.$message({message: "入库时间必需选择区间时间", type: "warning"});
-      return;
+    if ((this.form.exportStart && !this.form.exportEnd) || (!this.form.exportStart && this.form.exportEnd)) {
+      this.$message({ message: '入库时间必需选择区间时间', type: 'warning' })
+      return
     } else {
-      if(this.form.exportStart && this.form.exportEnd) {
-        params = Object.assign(params, {exportStart: this.form.exportStart, exportEnd: this.form.exportEnd})
+      if (this.form.exportStart && this.form.exportEnd) {
+        params = Object.assign(params, { exportStart: this.form.exportStart, exportEnd: this.form.exportEnd })
       }
     }
     // if(this.form.exportStart && this.form.exportEnd) {
     //   params = Object.assign(params, {exportStart: this.form.exportStart, exportEnd: this.form.exportEnd})
     // }
-    if((this.form.firstAreaId && !this.form.area_id) || (!this.form.firstAreaId && this.form.area_id)) {
-      this.$message.error('请选择城市');
+    if ((this.form.firstAreaId && !this.form.area_id) || (!this.form.firstAreaId && this.form.area_id)) {
+      this.$message.error('请选择城市')
       return
     } else {
-      if(this.form.firstAreaId && this.form.area_id) {
-        params = Object.assign(params, {firstAreaId: this.form.firstAreaId, area_id: this.form.area_id})
+      if (this.form.firstAreaId && this.form.area_id) {
+        params = Object.assign(params, { firstAreaId: this.form.firstAreaId, area_id: this.form.area_id })
       }
     }
     params = Object.assign(params,{high_quality: this.form.high_quality})
@@ -539,7 +539,6 @@ export default class indexPage extends Vue {
         field.customerVevelValue = (field.customerLevel).toString()
       })
       this.list = list;
-      console.log(this.list)
       this.pageCount = res.data.meta.lastPage;
       this.total = res.data.meta.total;
       if(this.form.keyword || this.form.mobile || this.form.companyId) {
@@ -551,60 +550,60 @@ export default class indexPage extends Vue {
           ...params
         }
       })
-    });
+    })
   }
   /* 翻页 */
-  handlePageChange(nowPage) {
-    this.form.page = nowPage;
-    this.getCompanyList();
+  handlePageChange (nowPage) {
+    this.form.page = nowPage
+    this.getCompanyList()
   }
   /* 新建公司 */
-  addCompany() {
-    this.$router.push({path: "/index/createCompany"});
+  addCompany () {
+    this.$router.push({ path: '/index/createCompany' })
   }
-  onSubmit() {
-    this.form.page = 1;
-    this.getCompanyList();
+  onSubmit () {
+    this.form.page = 1
+    this.getCompanyList()
   }
   // 搜索公司
-  search() {
-    this.onSubmit();
+  search () {
+    this.onSubmit()
   }
   // 获取城市标签
-  getCity() {
+  getCity () {
     return getCityApi().then(res => {
       res.data.data.map(item => this.firstAreaIdList.push(item))
     })
   }
   // 获取权益列表
-  async getRightList() {
-    let res = await rightInfoApi({ pageCount: 50 });
-    let arr = res.data.data;
+  async getRightList () {
+    let res = await rightInfoApi({ pageCount: 50 })
+    let arr = res.data.data
     arr.map((v, k) => {
       v.id = ((v.id).toString())
     })
     this.rightList = arr
   }
   // 获取销售人员名单
-  async getSalerList() {
-    let res = await getSalerListApi({ pageCount: 50 });
-    let arr = res.data.data;
+  async getSalerList () {
+    let res = await getSalerListApi({ pageCount: 50 })
+    let arr = res.data.data
     arr.map((v, k) => {
       v.id = ((v.id).toString())
     })
     this.salerLis = arr
   }
   /* 选择省 */
-  changeSearchType() {
+  changeSearchType () {
     this.firstAreaIdList.map(item => {
       if (item.areaId === this.form.firstAreaId) {
-        this.cityLable = item.children;
-        this.form.area_id = "";
+        this.cityLable = item.children
+        this.form.area_id = ''
       }
-    });
+    })
   }
-  resetForm(name) {
-    this.$refs[name].resetFields();
+  resetForm (name) {
+    this.$refs[name].resetFields()
     this.form.searchType = 'keyword'
     this.form.content = ''
     this.form.keyword = ''
@@ -621,17 +620,17 @@ export default class indexPage extends Vue {
     this.form.advisorUid = ''
     this.form.exportStart = undefined
     this.form.exportEnd = undefined
-    this.getCompanyList();
+    this.getCompanyList()
   }
-  check(id) {
-    this.$route.meta.scrollY = window.scrollY;
+  check (id) {
+    this.$route.meta.scrollY = window.scrollY
     this.$router.push({
-      path: "/index/companyInfo",
+      path: '/index/companyInfo',
       query: { id: id }
-    });
+    })
   }
-  toUser(uid) {
-    this.$router.push({ path: `/user/userInfo/${uid}` });
+  toUser (uid) {
+    this.$router.push({ path: `/user/userInfo/${uid}` })
   }
   toPost(id) {
     this.$router.push({ path: `/24h/add/${id}` });
@@ -647,53 +646,53 @@ export default class indexPage extends Vue {
       let url = `${API_ROOT}/company/list?isExport=1`
 
       this.form[this.form.searchType] = this.form.content
-      if(this.form.wherefrom) {
+      if (this.form.wherefrom) {
         url += `&wherefrom=${this.form.wherefrom}`
       }
-      if(this.form.customer_level !== '') {
+      if (this.form.customer_level !== '') {
         url += `&customer_level=${this.form.customer_level}`
       }
-      if(this.form.advisorUid) {
+      if (this.form.advisorUid) {
         url += `&advisorUid=${this.form.advisorUid}`
       }
-      if(this.form.adminUid) {
+      if (this.form.adminUid) {
         url += `&adminUid=${this.form.adminUid}`
       }
-      if(this.form.status) {
+      if (this.form.status) {
         url += `&status=${this.form.status}`
       }
-      if(this.form.equity) {
+      if (this.form.equity) {
         url += `&equity=${this.form.equity}`
       }
-      if(this.form.keyword) {
+      if (this.form.keyword) {
         url += `&keyword=${this.form.keyword}`
       }
-      if(this.form.companyId) {
+      if (this.form.companyId) {
         url += `&companyId=${this.form.companyId}`
       }
-      if(this.form.mobile) {
+      if (this.form.mobile) {
         url += `&mobile=${this.form.mobile}`
       }
-      if(this.form.is_license) {
+      if (this.form.is_license) {
         url += `&is_license=${this.form.is_license}`
       }
-      if((this.form.start && !this.form.end) || (!this.form.start&& this.form.end)) {
-        this.$message({message: "权益截止时间必需选择区间时间", type: "warning"});
-        return;
+      if ((this.form.start && !this.form.end) || (!this.form.start && this.form.end)) {
+        this.$message({ message: '权益截止时间必需选择区间时间', type: 'warning' })
+        return
       } else {
-        if(this.form.start && this.form.end) {
+        if (this.form.start && this.form.end) {
           url += `&start=${this.form.start}&end=${this.form.end}`
         }
       }
-      if((this.form.exportStart && this.form.exportEnd)) {
+      if ((this.form.exportStart && this.form.exportEnd)) {
         url += `&exportStart=${this.form.exportStart}&exportEnd=${this.form.exportEnd}`
       }
 
-      if((this.form.firstAreaId && !this.form.area_id) || (!this.form.firstAreaId && this.form.area_id)) {
-        this.$message.error('请选择城市');
+      if ((this.form.firstAreaId && !this.form.area_id) || (!this.form.firstAreaId && this.form.area_id)) {
+        this.$message.error('请选择城市')
         return
       } else {
-        if(this.form.firstAreaId && this.form.area_id) {
+        if (this.form.firstAreaId && this.form.area_id) {
           url += `&firstAreaId=${this.form.firstAreaId}&area_id=${this.form.area_id}`
         }
       }
@@ -701,9 +700,9 @@ export default class indexPage extends Vue {
       url = url.replace(/\s*/g, '')
       let xmlResquest = new XMLHttpRequest()
       xmlResquest.open('get', url, true)
-      xmlResquest.setRequestHeader('Content-type', 'application/json')
-      xmlResquest.setRequestHeader('Authorization-Admin', getAccessToken())
-      xmlResquest.responseType = 'blob'
+      xmlResquest.setRequestHeader('Content-type', 'application/json')
+      xmlResquest.setRequestHeader('Authorization-Admin', getAccessToken())
+      xmlResquest.responseType = 'blob'
       xmlResquest.onload = () => {
         this.canDownloadData = true
         let content = xmlResquest.response
@@ -721,27 +720,26 @@ export default class indexPage extends Vue {
       this.$message({
         type: 'info',
         message: '已取消导出'
-      });          
+      })
     })
   }
-  created() {
+  created () {
     this.form = Object.assign(this.form, this.$route.query)
-    this.getCompanyList();
+    this.getCompanyList()
     this.getCity().then(() => {
       this.form.firstAreaId = Number(this.form.firstAreaId) > 0 ? Number(this.form.firstAreaId) : ''
       this.form.area_id = Number(this.form.area_id) > 0 ? Number(this.form.area_id) : ''
       let result = {}
-      if(this.form.firstAreaId) {
+      if (this.form.firstAreaId) {
         result = this.firstAreaIdList.find(field => field.areaId === this.form.firstAreaId)
         this.cityLable = result.children
       }
     })
-    this.getRightList();
-    this.getSalerList();
+    this.getRightList()
+    this.getSalerList()
     this.getCompanyCustomerLevelRange()
     this.getAdvisorUserList()
-    this.AdminShow = +sessionStorage.getItem("AdminShow")
-
+    this.AdminShow = +sessionStorage.getItem('AdminShow')
   }
 }
 </script>

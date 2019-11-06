@@ -1,6 +1,5 @@
 import { request } from './index.js'
 
-
 /* 获取广告位列表 */
 export const getAdvertListApi = data => request({
   url: '/advert/list',
@@ -22,13 +21,11 @@ export const editAdvertApi = data => request({
   data
 })
 
-
 /* 获取广告为详情 */
 export const getAdvertApi = data => request({
   url: `/advert/info/${data.id}`,
   type: 'get'
 })
-
 
 /* 删除广告 */
 export const deleteAdvertApi = data => request({

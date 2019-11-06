@@ -23,11 +23,11 @@
             </template>
             <template v-else-if="type === 'confirm'">
               <el-button size="large" @click="handleCancel" v-text="cancelText" v-show="showClose"></el-button>
-              <el-button 
-                type="primary" 
-                size="large" 
-                @click="handleConfirm" 
-                v-text="confirmText" 
+              <el-button
+                type="primary"
+                size="large"
+                @click="handleConfirm"
+                v-text="confirmText"
                 :class="{'err': headType == 3 }"
               ></el-button>
             </template>
@@ -166,7 +166,7 @@ export default ComponentDialog
         margin: 0 16px 0 8px;
         color: #354048;
         padding: 12px 0;
-        
+
       }
       .el-button--primary {
         &.err {
@@ -175,9 +175,9 @@ export default ComponentDialog
           color:rgba(255,52,52,1) !important;
         }
       }
-      
+
       button:last-child
-      { 
+      {
         margin-right: 0;
       }
 
@@ -191,4 +191,3 @@ export default ComponentDialog
   }
 }
 </style>
-

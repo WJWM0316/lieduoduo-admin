@@ -283,12 +283,10 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import resumeAddtab from "../resumeAddtab/index";
-import { getAccessToken } from "API/cacheService";
-import { uploadApi } from "API/commont";
-const packjson = require("PACKJSON/package.json");
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import resumeAddtab from '../resumeAddtab/index'
+import { uploadApi } from 'API/commont'
 import {
   addHistory,
   GetResumeHistory,
@@ -296,14 +294,14 @@ import {
   delateResume,
   delateLabel,
   saveResume
-} from "API/resumeStore.js";
+} from 'API/resumeStore.js'
 @Component({
-  name: "resume-popup",
+  name: 'resume-popup',
   props: {
     /* 简历ID */
     resumeId: {
       type: String,
-      default: ""
+      default: ''
     },
     /* 是否需要左右切换，如传入数组，则显示左右箭头，否则只显示当前简历 */
     itemList: {
@@ -313,7 +311,7 @@ import {
     /* 简历组件显示的tab ,如需补充多余tab 传入typelist同时，html加一个nowCheck */
     typeList: {
       type: Array,
-      default: () => ["简历详情", "历史记录"]
+      default: () => ['简历详情', '历史记录']
     }
   },
   components: {
@@ -322,7 +320,7 @@ import {
   watch: {}
 })
 export default class resumePopup extends Vue {
-  nowCheck = 0; //当前点击
+  nowCheck = 0; // 当前点击
   historyList = []; /* 历史记录 */
   // 点击切换
   isShow = false; /* 是否显示简历 */
@@ -335,258 +333,257 @@ export default class resumePopup extends Vue {
   nowResumeMsg = {
     resumeLabels: {}
   }; /* 当前简历详情 */
-  nowIndex = 0; //当itemList不为空时，记录当前点击的简历id
-  AdminShow = ""; //权限
+  nowIndex = 0; // 当itemList不为空时，记录当前点击的简历id
+  AdminShow = ''; // 权限
   uploadParam = {}; /* 上传参数 */
   headers = {}; /* 上传头部 */
   /* 打开标签组件 */
-  addTab() {
-    let newTabList = this.nowResumeMsg.resumeLabels.concat();
-    this.nowCheckListTab = newTabList;
-    this.$refs.addTab.showSelect();
-    this.$refs.addTab.Tabresumelist();
+  addTab () {
+    let newTabList = this.nowResumeMsg.resumeLabels.concat()
+    this.nowCheckListTab = newTabList
+    this.$refs.addTab.showSelect()
+    this.$refs.addTab.Tabresumelist()
   }
   // 查看操作
-  async operating(uid, param) {
-    console.log("sdf");
-    await addHistory(uid, param);
+  async operating (uid, param) {
+    console.log('sdf')
+    await addHistory(uid, param)
   }
-  created() {
+  created () {
     // this.AdminShow = +sessionStorage.getItem("AdminShow");
     // this.testingAdmin(this.AdminShow);
-    console.log("当前查看简历的权限");
+    console.log('当前查看简历的权限')
   }
-  testingAdmin(admin) {
-    this.isSales = /(3|4)/.test(admin) ? false : true;
+  testingAdmin (admin) {
+    this.isSales = !/(3|4)/.test(admin)
   }
   /* 初始化简历状态 */
-  initResume() {
-    this.nowResumeMsg.showPhone = false;
-    this.nowResumeMsg.showWechat = false;
-    this.nowCheck = 0;
+  initResume () {
+    this.nowResumeMsg.showPhone = false
+    this.nowResumeMsg.showWechat = false
+    this.nowCheck = 0
   }
   /* 上传文件 */
-  UploadImage(param) {
-    let name = param.file.name.split(".")[1];
-    let type = /(jpg|gif|png|peg|bmp)/.test(name) ? "img" : "doc";
-    const formData = new FormData();
-    formData.append("Authorization", sessionStorage.getItem("adminToken")); //
-    formData.append("attach_type", type);
-    formData.append("img1", param.file);
+  UploadImage (param) {
+    let name = param.file.name.split('.')[1]
+    let type = /(jpg|gif|png|peg|bmp)/.test(name) ? 'img' : 'doc'
+    const formData = new FormData()
+    formData.append('Authorization', sessionStorage.getItem('adminToken')) //
+    formData.append('attach_type', type)
+    formData.append('img1', param.file)
     // console.log("formData", formData);
     uploadApi(formData)
       .then(res => {
-        const resumeAttachId = res.data.data[0].id;
-        return resumeAttachId;
+        const resumeAttachId = res.data.data[0].id
+        return resumeAttachId
       })
       .then(resumeAttachId => {
         saveResume(this.nowResumeMsg.uid, { resumeAttachId }).then(res => {
-          this.getResume();
+          this.getResume()
           this.operating(this.nowResumeMsg.uid, {
-            action: "上传",
-            desc: "简历附件"
-          });
+            action: '上传',
+            desc: '简历附件'
+          })
           this.$message({
             message: `${res.data.msg}`
-          });
-        });
-      });
+          })
+        })
+      })
   }
   // 获取简历
-  getResume() {
+  getResume () {
     GetResumeDetailsAPI(this.resumeId).then(res => {
-      this.nowResumeMsg = res.data.data;
-      this.nowResumeMsg.resumeLabels.map(item => (item.delateTab = false));
+      this.nowResumeMsg = res.data.data
+      this.nowResumeMsg.resumeLabels.map(item => (item.delateTab = false))
       this.nowResumeMsg = Object.assign({}, this.nowResumeMsg, {
         showPhone: false,
         showWechat: false
-      });
+      })
       // console.log(this.itemList);
-    });
+    })
   }
-  delateFile(e) {
-    console.log(e);
+  delateFile (e) {
+    console.log(e)
     delateResume(e).then(res => {
-      console.log(res);
-      this.visible = false;
-      this.getResume();
+      console.log(res)
+      this.visible = false
+      this.getResume()
       this.operating(this.nowResumeMsg.uid, {
-        action: "删除",
-        desc: "简历附件"
-      });
-    });
+        action: '删除',
+        desc: '简历附件'
+      })
+    })
   }
-  beoforeUpload(e) {
-    console.log(e);
+  beoforeUpload (e) {
+    console.log(e)
   }
   // 上传简历f
-  uploadFile() {
-    console.log("上传简历");
+  uploadFile () {
+    console.log('上传简历')
   }
   /* 删除标签 */
-  delateLabelBtn(labelId, uid) {
-    console.log(uid, labelId);
+  delateLabelBtn (labelId, uid) {
+    console.log(uid, labelId)
     delateLabel(uid, labelId).then(res => {
       this.$message({
-        type: "success",
-        message: "删除成功!"
-      });
-      this.getResume();
-      this.$emit("updata");
-    });
+        type: 'success',
+        message: '删除成功!'
+      })
+      this.getResume()
+      this.$emit('updata')
+    })
   }
   // 左边箭头
-  LeftArrow() {
-    console.log(this.nowCheck);
-    console.log(this.nowIndex);
+  LeftArrow () {
+    console.log(this.nowCheck)
+    console.log(this.nowIndex)
 
     if (this.nowIndex < 0) {
-      this.nowIndex = 0;
-      return;
+      this.nowIndex = 0
     } else {
-      this.nowIndex = this.nowIndex - 1;
+      this.nowIndex = this.nowIndex - 1
 
       // this.historyCount=1;
-      console.log(this.nowCheck);
+      console.log(this.nowCheck)
       if (this.nowCheck) {
-        this.historyCount = 1;
+        this.historyCount = 1
         this.history(this.itemList[this.nowIndex].uid, {
           page: this.historyCount,
           count: 20
-        });
+        })
       }
-      this.$emit("SwitchResume", this.itemList[this.nowIndex].uid);
-      this.initResume();
+      this.$emit('SwitchResume', this.itemList[this.nowIndex].uid)
+      this.initResume()
       this.operating(this.itemList[this.nowIndex].uid, {
-        action: "查看",
-        desc: "简历"
-      });
+        action: '查看',
+        desc: '简历'
+      })
     }
   }
   // 右箭头
-  rightArrow() {
+  rightArrow () {
     if (this.nowIndex === this.itemList.length) {
       this.$message({
-        message: "本页数据加载完毕",
-        type: "warning"
-      });
+        message: '本页数据加载完毕',
+        type: 'warning'
+      })
     } else {
-      this.nowIndex = this.nowIndex + 1;
+      this.nowIndex = this.nowIndex + 1
       /* 每次切换简历应将历史记录的页面归为1 */
       if (this.nowCheck === 1) {
-        this.historyCount = 1;
+        this.historyCount = 1
         this.history(this.itemList[this.nowIndex].uid, {
           page: this.historyCount,
           count: 20
-        });
+        })
       }
       // this.resumeId = this.itemList[this.nowIndex].uid;
       /* 把下一个uid发回到父组件，并再父组件重新调用查看简历的接口 */
-      this.$emit("SwitchResume", this.itemList[this.nowIndex].uid);
-      this.initResume();
-      console.log(this.nowResumeMsg);
+      this.$emit('SwitchResume', this.itemList[this.nowIndex].uid)
+      this.initResume()
+      console.log(this.nowResumeMsg)
       this.operating(this.itemList[this.nowIndex].uid, {
-        action: "查看",
-        desc: "简历"
-      });
+        action: '查看',
+        desc: '简历'
+      })
     }
   }
   // 查看附件
-  seeFilesBtn() {
-    this.seeFiles(this.nowResumeMsg, this.nowResumeMsg.uid);
+  seeFilesBtn () {
+    this.seeFiles(this.nowResumeMsg, this.nowResumeMsg.uid)
   }
-  seeFiles(fileObJ, uid) {
-    let File = fileObJ.resumeAttach;
+  seeFiles (fileObJ, uid) {
+    let File = fileObJ.resumeAttach
 
     if (File === null) {
-      this.$message.error("此人未上传简历附件");
+      this.$message.error('此人未上传简历附件')
     } else {
-      let uid = fileObJ.uid;
-      let type = File.extension;
-      this.operating(uid, { action: "查看", desc: "简历附件" });
+      let uid = fileObJ.uid
+      let type = File.extension
+      this.operating(uid, { action: '查看', desc: '简历附件' })
       this.$nextTick(() => {
         if (/(png|jpg)/.test(type)) {
-          window.open(File.url);
+          window.open(File.url)
         } else if (/(pdf)/.test(type)) {
-          window.open(File.url);
+          window.open(File.url)
         } else if (/(doc|docx)/.test(type)) {
           window.open(
             `https://view.officeapps.live.com/op/view.aspx?src=${File.url}`
-          );
+          )
         } else {
           this.$message({
-            message: "格式不支持",
-            type: "warning"
-          });
+            message: '格式不支持',
+            type: 'warning'
+          })
         }
-      });
+      })
     }
   }
   // 查看手机号码
-  seeMobile() {
-    let uid = this.nowResumeMsg.uid;
-    this.operating(uid, { action: "查看", desc: "手机号码" });
-    console.log(this.nowResumeMsg);
-    this.nowResumeMsg.showPhone = true;
+  seeMobile () {
+    let uid = this.nowResumeMsg.uid
+    this.operating(uid, { action: '查看', desc: '手机号码' })
+    console.log(this.nowResumeMsg)
+    this.nowResumeMsg.showPhone = true
   }
   /* 查看微信号 */
-  seeWechat() {
-    let uid = this.nowResumeMsg.uid;
-    this.operating(uid, { action: "查看", desc: "微信号" });
-    this.nowResumeMsg.showWechat = true;
+  seeWechat () {
+    let uid = this.nowResumeMsg.uid
+    this.operating(uid, { action: '查看', desc: '微信号' })
+    this.nowResumeMsg.showWechat = true
   }
   // 点击遮罩展开组件
-  showMark() {
-    this.isShow = true;
+  showMark () {
+    this.isShow = true
   }
   // 点击遮罩关闭组件
-  closeMark() {
-    this.isShow = false;
-    this.nowIndex = 0;
+  closeMark () {
+    this.isShow = false
+    this.nowIndex = 0
   }
-  check(index) {
-    this.nowCheck = +index;
-    this.historyCount = 1;
-    this.historyList = [];
+  check (index) {
+    this.nowCheck = +index
+    this.historyCount = 1
+    this.historyList = []
     if (this.nowCheck === 1) {
       this.history(this.nowResumeMsg.uid, {
         page: this.historyCount,
         count: 20
-      });
+      })
       this.$nextTick(() => {
-        const el = document.getElementById("historyScroll");
-        el.addEventListener("scroll", this.handleScroll);
-      });
+        const el = document.getElementById('historyScroll')
+        el.addEventListener('scroll', this.handleScroll)
+      })
     } else if (this.nowCheck === 0) {
-      const el = document.getElementById("historyScroll");
-      el.removeEventListener("scroll", this.handleScroll);
-      this.operating(this.nowResumeMsg.uid, { action: "查看", desc: "简历" });
+      const el = document.getElementById('historyScroll')
+      el.removeEventListener('scroll', this.handleScroll)
+      this.operating(this.nowResumeMsg.uid, { action: '查看', desc: '简历' })
     }
   }
-  handleScroll(e) {
-    const el = document.getElementById("historyScroll");
-    const offsetHeight = el.offsetHeight;
-    const scrollTop = el.scrollTop;
-    const scrollHeight = el.scrollHeight;
-    if (scrollTop + offsetHeight == scrollHeight) {
+  handleScroll (e) {
+    const el = document.getElementById('historyScroll')
+    const offsetHeight = el.offsetHeight
+    const scrollTop = el.scrollTop
+    const scrollHeight = el.scrollHeight
+    if (scrollTop + offsetHeight === scrollHeight) {
       if (this.haveData) {
         GetResumeHistory(this.nowResumeMsg.uid, {
           page: this.historyCount++,
           count: 20
         }).then(res => {
-          this.haveData = res.data.meta.haveData;
-          this.historyList = [...this.historyList, ...res.data.data];
-        });
+          this.haveData = res.data.meta.haveData
+          this.historyList = [...this.historyList, ...res.data.data]
+        })
       }
 
       // this.Tabresumelist();
     }
   }
   // 请求历史记录
-  history(uid, form) {
+  history (uid, form) {
     GetResumeHistory(uid, form).then(res => {
-      this.historyList = res.data.data;
-    });
+      this.historyList = res.data.data
+    })
   }
 }
 </script>

@@ -297,28 +297,27 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import List from "@/components/list";
-import { getUserListApi } from "API/recruiter";
-import { getRecruiterCodeUrlApi } from "API/interview";
-import { companyTempUserList } from "API/company";
-import { getSalerListApi } from "API/commont";
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import List from '@/components/list'
+import { getUserListApi } from 'API/recruiter'
+import { getRecruiterCodeUrlApi } from 'API/interview'
+import { getSalerListApi } from 'API/commont'
 @Component({
-  name: "userList",
+  name: 'userList',
   components: {
     List
   },
   watch: {
     'form.searchType1': {
-      handler(newV, oldV) {
+      handler (newV, oldV) {
         this.form.keyword1 = ''
         this.form[oldV] = ''
       },
       immediate: true
     },
     'form.searchType2': {
-      handler(newV, oldV) {
+      handler (newV, oldV) {
         this.form.keyword2 = ''
         this.form[oldV] = ''
       },
@@ -329,283 +328,279 @@ import { getSalerListApi } from "API/commont";
 export default class user extends Vue {
   total = 0;
   pageCount = 0;
-  qrCode = "";
-  salerLis = []; //跟进人销售名单
-  AdminShow = ""; //权限字段，限制搜索
+  qrCode = '';
+  salerLis = []; // 跟进人销售名单
+  AdminShow = ''; // 权限字段，限制搜索
   form = {
-    admin_uid: "", //跟进人
-    keyword: "",
-    status: "",
-    auth_status: "",
-    createTimeStart: "",
-    createTimeEnd: "",
-    role: "99",
-    createPositionRight: "99", // 发布职位权益
-    idAuth: "99",
-    companyName: "",
-    mobile: "",
-    name: "",
+    admin_uid: '', // 跟进人
+    keyword: '',
+    status: '',
+    auth_status: '',
+    createTimeStart: '',
+    createTimeEnd: '',
+    role: '99',
+    createPositionRight: '99', // 发布职位权益
+    idAuth: '99',
+    companyName: '',
+    mobile: '',
+    name: '',
     page: 1,
     count: 20,
     searchType1: 'companyName',
     searchType2: 'userName',
     keyword1: '',
-    keyword2: '',
-    createTimeStart: '',
-    createTimeEnd: ''
+    keyword2: ''
   };
   /* 搜索关键字 */
   keyword = [
-    { label: "公司名字", value: "companyName" },
-    { label: "手机号", value: "mobile" },
-    { label: "人名", value: "userName" }
+    { label: '公司名字', value: 'companyName' },
+    { label: '手机号', value: 'mobile' },
+    { label: '人名', value: 'userName' }
   ];
   fields = [
     {
-      prop: "index",
-      label: "序号",
+      prop: 'index',
+      label: '序号',
       width: 80
     },
     {
-      prop: "name",
-      label: "个人信息",
+      prop: 'name',
+      label: '个人信息',
       width: 200
     },
     {
-      prop: "companyName",
-      label: "所属公司",
-      align: "left",
+      prop: 'companyName',
+      label: '所属公司',
+      align: 'left',
       width: 300
     },
     {
-      prop: "createPositionRight",
-      label: "发布职位权益",
+      prop: 'createPositionRight',
+      label: '发布职位权益',
       width: 150
     },
     {
-      prop: "adminName",
-      label: "跟进人",
+      prop: 'adminName',
+      label: '跟进人',
       width: 150
     },
     {
-      prop: "identityAuth",
-      label: "身份认证状态",
+      prop: 'identityAuth',
+      label: '身份认证状态',
       width: 220
     },
     {
-      prop: "createdAt",
-      label: "创建时间"
+      prop: 'createdAt',
+      label: '创建时间'
     },
     {
-      prop: "id",
-      fixed: "right",
+      prop: 'id',
+      fixed: 'right',
       width: 150,
-      label: "操作"
+      label: '操作'
     }
   ];
   list = [];
-  changeType1(e) {
+  changeType1 (e) {
     console.log(e)
   }
-  changeType2(e) {
+  changeType2 (e) {
     console.log(e)
   }
   /* 添加用户 */
-  addUser() {
-    sessionStorage.setItem("up_router", this.$route.path);
-    this.$route.meta.scrollY = window.scrollY;
-    this.$router.push({ path: "/user/addUser" });
+  addUser () {
+    sessionStorage.setItem('up_router', this.$route.path)
+    this.$route.meta.scrollY = window.scrollY
+    this.$router.push({ path: '/user/addUser' })
   }
-  changeProvince(e) {}
-  toCompany(companyId) {
-    this.$router.push({ path: `/index/companyInfo?id=${companyId}` });
+  changeProvince (e) {}
+  toCompany (companyId) {
+    this.$router.push({ path: `/index/companyInfo?id=${companyId}` })
   }
-  onSubmit(e) {
-    this.form.page = 1;
-    this.getRecruiterList();
+  onSubmit (e) {
+    this.form.page = 1
+    this.getRecruiterList()
   }
   // 获取销售人员名单
-  async getSalerList() {
-    let res = await getSalerListApi({ pageCount: 50 });
-    this.salerLis = res.data.data;
+  async getSalerList () {
+    let res = await getSalerListApi({ pageCount: 50 })
+    this.salerLis = res.data.data
   }
   // 添加跟进人
-  toEditAdminName(uid) {
-    this.$route.meta.scrollY = window.scrollY;
+  toEditAdminName (uid) {
+    this.$route.meta.scrollY = window.scrollY
     this.$router.push({
       path: `/user/userInfo/${uid}`,
       query: { isEditAdminName: true }
-    });
+    })
   }
   // 搜索地址
-  search() {
-    this.onSubmit();
+  search () {
+    this.onSubmit()
   }
   /* 重置筛选 */
-  resetForm(name) {
+  resetForm (name) {
     this.form = {
-      admin_uid: "", //跟进人
-      keyword: "",
-      status: "",
-      auth_status: "",
-      createTimeStart: "",
-      createTimeEnd: "",
-      role: "99",
-      createPositionRight: "99", // 发布职位权益
-      idAuth: "99",
-      companyName: "",
-      mobile: "",
-      name: "",
+      admin_uid: '', // 跟进人
+      keyword: '',
+      status: '',
+      auth_status: '',
+      createTimeStart: '',
+      createTimeEnd: '',
+      role: '99',
+      createPositionRight: '99', // 发布职位权益
+      idAuth: '99',
+      companyName: '',
+      mobile: '',
+      name: '',
       page: 1,
       count: 20,
       searchType1: 'companyName',
       searchType2: 'userName',
       keyword1: '',
-      keyword2: '',
-      createTimeStart: '',
-      createTimeEnd: ''
-    };
-    this.$refs[name].resetFields();
+      keyword2: ''
+    }
+    this.$refs[name].resetFields()
     this.getRecruiterList()
   }
   /* 请求招聘官审核列表 */
-  getRecruiterList(newForm) {
+  getRecruiterList (newForm) {
     this.form[this.form.searchType1] = this.form.keyword1
     this.form[this.form.searchType2] = this.form.keyword2
     let params = {
       page: this.form.page,
       count: this.form.count
     }
-    if(this.form.admin_uid) {
-      params = Object.assign(params, {admin_uid: this.form.admin_uid})
+    if (this.form.admin_uid) {
+      params = Object.assign(params, { admin_uid: this.form.admin_uid })
     }
-    if(this.form.keyword) {
-      params = Object.assign(params, {keyword: this.form.keyword})
+    if (this.form.keyword) {
+      params = Object.assign(params, { keyword: this.form.keyword })
     }
-    if(this.form.status) {
-      params = Object.assign(params, {status: this.form.status})
+    if (this.form.status) {
+      params = Object.assign(params, { status: this.form.status })
     }
-    if(this.form.auth_status) {
-      params = Object.assign(params, {auth_status: this.form.auth_status})
+    if (this.form.auth_status) {
+      params = Object.assign(params, { auth_status: this.form.auth_status })
     }
-    if(this.form.role === '99') {
-      params = Object.assign(params, {role: '2,3'})
+    if (this.form.role === '99') {
+      params = Object.assign(params, { role: '2,3' })
     } else {
-      params = Object.assign(params, {role: this.form.role})
+      params = Object.assign(params, { role: this.form.role })
     }
-    if(this.form.createPositionRight) {
-      params = Object.assign(params, {createPositionRight: this.form.createPositionRight})
+    if (this.form.createPositionRight) {
+      params = Object.assign(params, { createPositionRight: this.form.createPositionRight })
     }
-    if(this.form.idAuth) {
-      params = Object.assign(params, {idAuth: this.form.idAuth})
+    if (this.form.idAuth) {
+      params = Object.assign(params, { idAuth: this.form.idAuth })
     }
-    if(this.form.companyName) {
-      params = Object.assign(params, {companyName: this.form.companyName})
+    if (this.form.companyName) {
+      params = Object.assign(params, { companyName: this.form.companyName })
     }
-    if(this.form.mobile) {
-      params = Object.assign(params, {mobile: this.form.mobile})
+    if (this.form.mobile) {
+      params = Object.assign(params, { mobile: this.form.mobile })
     }
-    if(this.form.name) {
-      params = Object.assign(params, {name: this.form.name})
+    if (this.form.name) {
+      params = Object.assign(params, { name: this.form.name })
     }
-    if(this.form.userName) {
-      params = Object.assign(params, {userName: this.form.userName})
+    if (this.form.userName) {
+      params = Object.assign(params, { userName: this.form.userName })
     }
-    if((this.form.createTimeStart && !this.form.createTimeEnd) || (!this.form.createTimeStart && this.form.createTimeEnd)) {
-      this.$message({message: "必须选择一个时间区间", type: "warning"});
+    if ((this.form.createTimeStart && !this.form.createTimeEnd) || (!this.form.createTimeStart && this.form.createTimeEnd)) {
+      this.$message({ message: '必须选择一个时间区间', type: 'warning' })
     } else {
-      if(this.form.createTimeStart && this.form.createTimeEnd) {
-        params = Object.assign(params, {createTimeStart: this.form.createTimeStart, createTimeEnd: this.form.createTimeEnd})
+      if (this.form.createTimeStart && this.form.createTimeEnd) {
+        params = Object.assign(params, { createTimeStart: this.form.createTimeStart, createTimeEnd: this.form.createTimeEnd })
       }
     }
     console.log(this.form)
     getUserListApi(params).then(res => {
-      this.list = res.data.data;
-      this.total = res.data.meta.total;
-      this.pageCount = res.data.meta.lastPage;
-      if(this.form.searchType1 && this.form[this.form.searchType1]) {
-        params = Object.assign(params, {searchType1: this.form.searchType1, [this.form.searchType1]: this.form[this.form.searchType1]})
+      this.list = res.data.data
+      this.total = res.data.meta.total
+      this.pageCount = res.data.meta.lastPage
+      if (this.form.searchType1 && this.form[this.form.searchType1]) {
+        params = Object.assign(params, { searchType1: this.form.searchType1, [this.form.searchType1]: this.form[this.form.searchType1] })
       }
-      if(this.form.searchType2 && this.form[this.form.searchType2]) {
-        params = Object.assign(params, {searchType2: this.form.searchType2, [this.form.searchType2]: this.form[this.form.searchType2]})
+      if (this.form.searchType2 && this.form[this.form.searchType2]) {
+        params = Object.assign(params, { searchType2: this.form.searchType2, [this.form.searchType2]: this.form[this.form.searchType2] })
       }
       // this.$router.push({
       //   query: {
       //     ...params
       //   }
       // })
-    });
+    })
   }
   /* 翻页 */
-  handlePageChange(nowPage) {
-    this.form.page = nowPage;    
-    this.getRecruiterList();
+  handlePageChange (nowPage) {
+    this.form.page = nowPage
+    this.getRecruiterList()
   }
   /* 查看相应的招聘官审核详情 */
-  check(id) {
-    this.$route.meta.scrollY = window.scrollY;
+  check (id) {
+    this.$route.meta.scrollY = window.scrollY
     this.$router.push({
       path: `/user/recruiterInfo/${id}`,
       query: {
         isEditAdminName: false
       }
-    });
+    })
   }
   /* 生成职位详情小程序码 */
-  async creatLink(e, data, index) {
-    this.qrCode = "";
+  async creatLink (e, data, index) {
+    this.qrCode = ''
     if (data.isRecruiter !== 1) {
-      this.$refs["qrCode"].style.display = "none";
-      this.$message.error(`该用户不是招聘官,暂无招聘官主页`);
-      return;
+      this.$refs['qrCode'].style.display = 'none'
+      this.$message.error(`该用户不是招聘官,暂无招聘官主页`)
+      return
     }
     // 是否已经加载过二维码
     if (this.list[index].qrCode) {
-      this.qrCode = this.list[index].qrCode;
+      this.qrCode = this.list[index].qrCode
       this.$nextTick(() => {
-        this.$refs["qrCode"].style.display = "block";
-        this.$refs["qrCode"].style.left = e.clientX + "px";
-        this.$refs["qrCode"].style.top = e.clientY + window.scrollY + "px";
-      });
-      return;
+        this.$refs['qrCode'].style.display = 'block'
+        this.$refs['qrCode'].style.left = e.clientX + 'px'
+        this.$refs['qrCode'].style.top = e.clientY + window.scrollY + 'px'
+      })
+      return
     }
 
     this.$nextTick(() => {
-      this.$refs["qrCode"].style.display = "block";
-      this.$refs["qrCode"].style.left = e.clientX + "px";
-      this.$refs["qrCode"].style.top = e.clientY + window.scrollY + "px";
-    });
-    let res = await this.getQr(data.uid);
-    this.qrCode = res.data.data.qrCodeUrl;
-    this.list[index].qrCode = res.data.data.qrCodeUrl;
+      this.$refs['qrCode'].style.display = 'block'
+      this.$refs['qrCode'].style.left = e.clientX + 'px'
+      this.$refs['qrCode'].style.top = e.clientY + window.scrollY + 'px'
+    })
+    let res = await this.getQr(data.uid)
+    this.qrCode = res.data.data.qrCodeUrl
+    this.list[index].qrCode = res.data.data.qrCodeUrl
   }
 
   /* 生成二维码 */
-  getQr(id) {
-    return getRecruiterCodeUrlApi({ id: id });
+  getQr (id) {
+    return getRecruiterCodeUrlApi({ id: id })
   }
   /* 关闭二维码弹窗 */
-  //hiddenQr () {
+  // hiddenQr () {
   //  this.$nextTick(() => {
   //    this.$refs['qrCode'].style.display = 'none'
   //  })
-  //}
+  // }
   /* 关闭浮窗 */
-  closeTopic() {
+  closeTopic () {
     this.$nextTick(() => {
-      this.$refs["qrCode"].style.display = "none";
-    });
+      this.$refs['qrCode'].style.display = 'none'
+    })
   }
 
-  created() {
-    this.AdminShow = +sessionStorage.getItem("AdminShow");
-    this.getSalerList();
+  created () {
+    this.AdminShow = +sessionStorage.getItem('AdminShow')
+    this.getSalerList()
     this.form = Object.assign(this.form, this.$route.query)
     this.form.admin_uid = Number(this.form.admin_uid) > 0 ? Number(this.form.admin_uid) : ''
     this.form.keyword1 = this.$route.query.companyName
     console.log(this.$route.query)
-    if(this.form.role == '2,3') this.form.role = '99'
-    this.getRecruiterList();
+    if (this.form.role === '2,3') this.form.role = '99'
+    this.getRecruiterList()
   }
 }
 </script>

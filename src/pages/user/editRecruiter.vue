@@ -20,7 +20,7 @@
           <el-input v-model="userInfo.companyEmail" placeholder="请输入公司邮箱" style="width: 400px;"></el-input>
         </el-form-item>
         <el-form-item label-width="150px" label="招聘官头像" style="width: 700px">
-          <div class="avar" v-for="(item, index) in avatarsList">
+          <div class="avar" v-for="(item, index) in avatarsList" :key="index">
             <i class="el-icon-circle-close delIcon" @click.stop="delAvar(index)"></i>
             <img :src="item.smallUrl">
           </div>
@@ -32,12 +32,12 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import avarUploader from "@/components/avarUploader/avarUploader";
-import { getUserInfoApi, editOffCreatedApi } from "API/recruiter";
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import avarUploader from '@/components/avarUploader/avarUploader'
+import { getUserInfoApi, editOffCreatedApi } from 'API/recruiter'
 @Component({
-  name: "editRecruiter",
+  name: 'editRecruiter',
   components: {
     avarUploader
   }
@@ -45,75 +45,75 @@ import { getUserInfoApi, editOffCreatedApi } from "API/recruiter";
 export default class editRecruiter extends Vue {
   pop = {
     isShow: false,
-    type: "position"
+    type: 'position'
   };
   userInfo = {
-    uid: "",
-    position: "",
-    email: "",
-    companyEmail: "",
-    avatars: ""
+    uid: '',
+    position: '',
+    email: '',
+    companyEmail: '',
+    avatars: ''
   };
   avatarsList = [];
   iconUploader = {
-    point: "",
+    point: '',
     width: 400,
-    height: "",
-    tips: "建议尺寸400X400px，JPG、PNG格式，图片小于5M。"
+    height: '',
+    tips: '建议尺寸400X400px，JPG、PNG格式，图片小于5M。'
   };
   rule = {
-    position: [{ required: true, message: "请输入担任职务", trigger: "blur" }],
-    email: [{ required: true, message: "请输入简历接收邮箱", trigger: "blur" }]
+    position: [{ required: true, message: '请输入担任职务', trigger: 'blur' }],
+    email: [{ required: true, message: '请输入简历接收邮箱', trigger: 'blur' }]
   };
 
   /* 获取用户信息 */
-  async getUserInfo() {
-    let res = await getUserInfoApi(this.$route.params.id);
-    let userInfo = res.data.data;
+  async getUserInfo () {
+    let res = await getUserInfoApi(this.$route.params.id)
+    let userInfo = res.data.data
     this.userInfo = {
       uid: this.$route.params.id,
       position: userInfo.position,
       email: userInfo.email,
       companyEmail: userInfo.companyEmail,
       avatars: userInfo.avatarIds
-    };
-    this.avatarsList = userInfo.avatars;
+    }
+    this.avatarsList = userInfo.avatars
   }
-  getImg(data) {
-    this.userInfo.avatars.push(data[0].id);
-    this.avatarsList.push(data[0]);
-  }
-
-  delAvar(index) {
-    this.avatarsList.splice(index, 1);
-    this.userInfo.avatars.splice(index, 1);
+  getImg (data) {
+    this.userInfo.avatars.push(data[0].id)
+    this.avatarsList.push(data[0])
   }
 
-  save() {
-    this.$refs["userInfo"].validate(async valid => {
+  delAvar (index) {
+    this.avatarsList.splice(index, 1)
+    this.userInfo.avatars.splice(index, 1)
+  }
+
+  save () {
+    this.$refs['userInfo'].validate(async valid => {
       if (valid) {
-        this.userInfo.avatars = this.userInfo.avatars.join();
+        this.userInfo.avatars = this.userInfo.avatars.join()
         editOffCreatedApi(this.userInfo.uid, this.userInfo).then(res => {
           this.$message({
-            type: "success",
-            message: "编辑成功"
-          });
+            type: 'success',
+            message: '编辑成功'
+          })
           this.$router.push({
             path: `/user/userInfo/${this.userInfo.uid}`,
             params: {
               isEditAdminName: false
             }
-          });
+          })
           // this.$router.go(-1)
-        });
+        })
       } else {
-        return false;
+        return false
       }
-    });
+    })
   }
 
-  created() {
-    this.getUserInfo();
+  created () {
+    this.getUserInfo()
   }
 }
 </script>

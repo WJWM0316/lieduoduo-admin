@@ -14,21 +14,21 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import PageAside from "COMPONENTS/pageAside/index.vue";
-import PageHeader from "COMPONENTS/pageHeader/index.vue";
-//import { Loading } from 'element-ui'
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import PageAside from 'COMPONENTS/pageAside/index.vue'
+import PageHeader from 'COMPONENTS/pageHeader/index.vue'
+// import { Loading } from 'element-ui'
 @Component({
-  name: "App",
+  name: 'App',
   components: {
     PageAside,
     PageHeader
   },
   watch: {
     isAjax: {
-      handler(res) {
-        this.showAside(res);
+      handler (res) {
+        this.showAside(res)
       }
     }
   }
@@ -37,13 +37,13 @@ export default class App extends Vue {
   loadingInstance = null;
   showResetPsw = false;
   isAjax = false;
-  showAside(res) {
-    this.isAjax = res;
+  showAside (res) {
+    this.isAjax = res
   }
-  changeStatus(e) {
-    console.log(e);
+  changeStatus (e) {
+    console.log(e)
   }
-  mounted() {
+  mounted () {
     // if(sessionStorage.getItem(''))
   }
 }

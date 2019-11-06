@@ -24,11 +24,11 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
+import Vue from 'vue'
+import Component from 'vue-class-component'
 
 @Component({
-  name: "PopForm",
+  name: 'PopForm',
   prop: {
     // 标题
     title: {
@@ -42,7 +42,7 @@ import Component from "vue-class-component";
     failNum: {
       type: Number
     },
-    //数组
+    // 数组
     tableData: {
       type: Array
     }
@@ -50,7 +50,7 @@ import Component from "vue-class-component";
 })
 export default class PopForm extends Vue {
   isShowForm = false;
-  isShowForm() {}
+  isShowForm () {}
 }
 </script>
 <style lang='less' scoped>

@@ -58,8 +58,8 @@
 </template>
 
 <script>
-import List from "./list";
-export default List;
+import List from './list'
+export default List
 </script>
 
 <style lang="less" scoped>
@@ -91,4 +91,3 @@ export default List;
   }
 }
 </style>
-

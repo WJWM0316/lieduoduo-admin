@@ -25,11 +25,15 @@
     "web-storage-cache": "^1.0.3"
   },
   "devDependencies": {
+    "@vue/eslint-config-standard": "^4.0.0",
     "@vue/cli-plugin-babel": "^3.0.5",
     "@vue/cli-plugin-eslint": "^3.0.5",
     "@vue/cli-plugin-pwa": "^3.0.5",
     "@vue/cli-service": "^3.0.5",
+    "babel-eslint": "^10.0.1",
     "less": "^3.0.4",
+    "eslint": "^5.8.0",
+    "eslint-plugin-vue": "^5.0.0",
     "less-loader": "^4.1.0",
     "vue-template-compiler": "^2.5.17"
   }

@@ -88,7 +88,6 @@
 				"title":"24h反馈专场管理",
 				"name":"interview24h",
 				"flag":"interview",
-				"isTwo":true,
 				"isShow":false
 			},
 			{
@@ -96,7 +95,6 @@
 				"title":"申请列表",
 				"name":"List",
 				"flag":"interview",
-				"isTwo":true,
 				"isShow":false
 			},
 			{
@@ -116,11 +114,17 @@
 		"children":[
 			{
 				"path":"/resumeStore/list",
-				"title":"简历列表","name":"list","flag":"resume","isShow":false},{
+				"title":"简历列表",
+				"name":"list",
+				"flag":"resume",
+				"isShow":false
+			},
+			{
 				"path":"/resumeStore/recommendList",
 				"title":"推荐列表",
 				"name":"recommendList",
-				"flag":"resume","isShow":false
+				"flag":"resume",
+				"isShow":false
 			},
 			{
 				"path":"/resumeStore/consultantRecommendation",

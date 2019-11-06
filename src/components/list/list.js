@@ -172,9 +172,9 @@ export default class List extends Vue {
    */
   handlePageChange (currentPage) {
     this.$emit('page-change', currentPage)
-//  if (this.replaceUrl) {
-//    this.setPathQuery({page: currentPage})
-//  }
+    //  if (this.replaceUrl) {
+    //    this.setPathQuery({page: currentPage})
+    //  }
   }
 
   /**
@@ -185,7 +185,7 @@ export default class List extends Vue {
     this.$emit('selection-change', val)
   }
 
-  tableRowClassName ({row, rowIndex}) {
+  tableRowClassName ({ row, rowIndex }) {
     if (this.list.length === 0) {
       return
     }

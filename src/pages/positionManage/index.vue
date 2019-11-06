@@ -281,24 +281,23 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import List from "@/components/list";
-import { login, templistApi, getAddressListsApi } from "API/company";
-import { getPositionCodeUrlApi } from "API/interview";
-import { getListApi, getLabelPositionListApi } from "API/position";
-import { deflate } from "zlib";
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import List from '@/components/list'
+import { getAddressListsApi } from 'API/company'
+import { getPositionCodeUrlApi } from 'API/interview'
+import { getListApi, getLabelPositionListApi } from 'API/position'
 @Component({
-  name: "course-list",
+  name: 'course-list',
   components: {
     List
   },
   watch: {
     'form.city': {
-      handler(areaId) {
-        if(areaId) {
+      handler (areaId) {
+        if (areaId) {
           let item = this.cityLists.find(field => field.areaId === areaId)
-          if(!item) return
+          if (!item) return
           this.form.city = item.areaId
           this.form.cityName = item.title
         }
@@ -310,116 +309,115 @@ import { deflate } from "zlib";
 export default class companyCheck extends Vue {
   total = 0; // 筛查结果数量
   pageCount = 0; // 请求回的数据共几页
-  qrCode = "";
+  qrCode = '';
   AdminShow = 0;
   searchType = {
-    condition1: "name",
-    condition2: "name2",
-    condition2: "name3",
-    keyword1: "",
-    keyword2: "",
-    keyword3: ""
+    condition1: 'name',
+    condition2: 'name2',
+    condition3: 'name3',
+    keyword1: '',
+    keyword2: '',
+    keyword3: ''
   };
   clearable = true
   select1 = {
-    value: ""
+    value: ''
   };
   select2 = {
-    value: ""
+    value: ''
   };
   form = {
-    wherefrom: "", //数据来源
-    type: "",
-    is_online: "", // 状态（1 上线，2 下线)
-    status: "", // 状态（0关闭，1开启，审核通过，2审核中，3审核失败）查询多种状态用，号分隔（1,2,3）
-    recruiter: "",
+    wherefrom: '', // 数据来源
+    type: '',
+    is_online: '', // 状态（1 上线，2 下线)
+    status: '', // 状态（0关闭，1开启，审核通过，2审核中，3审核失败）查询多种状态用，号分隔（1,2,3）
+    recruiter: '',
     page: 1,
-    name: "", //职位名称，公司名，招聘官名（1）
-    name2: "", //职位名称，公司名，招聘官名（2）
+    name: '', // 职位名称，公司名，招聘官名（1）
+    name2: '', // 职位名称，公司名，招聘官名（2）
     count: 20,
     update_start: '',
     update_end: '',
     annual_salary: '',
     emolument_min: '',
     emolument_max: '',
-    annual_salary: '',
     city: '',
     cityName: '',
     work_experience: ''
   };
   cityLists = [];
   positionManage = {
-    value: "labelId",
-    label: "name",
-    children: "children"
-  }; //职位类别的配置
+    value: 'labelId',
+    label: 'name',
+    children: 'children'
+  }; // 职位类别的配置
   searchType = {
-    condition1: "keyword",
-    condition2: "mobile",
-    keyword1: "",
-    keyword2: ""
+    condition1: 'keyword',
+    condition2: 'mobile',
+    keyword1: '',
+    keyword2: ''
   };
   fields = [
     {
-      prop: "id",
-      label: "职位ID",
+      prop: 'id',
+      label: '职位ID',
       width: 150
     },
     {
-      prop: "positionMsg",
-      label: "职位信息",
+      prop: 'positionMsg',
+      label: '职位信息',
       width: 250
     },
     {
-      prop: "recruiterName",
-      label: "招聘官",
+      prop: 'recruiterName',
+      label: '招聘官',
       width: 180
     },
     {
-      prop: "company",
-      label: "主体公司",
+      prop: 'company',
+      label: '主体公司',
       width: 200
     },
     {
-      prop: "updatedAt",
-      label: "更新时间",
+      prop: 'updatedAt',
+      label: '更新时间',
       width: 200
     },
     {
-      prop: "emolumentMin",
-      label: "薪资范围",
+      prop: 'emolumentMin',
+      label: '薪资范围',
       width: 200
     },
     {
-      prop: "isOnline",
-      label: "上线/下线",
+      prop: 'isOnline',
+      label: '上线/下线',
       width: 150
     },
     {
-      prop: "status",
-      label: "审核状态"
+      prop: 'status',
+      label: '审核状态'
       //    width: 150
     },
     {
-      prop: "wherefromDesc",
-      label: "职位来源"
+      prop: 'wherefromDesc',
+      label: '职位来源'
       //    width: 150
     },
     {
-      prop: "op",
-      fixed: "right",
+      prop: 'op',
+      fixed: 'right',
       width: 150,
-      label: "操作"
+      label: '操作'
     }
   ];
   loading = false
   list = [];
   options = [];
   positionManage = {
-    value: "labelId",
-    label: "name",
-    children: "children"
-  }; //职位类别的配置
+    value: 'labelId',
+    label: 'name',
+    children: 'children'
+  }; // 职位类别的配置
   experienceLists = [
     {
       id: '1',
@@ -450,11 +448,11 @@ export default class companyCheck extends Vue {
       text: '10年以上'
     }
   ]
-  emolumentMaxList = [] //选择薪资范围
-  emolumentMinList = [] //选择薪资范围
+  emolumentMaxList = [] // 选择薪资范围
+  emolumentMinList = [] // 选择薪资范围
   annual_salary_list = []
-  change(e) {
-    let result = this.cityLists.find(field => field.areaId = e)
+  change (e) {
+    let result = this.cityLists.find(field => (field.areaId = e))
     this.form.city = result.areaId
     this.form.cityName = result.title
   }
@@ -463,26 +461,25 @@ export default class companyCheck extends Vue {
     let i = 0
     let list = []
 
-    while (i<max)
-    {
-      if(i<30){
+    while (i < max) {
+      if (i < 30) {
         i++
-      } else if(i<100){
-        i+=5
-      } else if(i<max){
-        i+=10
+      } else if (i < 100) {
+        i += 5
+      } else if (i < max) {
+        i += 10
       }
 
       list.push({
-        label : `${i}k`,
-        value : i
+        label: `${i}k`,
+        value: i
       })
     }
 
     this.emolumentMinList = list
   }
 
-  changeEmolumentMin(e){
+  changeEmolumentMin (e) {
     this.form.emolument_max = ''
     this.setEmolumentMax(e)
   }
@@ -492,67 +489,64 @@ export default class companyCheck extends Vue {
     let list = []
 
     if (num <= 10) {
-      max = num+5
+      max = num + 5
     } else if (num > 10 && num < 31) {
-      max = num*2
-
+      max = num * 2
     } else if (num > 34 && num < 71) {
-      max = num+30
-
+      max = num + 30
     } else if (num > 74 && num < 96) {
-      max = num+30
-
+      max = num + 30
     } else if (num > 99 && num < 251) {
-      max = num*2
+      max = num * 2
     }
 
-    for (let i = num+1; i <= max; i++) {
+    for (let i = num + 1; i <= max; i++) {
       list.push({
-        label : `${i}k`,
-        value : i
+        label: `${i}k`,
+        value: i
       })
     }
 
     this.emolumentMaxList = list
   }
-  get pickerOptionsStart() {
+  get pickerOptionsStart () {
     let _this = this
     return {
-      disabledDate(time) {
+      disabledDate (time) {
         let endDateVal = _this.form.appointmentConfirmTimeEnd
-        if(endDateVal) {
+        if (endDateVal) {
           return Date.parse(time) > Date.parse(new Date(endDateVal))
         }
       }
     }
   }
-  get pickerOptionsEnd() {
+  get pickerOptionsEnd () {
     let _this = this
     return {
-      disabledDate(time) {
+      disabledDate (time) {
         let beginDateVal = _this.form.appointmentConfirmTimeStart
-        if(beginDateVal) {
+        if (beginDateVal) {
           return Date.parse(time) < Date.parse(new Date(beginDateVal))
         }
       }
     }
   }
-   remoteMethod(query) {
+  remoteMethod (query) {
     this.loading = true
   }
-  type(e) {
-    this.form.type = e[e.length - 1];
+  type (e) {
+    this.form.type = e[e.length - 1]
   }
-  onSubmit(e) {
-    this.form.page = 1;
-    this.getTemplist();
+  onSubmit (e) {
+    this.form.page = 1
+    this.getTemplist()
   }
   // 搜索地址
-  search() {
-    this.onSubmit();
+  search () {
+    this.onSubmit()
   }
-  check(id) {
-    this.$route.meta.scrollY = window.scrollY;
+  check (id) {
+    this.$route.meta.scrollY = window.scrollY
     this.$router.push({
       name: 'positionAuditDetail',
       query: {
@@ -565,179 +559,178 @@ export default class companyCheck extends Vue {
     //   query: { id: id }
     // });
   }
-  changeProvince() {}
+  changeProvince () {}
   /* 重置 */
-  resetForm(formName) {
+  resetForm (formName) {
     this.form = {
-      wherefrom: "", //数据来源
-      type: "",
-      is_online: "", // 状态（1 上线，2 下线)
-      status: "", // 状态（0关闭，1开启，审核通过，2审核中，3审核失败）查询多种状态用，号分隔（1,2,3）
-      recruiter: "",
+      wherefrom: '', // 数据来源
+      type: '',
+      is_online: '', // 状态（1 上线，2 下线)
+      status: '', // 状态（0关闭，1开启，审核通过，2审核中，3审核失败）查询多种状态用，号分隔（1,2,3）
+      recruiter: '',
       page: 1,
-      name: "", //职位名称，公司名，招聘官名（1）
-      name2: "", //职位名称，公司名，招聘官名（2）
+      name: '', // 职位名称，公司名，招聘官名（1）
+      name2: '', // 职位名称，公司名，招聘官名（2）
       count: 20,
       update_start: '',
       update_end: '',
       annual_salary: '',
       emolument_min: '',
       emolument_max: '',
-      annual_salary: '',
       city: '',
       cityName: '',
       work_experience: ''
-    };
+    }
     let obj = {}
-    obj.stopPropagation = () =>{}
+    obj.stopPropagation = () => {}
     this.$refs.cascader.inputValue = ''
     // this.$refs.cascader.clearValue(obj)
     this.getTemplist()
   }
 
-  addPosition() {
-    this.$router.push({path: "/positionManage/positionPost"});
+  addPosition () {
+    this.$router.push({ path: '/positionManage/positionPost' })
   }
-  handlePageChange(nowPage) {
-    this.$route.meta.scrollY = 0;
-    window.scrollTo(0, 0);
-    this.form.page = nowPage;
-    this.getTemplist();
+  handlePageChange (nowPage) {
+    this.$route.meta.scrollY = 0
+    window.scrollTo(0, 0)
+    this.form.page = nowPage
+    this.getTemplist()
   }
   /* 请求职位管理列表 */
-  getTemplist() {
+  getTemplist () {
     // 基本查询条件
     let params = {
       page: this.form.page,
       count: this.form.count
     }
     // 已添加职位来源
-    if(this.form.wherefrom) {
-      params = Object.assign(params, {wherefrom: this.form.wherefrom})
+    if (this.form.wherefrom) {
+      params = Object.assign(params, { wherefrom: this.form.wherefrom })
     }
     // 已经选择时间
-    if(this.form.update_start && this.form.update_end) {
+    if (this.form.update_start && this.form.update_end) {
       params = Object.assign(params, {
         update_start: this.form.update_start,
         update_end: this.form.update_end
       })
     }
     // 已经选择城市
-    if(this.form.city) {
-      params = Object.assign(params, {city: this.form.city})
+    if (this.form.city) {
+      params = Object.assign(params, { city: this.form.city })
     }
     // 已经选择上下线
-    if(this.form.is_online) {
-      params = Object.assign(params, {is_online: this.form.is_online})
+    if (this.form.is_online) {
+      params = Object.assign(params, { is_online: this.form.is_online })
     }
     // 已经选择上下线
-    if(this.form.status) {
-      params = Object.assign(params, {status: this.form.status})
+    if (this.form.status) {
+      params = Object.assign(params, { status: this.form.status })
     }
     // 已经选择职位类别
-    if(this.form.type) {
-      params = Object.assign(params, {type: this.form.type})
+    if (this.form.type) {
+      params = Object.assign(params, { type: this.form.type })
     }
     // 已经选择薪资范围
-    if(this.form.emolument_min && this.form.emolument_max) {
-      params = Object.assign(params, {emolument_min: this.form.emolument_min, emolument_max: this.form.emolument_max, annual_salary: this.form.annual_salary})
+    if (this.form.emolument_min && this.form.emolument_max) {
+      params = Object.assign(params, { emolument_min: this.form.emolument_min, emolument_max: this.form.emolument_max, annual_salary: this.form.annual_salary })
     }
     // 已经符合筛选
-    if(this.form.name) {
-      params = Object.assign(params, {name: this.form.name})
+    if (this.form.name) {
+      params = Object.assign(params, { name: this.form.name })
     }
     // 已经符合筛选
-    if(this.form.name2) {
-      params = Object.assign(params, {name2: this.form.name2})
+    if (this.form.name2) {
+      params = Object.assign(params, { name2: this.form.name2 })
     }
     // 已经薪资范围
-    if(this.form.work_experience) {
-      params = Object.assign(params, {work_experience: this.form.work_experience})
+    if (this.form.work_experience) {
+      params = Object.assign(params, { work_experience: this.form.work_experience })
     }
-    if(this.form.update_start && !this.form.update_end) {
-      this.$message({message: '请选择职位的结束时间', type: 'warning'})
+    if (this.form.update_start && !this.form.update_end) {
+      this.$message({ message: '请选择职位的结束时间', type: 'warning' })
       return
     }
-    if(!this.form.update_start && this.form.update_end) {
-      this.$message({message: '请选择职位的开始时间', type: 'warning'})
+    if (!this.form.update_start && this.form.update_end) {
+      this.$message({ message: '请选择职位的开始时间', type: 'warning' })
       return
     }
     getListApi(params).then(res => {
-      this.list = res.data.data;
-      this.total = res.data.meta.total;
-      this.pageCount = res.data.meta.lastPage;
+      this.list = res.data.data
+      this.total = res.data.meta.total
+      this.pageCount = res.data.meta.lastPage
       this.$router.push({
         query: {
           ...params
         }
       })
-    });
+    })
   }
-  toPath(row) {
+  toPath (row) {
     // isRecommend
     if (!row.isRecommend) {
       this.$message({
-        message: "没开通服务"
-      });
+        message: '没开通服务'
+      })
     } else if (row.isOnline === 2) {
       this.$message({
-        message: "职位已下线"
-      });
+        message: '职位已下线'
+      })
     } else {
-      let obj = JSON.stringify(row);
+      let obj = JSON.stringify(row)
       this.$router.push({
-        path: "/resumeStore/recommendList/createOrder",
+        path: '/resumeStore/recommendList/createOrder',
         query: {
           obj,
           frompostion: true,
           isFocus: true
         }
-      });
+      })
     }
   }
   /* 关闭浮窗 */
-  closeTopic() {
+  closeTopic () {
     this.$nextTick(() => {
-      this.$refs["qrCode"].style.display = "none";
-    });
+      this.$refs['qrCode'].style.display = 'none'
+    })
   }
 
   /* 生成职位详情小程序码 */
-  async creatLink(e, positionId, index) {
-    this.qrCode = "";
+  async creatLink (e, positionId, index) {
+    this.qrCode = ''
     // 是否已经加载过二维码
     if (this.list[index].qrCode) {
-      this.qrCode = this.list[index].qrCode;
+      this.qrCode = this.list[index].qrCode
       this.$nextTick(() => {
-        this.$refs["qrCode"].style.display = "block";
-        this.$refs["qrCode"].style.left = e.clientX + "px";
-        this.$refs["qrCode"].style.top = e.clientY + window.scrollY + "px";
-      });
-      return;
+        this.$refs['qrCode'].style.display = 'block'
+        this.$refs['qrCode'].style.left = e.clientX + 'px'
+        this.$refs['qrCode'].style.top = e.clientY + window.scrollY + 'px'
+      })
+      return
     }
 
     this.$nextTick(() => {
-      this.$refs["qrCode"].style.display = "block";
-      this.$refs["qrCode"].style.left = e.clientX + "px";
-      this.$refs["qrCode"].style.top = e.clientY + window.scrollY + "px";
-    });
-    let res = await this.getQr(positionId);
-    this.qrCode = res.data.data.qrCodeUrl;
-    this.list[index].qrCode = res.data.data.qrCodeUrl;
+      this.$refs['qrCode'].style.display = 'block'
+      this.$refs['qrCode'].style.left = e.clientX + 'px'
+      this.$refs['qrCode'].style.top = e.clientY + window.scrollY + 'px'
+    })
+    let res = await this.getQr(positionId)
+    this.qrCode = res.data.data.qrCodeUrl
+    this.list[index].qrCode = res.data.data.qrCodeUrl
   }
 
   /* 生成二维码 */
-  getQr(id) {
-    return getPositionCodeUrlApi({ id: id });
+  getQr (id) {
+    return getPositionCodeUrlApi({ id: id })
   }
   /* 关闭二维码弹窗 */
-  hiddenQr() {
+  hiddenQr () {
     this.$nextTick(() => {
-      this.$refs["qrCode"].style.display = "none";
-    });
+      this.$refs['qrCode'].style.display = 'none'
+    })
   }
-  getAddressLists() {
-    return getAddressListsApi({level: 3}).then((res) => {
+  getAddressLists () {
+    return getAddressListsApi({ level: 3 }).then((res) => {
       let arr = res.data.data
       arr.map((v, k) => {
         v.areaId = ((v.areaId).toString())
@@ -746,36 +739,36 @@ export default class companyCheck extends Vue {
     })
     // return getAddressListsApi({level: 3}).then(res => this.cityLists = res.data.data)
   }
-  created() {
+  created () {
     this.form = Object.assign(this.form, this.$route.query)
-    if(!this.form.city) this.form.city = ''
-    this.AdminShow = +sessionStorage.getItem("AdminShow");
-    this.getTemplist();
-    this.ManageList();
+    if (!this.form.city) this.form.city = ''
+    this.AdminShow = +sessionStorage.getItem('AdminShow')
+    this.getTemplist()
+    this.ManageList()
     this.setEmolumentMin()
     this.getAddressLists()
-    for(let i = 12; i <= 24; i++) {
-      this.annual_salary_list.push({value: String(i), label: `${i}薪`})
+    for (let i = 12; i <= 24; i++) {
+      this.annual_salary_list.push({ value: String(i), label: `${i}薪` })
     }
   }
-  ManageList() {
+  ManageList () {
     getLabelPositionListApi().then(res => {
-      this.options = res.data.data;
+      this.options = res.data.data
       this.options.forEach(item => {
         item.children.forEach(item1 => {
           item1.children.forEach(item2 => {
-            let result = JSON.stringify(item2.children);
-            if (result === "[]") delete item2.children;
-          });
-        });
-      });
-    });
+            let result = JSON.stringify(item2.children)
+            if (result === '[]') delete item2.children
+          })
+        })
+      })
+    })
   }
-  activated() {
-    let that = this;
-    setTimeout(function() {
-      window.scrollTo(0, that.$route.meta.scrollY);
-    }, 300);
+  activated () {
+    let that = this
+    setTimeout(function () {
+      window.scrollTo(0, that.$route.meta.scrollY)
+    }, 300)
   }
 }
 </script>

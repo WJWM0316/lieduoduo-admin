@@ -266,11 +266,11 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import resumePopup from "COMPONENTS/resumePopup/resumePopup.vue";
-import { getLabelPositionListApi } from "API/position";
-import { getAddressListsApi } from "API/company";
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import resumePopup from 'COMPONENTS/resumePopup/resumePopup.vue'
+import { getLabelPositionListApi } from 'API/position'
+import { getAddressListsApi } from 'API/company'
 import {
   getApplyListApi,
   getResumeCodeUrlApi,
@@ -279,22 +279,22 @@ import {
   getInterviewComment,
   getApplyInterviewStatusType,
   getNotSuitTypeList
-} from "API/interview";
-import List from "@/components/list";
-import { getAccessToken, removeAccessToken } from "API/cacheService";
+} from 'API/interview'
+import List from '@/components/list'
+import { getAccessToken } from 'API/cacheService'
 import { API_ROOT } from 'API/index.js'
 @Component({
-  name: "application",
+  name: 'application',
   components: {
     List,
     resumePopup
   },
   watch: {
     'form.areaId': {
-      handler(areaId) {
-        if(areaId) {
+      handler (areaId) {
+        if (areaId) {
           let item = this.cityLists.find(field => field.areaId === areaId)
-          if(!item) return
+          if (!item) return
           this.form.areaId = item.areaId
           this.form.areaName = item.title
         }
@@ -307,322 +307,322 @@ export default class application extends Vue {
   canDownloadData = true
   timeout = null; // 防抖
   total = 0;
-  resumeId = "";
+  resumeId = '';
   centerDialogVisible = false;
-  reason = "";
+  reason = '';
   isShow = false;
   stutusList = [];
   showSecond = false;
   reasonList = [];
   fields = [
     {
-      prop: "interviewId",
-      label: "面试ID",
-      minWidth: "8%"
+      prop: 'interviewId',
+      label: '面试ID',
+      minWidth: '8%'
       //    width: 100
     },
     {
-      prop: "jobhunterInfo",
-      label: "求职者信息",
-      minWidth: "25%",
+      prop: 'jobhunterInfo',
+      label: '求职者信息',
+      minWidth: '25%',
       //    width: 300,
-      align: "left"
+      align: 'left'
     },
     {
-      prop: "statusDesc",
-      label: "状态",
-      minWidth: "20%"
+      prop: 'statusDesc',
+      label: '状态',
+      minWidth: '20%'
       //    width: 200
     },
     {
-      prop: "recruiterInfo",
-      label: "面试官信息",
-      minWidth: "25%",
+      prop: 'recruiterInfo',
+      label: '面试官信息',
+      minWidth: '25%',
       //    width: 300,
-      align: "left"
+      align: 'left'
     },
     {
-      prop: "adminInfo",
-      label: "跟进销售",
-      minWidth: "25%",
+      prop: 'adminInfo',
+      label: '跟进销售',
+      minWidth: '25%',
       //    width: 300,
-      align: "left"
+      align: 'left'
     },
     {
-      prop: "interviewInfo",
-      label: "约面信息",
-      minWidth: "31%",
+      prop: 'interviewInfo',
+      label: '约面信息',
+      minWidth: '31%',
       //    width: 500,
-      align: "left"
+      align: 'left'
     }
   ];
   form = {
-    searchType: "id",
-    content: "",
-    status: "0",
+    searchType: 'id',
+    content: '',
+    status: '0',
     createStartTime: undefined,
     createEndTime: undefined,
-    companyName: "",
+    companyName: '',
     page: 1,
     count: 20
   };
   list = [];
   options = [];
   positionManage = {
-    value: "labelId",
-    label: "name",
-    children: "children"
-  }; //职位类别的配置
+    value: 'labelId',
+    label: 'name',
+    children: 'children'
+  }; // 职位类别的配置
   cityLists = [];
-  getAddressLists() {
-    return getAddressListsApi({level: 3}).then(res => this.cityLists = res.data.data)
+  getAddressLists () {
+    return getAddressListsApi({ level: 3 }).then(res => (this.cityLists = res.data.data))
   }
   pageCount = 0; // 请求回的数据共几页
-  mobile = ""; // 当前查看的手机号码
-  qrCode = "";
-  AdminShow = ""; /* 权限字段 */
-  address = "";
+  mobile = ''; // 当前查看的手机号码
+  qrCode = '';
+  AdminShow = ''; /* 权限字段 */
+  address = '';
   /* 说出不合适原因 */
-  sayResult(interviewId) {
+  sayResult (interviewId) {
     getInterviewComment(interviewId).then(res => {
-      this.reason = res.data.data.reason;
-      this.centerDialogVisible = true;
-    });
+      this.reason = res.data.data.reason
+      this.centerDialogVisible = true
+    })
   }
-  toPath(id) {
+  toPath (id) {
     let routeUrl = this.$router.resolve({
-      path: "/positionManage/positionAuditDetail",
+      path: '/positionManage/positionAuditDetail',
       query: { id }
-    });
-    window.open(routeUrl.href, "_blank");
+    })
+    window.open(routeUrl.href, '_blank')
   }
-  showCallback(val) {
-    this.isShow = false;
+  showCallback (val) {
+    this.isShow = false
   }
-  created() {
-    this.AdminShow = +sessionStorage.getItem("AdminShow");
-    this.init();
-    this.getApplyInterviewStatusType();
+  created () {
+    this.AdminShow = +sessionStorage.getItem('AdminShow')
+    this.init()
+    this.getApplyInterviewStatusType()
     this.ManageList()
     this.getAddressLists()
   }
-  getNotSuitTypeList() {
+  getNotSuitTypeList () {
     getNotSuitTypeList().then(res => {
-      this.reasonList = res.data.data;
-    });
+      this.reasonList = res.data.data
+    })
   }
   /* 选择变更 */
-  changeProvince(e) {
+  changeProvince (e) {
     if (e === 52) {
-      this.getNotSuitTypeList();
-      this.showSecond = true;
+      this.getNotSuitTypeList()
+      this.showSecond = true
     } else {
-      this.showSecond = false;
+      this.showSecond = false
     }
   }
-  getApplyInterviewStatusType() {
+  getApplyInterviewStatusType () {
     getApplyInterviewStatusType().then(res => {
-      this.stutusList = res.data.data;
-    });
+      this.stutusList = res.data.data
+    })
   }
-  init() {
-    this.getInterviewList();
+  init () {
+    this.getInterviewList()
   }
-  showResume(row) {
-    if (this.AdminShow == 3 || this.AdminShow == 4) {
+  showResume (row) {
+    if (this.AdminShow === 3 || this.AdminShow === 4) {
       this.$message({
-        message: "用户暂无权限"
-      });
+        message: '用户暂无权限'
+      })
     } else {
-      this.resumeId = String(row.jobhunterInfo.uid);
-      this.isShow = true;
+      this.resumeId = String(row.jobhunterInfo.uid)
+      this.isShow = true
       this.$nextTick(() => {
-        let AdminShow = +sessionStorage.getItem("AdminShow");
-        this.$refs["resume"].testingAdmin(AdminShow);
-        this.$refs["resume"].getResume();
-        this.$refs["resume"].showMark();
-        this.$refs["resume"].initResume();
-        this.$refs["resume"].operating(this.resumeId, {
-          action: "查看",
-          desc: "简历"
-        });
-      });
+        let AdminShow = +sessionStorage.getItem('AdminShow')
+        this.$refs['resume'].testingAdmin(AdminShow)
+        this.$refs['resume'].getResume()
+        this.$refs['resume'].showMark()
+        this.$refs['resume'].initResume()
+        this.$refs['resume'].operating(this.resumeId, {
+          action: '查看',
+          desc: '简历'
+        })
+      })
     }
   }
   /* 获取列表数据 */
-  getInterviewList() {
+  getInterviewList () {
     getApplyListApi(this.form).then(res => {
-      this.list = res.data.data;
-      this.total = res.data.meta.total;
-      this.pageCount = res.data.meta.lastPage;
-    });
+      this.list = res.data.data
+      this.total = res.data.meta.total
+      this.pageCount = res.data.meta.lastPage
+    })
   }
 
   /* 展示手机 */
-  showPhone(e, mobile) {
-    if (this.timeout !== null) clearTimeout(this.timeout);
-    this.mobile = mobile || "用户未绑定手机";
+  showPhone (e, mobile) {
+    if (this.timeout !== null) clearTimeout(this.timeout)
+    this.mobile = mobile || '用户未绑定手机'
     this.$nextTick(() => {
-      this.$refs["mobile"].style.display = "block";
-      this.$refs["mobile"].style.left = e.clientX + "px";
-      this.$refs["mobile"].style.top = e.clientY + window.scrollY + "px";
-    });
+      this.$refs['mobile'].style.display = 'block'
+      this.$refs['mobile'].style.left = e.clientX + 'px'
+      this.$refs['mobile'].style.top = e.clientY + window.scrollY + 'px'
+    })
   }
 
   /* 展示地址 */
-  showAddress(e, address) {
-    if (this.timeout !== null) clearTimeout(this.timeout);
-    this.address = address;
+  showAddress (e, address) {
+    if (this.timeout !== null) clearTimeout(this.timeout)
+    this.address = address
     this.$nextTick(() => {
-      this.$refs["address"].style.display = "block";
-      this.$refs["address"].style.left = e.clientX + "px";
-      this.$refs["address"].style.top = e.clientY + 20 + window.scrollY + "px";
-    });
+      this.$refs['address'].style.display = 'block'
+      this.$refs['address'].style.left = e.clientX + 'px'
+      this.$refs['address'].style.top = e.clientY + 20 + window.scrollY + 'px'
+    })
   }
-  hideAdress() {
-    this.address = "";
+  hideAdress () {
+    this.address = ''
     this.$nextTick(() => {
-      this.$refs["address"].style.display = "none";
-    });
+      this.$refs['address'].style.display = 'none'
+    })
   }
 
   /* 生成小程序码 */
-  async creatLink(e, uid, index, type) {
-    this.qrCode = "";
+  async creatLink (e, uid, index, type) {
+    this.qrCode = ''
     // 是否已经加载过二维码
     if (this.list[index].qrCode && type === 1) {
-      this.qrCode = this.list[index].qrCode;
+      this.qrCode = this.list[index].qrCode
       this.$nextTick(() => {
-        this.$refs["qrCode"].style.display = "block";
-        this.$refs["qrCode"].style.left = e.clientX + "px";
-        this.$refs["qrCode"].style.top = e.clientY + window.scrollY + "px";
-      });
-      return;
+        this.$refs['qrCode'].style.display = 'block'
+        this.$refs['qrCode'].style.left = e.clientX + 'px'
+        this.$refs['qrCode'].style.top = e.clientY + window.scrollY + 'px'
+      })
+      return
     } else if (this.list[index].resumeQrCode && type === 2) {
-      this.qrCode = this.list[index].resumeQrCode;
+      this.qrCode = this.list[index].resumeQrCode
       this.$nextTick(() => {
-        this.$refs["qrCode"].style.display = "block";
-        this.$refs["qrCode"].style.left = e.clientX + "px";
-        this.$refs["qrCode"].style.top = e.clientY + window.scrollY + "px";
-      });
-      return;
+        this.$refs['qrCode'].style.display = 'block'
+        this.$refs['qrCode'].style.left = e.clientX + 'px'
+        this.$refs['qrCode'].style.top = e.clientY + window.scrollY + 'px'
+      })
+      return
     } else if (this.list[index].jobQrCode && type === 3) {
-      this.qrCode = this.list[index].jobQrCode;
+      this.qrCode = this.list[index].jobQrCode
       this.$nextTick(() => {
-        this.$refs["qrCode"].style.display = "block";
-        this.$refs["qrCode"].style.left = e.clientX + "px";
-        this.$refs["qrCode"].style.top = e.clientY + window.scrollY + "px";
-      });
-      return;
+        this.$refs['qrCode'].style.display = 'block'
+        this.$refs['qrCode'].style.left = e.clientX + 'px'
+        this.$refs['qrCode'].style.top = e.clientY + window.scrollY + 'px'
+      })
+      return
     }
     this.$nextTick(() => {
-      this.$refs["qrCode"].style.display = "block";
-      this.$refs["qrCode"].style.left = e.clientX + "px";
-      this.$refs["qrCode"].style.top = e.clientY + window.scrollY + "px";
-    });
-    let res = await this.getQr(type, uid);
+      this.$refs['qrCode'].style.display = 'block'
+      this.$refs['qrCode'].style.left = e.clientX + 'px'
+      this.$refs['qrCode'].style.top = e.clientY + window.scrollY + 'px'
+    })
+    let res = await this.getQr(type, uid)
     if (type === 1) {
-      this.qrCode = res.data.data.qrCodeUrl;
-      this.list[index].qrCode = res.data.data.qrCodeUrl;
+      this.qrCode = res.data.data.qrCodeUrl
+      this.list[index].qrCode = res.data.data.qrCodeUrl
     } else if (type === 2) {
-      this.qrCode = res.data.data.qrCodeUrl;
-      this.list[index].resumeQrCode = res.data.data.qrCodeUrl;
+      this.qrCode = res.data.data.qrCodeUrl
+      this.list[index].resumeQrCode = res.data.data.qrCodeUrl
     } else {
-      this.qrCode = res.data.data.qrCodeUrl;
-      this.list[index].jobQrCode = res.data.data.qrCodeUrl;
+      this.qrCode = res.data.data.qrCodeUrl
+      this.list[index].jobQrCode = res.data.data.qrCodeUrl
     }
   }
 
   /* 生成二维码 */
-  getQr(type, uid) {
+  getQr (type, uid) {
     switch (type) {
       case 1:
-        return getRecruiterCodeUrlApi({ id: uid });
-        break;
+        getRecruiterCodeUrlApi({ id: uid })
+        break
       case 2:
-        return getResumeCodeUrlApi({ id: uid });
-        break;
+        getResumeCodeUrlApi({ id: uid })
+        break
       case 3:
-        if (uid === 0) return;
-        return getPositionCodeUrlApi({ id: uid });
-        break;
+        if (uid === 0) return
+        getPositionCodeUrlApi({ id: uid })
+        break
     }
   }
 
-  hiddenPhone() {
+  hiddenPhone () {
     this.$nextTick(() => {
-      this.$refs["mobile"].style.display = "none";
-    });
+      this.$refs['mobile'].style.display = 'none'
+    })
   }
 
-  hiddenQr() {
+  hiddenQr () {
     this.$nextTick(() => {
-      this.$refs["qrCode"].style.display = "none";
-    });
+      this.$refs['qrCode'].style.display = 'none'
+    })
   }
 
   /* 关闭浮窗 */
-  closeTopic() {
+  closeTopic () {
     this.$nextTick(() => {
-      this.$refs["mobile"].style.display = "none";
-      this.$refs["qrCode"].style.display = "none";
-    });
+      this.$refs['mobile'].style.display = 'none'
+      this.$refs['qrCode'].style.display = 'none'
+    })
   }
 
   /* 查询 */
-  onSubmit() {
-    this.form.page = 1;
-    if((this.form.createStartTime && !this.form.createEndTime) || (!this.form.createStartTime&& this.form.createEndTime)) {
-      this.$message({message: "申请时间必需选择区间时间", type: "warning"});
-      return;
+  onSubmit () {
+    this.form.page = 1
+    if ((this.form.createStartTime && !this.form.createEndTime) || (!this.form.createStartTime && this.form.createEndTime)) {
+      this.$message({ message: '申请时间必需选择区间时间', type: 'warning' })
+      return
     }
-    this.getInterviewList();
+    this.getInterviewList()
   }
 
   /* 清除列表选项 */
-  resetForm(name) {
-    this.$refs[name].resetFields();
-    this.form.companyName = "";
-    this.form.status = "";
-    this.form.last_status = "";
-    this.form.createEndTime = undefined;
-    this.form.createStartTime = undefined;
-    this.form.positionLabel = '';
-    this.form.cityName = '';
-    this.form.areaId = '';
-     this.$refs.cascader.inputValue = ''
+  resetForm (name) {
+    this.$refs[name].resetFields()
+    this.form.companyName = ''
+    this.form.status = ''
+    this.form.last_status = ''
+    this.form.createEndTime = undefined
+    this.form.createStartTime = undefined
+    this.form.positionLabel = ''
+    this.form.cityName = ''
+    this.form.areaId = ''
+    this.$refs.cascader.inputValue = ''
   }
 
   /* 翻页 */
-  handlePageChange(nowPage) {
-    this.$route.meta.scrollY = 0;
-    window.scrollTo(0, 0);
-    this.form.page = nowPage;
-    this.getInterviewList();
+  handlePageChange (nowPage) {
+    this.$route.meta.scrollY = 0
+    window.scrollTo(0, 0)
+    this.form.page = nowPage
+    this.getInterviewList()
   }
   /* 防抖 */
-  debounce(wait) {
-    let that = this;
-    if (this.timeout !== null) clearTimeout(that.timeout);
-    this.timeout = setTimeout(that.hideAdress, wait);
+  debounce (wait) {
+    let that = this
+    if (this.timeout !== null) clearTimeout(that.timeout)
+    this.timeout = setTimeout(that.hideAdress, wait)
   }
-  ManageList() {
+  ManageList () {
     getLabelPositionListApi().then(res => {
-      this.options = res.data.data;
+      this.options = res.data.data
       this.options.forEach(item => {
         item.children.forEach(item1 => {
           item1.children.forEach(item2 => {
-            let result = JSON.stringify(item2.children);
-            if (result === "[]") delete item2.children;
-          });
-        });
-      });
-    });
+            let result = JSON.stringify(item2.children)
+            if (result === '[]') delete item2.children
+          })
+        })
+      })
+    })
   }
-  type(e) {
-    this.form.positionLabel = e[e.length - 1];
+  type (e) {
+    this.form.positionLabel = e[e.length - 1]
   }
-  download() {
+  download () {
     this.$confirm('是否导出该列表数据？', '提示', {
       confirmButtonText: '是',
       cancelButtonText: '否',
@@ -630,39 +630,39 @@ export default class application extends Vue {
     }).then(() => {
       let date = new Date()
       let downloadName = `申请列表-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}.xlsx`
-      let url = `${API_ROOT}/interview/apply?isExport=1` 
+      let url = `${API_ROOT}/interview/apply?isExport=1`
       // 已经有下拉筛选
-      if(this.form.searchType && this.form.content) {
+      if (this.form.searchType && this.form.content) {
         url += `&searchType=${this.form.searchType}&content=${this.form.content}`
       }
       // 已经存在公司名筛选
-      if(this.form.companyName && this.form.companyName.trim()) {
+      if (this.form.companyName && this.form.companyName.trim()) {
         url += `&companyName=${this.form.companyName}`
       }
       // 已经选择一级状态
-      if(this.form.status) {
+      if (this.form.status) {
         url += `&status=${this.form.status}`
       }
       // 已经选择二级状态
-      if(this.form.last_status) {
+      if (this.form.last_status) {
         url += `&last_status=${this.form.last_status}`
       }
-      if(this.form.positionLabel) {
+      if (this.form.positionLabel) {
         url += `&positionLabel=${this.form.positionLabel}`
       }
       // 已经选择城市
-      if(this.form.areaId) {
+      if (this.form.areaId) {
         url += `&areaId=${this.form.areaId}`
       }
-      if(this.form.createStartTime && this.form.createEndTime) {
+      if (this.form.createStartTime && this.form.createEndTime) {
         url += `&createStartTime=${this.form.createStartTime}&createEndTime=${this.form.createEndTime}`
       }
       url = url.replace(/\s*/g, '')
       let xmlResquest = new XMLHttpRequest()
       xmlResquest.open('get', url, true)
-      xmlResquest.setRequestHeader('Content-type', 'application/json')
-      xmlResquest.setRequestHeader('Authorization-Admin', getAccessToken())
-      xmlResquest.responseType = 'blob'
+      xmlResquest.setRequestHeader('Content-type', 'application/json')
+      xmlResquest.setRequestHeader('Authorization-Admin', getAccessToken())
+      xmlResquest.responseType = 'blob'
       this.canDownloadData = false
       xmlResquest.onload = () => {
         let content = xmlResquest.response
@@ -681,7 +681,7 @@ export default class application extends Vue {
       this.$message({
         type: 'info',
         message: '已取消导出'
-      });          
+      })
     })
   }
 }

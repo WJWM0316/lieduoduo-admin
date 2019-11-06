@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
-
+import { mapGetters } from 'vuex'
 @Component({
   name: 'modal-dialog',
   computed: {
@@ -23,13 +23,13 @@ import Component from 'vue-class-component'
       default: 'alert'
     },
 
-    //头部类型 1黄条。2 空格。3错误。4 正确
+    // 头部类型 1黄条。2 空格。3错误。4 正确
     headType: {
       type: String,
       default: '1'
     },
 
-    //按钮类型 1默认固定宽度。2 padding
+    // 按钮类型 1默认固定宽度。2 padding
     bottomType: {
       type: String,
       default: '1'
@@ -77,7 +77,7 @@ import Component from 'vue-class-component'
       default: '取消'
     },
 
-    //是否隐藏 1是。2 否
+    // 是否隐藏 1是。2 否
     isHideBtn: {
       type: String,
       default: '2'
@@ -85,14 +85,14 @@ import Component from 'vue-class-component'
   },
   watch: {
     show: {
-      handler(show) {
+      handler (show) {
         this.visiable = show
         this.$store.dispatch('switchOpenModal', show)
       },
       immediate: true
     },
     visiable: {
-      handler(visiable) {
+      handler (visiable) {
         if (!visiable) {
           this.$emit('close')
         }
@@ -101,17 +101,16 @@ import Component from 'vue-class-component'
   }
 })
 export default class ComponentDialog extends Vue {
-
   visiable = false
 
   // 弹窗宽度
-  get dialogWidth() {
+  get dialogWidth () {
     const width = this.width
     return width.toString().indexOf('px') >= 0 ? width : `${width}px`
   }
 
   // 弹窗最小高度
-  get dialogMinHeight() {
+  get dialogMinHeight () {
     const minHeight = this.minHeight
     return minHeight.toString().indexOf('px') >= 0 ? minHeight : `${minHeight}px`
   }
@@ -119,7 +118,7 @@ export default class ComponentDialog extends Vue {
   /**
    * 关闭弹窗
    */
-  handleCloseDialog() {
+  handleCloseDialog () {
     this.visiable = false
     this.$emit('input', this.visiable)
   }
@@ -127,14 +126,14 @@ export default class ComponentDialog extends Vue {
   /**
    * 点击确定
    */
-  handleConfirm() {
+  handleConfirm () {
     this.$emit('confirm')
   }
 
   /**
    * 点击取消
    */
-  handleCancel() {
+  handleCancel () {
     this.handleCloseDialog()
     this.$emit('cancel')
   }

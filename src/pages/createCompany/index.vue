@@ -15,7 +15,7 @@
     <!--公司信息表格-->
     <div class="companyInfo" v-if="active === 0">
       <div class="point">上传工牌/名片/在职证明等信息需要与身份信息保持一致</div>
-      
+
       <el-form
         class="edit-form"
         ref="companyInfo"
@@ -135,7 +135,7 @@
             {{`${item.address}${item.doorplate}`}}
           </span>
         </el-form-item>
-        
+
         <el-form-item
           label="一句话亮点"
           prop="one_sentence_intro"
@@ -143,7 +143,7 @@
         >
           <el-input v-model="companyInfo.one_sentence_intro" placeholder="请输入内容" style="width: 400px;" maxlength="30"></el-input>
         </el-form-item>
-        
+
         <el-form-item label="公司图片" prop="input" v-if="!$route.params.checkId" >
           <ul class="common-list">
             <li
@@ -208,13 +208,13 @@
         </el-form-item>
 
         <h3>{{$route.query.from === "cp" ? '' : '产品介绍'}}</h3>
-        <div v-for="(item, index) in companyInfo.product">
+        <div v-for="(item, index) in companyInfo.product" :key="index">
           <el-form-item class="full" label="产品logo" prop="icon">
             <image-uploader
               width="250"
               height="250"
               :showBtn="item.isEditing"
-              v-model="item.logoInfo.url || ''"
+              v-model="item.logoInfo.url"
               @loaded="handleProductIconLoaded"
             />
             <div class="func_zone" style="position: absolute;right: 0;top: 0;" v-if="!item.isEditing">
@@ -324,7 +324,7 @@
             </el-select>
           </el-form-item>
         </el-form>
-      </div> 
+      </div>
     </div>
 
     <!--添加新公司地址弹窗-->
@@ -369,11 +369,11 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import ImageUploader from "@/components/imageUploader";
-import emailCheck from "@/components/email/email";
-import { getAccessToken, removeAccessToken } from "@/api/cacheService.js";
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import ImageUploader from '@/components/imageUploader'
+import emailCheck from '@/components/email/email'
+import { getAccessToken } from '@/api/cacheService.js'
 
 import {
   upload_api
@@ -384,11 +384,9 @@ import {
   getSalerListApi,
   getAdvisorUserListApi,
   setCompanyAdvisorApi
-} from "API/commont";
-import adminControl from "@/components/adminControl/index";
+} from 'API/commont'
+import adminControl from '@/components/adminControl/index'
 import {
-  setCompanyInfoApi,
-  addCompanyAddressApi,
   delCompanyAddressApi,
   verifyEmailApi,
   checkCompanyNameApi,
@@ -398,16 +396,12 @@ import {
   editCheckCompanyInfoApi,
   editCheckCompanyFollowUserApi,
   editCompanyFollowUserApi,
-  setCompanyCompanyAdvisorApi,
   addCompanyProductApi,
-  editCompanyProductApi,
-  getCompanyProductApi,
-  deleteCompanyProductApi,
-  getCompanyProductListsApi
-} from "API/company";
-import mapSearch from "@/components/map";
+  editCompanyProductApi
+} from 'API/company'
+import mapSearch from '@/components/map'
 @Component({
-  name: "createCompany",
+  name: 'createCompany',
   components: {
     adminControl,
     ImageUploader,
@@ -428,7 +422,7 @@ export default class createCompany extends Vue {
     tips: 'JPG、PNG格式，最多可上传9张',
     params: {
       'Authorization-Admin': getAccessToken(),
-      attach_type: 'img',
+      attach_type: 'img'
     }
   }
   AdminShow = ''
@@ -440,7 +434,7 @@ export default class createCompany extends Vue {
   isBindAdmin = 0
   isNewCompany = false
   companyName = {
-    name: ""
+    name: ''
   }
   isCreated = false
   can_company_input = true
@@ -480,22 +474,22 @@ export default class createCompany extends Vue {
   dialogImageUrl = ''
   dialogVisible = false
   financing = [
-    { name: "未融资", id: 1 },
-    { name: "天使轮", id: 2 },
-    { name: "A轮", id: 3 },
-    { name: "B轮", id: 4 },
-    { name: "C轮", id: 5 },
-    { name: "D轮及以上", id: 6 },
-    { name: "已上市", id: 7 },
-    { name: "不需要融资", id: 8 }
+    { name: '未融资', id: 1 },
+    { name: '天使轮', id: 2 },
+    { name: 'A轮', id: 3 },
+    { name: 'B轮', id: 4 },
+    { name: 'C轮', id: 5 },
+    { name: 'D轮及以上', id: 6 },
+    { name: '已上市', id: 7 },
+    { name: '不需要融资', id: 8 }
   ]
   employees = [
-    { name: "0-20人", id: 1 },
-    { name: "20-99人", id: 2 },
-    { name: "100-499人", id: 3 },
-    { name: "500-999人", id: 4 },
-    { name: "1000-9999人", id: 5 },
-    { name: "10000人以上", id: 6 }
+    { name: '0-20人', id: 1 },
+    { name: '20-99人', id: 2 },
+    { name: '100-499人', id: 3 },
+    { name: '500-999人', id: 4 },
+    { name: '1000-9999人', id: 5 },
+    { name: '10000人以上', id: 6 }
   ]
   salesList = [];
   industry = []
@@ -527,8 +521,8 @@ export default class createCompany extends Vue {
     company_shortname: [
       {
         required: true,
-        message: "公司简称必填，要求1-10个字",
-        trigger: "blur",
+        message: '公司简称必填，要求1-10个字',
+        trigger: 'blur',
         min: 1,
         max: 10
       }
@@ -541,27 +535,27 @@ export default class createCompany extends Vue {
   }
   advisorUserList = []
   // 关闭
-  closeAdmin(e) {
-    this.showAdminWindow = false;
+  closeAdmin (e) {
+    this.showAdminWindow = false
     if (e && e.needLoad) {
       this.$set(this.companyInfo, 'realname', sessionStorage.getItem('name'))
     }
   }
   /* 保存公司名 */
-  saveCompanyName() {
+  saveCompanyName () {
     if (this.companyName.name === '') return
-    this.isShowCompany = false;
-    this.$set(this.companyInfo, "company_name", this.companyName.name)
+    this.isShowCompany = false
+    this.$set(this.companyInfo, 'company_name', this.companyName.name)
   }
-  closeAdminWindow() {
+  closeAdminWindow () {
     this.showAdminWindow = false
   }
-  ground(e) {
-    let result = this.salesList.find(field => field.id === e);
-    this.companyInfo.groupId = result.groupId;
-    this.companyInfo.admin_uid = result.id;
+  ground (e) {
+    let result = this.salesList.find(field => field.id === e)
+    this.companyInfo.groupId = result.groupId
+    this.companyInfo.admin_uid = result.id
   }
-  ground1(e) {
+  ground1 (e) {
     let item = this.advisorUserList.find(field => field.id === e)
     this.companyInfo.advisorUid = item.id
     this.companyInfo.advisorName = item.realname
@@ -569,23 +563,22 @@ export default class createCompany extends Vue {
   }
   /* 自定义公司名称校验规则 */
   companyNameRule = (rule, value, callback) => {
-    let reg = /\d+/g;
-    let arr = value.match(reg);
+    let reg = /\d+/g
+    let arr = value.match(reg)
     if (arr) {
-      this.companyName.name = "";
-      callback(new Error("公司名称不能使用阿拉伯数字"));
+      this.companyName.name = ''
+      callback(new Error('公司名称不能使用阿拉伯数字'))
     } else {
       checkCompanyNameApi({ company_name: value }).then(res => {
         if (res.data.data.exist) {
-          this.companyName.name = "";
-          callback(new Error("公司名称已被注册，请重新输入"));
+          this.companyName.name = ''
+          callback(new Error('公司名称已被注册，请重新输入'))
         } else {
-          callback();
+          callback()
         }
+      }).catch(() => {
+        this.companyName.name = ''
       })
-      .catch(err => {
-        this.companyName.name = ""
-      });
     }
   }
   /**
@@ -594,195 +587,193 @@ export default class createCompany extends Vue {
    * @detail   顾问推荐 - 顾问列表
    * @return   {[type]}   [description]
    */
-  getAdvisorUserList() {
-    getAdvisorUserListApi().then(res => this.advisorUserList = res.data.data)
+  getAdvisorUserList () {
+    getAdvisorUserListApi().then(res => (this.advisorUserList = res.data.data))
   }
   /* 切换tab */
-  tab(e) {
-    if (e.target.className === "userInfo") {
+  tab (e) {
+    if (e.target.className === 'userInfo') {
       this.active = 1
       if (this.salesList.length > 0) return
-      getSalerListApi().then(res => this.salesList = res.data.data)
+      getSalerListApi().then(res => (this.salesList = res.data.data))
     } else {
       this.active = 0
     }
   }
   /* 创建公司 */
-  async createdCompany() {
-    let companyInfo = {}
-    this.companyInfo.address = this.adressList;
-    this.$refs["companyInfo"].validate(async valid => {
+  async createdCompany () {
+    // let companyInfo = {}
+    this.companyInfo.address = this.adressList
+    this.$refs['companyInfo'].validate(async valid => {
       if (valid) {
-        let { id, checkId } = this.$route.params;
+        let { id, checkId } = this.$route.params
 
         if (this.isEdit) {
           // 编辑正式库
           if (id) {
-            delete this.companyInfo.adminUid;
+            delete this.companyInfo.adminUid
             let images = this.commonList.map(field => field.id).join(',')
-            let params = Object.assign(this.companyInfo, {images})
-            await editCompanyApi(id, params);
+            let params = Object.assign(this.companyInfo, { images })
+            await editCompanyApi(id, params)
             this.$message({
-              message: "编辑成功",
-              type: "success"
-            });
+              message: '编辑成功',
+              type: 'success'
+            })
           } else {
             /* 编辑审核库 */
-            delete this.companyInfo.admin_uid;
+            delete this.companyInfo.admin_uid
 
             try {
-              await editCheckCompanyInfoApi(checkId, this.companyInfo);
+              await editCheckCompanyInfoApi(checkId, this.companyInfo)
               this.$message({
-                message: "编辑成功",
-                type: "success"
-              });
+                message: '编辑成功',
+                type: 'success'
+              })
             } catch (err) {
             }
           }
         } else {
-          let admin_uid = sessionStorage.getItem("admin_uid");
-          this.$set(this.companyInfo, "admin_uid", admin_uid);
-          this.showAdminWindow = true;
-          this.isBindAdmin = 0;
-          this.isNewCompany = true;
+          let admin_uid = sessionStorage.getItem('admin_uid')
+          this.$set(this.companyInfo, 'admin_uid', admin_uid)
+          this.showAdminWindow = true
+          this.isBindAdmin = 0
+          this.isNewCompany = true
         }
       } else {
-        return false;
+        return false
       }
-    });
+    })
   }
-  mounted() {
-    this.AdminShow = +sessionStorage.getItem("AdminShow");
+  mounted () {
+    this.AdminShow = +sessionStorage.getItem('AdminShow')
     this.getAdvisorUserList()
     if (this.$route.query.isCreated) {
-      this.isCreated = this.$route.query.isCreated;
-      this.isShowCompany = true;
-      this.active = 0;
+      this.isCreated = this.$route.query.isCreated
+      this.isShowCompany = true
+      this.active = 0
     }
   }
   /* 保存跟进人 */
-  async saveSaller() {
-    let { id, checkId } = this.$route.params;
+  async saveSaller () {
+    let { id, checkId } = this.$route.params
     if (id) {
       // 数字代表权限的ip
-      if([0,1,2,3,4].includes(Number(this.AdminShow))) {
+      if ([0, 1, 2, 3, 4].includes(Number(this.AdminShow))) {
         await editCompanyFollowUserApi(
           id,
           this.companyInfo.admin_uid,
           this.companyInfo.groupId
-        );
+        )
       }
 
-      if([0,5].includes(Number(this.AdminShow))) {
-        if(this.companyInfo.advisorUid) {
-          await setCompanyAdvisorApi({id,advisorGroupId: this.companyInfo.advisorGroupId, advisorUid: this.companyInfo.advisorUid})
+      if ([0, 5].includes(Number(this.AdminShow))) {
+        if (this.companyInfo.advisorUid) {
+          await setCompanyAdvisorApi({ id, advisorGroupId: this.companyInfo.advisorGroupId, advisorUid: this.companyInfo.advisorUid })
         }
       }
-      
     } else {
       await editCheckCompanyFollowUserApi(
         checkId,
         this.companyInfo.admin_uid,
         this.companyInfo.groupId
-      );
-      if(this.companyInfo.advisorUid) {
-        await setCompanyAdvisorApi({id,advisorGroupId: this.companyInfo.advisorGroupId, advisorUid: this.companyInfo.advisorUid})
+      )
+      if (this.companyInfo.advisorUid) {
+        await setCompanyAdvisorApi({ id, advisorGroupId: this.companyInfo.advisorGroupId, advisorUid: this.companyInfo.advisorUid })
       }
     }
 
     this.$message({
-      type: "success",
-      message: "编辑成功"
-    });
+      type: 'success',
+      message: '编辑成功'
+    })
     this.$router.go(-1)
     // aaa
   }
-  handleIconLoaded(e) {
-    let formData = new FormData();
-    formData.append("attach_type", "img");
-    formData.append("img", e);
+  handleIconLoaded (e) {
+    let formData = new FormData()
+    formData.append('attach_type', 'img')
+    formData.append('img', e)
     uploadApi(formData).then(res => {
-      if (e.uploadType === "business_license") {
-        this.companyInfo.business_license = res.data.data[0].id;
-      } else if (e.uploadType === "on_job") {
-        this.companyInfo.on_job = res.data.data[0].id;
-      } else if (e.uploadType === "logo") {
-        this.companyInfo.logo = res.data.data[0].id;
-      } else if (e.uploadType === "front") {
-        this.personalInfo.passport_front = res.data.data[0].id;
-      } else if (e.uploadType === "reverse") {
-        this.personalInfo.passport_reverse = res.data.data[0].id;
-      } else if (e.uploadType === "handheld") {
-        this.personalInfo.handheld_passport = res.data.data[0].id;
+      if (e.uploadType === 'business_license') {
+        this.companyInfo.business_license = res.data.data[0].id
+      } else if (e.uploadType === 'on_job') {
+        this.companyInfo.on_job = res.data.data[0].id
+      } else if (e.uploadType === 'logo') {
+        this.companyInfo.logo = res.data.data[0].id
+      } else if (e.uploadType === 'front') {
+        this.personalInfo.passport_front = res.data.data[0].id
+      } else if (e.uploadType === 'reverse') {
+        this.personalInfo.passport_reverse = res.data.data[0].id
+      } else if (e.uploadType === 'handheld') {
+        this.personalInfo.handheld_passport = res.data.data[0].id
       }
-    });
+    })
   }
   /* 所属行业标签 */
-  getfieldList() {
+  getfieldList () {
     fieldApi().then(res => {
-      this.industry = res.data.data;
-    });
+      this.industry = res.data.data
+    })
   }
 
   /* 工作地点选择 */
-  changeAdress(e) {
+  changeAdress (e) {
     this.pop = {
       isShow: true,
-      type: "addAdress"
-    };
+      type: 'addAdress'
+    }
   }
   /* 关闭地址选择 */
-  popCancel() {
+  popCancel () {
     this.pop = {
       isShow: false,
-      type: "addAdress"
-    };
+      type: 'addAdress'
+    }
   }
   /* 添加地址 */
-  addAdress(address) {
-    this.adressList.push(address.data);
+  addAdress (address) {
+    this.adressList.push(address.data)
   }
   /* 删除地址 */
-  async delAdress(index) {
-    if (this.adressList[index].id)
-      await delCompanyAddressApi(this.adressList[index].id);
-    this.adressList.splice(index, 1);
-    this.companyInfo.address = this.adressList;
+  async delAdress (index) {
+    if (this.adressList[index].id) { await delCompanyAddressApi(this.adressList[index].id) }
+    this.adressList.splice(index, 1)
+    this.companyInfo.address = this.adressList
   }
   /* 邮箱弹窗 */
-  save(param) {
+  save (param) {
     verifyEmailApi(param).then(res => {
-      this.email.isShow = false;
-      this.companyInfo.email = param.email;
+      this.email.isShow = false
+      this.companyInfo.email = param.email
       this.$message({
-        type: "success",
-        message: "邮箱验证成功"
-      });
-    });
+        type: 'success',
+        message: '邮箱验证成功'
+      })
+    })
   }
-  close() {
-    this.email.isShow = false;
+  close () {
+    this.email.isShow = false
   }
 
   /* 获取编辑公司信息 */
-  async getCompanyInfo() {
-    let { id } = this.$route.params;
-    let res = await getCompanyInfoApi(id);
-    let newCompanyInfo = res.data.data.companyInfo;
-    this.setCompanyInfo(newCompanyInfo);
+  async getCompanyInfo () {
+    let { id } = this.$route.params
+    let res = await getCompanyInfoApi(id)
+    let newCompanyInfo = res.data.data.companyInfo
+    this.setCompanyInfo(newCompanyInfo)
   }
 
   /* 获取审核公司信息 */
-  async getCheckCompanyInfo() {
-    let { checkId } = this.$route.params;
-    let res = await getCheckCompanyInfoApi(checkId);
-    let newCompanyInfo = res.data.data.companyInfo;
-    this.setCompanyInfo(newCompanyInfo);
+  async getCheckCompanyInfo () {
+    let { checkId } = this.$route.params
+    let res = await getCheckCompanyInfoApi(checkId)
+    let newCompanyInfo = res.data.data.companyInfo
+    this.setCompanyInfo(newCompanyInfo)
   }
 
   /* 填充原公司数据 */
-  setCompanyInfo(newCompanyInfo) {
-    let admin_uid = sessionStorage.getItem("admin_uid");
+  setCompanyInfo (newCompanyInfo) {
+    // let admin_uid = sessionStorage.getItem('admin_uid')
     let productList = newCompanyInfo.product || []
     productList.map(field => {
       field.isEditing = false
@@ -791,29 +782,29 @@ export default class createCompany extends Vue {
     this.companyInfo = {
       company_name: newCompanyInfo.companyName,
       company_shortname: newCompanyInfo.companyShortname,
-      industry_id: newCompanyInfo.industryId ? newCompanyInfo.industryId : "",
+      industry_id: newCompanyInfo.industryId ? newCompanyInfo.industryId : '',
       financing: newCompanyInfo.financing
         ? parseInt(newCompanyInfo.financing)
-        : "",
+        : '',
       employees: newCompanyInfo.employees
         ? parseInt(newCompanyInfo.employees)
-        : "",
+        : '',
       intro: newCompanyInfo.intro,
-      business_license: newCompanyInfo.businessLicenseInfo.id || "",
-      on_job: newCompanyInfo.onJobInfo.id || "",
-      logo: newCompanyInfo.logoInfo.id || "",
+      business_license: newCompanyInfo.businessLicenseInfo.id || '',
+      on_job: newCompanyInfo.onJobInfo.id || '',
+      logo: newCompanyInfo.logoInfo.id || '',
       website: newCompanyInfo.website,
       address: newCompanyInfo.address ? newCompanyInfo.address : [],
       email: newCompanyInfo.email,
-      admin_uid: parseInt(newCompanyInfo.adminUid), //跟进人员
+      admin_uid: parseInt(newCompanyInfo.adminUid), // 跟进人员
       adminName: newCompanyInfo.adminName,
       advisorUid: newCompanyInfo.advisorUid,
       groupId: newCompanyInfo.groupId,
       advisorName: newCompanyInfo.advisorName === '无' ? '' : newCompanyInfo.advisorName,
-      advisorGroupId : newCompanyInfo.advisorGroupId,
+      advisorGroupId: newCompanyInfo.advisorGroupId,
       one_sentence_intro: newCompanyInfo.oneSentenceIntro,
       product: productList
-    };
+    }
     this.temProductList = [].concat(productList)
     this.commonList = newCompanyInfo.albumInfo
     console.log(newCompanyInfo)
@@ -822,33 +813,33 @@ export default class createCompany extends Vue {
     }
     // 上传证件信息
     this.form = {
-      logo: newCompanyInfo.logoInfo.url || "", // logo
-      icon1: newCompanyInfo.businessLicenseInfo.url || "", // 营业执照
-      icon2: newCompanyInfo.onJobInfo.url || "" // 工牌/名片/在职证明
-    };
-    this.adressList = newCompanyInfo.address ? newCompanyInfo.address : [];
+      logo: newCompanyInfo.logoInfo.url || '', // logo
+      icon1: newCompanyInfo.businessLicenseInfo.url || '', // 营业执照
+      icon2: newCompanyInfo.onJobInfo.url || '' // 工牌/名片/在职证明
+    }
+    this.adressList = newCompanyInfo.address ? newCompanyInfo.address : []
   }
 
-  init() {
-    let { isEditSaller } = this.$route.query;
-    let { id, checkId } = this.$route.params;
+  init () {
+    let { isEditSaller } = this.$route.query
+    let { id, checkId } = this.$route.params
     if (id || checkId) {
       // 是否编辑公司信息
-      this.isEdit = true;
-      this.companyInfoRules.company_name.splice(1, 1);
+      this.isEdit = true
+      this.companyInfoRules.company_name.splice(1, 1)
       if (id) {
-        this.getCompanyInfo();
+        this.getCompanyInfo()
       } else {
-        this.getCheckCompanyInfo();
+        this.getCheckCompanyInfo()
       }
     }
-    this.getfieldList();
+    this.getfieldList()
     // 编辑跟进人
     if (isEditSaller) {
-      this.active = 1;
+      this.active = 1
       getSalerListApi().then(res => {
-        this.salesList = res.data.data;
-      });
+        this.salesList = res.data.data
+      })
     }
   }
   /**
@@ -857,7 +848,7 @@ export default class createCompany extends Vue {
    * @detail  点击选择图片
    * @return   {[type]}   [description]
    */
-  handleChooseImage() {
+  handleChooseImage () {
     document.querySelector('#image').click()
     document.querySelector('#image').value = ''
   }
@@ -867,8 +858,8 @@ export default class createCompany extends Vue {
    * @detail   处理选中的图片
    * @return   {[type]}   [description]
    */
-  handleChangeImage() {
-    let commonList = this.commonList
+  handleChangeImage () {
+    // let commonList = this.commonList
     let fileLists = document.querySelector('#image').files
     fileLists = Array.from(fileLists).slice(0, 20 - this.commonList.length)
     Array.from(fileLists).map((file, index) => {
@@ -886,7 +877,7 @@ export default class createCompany extends Vue {
       // 成功读取
       reader.onload = (res) => {
         let isLt5M = file.size / 1024 / 1024 > 5
-        if(isLt5M) {
+        if (isLt5M) {
           this.$message.error('上传的图片大小是5MB~')
           return false
         }
@@ -896,7 +887,7 @@ export default class createCompany extends Vue {
       formData.append(`img${index + 1}`, file)
       formData.append('attach_type', 'img')
       this.xhr = new XMLHttpRequest()
-      if(this.commonList.length !== this.imageUpload.limit) {
+      if (this.commonList.length !== this.imageUpload.limit) {
         this.handleUploadImage(formData)
       }
     })
@@ -907,8 +898,8 @@ export default class createCompany extends Vue {
    * @detail   上传选中的图片
    * @return   {[type]}         [description]
    */
-  handleUploadImage(formData) {
-    let index = this.commonList.length
+  handleUploadImage (formData) {
+    // let index = this.commonList.length
     this.xhr.open('post', upload_api, true)
     this.xhr.setRequestHeader('Authorization-Admin', getAccessToken())
     // 上传成功
@@ -928,20 +919,20 @@ export default class createCompany extends Vue {
    * @detail   取消某一张图片上传
    * @return   {[type]}        [description]
    */
-  handleRemoveUploadImage(index) {
+  handleRemoveUploadImage (index) {
     this.commonList.splice(index, 1)
     this.imagesLists = this.commonList.map(field => field.url)
   }
-  editAction(index) {
+  editAction (index) {
     this.companyInfo.product.map((field, i) => {
       field.isEditing = false
-      if(i === index) field.isEditing = true
+      if (i === index) field.isEditing = true
     })
   }
-  deleteAction(index) {
+  deleteAction (index) {
     this.companyInfo.product.splice(index, 1)
   }
-  addAction() {
+  addAction () {
     this.companyInfo.product.push({
       actionType: 'add',
       id: '',
@@ -956,10 +947,10 @@ export default class createCompany extends Vue {
       isEditing: true
     })
   }
-  cancleEditCompanyProduct() {
+  cancleEditCompanyProduct () {
     this.init()
   }
-  editCompanyProduct() {
+  editCompanyProduct () {
     let query = this.$route.params
     let item = this.companyInfo.product.find(field => field.isEditing)
     let params = {
@@ -969,24 +960,24 @@ export default class createCompany extends Vue {
       lightspot: item.lightspot,
       site_url: item.siteUrl
     }
-    if(item.actionType === 'edit') {
-      params = Object.assign(params, {id: item.id})
+    if (item.actionType === 'edit') {
+      params = Object.assign(params, { id: item.id })
       editCompanyProductApi(params).then(() => this.init())
     } else {
-      params = Object.assign(params, {company_id: query.id})
+      params = Object.assign(params, { company_id: query.id })
       addCompanyProductApi(params).then(() => this.init())
     }
   }
-  handleProductIconLoaded(e) {
-    let formData = new FormData();
-    formData.append("attach_type", "img");
-    formData.append("img", e);
+  handleProductIconLoaded (e) {
+    let formData = new FormData()
+    formData.append('attach_type', 'img')
+    formData.append('img', e)
     uploadApi(formData).then(res => {
       let infos = res.data.data[0]
       this.companyInfo.product.find(field => {
-        if(field.isEditing) field.logoInfo = infos
+        if (field.isEditing) field.logoInfo = infos
       })
-    });
+    })
   }
   /**
    * @Author   小书包
@@ -994,8 +985,8 @@ export default class createCompany extends Vue {
    * @detail   图片重新排序
    * @return   {[type]}   [description]
    */
-  created() {
-    this.init();
+  created () {
+    this.init()
   }
 }
 </script>

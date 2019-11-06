@@ -55,17 +55,17 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
+import Vue from 'vue'
+import Component from 'vue-class-component'
 import {
   resumelist,
   createLabel,
   confgiLabel,
   removeAllLabel
-} from "API/resumeStore.js";
+} from 'API/resumeStore.js'
 
 @Component({
-  name: "resumeAddTab",
+  name: 'resumeAddTab',
   props: {
     /* 用户id */
     uid: {
@@ -80,117 +80,116 @@ import {
   }
 })
 export default class resumeAddtab extends Vue {
-  diyTabName = ""; /* 自定义标签 */
+  diyTabName = ''; /* 自定义标签 */
   showAddResumeTab = false; /* 是否显示select */
   tabList = []; /* 标签库 */
-  returnStr = "";
+  returnStr = '';
   labelStorePage = {
     page: 1,
     count: 100,
     haveData: 1
   };
-  showSelect() {
-    this.showAddResumeTab = true;
+  showSelect () {
+    this.showAddResumeTab = true
     this.$nextTick(() => {
-      const el = document.getElementById("Tab_Store");
-      el.addEventListener("scroll", this.handleScroll);
-    });
+      const el = document.getElementById('Tab_Store')
+      el.addEventListener('scroll', this.handleScroll)
+    })
   }
-  handleScroll(e) {
-    const el = document.getElementById("Tab_Store");
-    const offsetHeight = el.offsetHeight;
-    const scrollTop = el.scrollTop;
-    const scrollHeight = el.scrollHeight;
-    if (scrollTop + offsetHeight == scrollHeight) {
-      console.log("sdf");
-      this.Tabresumelist();
+  handleScroll (e) {
+    const el = document.getElementById('Tab_Store')
+    const offsetHeight = el.offsetHeight
+    const scrollTop = el.scrollTop
+    const scrollHeight = el.scrollHeight
+    if (scrollTop + offsetHeight === scrollHeight) {
+      this.Tabresumelist()
     }
   }
-  closeSelect() {
-    this.showAddResumeTab = false;
-    const el = document.getElementById("TabStore");
-    el.removeEventListener("scroll", this.handleScroll);
+  closeSelect () {
+    this.showAddResumeTab = false
+    const el = document.getElementById('TabStore')
+    el.removeEventListener('scroll', this.handleScroll)
   }
-  Tabresumelist() {
+  Tabresumelist () {
     if (this.labelStorePage.haveData) {
       resumelist({ count: 100, page: this.labelStorePage.page }).then(res => {
-        this.tabList = [...this.tabList, ...res.data.data];
-        let labelIdList = this.nowCheckListTab.map(field => field.labelId);
-        this.labelStorePage.haveData = res.data.meta.haveData;
-        this.labelStorePage.page++;
+        this.tabList = [...this.tabList, ...res.data.data]
+        let labelIdList = this.nowCheckListTab.map(field => field.labelId)
+        this.labelStorePage.haveData = res.data.meta.haveData
+        this.labelStorePage.page++
         this.tabList.map(
           field =>
-            (field.status = labelIdList.includes(field.id) ? true : false)
-        );
-      });
+            (field.status = !!labelIdList.includes(field.id))
+        )
+      })
     }
   }
   /* 确认给简历打标签 */
-  checkTab() {
+  checkTab () {
     if (this.nowCheckListTab.length === 0) {
       removeAllLabel(this.uid).then(res => {
-        this.showAddResumeTab = false;
-        this.$emit("CallbackDetail");
-      });
+        this.showAddResumeTab = false
+        this.$emit('CallbackDetail')
+      })
     } else {
-      console.log(this.nowCheckListTab);
-      let labelIds = this.nowCheckListTab.map(item => item.labelId).join(",");
+      console.log(this.nowCheckListTab)
+      let labelIds = this.nowCheckListTab.map(item => item.labelId).join(',')
       confgiLabel(this.uid, { labelIds }).then(res => {
-        console.log(res);
-        this.showAddResumeTab = false;
-        this.$emit("CallbackDetail");
-      });
+        console.log(res)
+        this.showAddResumeTab = false
+        this.$emit('CallbackDetail')
+      })
     }
   }
   /* 删除已选择的标签 */
-  delateTab(index) {
-    this.resetStoreStatus(index);
-    this.nowCheckListTab.splice(index, 1);
+  delateTab (index) {
+    this.resetStoreStatus(index)
+    this.nowCheckListTab.splice(index, 1)
   }
   /* 重置标签库 */
-  resetStoreStatus(index) {
+  resetStoreStatus (index) {
     for (let i = 0; i < this.tabList.length; i++) {
       if (this.nowCheckListTab[index].labelId === this.tabList[i].id) {
-        this.tabList[i].status = false;
+        this.tabList[i].status = false
       }
     }
   }
   /* 新增标签 */
-  addTab() {
-    console.log(this.diyTabName);
+  addTab () {
+    console.log(this.diyTabName)
     createLabel({ name: this.diyTabName }).then(res => {
-      this.Tabresumelist();
+      this.Tabresumelist()
       this.$message({
-        message: "添加成功",
-        type: "success"
-      });
-    });
+        message: '添加成功',
+        type: 'success'
+      })
+    })
   }
   /* 选择标签 */
-  choiceTab(index) {
+  choiceTab (index) {
     let isCheck = this.nowCheckListTab.filter(
       item => item.name === this.tabList[index].name
-    );
-    if (isCheck.length > 0) return;
-    if (this.nowCheckListTab.length >= 15) return;
+    )
+    if (isCheck.length > 0) return
+    if (this.nowCheckListTab.length >= 15) return
     if (!this.tabList[index].status) {
       let param = {
         status: !this.tabList[index].status,
         labelName: this.tabList[index].name,
         labelId: this.tabList[index].id
-      };
+      }
       this.$nextTick(() => {
-        this.tabList[index].status = true;
-        this.nowCheckListTab.push(param);
-      });
+        this.tabList[index].status = true
+        this.nowCheckListTab.push(param)
+      })
     } else {
       this.$nextTick(() => {
-        this.tabList[index].status = false;
-      });
+        this.tabList[index].status = false
+      })
     }
   }
 
-  created() {
+  created () {
     // this.Tabresumelist();
   }
 }

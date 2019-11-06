@@ -243,8 +243,8 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
+import Vue from 'vue'
+import Component from 'vue-class-component'
 import {
   getCompanyInfo,
   temppassApi,
@@ -253,172 +253,172 @@ import {
   identityFailApi,
   getCompanyInfoApi,
   deleteCompanyApi
-} from "API/company";
+} from 'API/company'
 Component.registerHooks([
-  "beforeRouteEnter",
-  "beforeRouteLeave",
-  "beforeRouteUpdate" // for vue-router 2.2+
-]);
+  'beforeRouteEnter',
+  'beforeRouteLeave',
+  'beforeRouteUpdate' // for vue-router 2.2+
+])
 @Component({
-  name: "checkPage",
+  name: 'checkPage',
   watch: {
-    "form.result": {
-      handler(tags, oldTags) {
-        this.needReason = tags;
+    'form.result': {
+      handler (tags, oldTags) {
+        this.needReason = tags
       }
     }
   },
   computed: {
     clickAble () {
-      return this.companyInfo 
-              && this.companyInfo.companyName 
-              && this.companyInfo.companyShortname 
-              && this.companyInfo.financing 
-              && this.companyInfo.employees
-              && this.companyInfo.industry
+      return this.companyInfo &&
+              this.companyInfo.companyName &&
+              this.companyInfo.companyShortname &&
+              this.companyInfo.financing &&
+              this.companyInfo.employees &&
+              this.companyInfo.industry
     }
   }
 })
 export default class checkPage extends Vue {
-  companyInfo = "";
-  personalInfo = "";
-  AdminShow = ""; //权限
-  nowImg = "";
-  type = ""; // 当前审核的信息类别 company 或 identity
+  companyInfo = '';
+  personalInfo = '';
+  AdminShow = ''; // 权限
+  nowImg = '';
+  type = ''; // 当前审核的信息类别 company 或 identity
   isCheck = false; // 审核蒙层
-  checkId = "";
+  checkId = '';
   isEdit = false; // 是否编辑公司库信息
-  editCompanyID = ""; // 当前编辑的公司id
-  needReason = "";
+  editCompanyID = ''; // 当前编辑的公司id
+  needReason = '';
   form = {
-    result: "",
-    reason: "",
-    other: "" // 其他原因
+    result: '',
+    reason: '',
+    other: '' // 其他原因
   };
-  beforeRouteEnter(from, to, next) {
+  beforeRouteEnter (from, to, next) {
     if (from.query.isEdit) {
-      from.meta.parentName = "公司库";
-      from.meta.title = "公司编辑";
-      from.meta.parentPath = "/index";
+      from.meta.parentName = '公司库'
+      from.meta.title = '公司编辑'
+      from.meta.parentPath = '/index'
     } else {
-      from.meta.parentName = "公司审核管理";
-      from.meta.title = "公司审核详情";
-      from.meta.parentPath = "/check/companyCheck";
+      from.meta.parentName = '公司审核管理'
+      from.meta.title = '公司审核详情'
+      from.meta.parentPath = '/check/companyCheck'
     }
-    next();
+    next()
   }
   /* 删除 */
-  del() {
-    this.$confirm("删除公司将清除已关联的招聘官和职位, 您确定删除吗?", "提示", {
-      confirmButtonText: "确定",
-      cancelButtonText: "取消",
-      customClass: "messageBox",
-      type: "warning"
+  del () {
+    this.$confirm('删除公司将清除已关联的招聘官和职位, 您确定删除吗?', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      customClass: 'messageBox',
+      type: 'warning'
     })
       .then(() => {
         deleteCompanyApi(this.editCompanyID).then(res => {
           this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-          this.$router.go(-1);
-        });
+            type: 'success',
+            message: '删除成功!'
+          })
+          this.$router.go(-1)
+        })
       })
       .catch(() => {
         this.$message({
-          type: "info",
-          message: "已取消删除"
-        });
-      });
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
   }
   /* 编辑公司信息 */
-  edit(name) {
+  edit (name) {
     this.$router.push({
       path: `/index/${name}`,
       query: { id: this.companyInfo.id }
-    });
+    })
   }
   /* 绑定管理员 */
-  bindAdmin() {}
+  bindAdmin () {}
   /* 编辑身份信息 */
-  editIdentity(uid) {
-    let checkId = this.$route.query.id;
+  editIdentity (uid) {
+    let checkId = this.$route.query.id
     this.$router.push({
       path: `/check/companyCheck/editUser/${checkId}?isFromCheck=true`
-    });
+    })
   }
   /* 去编辑公司信息 */
-  toEdit() {
-    let checkId = this.$route.query.id;
-    this.$router.push({ path: `/check/companyCheck/${checkId}`, query: { from: 'cp'} });
+  toEdit () {
+    let checkId = this.$route.query.id
+    this.$router.push({ path: `/check/companyCheck/${checkId}`, query: { from: 'cp' } })
   }
 
-  mounted() {
-    this.AdminShow = +sessionStorage.getItem("AdminShow");
+  mounted () {
+    this.AdminShow = +sessionStorage.getItem('AdminShow')
   }
   /* 点击审核按钮 */
-  Review(id, type) {
-    this.type = type;
-    this.isCheck = true;
-    this.checkId = id;
+  Review (id, type) {
+    this.type = type
+    this.isCheck = true
+    this.checkId = id
   }
-  showImg(imgUrl) {
-    this.nowImg = imgUrl;
+  showImg (imgUrl) {
+    this.nowImg = imgUrl
   }
-  hiddenMask() {
-    this.nowImg = "";
+  hiddenMask () {
+    this.nowImg = ''
   }
-  /*设置审核结果 */
-  setResult() {
+  /* 设置审核结果 */
+  setResult () {
     let param = {
       review_note: this.form.reason
         ? `${this.form.reason};${this.form.other}`
         : `${this.form.other}`
-    };
-    if (this.type === "company") {
-      //审核公司信息
-      if (this.form.result === "true") {
+    }
+    if (this.type === 'company') {
+      // 审核公司信息
+      if (this.form.result === 'true') {
         temppassApi(this.checkId).then(res => {
-          this.companyInfo.status = 1;
-          this.isCheck = false;
-          this.$message({ type: "success", message: "审核成功" });
-        });
+          this.companyInfo.status = 1
+          this.isCheck = false
+          this.$message({ type: 'success', message: '审核成功' })
+        })
       } else {
         tempfailApi(this.checkId, param).then(res => {
-          this.companyInfo.status = 2;
-          this.isCheck = false;
-          this.$message({ type: "error", message: "审核驳回成功" });
-        });
+          this.companyInfo.status = 2
+          this.isCheck = false
+          this.$message({ type: 'error', message: '审核驳回成功' })
+        })
       }
     } else {
-      //审核人员信息
-      if (this.form.result === "true") {
+      // 审核人员信息
+      if (this.form.result === 'true') {
         identityPassApi(this.checkId).then(res => {
-          this.personalInfo.status = 1;
-          this.isCheck = false;
-        });
+          this.personalInfo.status = 1
+          this.isCheck = false
+        })
       } else {
         identityFailApi(this.checkId, param).then(res => {
-          this.personalInfo.status = 2;
-          this.isCheck = false;
-        });
+          this.personalInfo.status = 2
+          this.isCheck = false
+        })
       }
     }
   }
-  created() {
-    const { id, isEdit } = this.$route.query;
+  created () {
+    const { id, isEdit } = this.$route.query
     if (isEdit) {
-      this.editCompanyID = id;
-      this.isEdit = isEdit;
+      this.editCompanyID = id
+      this.isEdit = isEdit
       getCompanyInfoApi(id).then(res => {
-        this.companyInfo = res.data.data.companyInfo;
-        this.personalInfo = res.data.data.identityInfo;
-      });
+        this.companyInfo = res.data.data.companyInfo
+        this.personalInfo = res.data.data.identityInfo
+      })
     } else {
       getCompanyInfo(id).then(res => {
-        this.companyInfo = res.data.data.companyInfo;
-        this.personalInfo = res.data.data.identityInfo;
-      });
+        this.companyInfo = res.data.data.companyInfo
+        this.personalInfo = res.data.data.identityInfo
+      })
     }
   }
 }

@@ -61,6 +61,7 @@
           <span
             class="AdressList"
             v-for="(item, index) in companyInfo.address"
+            :key="index"
           >{{`${index+1}、${item.address}${item.doorplate}`}}</span>
         </el-form-item>
 
@@ -75,7 +76,7 @@
         <el-form-item class label="公司邮箱">
           <span>{{companyInfo.email}}</span>
         </el-form-item>
-        
+
         <el-form-item class label="*一句话亮点">
           <span>{{companyInfo.oneSentenceIntro}}</span>
         </el-form-item>
@@ -117,24 +118,26 @@
           </div>
         </el-form-item>
         <h3 v-if="companyInfo.product.length">产品介绍</h3>
-        <div v-for="(item, index) in companyInfo.product" v-if="companyInfo.product.length">
-          <el-form-item class label="产品logo">
-            <img :src="item.logoInfo.smallUrl" alt="" style="width: 130px;height: 130px;" v-if="item.logoInfo.smallUrl">
-          </el-form-item>
-          <el-form-item class label="产品名称">
-            <span>{{item.productName}}</span>
-          </el-form-item>
-          <el-form-item class label="产品官网">
-            <span>{{item.siteUrl}}</span>
-          </el-form-item>
-          <el-form-item class label="产品slogan">
-            <span>{{item.slogan}}</span>
-          </el-form-item>
-          <el-form-item class label="产品亮点">
-            <span>{{item.lightspot}}</span>
-          </el-form-item>
-          <div class="line" style="height: 1px;background: #ebeef5;width: 100%; margin-bottom: 20px;" v-if="companyInfo.product.length !== index + 1"></div>
-        </div>
+        <template v-for="(item, index) in companyInfo.product">
+          <div v-if="companyInfo.product.length" :key="index">
+            <el-form-item class label="产品logo">
+              <img :src="item.logoInfo.smallUrl" alt="" style="width: 130px;height: 130px;" v-if="item.logoInfo.smallUrl">
+            </el-form-item>
+            <el-form-item class label="产品名称">
+              <span>{{item.productName}}</span>
+            </el-form-item>
+            <el-form-item class label="产品官网">
+              <span>{{item.siteUrl}}</span>
+            </el-form-item>
+            <el-form-item class label="产品slogan">
+              <span>{{item.slogan}}</span>
+            </el-form-item>
+            <el-form-item class label="产品亮点">
+              <span>{{item.lightspot}}</span>
+            </el-form-item>
+            <div class="line" style="height: 1px;background: #ebeef5;width: 100%; margin-bottom: 20px;" v-if="companyInfo.product.length !== index + 1"></div>
+          </div>
+        </template>
       </el-form>
     </div>
     <!-- 跟进销售设置 -->
@@ -189,25 +192,16 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import adminControl from "@/components/adminControl/index";
-import { fieldApi, uploadApi, getSalerListApi } from "API/commont";
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import adminControl from '@/components/adminControl/index'
 import {
-  bindCompanyApi,
-  setCompanyInfoApi,
-  setIdentityInfoApi,
-  addCompanyAddressApi,
-  delCompanyAddressApi,
-  verifyEmailApi,
   getCompanyInfoApi,
   getRecruitersListApi,
   getCompanyProductListsApi
-} from "API/company";
-import mapSearch from "@/components/map";
-import { constants } from "crypto";
+} from 'API/company'
 @Component({
-  name: "companyInfo",
+  name: 'companyInfo',
   components: {
     adminControl
   }
@@ -216,11 +210,11 @@ export default class createCompany extends Vue {
   active = 0;
   adressList = []; // 地址列表
   showAdminWindow = false;
-  nowImg = ""; //预览大图
+  nowImg = ''; // 预览大图
   nextAdmin = null; // 公司下一个管理员的信息
   pop = {
     isShow: false,
-    type: "position"
+    type: 'position'
   };
   isNewCompany = false;
   email = {
@@ -229,7 +223,7 @@ export default class createCompany extends Vue {
   /* 公司信息 */
   companyInfo = {
     product: [],
-    createdUid: "" /* 0没有绑定管理员，1已经绑定了管理员 */
+    createdUid: '' /* 0没有绑定管理员，1已经绑定了管理员 */
   };
 
   /* 权益信息 */
@@ -237,8 +231,8 @@ export default class createCompany extends Vue {
   // 是否是旧公司绑定管理员
   isOldEdit = false;
   /* 切换tab */
-  tab(num) {
-    switch(num) {
+  tab (num) {
+    switch (num) {
       case 0:
         this.active = num
         break
@@ -246,10 +240,10 @@ export default class createCompany extends Vue {
         this.active = num
         break
       case 2:
-        window.open(`/manage/positionManage?page=1&count=20&is_online=1&name2=${this.companyInfo.companyName}`, '_blank');
+        window.open(`/manage/positionManage?page=1&count=20&is_online=1&name2=${this.companyInfo.companyName}`, '_blank')
         break
       case 3:
-        window.open(`/recruiter?page=1&count=20&companyName=${this.companyInfo.companyName}`, '_blank');
+        window.open(`/recruiter?page=1&count=20&companyName=${this.companyInfo.companyName}`, '_blank')
         break
       default:
         break
@@ -257,74 +251,74 @@ export default class createCompany extends Vue {
   }
 
   /* 去编辑 */
-  toEdit() {
-    this.$router.push({ path: `/index/editCompany/${this.$route.query.id}` });
+  toEdit () {
+    this.$router.push({ path: `/index/editCompany/${this.$route.query.id}` })
   }
 
   /* 获取公司信息 */
-  getCompanyInfo() {
-    const { id } = this.$route.query;
+  getCompanyInfo () {
+    const { id } = this.$route.query
     getCompanyInfoApi(id)
       .catch(err => {
         if (err.data.code === 403) {
-          this.$router.go(-1);
+          this.$router.go(-1)
         }
       })
       .then(res => {
-        this.companyInfo = res.data.data.companyInfo;
-        this.rightInfo = res.data.data.rtInfo;
-      });
+        this.companyInfo = res.data.data.companyInfo
+        this.rightInfo = res.data.data.rtInfo
+      })
   }
-  getCompanyProductLists() {
+  getCompanyProductLists () {
     let query = this.$route.query
-    getCompanyProductListsApi({id: query.id, page: 1, count: 50})
+    getCompanyProductListsApi({ id: query.id, page: 1, count: 50 })
   }
   // 绑定已有公司的管理员
-  async bindAdmin() {
+  async bindAdmin () {
     // this.isFromUser = !false;
-    this.showAdminWindow = true;
-    this.isBindAdmin = this.companyInfo.createdUid ? true : false;
-    this.isOldEdit = true;
+    this.showAdminWindow = true
+    this.isBindAdmin = !!this.companyInfo.createdUid
+    this.isOldEdit = true
   }
   /* 移除已有公司的管理员 */
-  async delateAdmin() {
-    this.showAdminWindow = true;
+  async delateAdmin () {
+    this.showAdminWindow = true
     // 判断是否存在公司id，如果存在，则进入下一步
     if (this.companyInfo.createdUid) {
       let param = {
         page: 1,
         count: 2
-      };
-      //弹出移除并更换管理员的系统弹框，并自动调取管理员列表，获取下一个管理员信息
-      let res = await getRecruitersListApi(this.$route.query.id, param);
+      }
+      // 弹出移除并更换管理员的系统弹框，并自动调取管理员列表，获取下一个管理员信息
+      let res = await getRecruitersListApi(this.$route.query.id, param)
       res.data.data.forEach((item, index) => {
         if (this.companyInfo.createdUid !== item.uid) {
-          this.nextAdmin = item;
+          this.nextAdmin = item
         } else {
           if (index === 0) {
-            this.nextAdmin = null;
+            this.nextAdmin = null
           }
         }
-      });
+      })
     }
   }
-  close(e) {
-    this.showAdminWindow = false;
-    if (e && e.needLoad) this.getCompanyInfo();
+  close (e) {
+    this.showAdminWindow = false
+    if (e && e.needLoad) this.getCompanyInfo()
   }
-  closeBtn() {
-    this.showAdminWindow = false;
+  closeBtn () {
+    this.showAdminWindow = false
   }
   /* 查看大图 */
-  showImg(imgUrl) {
-    this.nowImg = imgUrl;
+  showImg (imgUrl) {
+    this.nowImg = imgUrl
   }
   /* 隐藏大图 */
-  hiddenMask() {
-    this.nowImg = "";
+  hiddenMask () {
+    this.nowImg = ''
   }
-  created() {
-    this.getCompanyInfo();
+  created () {
+    this.getCompanyInfo()
   }
 }
 </script>
