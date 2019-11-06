@@ -177,6 +177,13 @@
                 ></el-date-picker>
               </el-col>
             </el-form-item>
+            <!-- 是否优质公司 -->
+            <el-form-item label-width="100px" label="是否优质公司" prop="high_quality">
+              <el-select v-model="form.high_quality" placeholder="全部">
+                <el-option label="否" value=0></el-option>
+                <el-option label="是" value=1></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item class="btn">
               <el-button type="primary" @click="onSubmit">查询</el-button>
               <el-button @click.stop="resetForm('form')">重置</el-button>
@@ -204,6 +211,12 @@
                   @click="toUser(props.scope.row.createdUid)"
                   v-if="props.scope.row.createdUid"
                 >查看管理员</span>
+              </div>
+              <div>
+                <span class="check"
+                v-if="props.scope.row.highQuality === 0"
+                @click="toPost(props.scope.row.id)"
+                >添加到24h公司</span>
               </div>
             </div>
             <!-- 地址列 -->
@@ -239,6 +252,7 @@
                   :src="props.scope.row.logoInfo.middleUrl"
                 />
                 <div>
+                  <p class="btn-container-quality" v-if="props.scope.row.highQuality === 1">优质公司</p>
                   <span>{{props.scope.row.companyName}}</span>
                   <P class="label">
                     <span class="industry">{{props.scope.row.industry}}</span>
@@ -323,6 +337,7 @@ export default class indexPage extends Vue {
   pageCount = 0; // 请求回的数据共几页
   AdminShow = ""; //权限字段，限制搜索
   form = {
+    high_quality:'0',
     wherefrom: "",
     is_license: "",
     start: "",
@@ -516,7 +531,7 @@ export default class indexPage extends Vue {
         params = Object.assign(params, {firstAreaId: this.form.firstAreaId, area_id: this.form.area_id})
       }
     }
-
+    params = Object.assign(params,{high_quality: this.form.high_quality})
     getCompanyListApi(params).then(res => {
       let list = res.data.data
       list.map((field, index) => {
@@ -524,11 +539,13 @@ export default class indexPage extends Vue {
         field.customerVevelValue = (field.customerLevel).toString()
       })
       this.list = list;
+      console.log(this.list)
       this.pageCount = res.data.meta.lastPage;
       this.total = res.data.meta.total;
       if(this.form.keyword || this.form.mobile || this.form.companyId) {
         params = Object.assign(params, {searchType: this.form.searchType, content: this.form.content})
       }
+      
       this.$router.push({
         query: {
           ...params
@@ -615,6 +632,9 @@ export default class indexPage extends Vue {
   }
   toUser(uid) {
     this.$router.push({ path: `/user/userInfo/${uid}` });
+  }
+  toPost(id) {
+    this.$router.push({ path: `/24h/add/${id}` });
   }
   download() {
     this.$confirm('是否导出该列表数据？', '提示', {
@@ -800,7 +820,7 @@ export default class indexPage extends Vue {
   }
 }
 .check {
-  line-height: 48px;
+  line-height: 45px;
   color: #652791;
   cursor: pointer;
 }
@@ -816,6 +836,14 @@ export default class indexPage extends Vue {
       border-radius: 3px;
       margin-right: 10px;
     }
+  }
+  .btn-container-quality{
+    width: 70px;
+    line-height: 20px;
+    color: #fff;
+    background: #652791;
+    border-radius: 30px;
+    text-align: center;
   }
 }
 </style>
