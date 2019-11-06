@@ -176,6 +176,13 @@
           <el-input placeholder="请输入官网" :maxlength="5000" v-model="companyInfo.website"></el-input>
         </el-form-item>
 
+        <el-form-item class style="width: 640px;" label="是否优质公司">
+              <el-select v-model="companyInfo.high_quality" placeholder="全部">
+                <el-option label="否" value=0></el-option>
+                <el-option label="是" value=1></el-option>
+              </el-select>
+            </el-form-item>
+
         <h3>资质信息</h3>
         <el-form-item class="full" label="营业执照" prop="icon">
           <image-uploader
@@ -448,6 +455,7 @@ export default class createCompany extends Vue {
   nextAdmin = {}
   showAdminWindow = false
   companyInfo = {
+    high_quality: '',
     real_name: '',
     user_email: '',
     user_position: '',
@@ -807,7 +815,6 @@ export default class createCompany extends Vue {
     }
     this.temProductList = [].concat(productList)
     this.commonList = newCompanyInfo.albumInfo
-    console.log(newCompanyInfo)
     if (Reflect.has(newCompanyInfo, 'albumInfo')) {
       this.imagesLists = newCompanyInfo.albumInfo.map(field => field.url)
     }
