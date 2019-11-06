@@ -622,6 +622,7 @@ export default class createCompany extends Vue {
             delete this.companyInfo.adminUid
             let images = this.commonList.map(field => field.id).join(',')
             let params = Object.assign(this.companyInfo, { images })
+            console.log(params.high_quality)
             await editCompanyApi(id, params)
             this.$message({
               message: '编辑成功',
@@ -787,7 +788,9 @@ export default class createCompany extends Vue {
       field.isEditing = false
       field.actionType = 'edit'
     })
+    newCompanyInfo.highQuality = newCompanyInfo.highQuality.toString()
     this.companyInfo = {
+      high_quality:newCompanyInfo.highQuality,
       company_name: newCompanyInfo.companyName,
       company_shortname: newCompanyInfo.companyShortname,
       industry_id: newCompanyInfo.industryId ? newCompanyInfo.industryId : '',
