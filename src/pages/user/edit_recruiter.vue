@@ -274,7 +274,7 @@ import {
   uploadApi,
   getLabelProfessionalLiteracyListApi,
   getLabelProfessionalSkillsListApi
-} from 'API/commont'
+} from 'API/common'
 import {
   upload_api
 } from '@/api/index.js'

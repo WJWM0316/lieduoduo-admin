@@ -352,7 +352,7 @@ import CustomSelect from '../../components/CustomSelect/index.vue'
 import filterAnswer from 'COMPONENTS/filterAnswer/index.vue'
 import { getLabelPositionListApi } from 'API/position'
 import { getCityApi } from 'API/company'
-import { fieldApi } from 'API/commont'
+import { fieldApi } from 'API/common'
 import {
   GetResumeAPI,
   degreeListAPI,

@@ -24,7 +24,7 @@
       <div class="companyName"><span class="label">公司认证邮箱</span>{{recruiterInfo.companyEmail || '无'}}</div>
     </div>
     <!--人员认证信息-->
-    <div class="commont companyInfo">
+    <div class="common companyInfo">
       <!--头部-->
       <div class="header">
         <div class="left">
@@ -183,7 +183,6 @@ export default class reviewDetails extends Vue {
 <style lang="less" scoped="scoped">
 .reviewDetail{
   padding: 20px;
-  margin-left: 200px;
 }
 .companyCheck{
   border: 1px solid #f4f4f4;
@@ -198,7 +197,7 @@ export default class reviewDetails extends Vue {
     color: #909399;
   }
 }
-.commont{
+.common{
   width: 100%;
   .header{
     background-color: #f4f4f4;

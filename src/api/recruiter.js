@@ -18,7 +18,7 @@ export const detectionMobileApi = data => request({
   url: `/usermanage/is_existed/mobile`,
   type: 'post',
   data,
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 /* 身份证信息校验 */
 export const checkUserauthApi = data => request({
@@ -54,7 +54,7 @@ export const getUserListApi = data => request({
 export const getUserInfoApi = data => request({
   url: `/usermanage/user/detail/${data}`,
   type: 'get',
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 /* 开启招聘官发布职位权限 */
 export const onCreatedRightApi = data => request({
@@ -152,14 +152,14 @@ export const setRecruiterLabelsApi = data => request({
   url: `/recruiter/label/${data.uid}`,
   type: 'post',
   data,
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 
 /* 获取生活标签 */
 export const getLifeLabelsListsApi = data => request({
   url: `/label/life`,
   type: 'get',
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 
 /* 添加生活标签 */

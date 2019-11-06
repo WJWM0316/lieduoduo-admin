@@ -286,7 +286,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import resumeAddtab from '../resumeAddtab/index'
-import { uploadApi } from 'API/commont'
+import { uploadApi } from 'API/common'
 import {
   addHistory,
   GetResumeHistory,

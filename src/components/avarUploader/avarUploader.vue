@@ -7,7 +7,7 @@
 <script>
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import { uploadApi } from 'API/commont'
+import { uploadApi } from 'API/common'
 @Component({
   name: 'avarBox',
   props: {

@@ -49,7 +49,7 @@ export const getResumeCodeUrlApi = data => request({
   url: '/resume/get_resume_code_url',
   type: 'get',
   data,
-  noGlobalLoading: true // 不需要loading
+  noGlobalLoading: false // 不需要loading
 })
 
 /* 获取招聘官主页小程序码 */
@@ -57,7 +57,7 @@ export const getRecruiterCodeUrlApi = data => request({
   url: '/applyjoin/get_recruiter_code_url',
   type: 'get',
   data,
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 
 /* 获取职位详情小程序码 */
@@ -65,7 +65,7 @@ export const getPositionCodeUrlApi = data => request({
   url: '/get_position_code_url',
   type: 'get',
   data,
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 
 /* 24h急速反馈列表 */
@@ -73,7 +73,7 @@ export const getQuickApplyInterviewApi = data => request({
   url: '/interview/quickApply',
   type: 'get',
   data,
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 
 /* 不合适面试撤回 */
@@ -81,28 +81,28 @@ export const interviewRetractApi = data => request({
   url: `/interview/interviewRetract/${data.jobhunterUid}`,
   type: 'put',
   data,
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 
 /* 确定约面 */
 export const confirmInterviewApi = data => request({
   url: `/interview/confirm/${data.interviewId}`,
   type: 'post',
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 
 /* 获取面试评价不满意标签 */
 export const getInterviewCommentReasonApi = data => request({
   url: `/interview/getCommentReason`,
   type: 'get',
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 
 /* 获取面试过程中不合适标签 */
 export const getInterviewNotSuitReasonApi = data => request({
   url: `/interview/getInterviewNotSuitReason`,
   type: 'get',
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 
 /* 标记不合适 */
@@ -110,7 +110,7 @@ export const refuseJobhunterUidInterviewApi = data => request({
   url: `/interview/refuse/${data.jobhunterUid}`,
   type: 'post',
   data,
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 
 /* 设置面试安排 */
@@ -118,7 +118,7 @@ export const setInterviewInfoApi = data => request({
   url: `/interview/setInterviewInfo/${data.interviewId}`,
   type: 'post',
   data,
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 
 /* 分页获取地址列表 */
@@ -126,7 +126,7 @@ export const getSimplepageAddressesListsApi = data => request({
   url: '/company/position/simplepage/addresses',
   type: 'get',
   data,
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 
 /* 设置候选人是否到场 */
@@ -134,7 +134,7 @@ export const setUserInterviewAttendApi = data => request({
   url: '/interview/attend',
   type: 'put',
   data,
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 
 /* 面试评价(设置感兴趣) */

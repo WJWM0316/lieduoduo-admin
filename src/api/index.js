@@ -51,11 +51,10 @@ export const request = ({
   type = 'post',
   url,
   data = {},
-  noGlobalLoading,
+  globalLoading,
   config = {}
 } = {}) => {
-  if (noGlobalLoading) {
-  } else {
+  if (globalLoading) {
     loadingInstance = Loading.service({})
   }
   return axios[type](url, type === 'get' ? { params: data } : data).catch(

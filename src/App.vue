@@ -1,53 +1,6 @@
 <template>
-  <div id="app">
-    <page-aside/>
-    <page-header/>
-    <!--<router-view/>-->
-    <router-view></router-view>
-    <!-- <keep-alive>
-      <router-view v-if="$route.meta.keepAlive">
-      </router-view>
-    </keep-alive>
-    <router-view v-if="!$route.meta.keepAlive">
-    </router-view> -->
-  </div>
+  <router-view></router-view>
 </template>
-
-<script>
-import Vue from 'vue'
-import Component from 'vue-class-component'
-import PageAside from 'COMPONENTS/pageAside/index.vue'
-import PageHeader from 'COMPONENTS/pageHeader/index.vue'
-// import { Loading } from 'element-ui'
-@Component({
-  name: 'App',
-  components: {
-    PageAside,
-    PageHeader
-  },
-  watch: {
-    isAjax: {
-      handler (res) {
-        this.showAside(res)
-      }
-    }
-  }
-})
-export default class App extends Vue {
-  loadingInstance = null;
-  showResetPsw = false;
-  isAjax = false;
-  showAside (res) {
-    this.isAjax = res
-  }
-  changeStatus (e) {
-    console.log(e)
-  }
-  mounted () {
-    // if(sessionStorage.getItem(''))
-  }
-}
-</script>
 
 <style lang="less">
 @import "./App.less";

@@ -790,7 +790,6 @@ export default class companyCheck extends Vue {
   width: 57px !important;
 }
 .positionManage {
-  margin-left: 200px;
   text-align: unset;
   .el-main,
   .m-list{

@@ -98,7 +98,7 @@ export const createOrder = (positionId, data) =>
   request({
     url: `/advisor/recommend/resume/${positionId}`,
     type: 'post',
-    noGlobalLoading: true,
+    noGlobalLoading: false,
     data
   })
 // 获取简历历史记录
@@ -106,7 +106,7 @@ export const GetResumeHistory = (uid, data) =>
   request({
     url: `/resume/history/${uid}`,
     type: 'get',
-    noGlobalLoading: true,
+    noGlobalLoading: false,
     data
   })
 // 获取简历历史记录
@@ -134,7 +134,7 @@ export const addHistory = (uid, data) =>
   request({
     url: `/resume/history/${uid}`,
     type: 'post',
-    noGlobalLoading: true,
+    noGlobalLoading: false,
     data
   })
 
@@ -143,7 +143,7 @@ export const searchId = id =>
   request({
     url: `/position/recommend/${id}`,
     type: 'get',
-    noGlobalLoading: true
+    noGlobalLoading: false
   })
 // 返点原因
 export const refund = (uid, data) =>
@@ -170,7 +170,7 @@ export const resultList = uid =>
   request({
     url: `/advisor/recommend_list/result/${uid}`,
     type: 'get',
-    noGlobalLoading: true
+    noGlobalLoading: false
   })
 // 邀约进展列表
 export const interviewsList = data =>
@@ -184,7 +184,7 @@ export const getRecommendInterviewsSearchListApi = data => request({
   url: `/recommend/interviews/search`,
   type: 'get',
   data,
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 
 /* 获取简历等级 */
@@ -199,5 +199,5 @@ export const setResumeLevelApi = data => request({
   url: `/resume/grade/${data.uid}`,
   type: 'put',
   data,
-  noGlobalLoading: true
+  noGlobalLoading: false
 })

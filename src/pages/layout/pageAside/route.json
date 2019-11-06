@@ -18,42 +18,23 @@
 		"path": "/recruiter",
 		"title": "招聘官管理",
 		"name": "recruiterList",
-		"icon": "el-icon-menu",
 		"isShow": true,
+		"icon": "el-icon-menu",
 		"children": []
 	},
 	{
 		"path": "/24h",
 		"title": "24h反馈专场管理",
 		"name": "24h",
-		"icon": "el-icon-menu",
 		"isShow": true,
-		"children": [
-			{
-				"path": "/24h/1",
-				"title": "24h职位(限席位)",
-				"name": "24h",
-				"isShow": true
-			},
-			{
-				"path": "/24h/2",
-				"title": "24h招聘官(约大咖)",
-				"name": "24h",
-				"isShow": true
-			},
-			{
-				"path": "/24h/3",
-				"title": "24h公司(酷公司)",
-				"name": "24h",
-				"isShow": true
-			}
-		]
+		"icon": "el-icon-menu",
+		"children": []
 	},
 	{
 		"path": "/manage",
 		"title": "职位管理",
-		"icon": "el-icon-menu",
 		"isShow": true,
+		"icon": "el-icon-menu",
 		"children": [{
 				"path": "/manage/positionManage",
 				"title": "全部职位",
@@ -77,8 +58,8 @@
 	{
 		"path": "/",
 		"title": "审核管理",
-		"icon": "el-icon-menu",
 		"isShow": true,
+		"icon": "el-icon-menu",
 		"children": [{
 				"path": "/check/companyCheck",
 				"title": "公司审核管理",
@@ -100,7 +81,7 @@
 		"isShow": true,
 		"children": [{
 				"path": "/interview/24h",
-				"title": "24h面试管理",
+				"title": "24h反馈专场管理",
 				"name": "interview24h",
 				"isShow": true
 			},
@@ -121,6 +102,7 @@
 	{
 		"path": "/resumeStore",
 		"title": "简历库",
+		"icon": "el-icon-menu",
 		"isShow": true,
 		"children": [{
 				"path": "/resumeStore/list",

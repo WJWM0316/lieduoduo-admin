@@ -171,7 +171,7 @@ import {
 } from 'API/resumeStore'
 import { getLabelPositionListApi } from 'API/position'
 import { getCityApi } from 'API/company'
-import { fieldApi, uploadApi } from 'API/commont'
+import { fieldApi, uploadApi } from 'API/common'
 import { getAccessToken } from 'API/cacheService'
 const packjson = require('../../../../../package.json')
 // eslint-disable-next-line no-unused-vars

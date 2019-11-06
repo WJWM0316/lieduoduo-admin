@@ -315,7 +315,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { getCompanyListApi, getCityApi, setCompanyCustomerLevelApi } from 'API/company'
-import { rightInfoApi, getSalerListApi, getCompanyCustomerLevelRangeApi, getAdvisorUserListApi } from 'API/commont'
+import { rightInfoApi, getSalerListApi, getCompanyCustomerLevelRangeApi, getAdvisorUserListApi } from 'API/common'
 import { getAccessToken } from 'API/cacheService'
 import { API_ROOT } from 'API/index.js'
 import List from '@/components/list'
@@ -749,7 +749,6 @@ export default class indexPage extends Vue {
   .el-form-item__label{
     text-align: center
   }
-  margin-left: 200px;
   .container {
     min-width: 1000px;
     margin: 22px;

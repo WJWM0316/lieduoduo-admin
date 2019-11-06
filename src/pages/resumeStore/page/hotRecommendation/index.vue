@@ -326,7 +326,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import lyoutContent from 'COMPONENTS/Lyout/lyoutContent/lyoutContent.vue'
-import { getAdvisorUserListApi, payRecommendApi, refundRecommendApi } from 'API/commont'
+import { getAdvisorUserListApi, payRecommendApi, refundRecommendApi } from 'API/common'
 
 import {
   getRecommendInterviewsSearchListApi,

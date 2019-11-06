@@ -278,7 +278,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import List from '@/components/list'
-import { getSalerListApi, getCompanyCustomerLevelRangeApi } from 'API/commont'
+import { getSalerListApi, getCompanyCustomerLevelRangeApi } from 'API/common'
 import { templistApi, setCompanyCompanyLevelApi } from 'API/company'
 import { getAccessToken } from 'API/cacheService'
 import { API_ROOT } from 'API/index.js'
@@ -558,7 +558,6 @@ export default class companyCheck extends Vue {
 
 <style lang="less" scoped="scoped">
 .companyCheck {
-  margin-left: 200px;
   .container {
     min-width: 1000px;
     margin: 22px;

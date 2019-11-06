@@ -410,7 +410,6 @@ export default class createCompany extends Vue {
   right: 5px;
 }
 .createCompany {
-  margin-left: 200px;
   padding: 22px;
   .header {
     padding-right: 20px;

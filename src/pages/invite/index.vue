@@ -803,7 +803,6 @@ export default class invite extends Vue {
 @import "./index.less";
 @import "../../style/iconfont.less";
 .application {
-  margin-left: 200px;
   text-align: unset;
   .container {
     min-width: 1000px;

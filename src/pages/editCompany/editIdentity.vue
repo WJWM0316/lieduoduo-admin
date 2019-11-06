@@ -89,7 +89,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import ImageUploader from '@/components/imageUploader'
-import { fieldApi, uploadApi } from 'API/commont'
+import { fieldApi, uploadApi } from 'API/common'
 import { editIdentityApi, getIdentityApi } from 'API/company'
 @Component({
   name: 'editCompany',
@@ -205,7 +205,6 @@ export default class editCompany extends Vue {
 
 <style lang="less" scoped="scoped">
 .editCompanyInfo{
-  margin-left: 200px;
   padding: 22px;
 }
 .header{

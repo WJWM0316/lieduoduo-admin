@@ -162,20 +162,20 @@ export const checkCompanyNameApi = (data) => request({
   url: `/company/company_exist`,
   type: 'get',
   data,
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 // 绑定公司，检测公司是否存在
 export const checkOldCompanyName = (data) => request({
   url: `/company/exist/${data}`,
   type: 'get',
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 /* 发送验证码到企业邮箱 */
 export const sendEmailApi = (data) => request({
   url: `/company/mail`,
   type: 'post',
   data,
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 /* 验证企业邮箱 */
 export const verifyEmailApi = (data) => request({
@@ -198,7 +198,7 @@ export const editCheckCompanyInfoApi = (checkId, data) => request({
 export const checkIdentityApi = (phone) => request({
   url: `/company/is_admin/${phone}`,
   type: 'get',
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 /* 公司绑定招聘官 */
 export const bindCompanyApi = (companyId, data) => request({
@@ -211,7 +211,7 @@ export const getRecruitersListApi = (companyId, data) => request({
   url: `/company/recruiters/${companyId}`,
   type: 'get',
   data,
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 /* 解绑管理员 */
 export const deleteAdminApi = (companyId, data) => request({
@@ -261,7 +261,7 @@ export const setCompanyCustomerLevelApi = data => request({
   url: `/company/set/customer_level/${data.id}`,
   type: 'put',
   data,
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 
 /* 设置客户等级 */
@@ -269,7 +269,7 @@ export const setCompanyCompanyLevelApi = data => request({
   url: `/company/set/company_temp_customer_level/${data.id}`,
   type: 'put',
   data,
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 
 /* 设置顾问跟进人 */
@@ -277,7 +277,7 @@ export const setCompanyCompanyAdvisorApi = data => request({
   url: `/company/set/advisor/${data.id}`,
   type: 'put',
   data,
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 
 /* 创建公司产品 */
@@ -285,7 +285,7 @@ export const addCompanyProductApi = data => request({
   url: `/company/product`,
   type: 'post',
   data,
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 
 /* 编辑公司产品 */
@@ -293,21 +293,21 @@ export const editCompanyProductApi = data => request({
   url: `/company/product/${data.id}`,
   type: 'put',
   data,
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 
 /* 获取某个公司产品产品 */
 export const getCompanyProductApi = data => request({
   url: `/company/product/${data.id}`,
   type: 'get',
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 
 /* 删除公司产品 */
 export const deleteCompanyProductApi = data => request({
   url: `/company/product/${data.id}`,
   type: 'get',
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 
 /* 获取公司产品列表 */
@@ -315,12 +315,12 @@ export const getCompanyProductListsApi = data => request({
   url: `/company/productlist/${data.id}`,
   type: 'get',
   data,
-  noGlobalLoading: true
+  noGlobalLoading: false
 })
 
 /* 获取地址 */
 export const getAddressListsApi = data => request({
   url: `/area/level/${data.level}`,
   type: 'get',
-  noGlobalLoading: true
+  noGlobalLoading: false
 })

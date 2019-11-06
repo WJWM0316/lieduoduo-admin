@@ -391,7 +391,7 @@ import {
   getSalerListApi,
   getAdvisorUserListApi,
   setCompanyAdvisorApi
-} from 'API/commont'
+} from 'API/common'
 import adminControl from '@/components/adminControl/index'
 import {
   delCompanyAddressApi,
@@ -1009,7 +1009,6 @@ export default class createCompany extends Vue {
   z-index: 100;
 }
 .createCompany {
-  margin-left: 200px;
   padding: 22px;
   .header {
     padding-right: 20px;

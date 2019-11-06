@@ -46,7 +46,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 // import { routes } from '@/router/routes'
-// import { admin_menu } from 'API/commont'
+// import { admin_menu } from 'API/common'
 import routelist from './route.json'
 
 @Component({
