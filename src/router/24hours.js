@@ -7,29 +7,35 @@ export default [
     component: Layout,
     children: [
       {
-        path: '',
-        name: '24h',
+        path: 'position',
         meta: { title: '24h反馈专场管理' },
-        component: resolve => require(['@/pages/24h/24h.vue'], resolve)
-      },
-      {
-        path: 'edit',
-        name: 'h24_edit',
-        meta: {
-          title: '专场发布'
-        },
-        component: resolve =>
-          require(['@/pages/24h/post.vue'], resolve)
-      },
-      {
-        path: 'add',
-        name: 'h24_post',
-        meta: {
-          title: '专场发布'
-        },
-        component: resolve =>
-          require(['@/pages/24h/post.vue'], resolve)
+        component: { render (c) { return c('router-view') } },
+        children: [
+          {
+            path: '',
+            name: '24h_position',
+            meta: { title: '24h反馈专场管理' },
+            component: resolve => require(['@/pages/24h/position/24h.vue'], resolve)
+          },
+          {
+            path: 'edit',
+            name: 'h24_position_edit',
+            meta: {
+              title: '专场发布'
+            },
+            component: resolve => require(['@/pages/24h/position/post.vue'], resolve)
+          },
+          {
+            path: 'add',
+            name: 'h24_position_post',
+            meta: {
+              title: '专场发布'
+            },
+            component: resolve => require(['@/pages/24h/position/post.vue'], resolve)
+          }
+        ]
       }
+
     ]
   }
 ]

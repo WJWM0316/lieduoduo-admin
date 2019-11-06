@@ -9,7 +9,7 @@
           <span>失败:{{failNum}}份</span>
         </div>
         <div class="resultList">
-          <el-table height="400" max-height="400" :data="tableData" style="width: 100%">
+          <el-table border height="400" max-height="400" :data="tableData" style="width: 100%">
             <el-table-column align="center" prop="date" label="简历编号" width="380"></el-table-column>
             <el-table-column align="center" prop="name" label="求职者" width="380"></el-table-column>
             <el-table-column align="center" prop="address" label="原因说明" width="380"></el-table-column>

@@ -128,7 +128,7 @@
       </el-form-item>
     </el-form>
 
-    <el-table :data="lists">
+    <el-table border :data="lists">
       <el-table-column
         prop="id"
         label="职位ID">

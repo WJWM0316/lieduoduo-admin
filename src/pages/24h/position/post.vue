@@ -1,5 +1,5 @@
 <style lang="less" scoped>
-#H24_post{
+#h24_position_post{
   margin: 22px 22px 22px 222px;
   border: 1px solid rgb(238, 238, 238);
   text-align: left;
@@ -14,9 +14,9 @@
 }
 </style>
 <template>
-  <div id="H24_post" class="H24">
+  <div id="h24_position_post" class="H24">
     <el-form ref="form" :model="form" label-width="140px" label-suffix="：">
-      <el-form-item label="批量添加职位ID" v-if="$route.name !== 'h24_edit'">
+      <el-form-item label="批量添加职位ID" v-if="$route.name !== 'h24_position_edit'">
         <div class="tips">添加多个职位，请用英文,隔开</div>
         <el-input type="textarea" v-model="form.positions" style="width: 400px;"></el-input>
       </el-form-item>
@@ -29,7 +29,7 @@
           placeholder="选择上架日期">
         </el-date-picker>
       </el-form-item>
-      <!-- :disabled="form.status === 1 && $route.name === 'h24_edit'" -->
+      <!-- :disabled="form.status === 1 && $route.name === 'h24_position_edit'" -->
       <el-form-item label="截止时间">
         <el-date-picker
           v-model="form.end_time"
@@ -40,19 +40,19 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item label="服务席位数量">
-        <el-input v-model="form.seats_num" style="width: 400px;" :disabled="form.status === 1 && $route.name === 'h24_edit'"></el-input>
+        <el-input v-model="form.seats_num" style="width: 400px;" :disabled="form.status === 1 && $route.name === 'h24_position_edit'"></el-input>
       </el-form-item>
-      <el-form-item label="状态" v-if="$route.name === 'h24_edit'">
+      <el-form-item label="状态" v-if="$route.name === 'h24_position_edit'">
         <!-- <el-radio v-model="form.is_online" :label="1">上架</el-radio>
         <el-radio v-model="form.is_online" :label="2">下架</el-radio> -->
         <el-radio v-model="form.is_online" :label="3">立即截止</el-radio>
       </el-form-item>
-      <el-form-item label="权重排序值" v-if="$route.name === 'h24_edit'">
+      <el-form-item label="权重排序值" v-if="$route.name === 'h24_position_edit'">
         <el-input v-model="form.sort" style="width: 400px;"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">确定</el-button>
-        <el-button @click="reset" v-if="$route.name === 'h24_edit'">取消</el-button>
+        <el-button @click="reset" v-if="$route.name === 'h24_position_edit'">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -67,9 +67,9 @@ import {
   getRapidlySurfaceApi
 } from 'API/24h'
 @Component({
-  name: 'H24_POST'
+  name: 'h24_position_post'
 })
-export default class H24_POST extends Vue {
+export default class h24_position_post extends Vue {
   form = {
     seats_num: '',
     start_time: '',
@@ -95,7 +95,7 @@ export default class H24_POST extends Vue {
     let seats_num = new Promise((resolve, reject) => !this.form.seats_num ? reject('请添加席位数量') : resolve())
     // eslint-disable-next-line prefer-promise-reject-errors
     let repeatPosition = new Promise((resolve, reject) => this.hasDuplicates(params.positions) ? reject('请不要重复添加职位') : resolve())
-    let api = this.$route.name === 'h24_edit' ? 'editAction' : 'addAction'
+    let api = this.$route.name === 'h24_position_edit' ? 'editAction' : 'addAction'
     if (this.form.id) {
       params = Object.assign(params, { id: this.form.id })
     }
@@ -144,7 +144,7 @@ export default class H24_POST extends Vue {
     return arr.filter((e, i) => arr.lastIndexOf(e) !== i && i === arr.indexOf(e)).length > 0
   }
   created () {
-    if (this.$route.name === 'h24_edit') this.getRapidlySurface()
+    if (this.$route.name === 'h24_position_edit') this.getRapidlySurface()
   }
 }
 </script>

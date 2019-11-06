@@ -106,6 +106,7 @@
       <div class="List" ref="List" id="scroll" slot="dataList">
         <div class="form">
           <el-table
+            border
             :max-height="tableHeight"
             highlight-current-row
             :data="tableData"

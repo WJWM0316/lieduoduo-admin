@@ -354,7 +354,7 @@
       </el-form-item>
     </el-form>
 
-    <el-table :data="lists">
+    <el-table border :data="lists">
       <el-table-column
         prop="interviewId"
         width="80"
