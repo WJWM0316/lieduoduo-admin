@@ -355,7 +355,8 @@ export default class user extends Vue {
   keyword = [
     { label: '公司名字', value: 'companyName' },
     { label: '手机号', value: 'mobile' },
-    { label: '人名', value: 'userName' }
+    { label: '人名', value: 'userName' },
+    { label: '用户ID', value: 'uid' }
   ];
   fields = [
     {
@@ -513,11 +514,11 @@ export default class user extends Vue {
         params = Object.assign(params, { createTimeStart: this.form.createTimeStart, createTimeEnd: this.form.createTimeEnd })
       }
     }
-    console.log(this.form)
     getUserListApi(params).then(res => {
       this.list = res.data.data
       this.total = res.data.meta.total
       this.pageCount = res.data.meta.lastPage
+      console.log(res)
       if (this.form.searchType1 && this.form[this.form.searchType1]) {
         params = Object.assign(params, { searchType1: this.form.searchType1, [this.form.searchType1]: this.form[this.form.searchType1] })
       }
@@ -598,7 +599,6 @@ export default class user extends Vue {
     this.form = Object.assign(this.form, this.$route.query)
     this.form.admin_uid = Number(this.form.admin_uid) > 0 ? Number(this.form.admin_uid) : ''
     this.form.keyword1 = this.$route.query.companyName
-    console.log(this.$route.query)
     if (this.form.role === '2,3') this.form.role = '99'
     this.getRecruiterList()
   }
