@@ -28,7 +28,7 @@ export default [
           /* 编辑公司审核里的用户信息 */
           {
             path: 'editUser/:id',
-            name: 'editUser',
+            name: 'check_editUser',
             meta: {
               title: '编辑用户信息'
             },

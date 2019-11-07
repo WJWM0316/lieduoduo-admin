@@ -27,6 +27,8 @@ export default class App extends Vue {
 </script>
 <style lang="less" scoped>
 #app .app-container {
-  margin-left: 200px;
+  margin-left: 222px;
+  padding-left: 0px;
+  padding-right: 22px;
 }
 </style>

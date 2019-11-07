@@ -1,5 +1,5 @@
 @side-width: 200px;
-@logo-height: 130px;
+@logo-height: 100px;
 .app-aside {
   width: @side-width;
   height: 100vh;
@@ -22,8 +22,11 @@
   }
 }
 .logo {
-  padding: 40px 0;
-  height: 130px;
+  padding: 30px 0;
+  height: @logo-height;
   box-sizing: border-box;
   text-align: center;
+  img {
+    max-width: 50%;
+  }
 }

@@ -78,7 +78,7 @@
           <span v-if="resultmsg.failNum">失败:{{resultmsg.failNum}}份</span>
         </div>
         <div class="resultList">
-          <el-table height="400" max-height="400" :data="tableData">
+          <el-table border height="400" max-height="400" :data="tableData">
             <el-table-column prop="vkey" label="简历编号"></el-table-column>
             <el-table-column prop="name" label="求职者"></el-table-column>
             <el-table-column prop="isSuccess" label="提交结果">

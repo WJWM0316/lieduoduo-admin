@@ -45,7 +45,7 @@
         <div class="content"></div>
       </div>
       <div class="form" ref="form">
-        <el-table highlight-current-row :data="tableData" style="width: 100%">
+        <el-table border highlight-current-row :data="tableData" style="width: 100%">
           <el-table-column prop="jobhunter.resumeNum" label="简历ID" width="140">
             <template slot-scope="scope">
               <p v-if="scope.row.isJobhunterApply" class="Self-operation inquire">求职者已自行约面</p>
@@ -187,7 +187,7 @@
             <span>失败:{{nowFailNum}}份</span>
           </div>
           <div class="resultList">
-            <el-table height="400" max-height="400" :data="resultList" style="width: 100%">
+            <el-table border height="400" max-height="400" :data="resultList" style="width: 100%">
               <el-table-column prop="vkey" label="简历编号" width="380"></el-table-column>
               <el-table-column prop="name" label="求职者" width="380"></el-table-column>
               <el-table-column prop="reason" label="原因说明" width="380"></el-table-column>

@@ -1,133 +1,152 @@
 [{
-		"path": "/index",
-		"name": "index",
-		"title": "公司库",
-		"isShow": true,
-		"icon": "el-icon-menu",
-		"children": []
-	},
-	{
-		"path": "/user",
-		"title": "用户管理",
-		"name": "user",
-		"isShow": true,
-		"icon": "el-icon-menu",
-		"children": []
-	},
-	{
-		"path": "/recruiter",
-		"title": "招聘官管理",
-		"name": "recruiterList",
-		"isShow": true,
-		"icon": "el-icon-menu",
-		"children": []
-	},
-	{
-		"path": "/24h",
-		"title": "24h反馈专场管理",
-		"name": "24h",
-		"isShow": true,
-		"icon": "el-icon-menu",
-		"children": []
-	},
-	{
-		"path": "/manage",
-		"title": "职位管理",
-		"isShow": true,
-		"icon": "el-icon-menu",
-		"children": [{
-				"path": "/manage/positionManage",
-				"title": "全部职位",
-				"name": "positionManage",
-				"isShow": true
-			},
-			{
-				"path": "/manage/advertisement",
-				"title": "广告职位管理",
-				"name": "advertisement",
-				"isShow": true
-			},
-			{
-				"path": "/manage/urgent",
-				"title": "急聘职位管理",
-				"name": "urgent",
-				"isShow": true
-			}
-		]
-	},
-	{
-		"path": "/",
-		"title": "审核管理",
-		"isShow": true,
-		"icon": "el-icon-menu",
-		"children": [{
-				"path": "/check/companyCheck",
-				"title": "公司审核管理",
-				"name": "companyCheck",
-				"isShow": true
-			},
-			{
-				"path": "/check/recruitmentOfficer",
-				"title": "招聘官审核",
-				"name": "recruitmentOfficer",
-				"isShow": true
-			}
-		]
-	},
-	{
-		"path": "/interview",
-		"title": "面试管理",
-		"icon": "el-icon-menu",
-		"isShow": true,
-		"children": [{
-				"path": "/interview/24h",
-				"title": "24h反馈专场管理",
-				"name": "interview24h",
-				"isShow": true
-			},
-			{
-				"path": "/interview/List",
-				"title": "申请列表",
-				"name": "List",
-				"isShow": true
-			},
-			{
-				"path": "/interview/invite",
-				"title": "邀约列表",
-				"name": "invite",
-				"isShow": true
-			}
-		]
-	},
-	{
-		"path": "/resumeStore",
-		"title": "简历库",
-		"icon": "el-icon-menu",
-		"isShow": true,
-		"children": [{
-				"path": "/resumeStore/list",
-				"title": "简历列表",
-				"name": "list",
-				"isShow": true
-			},
-			{
-				"path": "/resumeStore/recommendList",
-				"title": "推荐列表",
-				"name": "recommendList",
-				"isShow": true
-			},
-			{
-				"path": "/resumeStore/consultantRecommendation",
-				"title": "顾问推荐进展",
-				"name": "consultantRecommendation",
-				"isShow": true
-			},
-			{
-				"path": "/resumeStore/hotRecommendation",
-				"title": "热门推荐进展",
-				"name": "hotRecommendation",
-				"isShow": true
-			}
-		]
-	}
+	"path": "/index",
+	"name": "index",
+	"title": "公司库",
+	"isShow": true,
+	"icon": "el-icon-coin",
+	"children": []
+},
+{
+	"path": "/user",
+	"title": "用户管理",
+	"name": "user",
+	"isShow": true,
+	"icon": "el-icon-user",
+	"children": []
+},
+{
+	"path": "/recruiter",
+	"title": "招聘官管理",
+	"name": "recruiterList",
+	"icon": "el-icon-s-management",
+	"isShow": true,
+	"children": []
+},
+{
+	"path": "/24h",
+	"title": "24h反馈专场管理",
+	"name": "24h",
+	"icon": "el-icon-time",
+	"isShow": true,
+	"children": [
+		{
+			"path": "/24h/position",
+			"title": "24h职位(限席位)",
+			"name": "24h_position",
+			"isShow": true
+		},
+		{
+			"path": "/24h/interviewer",
+			"title": "24h招聘官(约大咖)",
+			"name": "h24_interviewer",
+			"isShow": true
+		},
+		{
+			"path": "/24h/company",
+			"title": "24h公司(酷公司)",
+			"name": "h24_company",
+			"isShow": true
+		}
+	]
+},
+{
+	"path": "/manage",
+	"title": "职位管理",
+	"icon": "el-icon-files",
+	"isShow": true,
+	"children": [{
+			"path": "/manage/positionManage",
+			"title": "全部职位",
+			"name": "positionManage",
+			"isShow": true
+		},
+		{
+			"path": "/manage/advertisement",
+			"title": "广告职位管理",
+			"name": "advertisement",
+			"isShow": true
+		},
+		{
+			"path": "/manage/urgent",
+			"title": "急聘职位管理",
+			"name": "urgent",
+			"isShow": true
+		}
+	]
+},
+{
+	"path": "/",
+	"title": "审核管理",
+	"icon": "el-icon-menu",
+	"isShow": true,
+	"children": [{
+			"path": "/check/companyCheck",
+			"title": "公司审核管理",
+			"name": "companyCheck",
+			"isShow": true
+		},
+		{
+			"path": "/check/recruitmentOfficer",
+			"title": "招聘官审核",
+			"name": "recruitmentOfficer",
+			"isShow": true
+		}
+	]
+},
+{
+	"path": "/interview",
+	"title": "面试管理",
+	"icon": "el-icon-attract",
+	"isShow": true,
+	"children": [{
+			"path": "/interview/24h",
+			"title": "24h面试管理",
+			"name": "interview24h",
+			"isShow": true
+		},
+		{
+			"path": "/interview/List",
+			"title": "申请列表",
+			"name": "List",
+			"isShow": true
+		},
+		{
+			"path": "/interview/invite",
+			"title": "邀约列表",
+			"name": "invite",
+			"isShow": true
+		}
+	]
+},
+{
+	"path": "/resumeStore",
+	"title": "简历库",
+	"icon": "el-icon-tickets",
+	"isShow": true,
+	"children": [{
+			"path": "/resumeStore/list",
+			"title": "简历列表",
+			"name": "list",
+			"isShow": true
+		},
+		{
+			"path": "/resumeStore/recommendList",
+			"title": "推荐列表",
+			"name": "recommendList",
+			"isShow": true
+		},
+		{
+			"path": "/resumeStore/consultantRecommendation",
+			"title": "顾问推荐进展",
+			"name": "consultantRecommendation",
+			"isShow": true
+		},
+		{
+			"path": "/resumeStore/hotRecommendation",
+			"title": "热门推荐进展",
+			"name": "hotRecommendation",
+			"isShow": true
+		}
+	]
+}
 ]

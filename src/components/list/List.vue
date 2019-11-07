@@ -6,6 +6,7 @@
       <slot>
         <el-table
           ref="table"
+          border
           :height="height || undefined"
           :data="list"
           :empty-text="emptyText"
@@ -70,7 +71,7 @@ export default List
 }
 .m-list {
   position: relative;
-  padding: 20px 20px 80px 20px;
+  padding: 20px 0px 80px 0px;
   /*width: 100%;*/
   max-width: 100%;
   min-height: 100%;
