@@ -143,6 +143,26 @@
                 ></el-option>
               </el-select>
             </el-form-item>
+
+            <!-- 职位类别 -->
+            <el-form-item label="职位类别">
+              <el-cascader
+                ref="cascader"
+                placeholder="职位类别"
+                :options="options"
+                filterable
+                change-on-select
+                :clearable="clearable"
+                :props="positionManage"
+                @change="type"
+              ></el-cascader>
+            </el-form-item>
+
+            <!-- 职务名称 -->
+          <el-form-item label="职务名称">
+            <el-input placeholder="请输入职务名称" v-model="form.position"></el-input>
+          </el-form-item>
+
             <el-form-item class="btn">
               <el-button @click.stop="onSubmit" style="color: white !important" type="primary">查询</el-button>
               <el-button @click.stop="resetForm('form')">重置</el-button>
@@ -171,13 +191,23 @@
               <div
                 style="width: 100%; cursor: pointer; color: #652791;"
                 @click.stop="creatLink($event, props.scope.row, props.scope.$index)"
-              >查看招聘官</div>
+              >小程序码</div>
+              <div v-if="props.scope.row.isRapidlyRecruiter === 1" class="check" @click="checkRecruitment(props.scope.row.uid)">添加到24h招聘官</div>
             </div>
             <!-- 序号 -->
             <div class="btn-container" v-else-if="props.scope.column.property === 'index'">
               <div>
                 <span>{{props.scope.$index +1}}</span>
               </div>
+            </div>
+            <!-- 个人信息 -->
+            <div v-else-if="props.scope.column.property === 'name'">
+              <p>{{props.scope.row.name}}</p>
+              <p v-if="props.scope.row.position !== ''">{{props.scope.row.position}}</p>
+            </div>
+            <!-- 用户ID -->
+            <div class="btn-container" v-else-if="props.scope.column.property === 'uid'">
+              <span>{{props.scope.row.uid}}</span>
             </div>
             <!-- 所属公司 -->
             <div
@@ -303,6 +333,7 @@ import List from '@/components/list'
 import { getUserListApi } from 'API/recruiter'
 import { getRecruiterCodeUrlApi } from 'API/interview'
 import { getSalerListApi } from 'API/common'
+import { getLabelPositionListApi } from 'API/position'
 @Component({
   name: 'userList',
   components: {
@@ -331,6 +362,14 @@ export default class user extends Vue {
   qrCode = '';
   salerLis = []; // 跟进人销售名单
   AdminShow = ''; // 权限字段，限制搜索
+  options = [] // 职位标签列表
+  clearable = true
+  positionManage = {
+    value: 'labelId',
+    label: 'name',
+    children: 'children'
+  }; // 职位类别的配置
+  
   form = {
     admin_uid: '', // 跟进人
     keyword: '',
@@ -349,7 +388,9 @@ export default class user extends Vue {
     searchType1: 'companyName',
     searchType2: 'userName',
     keyword1: '',
-    keyword2: ''
+    keyword2: '',
+    type: '',
+    position: ''
   };
   /* 搜索关键字 */
   keyword = [
@@ -367,7 +408,12 @@ export default class user extends Vue {
     {
       prop: 'name',
       label: '个人信息',
-      width: 200
+      width: 100
+    },
+    {
+      prop: 'uid',
+      label: '用户ID',
+      width: 100
     },
     {
       prop: 'companyName',
@@ -435,6 +481,10 @@ export default class user extends Vue {
       query: { isEditAdminName: true }
     })
   }
+
+  type (e) {
+    this.form.type = e[e.length - 1]
+  }
   // 搜索地址
   search () {
     this.onSubmit()
@@ -459,11 +509,28 @@ export default class user extends Vue {
       searchType1: 'companyName',
       searchType2: 'userName',
       keyword1: '',
-      keyword2: ''
+      keyword2: '',
+      position: ''
     }
     this.$refs[name].resetFields()
     this.getRecruiterList()
+    this.$refs.cascader.inputValue = ''
   }
+  // 职位类别标签获取
+  ManageList () {
+    getLabelPositionListApi().then(res => {
+      this.options = res.data.data
+      this.options.forEach(item => {
+        item.children.forEach(item1 => {
+          item1.children.forEach(item2 => {
+            let result = JSON.stringify(item2.children)
+            if (result === '[]') delete item2.children
+          })
+        })
+      })
+    })
+  }
+
   /* 请求招聘官审核列表 */
   getRecruiterList (newForm) {
     this.form[this.form.searchType1] = this.form.keyword1
@@ -514,11 +581,19 @@ export default class user extends Vue {
         params = Object.assign(params, { createTimeStart: this.form.createTimeStart, createTimeEnd: this.form.createTimeEnd })
       }
     }
+    // 已经选择职位类别
+    if (this.form.type) {
+      params = Object.assign(params, { positionTypeId: this.form.type })
+    }
+    // 已经选择职位类别
+    if (this.form.position) {
+      params = Object.assign(params, { position: this.form.position })
+    }
     getUserListApi(params).then(res => {
       this.list = res.data.data
       this.total = res.data.meta.total
+      console.log(this.list)
       this.pageCount = res.data.meta.lastPage
-      console.log(res)
       if (this.form.searchType1 && this.form[this.form.searchType1]) {
         params = Object.assign(params, { searchType1: this.form.searchType1, [this.form.searchType1]: this.form[this.form.searchType1] })
       }
@@ -544,6 +619,15 @@ export default class user extends Vue {
       path: `/user/recruiterInfo/${id}`,
       query: {
         isEditAdminName: false
+      }
+    })
+  }
+  //将招聘官添加到24h招聘官
+  checkRecruitment (id) {
+    this.$router.push({
+      path: `/24h/recruiter/add`,
+      query: {
+        recruiter_uid: id
       }
     })
   }
@@ -601,6 +685,7 @@ export default class user extends Vue {
     this.form.keyword1 = this.$route.query.companyName
     if (this.form.role === '2,3') this.form.role = '99'
     this.getRecruiterList()
+    this.ManageList()
   }
 }
 </script>
@@ -696,6 +781,9 @@ export default class user extends Vue {
       color: #652791;
       cursor: pointer;
     }
+  }
+  .name-column{
+    flex-direction: column;
   }
 }
 .btn-container {

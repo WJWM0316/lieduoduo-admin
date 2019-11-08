@@ -559,7 +559,6 @@ export default class companyCheck extends Vue {
     //   query: { id: id }
     // });
   }
-  changeProvince () {}
   /* 重置 */
   resetForm (formName) {
     this.form = {

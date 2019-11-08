@@ -254,7 +254,7 @@
       <div class="html_content_box" v-if="model.type === 'official'">
         <div class="m_h1">已选择标签：</div>
         <ul class="label_ul_dialog" v-if="model.selected.length">
-          <li :class="{active: item.active}" v-for="(item, index) in model.selected" :key="index" @click="removeLabelItem(index)">{{item.name || item.labelName}}</li>
+          <li :class="{active: item.active}" v-for="(item, index) in model.official" :key="index" @click="removeLabelItem(index)">{{item.name || item.labelName}}</li>
         </ul>
         <div class="m_h2">请选择标签：</div>
         <ul class="label_ul_dialog" v-if="model.official.length">
@@ -546,7 +546,13 @@ export default class EditRecruiter extends Vue {
   //拿到招聘官标签列表
   getRecruiterLabelsLists () {
     getofficialLifeLabelsApi({ uid: this.$route.params.id }).then(res => {
-      this.userInfos.official = res.data.data
+      let official = []
+      let list = res.data.data
+      list.forEach(item => {
+        official.push(item)
+      })
+      this.userInfos.official = official
+      console.log(this.userInfos.official)
     })
     console.log(this.userInfos.official)
 
@@ -706,7 +712,7 @@ export default class EditRecruiter extends Vue {
       skillLabels.push({ labelId: item.labelId, source: item.source })
     })
     this.userInfos.official.forEach(item => {
-      official.push({ labelId: item.labelId, source: item.source })
+      official.push({ labelId: item.labelId })
     })
     let data = {
       uid: this.$route.params.id,
@@ -718,7 +724,6 @@ export default class EditRecruiter extends Vue {
     let officialData = {
       uid: this.$route.params.id,
       labelId: official,
-      name: this.value2
     }
     switch (this.model.type) {
 
@@ -780,7 +785,7 @@ export default class EditRecruiter extends Vue {
     this.userInfos.skillLabels.map(field => delete field.delete)
     this.userInfos.literacyLabels.map(field => delete field.delete)
     this.userInfos.lifeLabels.map(field => delete field.delete)
-    this.userInfos.official.map(field => delete field.delete)
+    // this.userInfos.official.map(field => delete field.delete)
   }
   //
   setRecruiterLabels (data) {
@@ -845,7 +850,7 @@ export default class EditRecruiter extends Vue {
     return createLabelProfessionalSkillsApi({ uid: this.$route.params.id })
   }
   getLabelProfessionalOfficialList () {
-    return getLabelProfessionalOfficialListApi().then(res => this.labelProfessionalofficial == res.data.data)
+    return getLabelProfessionalOfficialListApi().then(res => this.labelProfessionalofficial = res.data.data)
   }
   getLabelItem (index, item) {
     let selected = this.model.selected
@@ -926,9 +931,6 @@ export default class EditRecruiter extends Vue {
         this.model.selected = selected
       }
     }
-  }
-  getofficialLifeLabel () {
-    let selected = this.model.selected
   }
   getLifeLabel (type, index, item) {
     let lifeLabelsLists = this.lifeLabelsLists
@@ -1156,7 +1158,6 @@ export default class EditRecruiter extends Vue {
     this.getRecruiterLabel()
     this.getRecruiterLabelsLists()
     this.getLifeLabelsLists()
-    getLabelProfessionalOfficialListApi().then(res => console.log(res.data.data))
   }
   created () {
     this.init()
