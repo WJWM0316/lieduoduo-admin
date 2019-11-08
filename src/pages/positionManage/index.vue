@@ -171,6 +171,7 @@
                 style="width: 100%; cursor: pointer; color: #652791;"
                 @click.stop="creatLink($event, props.scope.row.id, props.scope.$index)"
               >扫码看职位</div>
+              <div class="check" v-if="props.scope.row.isRapidly === 1" @click.stop="checkPosition(props.scope.row.id)">添加到24h职位（限席位）</div>
             </div>
 
             <div
@@ -230,6 +231,14 @@
               style="height: 48px;"
             >
               <span>{{props.scope.row.companyInfo.companyName}}</span>
+            </div>
+            <div v-else-if="props.scope.column.property === 'types'">
+              <p>{{props.scope.row.types.topType}}</p>
+              <p>{{props.scope.row.types.middleType}}</p>
+              <p>{{props.scope.row.types.minType}}</p>
+            </div>
+            <div v-else-if="props.scope.column.property === 'lastRapidly'">
+              <p>{{props.scope.row.lastRapidly}}</p>
             </div>
             <div
               class="btn-container"
@@ -377,6 +386,16 @@ export default class companyCheck extends Vue {
       prop: 'company',
       label: '主体公司',
       width: 200
+    },
+    {
+      prop: 'types',
+      label: '职位类别',
+      width: 150
+    },
+    {
+      prop: 'lastRapidly',
+      label: '上次成为24h职位（限席位）时间',
+      width: 150
     },
     {
       prop: 'updatedAt',
@@ -559,7 +578,16 @@ export default class companyCheck extends Vue {
     //   query: { id: id }
     // });
   }
-  changeProvince () {}
+
+  checkPosition (id) {
+    this.$router.push({
+      name: 'h24_position_post',
+      query: {
+        positions: id
+      }
+    })
+  }
+
   /* 重置 */
   resetForm (formName) {
     this.form = {
