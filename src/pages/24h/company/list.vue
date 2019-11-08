@@ -1,27 +1,44 @@
 <template>
   <div>
     <layout-content
-      :leftcontent="{ title: '24h招聘官'}"
+      :leftcontent="{ title: '24h公司'}"
       :isShowbtn="true">
-      <el-button type="primary" slot="text" @click="todoAction('add')">新建</el-button>
+      <el-button type="primary" slot="text" @click="todoAction('add')">新增</el-button>
       <template slot="formContent">
         <header-filter
           ref="headerFilter"
           :props="{
             city: 'area_id',
-            type:'position_type_id',
+            type:'label_id',
             status: 'status'
           }"
+          :props-arr="{
+            city: 'citys',
+            type:'labelArr',
+            status: 'rapidlyStatus'
+          }"
+          :props-key="{
+            city: 'cityNum',
+            type:'id',
+            status: 'value'
+          }"
           @on-search="handleSearch"
-          method-type="getRapidlyRecruiterAttr"/>
+          method-type="getRapidlyCompanyAttr">
+          <template slot="add-type-btn"><router-link style="margin-left: 8px" :to="{name: '24h_labels'}">
+            <el-button type="default" icon="el-icon-setting">管理24h分类</el-button>
+          </router-link></template>
+        </header-filter>
         <el-form ref="form" :model="form" label-width="80px" :inline="true">
-          <el-form-item label="用户Id">
-            <el-input v-model="form.uid"></el-input>
+          <el-form-item label="公司ID:">
+            <el-input v-model="form.company_id"></el-input>
           </el-form-item>
-          <el-form-item label="上架时间">
+          <el-form-item label="公司名称:">
+            <el-input v-model="form.company_name"></el-input>
+          </el-form-item>
+          <el-form-item label="上架时间:">
             <el-date-picker type="datetime" placeholder="选择日期" v-model="form.start_time" style="width: 100%;" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
           </el-form-item>
-          <el-form-item label="下架时间">
+          <el-form-item label="下架时间:">
             <el-date-picker type="datetime" placeholder="选择日期" v-model="form.end_time" style="width: 100%;" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
           </el-form-item>
           <el-form-item>
@@ -37,17 +54,16 @@
               {{row.surfaceRapidlyInfo && row.surfaceRapidlyInfo.sort}}
             </template>
           </el-table-column>
-          <el-table-column prop="uid" label="用户Id"></el-table-column>
-          <el-table-column prop="name" label="招聘官名称" width="120"></el-table-column>
-          <el-table-column label="所属公司" width="250">
+          <el-table-column prop="id" label="公司ID"></el-table-column>
+          <el-table-column label="公司信息" width="250">
             <template slot-scope="{row}">
-              <div class="company-wrapper"  v-if="row.companyInfo">
-                <div class="company-image">
-                  <img :src="row.companyInfo.logoInfo.middleUrl" alt="">
+              <div class="company-wrapper">
+                <div class="company-image" >
+                  <img :src="row.logoInfo && row.logoInfo.middleUrl" alt="">
                 </div>
                 <div class="company-title">
-                  <p>{{row.companyInfo.companyShortname}}</p>
-                  <p><span>{{row.companyInfo.industry}}</span> <span>{{row.companyInfo.financingInfo}}</span> <span>{{row.companyInfo.employeesInfo}}</span></p>
+                  <p>{{row.companyShortname}}</p>
+                  <p><span>{{row.industry}}</span> <span>{{row.financingInfo}}</span> <span>{{row.employeesInfo}}</span></p>
                 </div>
               </div>
             </template>
@@ -55,9 +71,6 @@
           <el-table-column prop="positionNum" label="在线职位数"></el-table-column>
           <el-table-column prop="isOnline" label="上架状态">
             <template slot-scope="{row}">
-              <!-- <span v-if="row.isOnline === 1">上架</span>
-              <span v-if="row.isOnline === 2">下架</span>
-              <span v-if="row.isOnline === 3">截止</span> -->
               {{row.surfaceRapidlyInfo && row.surfaceRapidlyInfo.isOnlineDesc}}
             </template>
           </el-table-column>
@@ -78,7 +91,7 @@
             label="操作">
             <template slot-scope="{row}">
               <span class="btn_deal" @click="todoAction('edit', row)">编辑</span>
-              <span class="btn_deal" @click="todoAction('details', row)">查看招聘官</span>
+              <span class="btn_deal" @click="todoAction('details', row)">查看公司</span>
               <span class="btn_deal" @click="todoAction('view', row)">相关24h面试</span>
             </template>
           </el-table-column>
@@ -102,7 +115,7 @@
 <script>
 import LayoutContent from 'COMPONENTS/LayoutWrapper/content'
 import HeaderFilter from '../components/areaTypeFilter'
-import { getRapidlyRecruiterList } from 'API/24h'
+import { getRapidlyCompanyList } from 'API/24h'
 export default {
   components: { LayoutContent, HeaderFilter },
   data () {
@@ -112,7 +125,8 @@ export default {
       total: 0,
       form: {
         page: 1,
-        uid: '',
+        company_id: '',
+        company_name: '',
         start_time: '',
         end_time: '',
         count: 20
@@ -136,7 +150,7 @@ export default {
       }
       this.form = params
       this.getLoading = true
-      getRapidlyRecruiterList(params).then(({ data }) => {
+      getRapidlyCompanyList(params).then(({ data }) => {
         this.getLoading = false
         this.total = data.meta.total
         this.lists = data.data
@@ -146,26 +160,25 @@ export default {
     todoAction (type, data) {
       switch (type) {
         case 'add':
-          this.$router.push({ name: '24h_recruiter_add' })
+          this.$router.push({ name: '24h_company_add' })
           break
         case 'edit':
-          this.$router.push({ name: '24h_recruiter_edit', query: { id: data.surfaceRapidlyInfo.id } })
+          this.$router.push({ name: '24h_company_edit', query: { id: data.surfaceRapidlyInfo.id } })
           break
         case 'view':
           this.$router.push({
-            name: 'interview24h',
-            query: {
-              tab_status: 1,
-              searchType: 'recruiter',
-              content: data.id
+            name: 'recruiter_info',
+            params: {
+              id: data.id
             }
           })
           break
         case 'details':
           this.$router.push({
-            name: 'recruiter_info',
-            params: {
-              id: data.id
+            name: 'index',
+            query: {
+              searchType: 'companyId',
+              content: data.id
             }
           })
           break
@@ -184,7 +197,17 @@ export default {
       this.getPageList()
     },
     reset () {
-
+      this.form = {
+        page: 1,
+        company_id: '',
+        company_name: '',
+        start_time: '',
+        end_time: '',
+        count: 20
+      }
+      this.$refs.headerFilter.clear().then(val => {
+        this.handleSearch(val)
+      })
     }
   }
 }
@@ -207,8 +230,8 @@ export default {
   align-items: center;
   .company-image {
     width: 50px;
-    height: 50px;
     min-width: 50px;
+    height: 50px;
     overflow: hidden;
     margin-right: 4px;
     img {
