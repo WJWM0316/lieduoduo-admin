@@ -790,7 +790,7 @@ export default class createCompany extends Vue {
     })
     newCompanyInfo.highQuality = newCompanyInfo.highQuality.toString()
     this.companyInfo = {
-      high_quality:newCompanyInfo.highQuality,
+      high_quality: newCompanyInfo.highQuality,
       company_name: newCompanyInfo.companyName,
       company_shortname: newCompanyInfo.companyShortname,
       industry_id: newCompanyInfo.industryId ? newCompanyInfo.industryId : '',

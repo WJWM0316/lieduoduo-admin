@@ -1416,7 +1416,7 @@ export default class Interview24h extends Vue {
     if (this.form.status) this.form.status = Number(this.form.status)
     if (this.form.last_status) this.form.last_status = Number(this.form.last_status)
     if (query.tab_status) {
-      this.navigation.map(field => (field.active = query.tab_status === field.id))
+      this.navigation.map(field => (field.active = String(query.tab_status) === field.id))
     } else {
       this.navigation[0].active = true
     }

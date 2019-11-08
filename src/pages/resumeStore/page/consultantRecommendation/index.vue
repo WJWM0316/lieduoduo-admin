@@ -303,7 +303,7 @@
 <script>
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import lyoutContent from 'COMPONENTS/Lyout/lyoutContent/lyoutContent.vue'
+import lyoutContent from 'COMPONENTS/LayoutWrapper/content.vue'
 import { getAdvisorUserListApi } from 'API/common'
 import {
   interviewsList,

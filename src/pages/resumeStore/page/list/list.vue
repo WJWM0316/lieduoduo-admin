@@ -6,8 +6,7 @@
       ref="methods"
       @handlePageChange="handlePageChange"
     >
-      <div class="class" v-if="isShowResumeHandle" slot="text" @click.stop="createResume">新建简历</div>
-      <!-- <div class="class" slot="text" @click.stop="createResume2">新建简历</div> -->
+      <el-button v-if="isShowResumeHandle" slot="text" @click.stop="createResume">新建简历</el-button>
       <div class="formSumbit" slot="formContent">
         <div class="formReasult">
           <el-form ref="form" :model="form" class="form">
@@ -346,7 +345,7 @@
 <script>
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import lyoutContent from 'COMPONENTS/Lyout/lyoutContent/lyoutContent.vue'
+import lyoutContent from 'COMPONENTS/LayoutWrapper/content.vue'
 import resumePopup from 'COMPONENTS/resumePopup/resumePopup'
 import CustomSelect from '../../components/CustomSelect/index.vue'
 import filterAnswer from 'COMPONENTS/filterAnswer/index.vue'

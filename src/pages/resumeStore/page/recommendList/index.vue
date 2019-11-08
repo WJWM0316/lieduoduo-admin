@@ -8,7 +8,7 @@
       @handlePageChange="handlePageChange"
       @handertableHeight="handertableHeight"
     >
-      <div class="class" slot="text" @click.stop="toTabBlock">新建推荐单</div>
+      <el-button class="class" slot="text" @click.stop="toTabBlock">新建推荐单</el-button>
       <div class="formSumbit" slot="formContent">
         <div class="formReasult">
           <el-form ref="form" :model="form" class="form">
@@ -168,7 +168,7 @@
 <script>
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import lyoutContent from 'COMPONENTS/Lyout/lyoutContent/lyoutContent.vue'
+import lyoutContent from 'COMPONENTS/LayoutWrapper/content.vue'
 import { recommendList, userList } from 'API/resumeStore'
 @Component({
   name: 'recommendList',

@@ -4,13 +4,10 @@ export default [
     path: '/manage',
     meta: { title: '职位管理', auth: true },
     component: Layout,
+    redirect: {
+      name: 'positionManage'
+    },
     children: [
-      {
-        path: '',
-        name: 'manage',
-        meta: { title: '职位管理' },
-        component: resolve => require(['../App.vue'], resolve)
-      },
       {
         path: 'advertisement',
         name: 'advertisement',

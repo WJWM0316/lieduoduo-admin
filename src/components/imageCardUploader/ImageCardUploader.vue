@@ -24,12 +24,3 @@
 import ImageCardUploader from './imageCardUploader'
 export default ImageCardUploader
 </script>
-
-<style lang="scss" scoped>
-@import "../../styles/scss/variables";
-@import "../../styles/scss/mixins";
-
-.m-image-card-uploader {
-
-}
-</style>

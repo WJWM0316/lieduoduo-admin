@@ -36,9 +36,9 @@
 			"isShow": true
 		},
 		{
-			"path": "/24h/interviewer",
+			"path": "/24h/recruiter",
 			"title": "24h招聘官(约大咖)",
-			"name": "h24_interviewer",
+			"name": "h24_recruiter",
 			"isShow": true
 		},
 		{

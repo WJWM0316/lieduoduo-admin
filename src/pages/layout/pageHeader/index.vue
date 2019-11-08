@@ -32,12 +32,12 @@ export default {
   methods: {
     toLogin () {
       clear()
-      this.$store.commit('REMOVE_USERINFO')
       this.$store.commit('removeMenus')
       this.isShow = false
       this.$router.push({
         path: '/login'
       })
+      this.$store.commit('REMOVE_USERINFO')
     },
     showExit () {
       this.isShow = !this.isShow

@@ -2,7 +2,7 @@
 <template>
   <div class="companyCheck">
     <el-container class="container" style="border: 1px solid #eee">
-      <el-header class="header" style="text-align: right; font-size: 15px">
+      <el-header class="app-title header" style="text-align: right; font-size: 15px">
         <div class="title">审核管理({{total}})</div>
         <div class="export"><el-button @click="addCompany" class="btn-limit-width">+ 新建公司</el-button></div>
         <el-button type="primary" @click="download" :disabled="!canDownloadData" v-if="AdminShow == 0 || AdminShow == 2 || AdminShow == 1 || AdminShow == 4 || AdminShow == 5">导出</el-button>
@@ -562,25 +562,6 @@ export default class companyCheck extends Vue {
     min-width: 1000px;
     margin: 22px;
     .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      .title {
-        display: flex;
-        align-items: center;
-        position: relative;
-        font-size: 15px;
-        &::before {
-          background: #ffe266;
-          content: "";
-          display: inline-block;
-          float: left;
-          height: 100%;
-          height: 16px;
-          margin-right: 10px;
-          width: 6px;
-        }
-      }
       .export{
         position: absolute;
         right: 140px;

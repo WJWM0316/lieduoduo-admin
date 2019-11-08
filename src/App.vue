@@ -3,14 +3,6 @@
 </template>
 
 <style lang="less">
-@import "./App.less";
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 .messageBox {
   p {
     color: #000;
@@ -26,9 +18,9 @@
     }
   }
 }
-.el-table {
-  .cell {
-    text-align: left;
-  }
-}
+
+@import './style/reset.css';
+@import './style/less/common.less';
+@import './elementui/element.reset.less';
+
 </style>

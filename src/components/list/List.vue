@@ -64,7 +64,6 @@ export default List
 </script>
 
 <style lang="less" scoped>
-/*@import "../../styles/scss/variables";*/
 
 .el-table .warning-row {
   background: oldlace;
