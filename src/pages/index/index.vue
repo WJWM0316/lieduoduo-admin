@@ -642,7 +642,7 @@ export default class indexPage extends Vue {
     this.$router.push({ path: `/user/userInfo/${uid}` })
   }
   toPost(id) {
-    this.$router.push({ path: `/24h/add/${id}` });
+    this.$router.push({ name: '24h_company_add' , query: { company_id:id } });
   }
   download() {
     this.$confirm('是否导出该列表数据？', '提示', {
