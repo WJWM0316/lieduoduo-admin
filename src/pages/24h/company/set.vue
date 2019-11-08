@@ -88,6 +88,8 @@ export default {
     }
   },
   created () {
+    const { query } = this.$route
+    this.form.company_id = query.company_id ? query.company_id : ''
     this.getAttrs()
     if (this.isEdit) this.getRapidlySurface()
   },
