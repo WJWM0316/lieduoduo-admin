@@ -625,7 +625,7 @@ export default class user extends Vue {
   //将招聘官添加到24h招聘官
   checkRecruitment (id) {
     this.$router.push({
-      path: `/24h/recruiter/add`,
+      name: '24h_recruiter_add',
       query: {
         recruiter_uid: id
       }
