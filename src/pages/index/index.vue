@@ -262,6 +262,10 @@
                 </div>
               </div>
             </div>
+            <div v-else-if="props.scope.column.property === 'jobOffers'">
+              <p>{{props.scope.row.recruiterNum + '个面试官'}}</p>
+              <p>{{props.scope.row.positionNum + '个上线职位'}}</p>
+            </div>
             <!--认证状态-->
             <div
               class="btn-container"
@@ -380,6 +384,11 @@ export default class indexPage extends Vue {
     {
       prop: 'address',
       label: '地区',
+      width: 150
+    },
+    {
+      prop: 'jobOffers',
+      label: '招聘信息',
       width: 150
     },
     {
