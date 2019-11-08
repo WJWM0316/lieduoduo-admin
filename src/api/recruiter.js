@@ -169,3 +169,18 @@ export const addLifeLabelsApi = data => request({
   data,
   noGlobalLoading: false
 })
+
+/* 获取招聘官官方标签 */
+export const getofficialLifeLabelsApi = data => request({
+  url: `/recruiter/official_labels/${data.uid}`,
+  type: 'get',
+  noGlobalLoading: false
+})
+
+/* 添加招聘官官方标签 */
+export const addofficialLifeLabelsApi = data => request({
+  url: `/recruiter/official_label/${data.uid}`,
+  type: 'post',
+  data,
+  noGlobalLoading: false
+})

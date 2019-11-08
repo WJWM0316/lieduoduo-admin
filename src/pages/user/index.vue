@@ -45,6 +45,7 @@
               >
                 <el-select
                   class="selectTitle"
+                  
                   v-model="searchType.condition2"
                   slot="prepend"
                   placeholder="请选择"

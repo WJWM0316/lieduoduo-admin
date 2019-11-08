@@ -94,6 +94,17 @@
       <h3>个人标签</h3>
       <el-form label-suffix="：" label-width="160px">
 
+        <el-form-item label="官方标签">
+          <ul class="label_ul" v-if="userInfos.official.length">
+            <li
+              :class="{active: item.active}"
+              v-for="(item, index) in userInfos.official"
+              :key="index">{{item.name || item.labelName}}
+            </li>
+          </ul>
+          <el-button type="text" @click="todoAction('official')">{{userInfos.official.length ? '编辑' : '添加'}}</el-button>
+        </el-form-item>
+
         <el-form-item label="职业技能">
           <ul class="label_ul" v-if="userInfos.skillLabels.length">
             <li
@@ -238,6 +249,18 @@
       <div class="html_content_box_01" v-if="model.type === 'customize' || model.type === 'customize_life'">
         <el-input v-model="model.value2" placeholder="请输入标签名称" maxlength="6"></el-input>
       </div>
+      
+      <!-- 官方标签 -->
+      <div class="html_content_box" v-if="model.type === 'official'">
+        <div class="m_h1">已选择标签：</div>
+        <ul class="label_ul_dialog" v-if="model.selected.length">
+          <li :class="{active: item.active}" v-for="(item, index) in model.selected" :key="index" @click="removeLabelItem(index)">{{item.name || item.labelName}}</li>
+        </ul>
+        <div class="m_h2">请选择标签：</div>
+        <ul class="label_ul_dialog" v-if="model.official.length">
+          <li :class="{active: item.active}" v-for="(item, index) in labelProfessionalofficial" :key="index" @click="getLabelItem(index, item)">{{item.name}}</li>
+        </ul>
+      </div>
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="close">取 消</el-button>
@@ -273,7 +296,8 @@ import adminControl from '@/components/adminControl/index'
 import {
   uploadApi,
   getLabelProfessionalLiteracyListApi,
-  getLabelProfessionalSkillsListApi
+  getLabelProfessionalSkillsListApi,
+  getLabelProfessionalOfficialListApi,
 } from 'API/common'
 import {
   upload_api
@@ -293,12 +317,14 @@ import {
   addProfessionalSkillsLabelApi,
   setRecruiterLabelsApi,
   getLifeLabelsListsApi,
-  addLifeLabelsApi
+  addLifeLabelsApi,
+  addofficialLifeLabelsApi,
+  getofficialLifeLabelsApi
 } from 'API/recruiter'
 
 import {
   editApplyUserInfoApi,
-  getRecruitersListApi
+  getRecruitersListApi,
 } from 'API/company'
 import { getAccessToken } from '@/api/cacheService.js'
 // 邮箱
@@ -381,13 +407,14 @@ export default class EditRecruiter extends Vue {
     createPositionRight: '1',
     skillLabels: [],
     literacyLabels: [],
-    lifeLabels: []
-
+    lifeLabels: [],
+    official: [] // 官方标签
   };
   userInfo = {}
   nextAdmin = null; // 公司下一个管理员的信息
   labelProfessionalLiteracyList = []
   labelProfessionalSkillsList = []
+  labelProfessionalofficial = [] // 官方标签
   // 关闭移除招聘官
   closeAdmin () {
     this.showAdminWindow = false
@@ -516,7 +543,13 @@ export default class EditRecruiter extends Vue {
     return getRecruiterLabelApi({ uid: this.$route.params.id })
       .then(res => (this.userInfos = Object.assign(this.userInfos, { label: res.data.data })))
   }
+  //拿到招聘官标签列表
   getRecruiterLabelsLists () {
+    getofficialLifeLabelsApi({ uid: this.$route.params.id }).then(res => {
+      this.userInfos.official = res.data.data
+    })
+    console.log(this.userInfos.official)
+
     return getRecruiterLabelsListsApi({ uid: this.$route.params.id }).then(res => {
       let literacyLabels = []
       let lifeLabels = []
@@ -550,6 +583,19 @@ export default class EditRecruiter extends Vue {
   todoAction (type) {
     let literacyLabels = this.userInfos.literacyLabels.map(field => field.labelId)
     switch (type) {
+
+      case 'official':
+        let official = [].concat(this.userInfos.official)
+        if (official.length >= 2) {
+          this.$message({ message: '最多只能添加俩个技能标签', type: 'warning' })
+          return
+        }
+        this.model.show = true
+        this.model.title = '添加官方标签'
+        this.model.type = 'official'
+        // this.model.selected = 
+        break
+
       case 'literacy':
         let literacy = [].concat(this.userInfos.skillLabels)
         if (literacy.length >= 3) {
@@ -643,19 +689,24 @@ export default class EditRecruiter extends Vue {
         break
     }
   }
+  //向后端发送标签信息
   confirm () {
     let skillLabels = []
     let literacyLabels = []
     let lifeLabels = []
+    let official = []
     // 设置默认值
-    this.userInfos.literacyLabels.map(item => {
+    this.userInfos.literacyLabels.forEach(item => {
       literacyLabels.push({ labelId: item.labelId, source: item.source })
     })
-    this.userInfos.lifeLabels.map(item => {
+    this.userInfos.lifeLabels.forEach(item => {
       lifeLabels.push({ labelId: item.labelId, source: item.source })
     })
-    this.userInfos.skillLabels.map(item => {
+    this.userInfos.skillLabels.forEach(item => {
       skillLabels.push({ labelId: item.labelId, source: item.source })
+    })
+    this.userInfos.official.forEach(item => {
+      official.push({ labelId: item.labelId, source: item.source })
     })
     let data = {
       uid: this.$route.params.id,
@@ -663,7 +714,25 @@ export default class EditRecruiter extends Vue {
       literacyLabels,
       lifeLabels
     }
+    //官方标签数据
+    let officialData = {
+      uid: this.$route.params.id,
+      labelId: official,
+      name: this.value2
+    }
     switch (this.model.type) {
+
+      case 'official':
+        officialData.labelId = []
+        this.model.selected.forEach(item => {
+          if(item.type === 'label_professional_official') {
+            officialData.labelId.push({ labelId: item.labelId, source: item.source })
+          }
+        })
+        console.log(officialData)
+          addofficialLifeLabelsApi(officialData).then()
+          break;
+
       case 'literacy':
         data.literacyLabels = []
         data.skillLabels = []
@@ -711,7 +780,9 @@ export default class EditRecruiter extends Vue {
     this.userInfos.skillLabels.map(field => delete field.delete)
     this.userInfos.literacyLabels.map(field => delete field.delete)
     this.userInfos.lifeLabels.map(field => delete field.delete)
+    this.userInfos.official.map(field => delete field.delete)
   }
+  //
   setRecruiterLabels (data) {
     return setRecruiterLabelsApi(data).then(() => {
       this.model.show = false
@@ -768,10 +839,13 @@ export default class EditRecruiter extends Vue {
     return getLabelProfessionalLiteracyListApi().then(res => (this.labelProfessionalLiteracyList = res.data.data))
   }
   getLabelProfessionalSkillsList () {
-    return getLabelProfessionalSkillsListApi().then(res => (this.labelProfessionalSkillsList = res.data.data.labelProfessionalSkills))
+    return getLabelProfessionalSkillsListApi().then(res => {(this.labelProfessionalSkillsList = res.data.data.labelProfessionalSkills)})
   }
   createLabelProfessionalSkills () {
     return createLabelProfessionalSkillsApi({ uid: this.$route.params.id })
+  }
+  getLabelProfessionalOfficialList () {
+    return getLabelProfessionalOfficialListApi().then(res => this.labelProfessionalofficial == res.data.data)
   }
   getLabelItem (index, item) {
     let selected = this.model.selected
@@ -852,6 +926,9 @@ export default class EditRecruiter extends Vue {
         this.model.selected = selected
       }
     }
+  }
+  getofficialLifeLabel () {
+    let selected = this.model.selected
   }
   getLifeLabel (type, index, item) {
     let lifeLabelsLists = this.lifeLabelsLists
@@ -1079,6 +1156,7 @@ export default class EditRecruiter extends Vue {
     this.getRecruiterLabel()
     this.getRecruiterLabelsLists()
     this.getLifeLabelsLists()
+    getLabelProfessionalOfficialListApi().then(res => console.log(res.data.data))
   }
   created () {
     this.init()

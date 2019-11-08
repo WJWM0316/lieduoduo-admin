@@ -98,3 +98,10 @@ export const getLabelProfessionalSkillsListApi = data => request({
   type: 'get',
   noGlobalLoading: false
 })
+
+/* 官方标签列表 */
+export const getLabelProfessionalOfficialListApi = data => request({
+  url: `/label/recruiter_official/list`,
+  type: 'get',
+  noGlobalLoading: false
+})
