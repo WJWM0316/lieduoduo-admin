@@ -341,11 +341,11 @@ export default class indexPage extends Vue {
   pageCount = 0; // 请求回的数据共几页
   AdminShow = ''; // 权限字段，限制搜索
   form = {
-    high_quality:'0',
-    wherefrom: "",
-    is_license: "",
-    start: "",
-    end: "",
+    high_quality: '0',
+    wherefrom: '',
+    is_license: '',
+    start: '',
+    end: '',
     exportStart: undefined,
     exportEnd: undefined,
     page: 1,
@@ -540,20 +540,20 @@ export default class indexPage extends Vue {
         params = Object.assign(params, { firstAreaId: this.form.firstAreaId, area_id: this.form.area_id })
       }
     }
-    params = Object.assign(params,{high_quality: this.form.high_quality})
+    params = Object.assign(params, { high_quality: this.form.high_quality })
     getCompanyListApi(params).then(res => {
       let list = res.data.data
       list.map((field, index) => {
         field.customer_level = [].concat(this.companyCustomerLevelRange)
         field.customerVevelValue = (field.customerLevel).toString()
       })
-      this.list = list;
-      this.pageCount = res.data.meta.lastPage;
-      this.total = res.data.meta.total;
-      if(this.form.keyword || this.form.mobile || this.form.companyId) {
-        params = Object.assign(params, {searchType: this.form.searchType, content: this.form.content})
+      this.list = list
+      this.pageCount = res.data.meta.lastPage
+      this.total = res.data.meta.total
+      if (this.form.keyword || this.form.mobile || this.form.companyId) {
+        params = Object.assign(params, { searchType: this.form.searchType, content: this.form.content })
       }
-      
+
       this.$router.push({
         query: {
           ...params
@@ -644,7 +644,7 @@ export default class indexPage extends Vue {
   toPost(id) {
     this.$router.push({ name: '24h_company_add' , query: { company_id:id } });
   }
-  download() {
+  download () {
     this.$confirm('是否导出该列表数据？', '提示', {
       confirmButtonText: '是',
       cancelButtonText: '否',

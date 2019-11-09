@@ -16,6 +16,7 @@
           :class="{active: item[propsKey.type] == params[props.type]}"
           @click="tabClick(item, propsKey.type, props.type)">{{item.name}}</li>
       </template>
+      <slot name="add-type-btn"></slot>
     </ul>
     <ul class="h24_navigation">
       <template v-for="item in status">
@@ -31,7 +32,7 @@
   </div>
 </template>
 <script>
-import { getRapidlyPositionAttr, getRapidlyRecruiterAttr } from 'API/24h'
+import { getRapidlyPositionAttr, getRapidlyRecruiterAttr, getRapidlyCompanyAttr } from 'API/24h'
 export default {
   props: {
     props: {
@@ -81,7 +82,8 @@ export default {
     }
     this.methodApi = {
       getRapidlyPositionAttr,
-      getRapidlyRecruiterAttr
+      getRapidlyRecruiterAttr,
+      getRapidlyCompanyAttr
     }
   },
   methods: {

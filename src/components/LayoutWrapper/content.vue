@@ -20,7 +20,7 @@
       <!-- 分页 -->
       <div class="pageList" slot="pageList">
         <!-- v-if="hasPagination" v-show="total > 0" -->
-        <footer class="list-footer">
+        <footer class="list-footer" v-if="leftcontent.page && leftcontent.total">
           <el-pagination
             layout="prev, pager, next, slot"
             :current-page="leftcontent.page"

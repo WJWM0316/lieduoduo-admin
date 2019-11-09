@@ -107,6 +107,7 @@ export default class H24 extends Vue {
       ...this.form,
       ...query
     }
+    this.form = params
     this.getLoading = true
     getRapidlyPositionList(params).then(res => {
       this.getLoading = false

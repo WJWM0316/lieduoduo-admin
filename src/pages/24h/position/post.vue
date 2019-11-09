@@ -83,6 +83,8 @@ export default {
     }
   },
   created () {
+    const { query } = this.$route
+    this.form.positions = query.positions
     if (this.isEdit) this.getRapidlySurface()
   },
   computed: {

@@ -1,4 +1,4 @@
-<style lang="less">
+<style lang="less" scoped>
 #interview24h{
   margin: 22px 22px 60px 222px;
   border: 1px solid rgb(238, 238, 238);
@@ -1374,7 +1374,7 @@ export default class Interview24h extends Vue {
    * @Author   小书包
    * @DateTime 2019-08-02
    * @detail   获取时间
-   * @param    {[type]}   e [description]
+   * @param    {[type]}  e   [description]
    * @return   {[type]}     [description]
    */
   getTime (e) {

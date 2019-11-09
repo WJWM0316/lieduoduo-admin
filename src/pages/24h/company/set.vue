@@ -2,9 +2,9 @@
   <!-- 新增|编辑招聘官 -->
   <div class="set-recruiter-wrapper">
     <el-form ref="form" :model="form" :rules="formRules" label-width="140px">
-      <el-form-item label="批量添加招聘官ID：" v-if="!isEdit" prop="recruiter_uid">
-        <div class="tips">添加多个招聘官，请用英文,隔开</div>
-        <el-input type="textarea" v-model="form.recruiter_uid" style="width: 400px;"></el-input>
+      <el-form-item label="批量添加公司ID：" v-if="!isEdit" prop="company_id">
+        <div class="tips">添加多个公司，请用英文,隔开</div>
+        <el-input type="textarea" v-model="form.company_id" style="width: 400px;"></el-input>
       </el-form-item>
       <el-form-item label="上下架时间：" prop="times">
         <el-date-picker
@@ -17,17 +17,10 @@
           end-placeholder="下架时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="城市：" prop="area_id">
-        <el-select v-model="form.area_id" style="width: 400px">
-          <template v-for="item in citys">
-            <el-option :key="item.cityNum" :label="item.name" :value="item.cityNum"></el-option>
-          </template>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="职位类别：" prop="position_type_id">
-        <el-select v-model="form.position_type_id" style="width: 400px">
-          <template v-for="item in positionTypes">
-            <el-option :key="item.positionTypeId" :label="item.name" :value="item.positionTypeId"></el-option>
+      <el-form-item label="24h公司分类：" prop="labels">
+        <el-select v-model="form.labels" style="width: 400px">
+          <template v-for="item in labelArr">
+            <el-option :key="item.id" :label="item.name" :value="item.id"></el-option>
           </template>
         </el-select>
       </el-form-item>
@@ -46,7 +39,7 @@
         <el-input v-model.number="form.sort" style="width: 400px;"></el-input>
       </el-form-item>
       <el-form-item label="温馨提示：" v-if="!isEdit">
-        <div class="tips">添加后对应关联的24h职位和24h招聘官，需要几分钟才能跑完，导致前台可能会有延迟现象，请耐心等候。</div>
+        <div class="tips">添加后对应关联的24h职位和24h招聘官，需要几分钟才能跑完，所以前台可能会有延迟现象，请耐心等候。</div>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit" :loading="btnLoading">确定</el-button>
@@ -56,7 +49,7 @@
   </div>
 </template>
 <script>
-import { getRapidlyRecruiterAttr, addRapidlyRecruiter, getRapidRecruiterById, editRapidlyRecruiter } from 'API/24h'
+import { getRapidlyCompanyAttr, addRapidlyCompany, editRapidlyCompany, getRapidCompanyById } from 'API/24h'
 export default {
   data () {
     const validPosition = (rule, value, callback) => {
@@ -73,59 +66,52 @@ export default {
     return {
       btnLoading: false,
       form: {
-        area_id: '',
-        position_type_id: '',
-        recruiter_uid: '',
+        labels: '',
+        company_id: '',
         is_online: '',
         times: [],
         sort: 0
       },
       formRules: {
-        recruiter_uid: [{ required: true, validator: validPosition, trigger: 'blur' }],
-        area_id: [{ required: true, message: '请选择城市', trigger: 'blur' }],
-        position_type_id: [{ required: true, message: '请选择职位类型', trigger: 'blur' }],
+        company_id: [{ required: true, validator: validPosition, trigger: 'blur' }],
+        labels: [{ required: true, message: '请选择职位类型', trigger: 'blur' }],
         times: [{ required: true, type: 'array', message: '请选择上下架时间', trigger: 'change' }],
         is_online: [{ type: 'number', message: '', trigger: 'change' }],
         sort: [{ type: 'number', message: '请输入正确的格式', trigger: 'blur' }]
       },
-      citys: [],
-      positionTypes: []
+      labelArr: []
     }
   },
   computed: {
     isEdit () {
-      return this.$route.name === '24h_recruiter_edit'
+      return this.$route.name === '24h_company_edit'
     }
   },
   created () {
     const { query } = this.$route
-    this.form.recruiter_uid = query.recruiter_uid ? query.recruiter_uid : ''
+    this.form.company_id = query.company_id ? query.company_id : ''
     this.getAttrs()
-    if (this.isEdit) {
-      this.getRapidlySurface()
-    }
+    if (this.isEdit) this.getRapidlySurface()
   },
   methods: {
     // 获取部分参数
     getAttrs () {
-      getRapidlyRecruiterAttr().then(({ data }) => {
-        const { citys, positionTypes } = data.data
-        this.citys = citys
-        this.positionTypes = positionTypes
+      getRapidlyCompanyAttr().then(({ data }) => {
+        const { labelArr } = data.data
+        this.labelArr = labelArr
       })
     },
     onSubmit () {
       this.$refs.form.validate(valid => {
         if (valid) {
-          const { area_id, position_type_id, recruiter_uid, is_online, times, sort } = this.form
+          const { labels, company_id, is_online, times, sort } = this.form
           const start_time = times[0]
           const end_time = times[1]
           this.btnLoading = true
           if (this.isEdit) {
-            editRapidlyRecruiter({
+            editRapidlyCompany({
               id: this.$route.query.id,
-              area_id,
-              position_type_id,
+              labels: String(labels),
               is_online,
               start_time,
               end_time,
@@ -138,19 +124,14 @@ export default {
               }
             })
           } else {
-            addRapidlyRecruiter({
-              area_id, position_type_id, recruiter_uid, start_time, end_time, sort
+            addRapidlyCompany({
+              labels: String(labels), company_id, start_time, end_time, sort
             }).then(({ data }) => {
               this.btnLoading = false
-              const { code, msg, httpStatus } = data
+              const { httpStatus } = data
               if (httpStatus === 200) {
                 this.$router.push({
-                  name: '24h_recruiter'
-                })
-              } else if (code === 919) {
-                this.$alert(`${msg}`, '以下用户非招聘官', {
-                  confirmButtonText: '确定',
-                  type: 'warning'
+                  name: '24h_company'
                 })
               }
             })
@@ -159,14 +140,13 @@ export default {
       })
     },
     getRapidlySurface () {
-      getRapidRecruiterById({ id: this.$route.query.id }).then(({ data }) => {
+      getRapidCompanyById({ id: this.$route.query.id }).then(({ data }) => {
         const { surfaceRapidlyInfo } = data.data
         Object.assign(this.form, {
-          area_id: surfaceRapidlyInfo.areaId,
           times: [surfaceRapidlyInfo.startTime, surfaceRapidlyInfo.endTime],
           is_online: surfaceRapidlyInfo.isOnline,
           sort: surfaceRapidlyInfo.sort,
-          position_type_id: surfaceRapidlyInfo.positionTypeId
+          labels: surfaceRapidlyInfo.labelArr[0] && surfaceRapidlyInfo.labelArr[0].id
         })
       })
     },
