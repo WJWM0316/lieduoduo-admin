@@ -604,7 +604,7 @@ export default class invitPro extends Vue {
   }
   toPositionPath (id) {
     this.$router.push({
-      path: '/positionManage/positionAuditDetail',
+      name: 'positionAuditDetail',
       query: { id }
     })
   }

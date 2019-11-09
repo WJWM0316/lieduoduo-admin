@@ -21,7 +21,7 @@ export default [
             path: 'edit',
             name: 'h24_position_edit',
             meta: {
-              title: '新增24h职位'
+              title: '修改新增24h职位'
             },
             component: resolve => require(['@/pages/24h/position/post.vue'], resolve)
           },
@@ -29,7 +29,7 @@ export default [
             path: 'add',
             name: 'h24_position_post',
             meta: {
-              title: '修改24h职位'
+              title: '新增24h职位'
             },
             component: resolve => require(['@/pages/24h/position/post.vue'], resolve)
           }

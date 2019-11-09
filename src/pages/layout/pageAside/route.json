@@ -105,9 +105,9 @@
 			"isShow": true
 		},
 		{
-			"path": "/interview/List",
+			"path": "/interview/apply",
 			"title": "申请列表",
-			"name": "List",
+			"name": "interview_apply",
 			"isShow": true
 		},
 		{

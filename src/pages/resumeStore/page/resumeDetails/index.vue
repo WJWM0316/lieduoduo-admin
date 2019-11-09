@@ -14,5 +14,5 @@ import Component from 'vue-class-component'
 export default class resumeDetails extends Vue {}
 </script>
 <style scoped lang="less">
-@import "./resumeDetails.less";
+@import "./index.less";
 </style>

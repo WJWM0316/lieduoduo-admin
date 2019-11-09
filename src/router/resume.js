@@ -3,7 +3,6 @@ export default [
   /* 简历库 */
   {
     path: '/resumeStore',
-    name: 'resumeStore',
     meta: { title: '简历库', auth: true },
     component: Layout,
     redirect: {
@@ -18,7 +17,7 @@ export default [
           {
             path: '',
             name: 'list',
-            meta: { title: '简历列表' },
+            meta: { title: '简历列表管理' },
             component: resolve =>
               require(['@/pages/resumeStore/page/list/list.vue'], resolve)
           },
@@ -78,7 +77,6 @@ export default [
           }
         ]
       },
-
       {
         path: 'invitationProgress',
         name: 'invitationProgress',
@@ -108,10 +106,10 @@ export default [
       },
       /* 简历详情 */
       {
-        path: '/resumeDetails',
+        path: 'resumeDetails',
         name: 'resumeDetails',
         meta: { title: '简历详情' },
-        component: resolve => require(['@/pages/resumeDetails/resumeDetails.vue'], resolve)
+        component: resolve => require(['@/pages/resumeStore/page/resumeDetails/index.vue'], resolve)
       }
     ]
   }

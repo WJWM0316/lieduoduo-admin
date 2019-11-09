@@ -144,12 +144,12 @@
             </ul>
           </div>
           <div class="pop_right">
-            <img class="clo" src="../../assets/images/clo.png" @click="popCancel('name')" />
+            <img class="clo" src="../../../assets/images/clo.png" @click="popCancel('name')" />
             <search-bar class="f-float-left" @search="handleSearch" :width="'200'" v-model="searchPosition" placeholder="请输入职位关键词" style="margin-top: 12px;"></search-bar>
             <ul class="job_classily">
               <li v-for="(item,index) in secondPositionList" @click="selectSecondPosition(index)" :key="index">
-                <img class="classily_icon classily_open" src="../../assets/images/add_icon.png" v-if="!item.active" />
-                <img class="classily_icon classily_close" src="../../assets/images/close_icon.png" v-else />
+                <img class="classily_icon classily_open" src="../../../assets/images/add_icon.png" v-if="!item.active" />
+                <img class="classily_icon classily_close" src="../../../assets/images/close_icon.png" v-else />
                 {{item.name}}
               </li>
             </ul>

@@ -1,11 +1,10 @@
 <template>
   <header id="page-header">
-    <!-- <el-breadcrumb separator="/">
-      <el-breadcrumb-item v-if="haveParent" :to="{ path: `${parentPath}` }">{{parentName}}</el-breadcrumb-item>
-      <el-breadcrumb-item>
-        <a>{{nowLinkName}}</a>
-      </el-breadcrumb-item>
-    </el-breadcrumb> -->
+    <el-breadcrumb separator="/">
+      <template v-for="item in breadCrumbs">
+        <el-breadcrumb-item :key="item.path" :to="{ path: item.path}">{{item.title}}</el-breadcrumb-item>
+      </template>
+    </el-breadcrumb>
     <ul class="navigation">
       <li style="position: relative; cursor: pointer;" @click.stop="showExit">
         <img :src="userinfo.avatarInfo && userinfo.avatarInfo.middleUrl" class="avar">
@@ -27,7 +26,25 @@ export default {
   computed: {
     userinfo () {
       return this.$store.getters.getUserinfo || {}
+    },
+    breadCrumbs () {
+      let matched = this.$route.matched
+      matched = matched.map((val, index) => ({
+        index,
+        path: val.path,
+        name: val.name,
+        title: (val.meta && val.meta.title) || '',
+        redirect: val.redirect
+      }))
+      return matched.filter(val => {
+        if (val.index) return true
+        if (val.name) return true
+        return false
+      })
     }
+  },
+  mounted () {
+    console.log(this.breadCrumbs)
   },
   methods: {
     toLogin () {
