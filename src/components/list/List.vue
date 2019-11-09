@@ -76,6 +76,7 @@ export default List
   min-height: 100%;
 
   .list-footer {
+    text-align: center;
     box-sizing: border-box;
     z-index: 200;
     position: fixed;

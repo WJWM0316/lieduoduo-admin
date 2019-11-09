@@ -164,6 +164,7 @@ export default class lyoutContent extends Vue {
   }
 }
 .list-footer {
+  text-align: center;
   box-sizing: border-box;
   z-index: 999;
   position: fixed;

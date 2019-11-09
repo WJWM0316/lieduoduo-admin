@@ -5,6 +5,7 @@ const resolve = dir => {
 
 module.exports = {
   lintOnSave: false,
+  productionSourceMap: false,
   configureWebpack: {
     entry: {
       vendors: ['vue', 'vue-router', 'axios', 'vuex']
@@ -32,3 +33,5 @@ module.exports = {
     config.plugins.delete('prefetch')
   }
 }
+// 当 prefetch 插件被禁用时，你可以通过 webpack 的内联注释手动选定要提前获取的代码区块
+// import(/* webpackPrefetch: true */ './someAsyncComponent.vue')

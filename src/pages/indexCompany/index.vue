@@ -194,6 +194,7 @@
         <list
           :fields="fields"
           :list="list"
+          v-loading="getLoading"
           :total="total"
           :page="Number(form.page)"
           :page-count="pageCount"
@@ -337,6 +338,7 @@ Component.registerHooks([
 })
 export default class indexPage extends Vue {
   canDownloadData = true
+  getLoading = true
   total = 0; // 筛查结果数量
   pageCount = 0; // 请求回的数据共几页
   AdminShow = ''; // 权限字段，限制搜索
@@ -541,7 +543,9 @@ export default class indexPage extends Vue {
       }
     }
     params = Object.assign(params, { high_quality: this.form.high_quality })
+    this.getLoading = true
     getCompanyListApi(params).then(res => {
+      this.getLoading = false
       let list = res.data.data
       list.map((field, index) => {
         field.customer_level = [].concat(this.companyCustomerLevelRange)
@@ -641,8 +645,8 @@ export default class indexPage extends Vue {
   toUser (uid) {
     this.$router.push({ path: `/user/userInfo/${uid}` })
   }
-  toPost(id) {
-    this.$router.push({ name: '24h_company_add' , query: { company_id:id } });
+  toPost (id) {
+    this.$router.push({ name: '24h_company_add', query: { company_id: id } })
   }
   download () {
     this.$confirm('是否导出该列表数据？', '提示', {

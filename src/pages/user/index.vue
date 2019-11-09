@@ -152,6 +152,7 @@
         </div>
         <!--筛选-->
         <list
+          v-loading="getLoading"
           :fields="fields"
           :list="list"
           :total="total"
@@ -313,6 +314,7 @@ import { getSalerListApi } from 'API/common'
 export default class user extends Vue {
   total = 0;
   pageCount = 0;
+  getLoading = false
   qrCode = '';
   salerLis = []; // 跟进人销售名单
   AdminShow = ''; // 权限字段，限制搜索
@@ -429,7 +431,9 @@ export default class user extends Vue {
   }
   // 获取销售人员名单
   async getSalerList () {
+    this.getLoading = true
     let res = await getSalerListApi({ pageCount: 50 })
+    this.getLoading = false
     this.salerLis = res.data.data
   }
   // 添加跟进人
