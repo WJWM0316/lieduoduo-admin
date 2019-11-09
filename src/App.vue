@@ -18,7 +18,7 @@
     }
   }
 }
-
+@import './style/iconfont.less';
 @import './style/reset.css';
 @import './style/less/common.less';
 @import './elementui/element.reset.less';

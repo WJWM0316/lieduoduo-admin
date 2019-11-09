@@ -79,7 +79,6 @@ export default class login extends Vue {
 </script>
 
 <style lang="less" scoped="scoped">
-@import "../../style/iconfont.less";
 #login {
   background: url(../../assets/loginbg.png);
   background-color: #fbfbff;

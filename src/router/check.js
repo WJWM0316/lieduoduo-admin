@@ -41,7 +41,7 @@ export default [
             meta: {
               title: '编辑公司信息'
             },
-            component: resolve => require(['@/pages/createCompany/index.vue'], resolve)
+            component: resolve => require(['@/pages/indexCompany/createCompany'], resolve)
           }
         ]
       },

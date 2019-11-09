@@ -4,7 +4,6 @@ import App from './App.vue'
 import router from './router'
 import store from './store/store'
 import VuePhotoZoomPro from 'vue-photo-zoom-pro'
-import './style/iconfont.less'
 // import Alert from 'COMPONENTS/alert/alert.js'
 // 自定义的组件
 // 引入vue实例扩展函数库

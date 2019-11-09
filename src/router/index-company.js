@@ -11,7 +11,7 @@ export default [
         path: '',
         name: 'index',
         meta: { title: '公司库' },
-        component: resolve => require(['@/pages/index/index.vue'], resolve)
+        component: resolve => require(['@/pages/indexCompany/index.vue'], resolve)
       },
       {
         path: 'createCompany',
@@ -19,7 +19,7 @@ export default [
         meta: {
           title: '创建公司'
         },
-        component: resolve => require(['@/pages/createCompany/index.vue'], resolve)
+        component: resolve => require(['@/pages/indexCompany/createCompany'], resolve)
       },
       /* 编辑公司信息 */
       {
@@ -28,7 +28,7 @@ export default [
         meta: {
           title: '编辑公司信息'
         },
-        component: resolve => require(['@/pages/createCompany/index.vue'], resolve)
+        component: resolve => require(['@/pages/indexCompany/createCompany'], resolve)
       },
       /* 公司录入详情 */
       {
@@ -37,7 +37,7 @@ export default [
         meta: {
           title: '公司详情'
         },
-        component: resolve => require(['@/pages/index/companyInfo.vue'], resolve)
+        component: resolve => require(['@/pages/indexCompany/companyInfo.vue'], resolve)
       },
 
       /* 编辑身份信息 */
@@ -48,7 +48,7 @@ export default [
           title: '编辑身份信息'
         },
         component: resolve =>
-          require(['@/pages/editCompany/editIdentity.vue'], resolve)
+          require(['@/pages/indexCompany/editIdentity.vue'], resolve)
       }
     ]
   }

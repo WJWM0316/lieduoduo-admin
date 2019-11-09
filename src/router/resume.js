@@ -77,7 +77,6 @@ export default [
           }
         ]
       },
-
       {
         path: 'invitationProgress',
         name: 'invitationProgress',
@@ -110,7 +109,7 @@ export default [
         path: 'resumeDetails',
         name: 'resumeDetails',
         meta: { title: '简历详情' },
-        component: resolve => require(['@/pages/resumeDetails/resumeDetails.vue'], resolve)
+        component: resolve => require(['@/pages/resumeStore/page/resumeDetails/index.vue'], resolve)
       }
     ]
   }

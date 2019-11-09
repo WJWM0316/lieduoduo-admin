@@ -71,7 +71,7 @@ export default [
             path: '',
             meta: { title: '职位列表' },
             name: 'positionManage',
-            component: resolve => require(['@/pages/positionManage/index.vue'], resolve)
+            component: resolve => require(['@/pages/positionManage/list/index.vue'], resolve)
           },
           /* 职位审核详情 */
           {
@@ -81,7 +81,7 @@ export default [
               title: '职位审核详情'
             },
             component: resolve =>
-              require(['@/pages/positionAuditDetail/index.vue'], resolve)
+              require(['@/pages/positionManage/audit/index.vue'], resolve)
           },
           /* 职位发布编辑 */
           {
@@ -90,7 +90,7 @@ export default [
             meta: {
               title: '职位发布'
             },
-            component: resolve => require(['@/pages/positionPost/index.vue'], resolve)
+            component: resolve => require(['@/pages/positionManage/set/index.vue'], resolve)
           }
         ]
       }

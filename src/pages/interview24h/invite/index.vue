@@ -253,16 +253,16 @@
     <div class="phone" ref="mobile">
       <span>{{mobile}}</span>
 
-      <img class="phoneBg" src="../../assets/number_bg.png" />
+      <img class="phoneBg" src="../../../assets/number_bg.png" />
     </div>
     <!--小程序码展示框-->
     <div class="qrCode" ref="qrCode">
-      <img class="bg" src="../../assets/code_bg.png" />
+      <img class="bg" src="../../../assets/code_bg.png" />
       <div
         style="height: 100%;display: flex; align-items: center;flex-direction: column;justify-content: center;"
         v-if="!qrCode"
       >
-        <img style="height: 38px;width: 38px;" src="../../assets/loading.gif" />
+        <img style="height: 38px;width: 38px;" src="../../../assets/loading.gif" />
         <div class="txt">正在加载中…</div>
       </div>
       <div v-else>
@@ -801,7 +801,6 @@ export default class invite extends Vue {
 
 <style lang="less" scoped="scoped">
 @import "./index.less";
-@import "../../style/iconfont.less";
 .application {
   text-align: unset;
   .container {
