@@ -4,7 +4,6 @@ import Store from '@/store/store'
 import { admin_menu, getUserInfoApi } from 'API/common'
 import { getAccessToken, getUserInfo } from 'API/cacheService'
 import Hours24 from './24hours'
-import Advert from './advert'
 import Check from './check'
 import Common from './common'
 import IndexCompany from './index-company'
@@ -22,7 +21,6 @@ const router = new Router({
     ...IndexCompany,
     ...Recruiter,
     ...Hours24,
-    ...Advert,
     ...User,
     ...Check,
     ...Interview,

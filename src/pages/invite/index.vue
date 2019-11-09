@@ -460,7 +460,7 @@ export default class invite extends Vue {
     this.isShow = false
   }
   toPath (id) {
-    window.open(`/positionManage/positionAuditDetail?id=${id}`, '_blank')
+    window.open(`/manage/positionManage/positionAuditDetail?id=${id}`, '_blank')
   }
   /* 说出不合适原因 */
   sayResult (interviewId) {

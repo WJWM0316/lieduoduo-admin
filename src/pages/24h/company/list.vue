@@ -167,9 +167,10 @@ export default {
           break
         case 'view':
           this.$router.push({
-            name: 'recruiter_info',
+            name: 'interview24h',
             params: {
-              id: data.id
+              searchType: 'company_id',
+              content: data.id
             }
           })
           break

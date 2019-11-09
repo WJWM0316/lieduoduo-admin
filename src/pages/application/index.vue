@@ -391,7 +391,7 @@ export default class application extends Vue {
   }
   toPath (id) {
     let routeUrl = this.$router.resolve({
-      path: '/positionManage/positionAuditDetail',
+      name: 'positionAuditDetail',
       query: { id }
     })
     window.open(routeUrl.href, '_blank')

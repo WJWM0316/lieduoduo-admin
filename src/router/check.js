@@ -3,7 +3,6 @@ export default [
   // 审核管理
   {
     path: '/check',
-    name: 'check',
     meta: { title: '审核管理', auth: true },
     component: Layout,
     children: [
@@ -15,6 +14,7 @@ export default [
           {
             path: '',
             name: 'companyCheck',
+            meta: { title: '审核列表' },
             component: resolve => require(['@/pages/companyCheck/index.vue'], resolve)
           },
           {
@@ -47,29 +47,36 @@ export default [
       },
       {
         path: 'recruitmentOfficer',
-        name: 'recruitmentOfficer',
         meta: { title: '招聘官管理' },
-        component: resolve =>
-          require(['@/pages/officerManage/index.vue'], resolve)
-      },
-      /* 编辑申请招聘官用户信息 */
-      {
-        path: '/check/recruitmentOfficer/editUser/:id',
-        name: 'editOfficerUser',
-        meta: {
-          title: '编辑招聘官信息'
-        },
-        component: resolve => require(['@/pages/user/addUser.vue'], resolve)
-      },
-      /* 招聘官审核详情 */
-      {
-        path: '/check/recruitmentOfficer/reviewDetails',
-        name: 'reviewDetails',
-        meta: {
-          title: '招聘官审核详情'
-        },
-        component: resolve =>
-          require(['@/pages/officerManage/reviewDetails.vue'], resolve)
+        component: { render (c) { return c('router-view') } },
+        children: [
+          {
+            path: '',
+            name: 'recruitmentOfficer',
+            meta: { title: '招聘官列表' },
+            component: resolve => require(['@/pages/officerManage/index.vue'], resolve)
+          },
+          /* 编辑申请招聘官用户信息 */
+          {
+            path: 'editUser/:id',
+            name: 'editOfficerUser',
+            meta: {
+              title: '编辑招聘官信息'
+            },
+            component: resolve => require(['@/pages/user/addUser.vue'], resolve)
+          },
+          /* 招聘官审核详情 */
+          {
+            path: 'reviewDetails',
+            name: 'reviewDetails',
+            meta: {
+              title: '招聘官审核详情'
+            },
+            component: resolve =>
+              require(['@/pages/officerManage/reviewDetails.vue'], resolve)
+          }
+        ]
+
       }
     ]
   }

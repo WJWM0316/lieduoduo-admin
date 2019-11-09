@@ -10,14 +10,6 @@ export default [
     component: Layout,
     children: [
       {
-        path: '',
-        name: 'interview',
-        component: resolve => require(['../App.vue'], resolve),
-        meta: {
-          title: '面试管理'
-        }
-      },
-      {
         path: '24h',
         name: 'interview24h',
         meta: {

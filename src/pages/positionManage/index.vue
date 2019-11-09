@@ -573,10 +573,6 @@ export default class companyCheck extends Vue {
         page: 'positionManage'
       }
     })
-    // this.$router.push({
-    //   path: "/positionManage/positionAuditDetail",
-    //   query: { id: id }
-    // });
   }
 
   checkPosition (id) {
@@ -617,7 +613,7 @@ export default class companyCheck extends Vue {
   }
 
   addPosition () {
-    this.$router.push({ path: '/positionManage/positionPost' })
+    this.$router.push({ name: 'positionPost' })
   }
   handlePageChange (nowPage) {
     this.$route.meta.scrollY = 0

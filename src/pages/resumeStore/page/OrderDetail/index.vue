@@ -403,7 +403,7 @@ export default class OrderDetail extends Vue {
   toPositionPath (id) {
     // console.log(id);
     this.$router.push({
-      path: '/positionManage/positionAuditDetail',
+      name: 'positionAuditDetail',
       query: { id }
     })
   }

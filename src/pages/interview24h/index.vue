@@ -762,6 +762,10 @@ export default class Interview24h extends Vue {
     {
       value: 'position',
       label: '职位'
+    },
+    {
+      value: 'company_id',
+      label: '公司ID'
     }
   ]
   statusLists = [
@@ -1772,7 +1776,7 @@ export default class Interview24h extends Vue {
    * @return   {[type]}      [description]
    */
   readPosition (id) {
-    window.open(`/positionManage/positionAuditDetail?id=${id}`, '_blank')
+    window.open(`/manage/positionManage/positionAuditDetail?id=${id}`, '_blank')
   }
   hide () {
     this.openType = ''
