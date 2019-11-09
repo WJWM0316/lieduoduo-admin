@@ -168,7 +168,7 @@ export default {
         case 'view':
           this.$router.push({
             name: 'interview24h',
-            params: {
+            query: {
               searchType: 'company_id',
               content: data.id
             }
