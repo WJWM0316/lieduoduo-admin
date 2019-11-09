@@ -416,9 +416,7 @@ export default class invitPro extends Vue {
     return param
   }
   getData (page) {
-    console.log('page', page)
     let obj = this.forEachKeys(this.form, page)
-    console.log(obj, 'sdfsdf')
     interviewsList(obj).then(res => {
       this.tableData = res.data.data
       this.leftcontent.lastPage = res.data.meta.lastPage

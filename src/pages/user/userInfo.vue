@@ -334,16 +334,12 @@ export default class addUser extends Vue {
   };
   /* 切换tab */
   tab (e) {
-    console.log('e.target.className', e.target.className)
-    console.log('-----')
     if (e.target.className.indexOf('userInfo') === -1) {
-      console.log('基本信息 ')
       this.$nextTick(() => {
         this.userList()
       })
       this.isEditAdminName = true
     } else if (e.target.className.indexOf('editAdminName') === -1) {
-      console.log('账户设置')
       this.$nextTick(() => {
         this.getUserInfo()
       })
@@ -355,7 +351,6 @@ export default class addUser extends Vue {
     this.$set(this.saveParam, 'admin_uid', this.salesList[e].id)
   }
   async saveAdminName () {
-    console.log(this.saveParam)
     if (this.saveParam.group_id === '') {
       this.$message.error('请先选择跟进人')
     } else {
@@ -424,7 +419,6 @@ export default class addUser extends Vue {
     // this.isNewCompany=false
     this.companyInfo.realName = this.userInfo.name
 
-    console.log('this.companyInfo', this.companyInfo)
     // console.log(this.userInfo);
     if (this.companyInfo.isAdmin) {
       let param = {
@@ -443,7 +437,6 @@ export default class addUser extends Vue {
   bindCompany () {
     this.showAdminWindow = true
     this.isBindAdmin = false
-    console.log(this.userInfo)
     // this.
   }
   /* 关闭弹窗 */
@@ -454,11 +447,9 @@ export default class addUser extends Vue {
 
   /* 获取用户信息 */
   async getUserInfo () {
-    console.log('routeId', this.$route.params.id)
     let res = await getUserInfoApi(this.$route.params.id)
     let userInfo = res.data.data
     this.userInfo = userInfo
-    console.log('this.userInfo', this.userInfo)
 
     this.isDetection = !userInfo.needRealNameAuth
     if (userInfo.companyInfo) {
@@ -472,7 +463,6 @@ export default class addUser extends Vue {
     this.phone = {
       mobile: userInfo.mobile
     }
-    console.log('userInfo', userInfo)
     /* 身份信息 */
     this.personalInfo = {
       uid: userInfo.uid,
@@ -532,25 +522,18 @@ export default class addUser extends Vue {
   userList () {
     getSalerListApi().then(res => {
       this.salesList = res.data.data
-      console.log(this.salesList, 'fffffffffffffffffffffffff')
     })
   }
   mounted (e) {
     this.isEditAdminName = Boolean(this.$route.query.isEditAdminName)
-    console.log(this.isEditAdminName)
     if (this.isEditAdminName) {
-      console.log('进入账户设置')
       // this.active = 1;
       this.userList()
     } else {
-      console.log('进入基本信息')
-
       // this.active = 0;
       this.getUserInfo()
     }
-    console.log('isEditAdminName', this.isEditAdminName)
     this.AdminShow = +sessionStorage.getItem('AdminShow')
-    // console.log("this.AdminShow", this.AdminShow);
   }
 }
 </script>

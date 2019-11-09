@@ -430,10 +430,8 @@ export default class OrderDetail extends Vue {
   // 看二维码
   /* 生成小程序码 */
   async creatLink (e, uid, index, type) {
-    console.log('e', e.clientX)
     this.qrCode = ''
     // 是否已经加载过二维码
-    console.log('this.tableData[index]', this.tableData[index])
     if (this.tableData[index].qrCode && type === 1) {
       this.qrCode = this.tableData[index].qrCode
       this.$nextTick(() => {

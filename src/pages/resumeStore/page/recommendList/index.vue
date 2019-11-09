@@ -235,7 +235,6 @@ export default class recommend extends Vue {
   }
   forEachKeys (form, page) {
     // 基础键，剩余键值对由用户选择
-    console.log('form.page', form.page)
     let param = {
       count: 20,
       page: page,
@@ -260,7 +259,6 @@ export default class recommend extends Vue {
     })
   }
   handlePageChange (nowPage) {
-    // console.log(nowPage);
     this.$refs['methods'].scrollZero()
     this.form.page = nowPage
     this.getData(this.form.page)

@@ -309,7 +309,6 @@ export default class Advertisement extends Vue {
     if (this.form.wherefrom) {
       params = Object.assign(params, { wherefrom: this.form.wherefrom })
     }
-    console.log(this.form)
     getAdvertListApi(params).then(res => {
       let infos = res.data
       let lists = infos.data

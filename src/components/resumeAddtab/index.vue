@@ -132,10 +132,8 @@ export default class resumeAddtab extends Vue {
         this.$emit('CallbackDetail')
       })
     } else {
-      console.log(this.nowCheckListTab)
       let labelIds = this.nowCheckListTab.map(item => item.labelId).join(',')
       confgiLabel(this.uid, { labelIds }).then(res => {
-        console.log(res)
         this.showAddResumeTab = false
         this.$emit('CallbackDetail')
       })
@@ -156,7 +154,6 @@ export default class resumeAddtab extends Vue {
   }
   /* 新增标签 */
   addTab () {
-    console.log(this.diyTabName)
     createLabel({ name: this.diyTabName }).then(res => {
       this.Tabresumelist()
       this.$message({

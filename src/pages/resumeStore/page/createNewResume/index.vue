@@ -246,7 +246,6 @@ export default class OrderDetail extends Vue {
     }
   };
   validate_startWorkYear = (rule, value, callback) => {
-    console.log(value, 'startWorkYear')
     if (!value) {
       callback(new Error('请输入工作时间'))
     } else {
@@ -356,7 +355,7 @@ export default class OrderDetail extends Vue {
   }
   /* 上传文件 */
   handleFileSuccess (e) {
-    console.log(e)
+    // console.log(e)
   }
   /* 修改手机号码 */
   editMoile () {
@@ -365,21 +364,20 @@ export default class OrderDetail extends Vue {
     this.closeModel = true
   }
   verificationMobile () {
-    console.log(this.checkMobileVal)
+    // console.log(this.checkMobileVal)
   }
   changeTimeStamp (e, type) {
     this.form[type] = parseInt(e / 1000)
   }
   /* 文件上传成功 */
   uploadImg (e) {
-    console.log(e)
+    // console.log(e)
   }
   /* 选择文件 */
   beforeUpload (e) {
     this.form.resumeAttachId = e.data[0].id
   }
   UploadImage (param) {
-    console.log(param)
     let name = param.file.name.split('.')[1]
     let type = /(jpg|gif|png|peg|bmp)/.test(name) ? 'img' : 'doc'
     const formData = new FormData()
@@ -400,7 +398,6 @@ export default class OrderDetail extends Vue {
       })
     } else {
       haveMobile(e).then(res => {
-        console.log(res)
         if (!res.data.data.userExist) {
           this.$message({
             message: '该用户不存在，请去创建用户',
@@ -425,17 +422,15 @@ export default class OrderDetail extends Vue {
     }
   }
   choiceMax (e) {
-    console.log(e)
+    // console.log(e)
   }
   submitForm (form) {
     this.changeTimeStamp(this.form.birth, 'birth')
     this.changeTimeStamp(this.form.startWorkYear, 'startWorkYear')
-    // console.log(this.form.expectFieldIds);
     this.form.expectFieldIds = [...this.form.expectFieldIds].join(',')
     this.$refs[form].validate(valid => {
       if (valid) {
         createResume(this.form.mobile, this.form).then(res => {
-          console.log(res)
           this.$message({
             message: '创建成功',
             type: 'success'
@@ -448,7 +443,6 @@ export default class OrderDetail extends Vue {
           })
         })
       } else {
-        console.log(this.form)
         return false
       }
     })
@@ -500,7 +494,6 @@ export default class OrderDetail extends Vue {
   field () {
     fieldApi().then(res => {
       this.fieldList = res.data.data
-      console.log('行业', this.fieldList)
     })
   }
   getUploadParam () {

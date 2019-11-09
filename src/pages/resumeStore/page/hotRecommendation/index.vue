@@ -394,7 +394,6 @@ export default class invitPro extends Vue {
     getAdvisorUserListApi().then(res => (this.advisorUserList = res.data.data))
   }
   handlePageChange (nowPage) {
-    // console.log(nowPage);
     this.$refs['methods'].scrollZero()
     this.form.page = nowPage
     this.getData(this.form.page)
@@ -412,7 +411,6 @@ export default class invitPro extends Vue {
     this.$refs[name].resetFields()
     this.form.followAdvisorUid = ''
     this.getData(1)
-    // console.log(this.form);
   }
   /* 关闭二维码弹窗 */
   closeTopic () {
@@ -506,7 +504,6 @@ export default class invitPro extends Vue {
   /* 生成小程序码 */
   /* 展示手机 */
   showPhone (e, mobile) {
-    // console.log(mobile);
     if (this.timeout !== null) clearTimeout(this.timeout)
     this.mobile = mobile || '用户未绑定手机'
     this.$nextTick(() => {

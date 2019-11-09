@@ -317,7 +317,6 @@ export default class PostResume extends Vue {
       //   mobile: 13093177279
       // }
       this.uid = query.userInfo.uid
-      console.log(query.userInfo)
       if (!this.uid && !query.userInfo.mobile) {
         this.$message({
           message: '信息不全',
@@ -357,7 +356,6 @@ export default class PostResume extends Vue {
 
     getResumeDetails () {
       return GetResumeDetailsAPI(this.uid).then(res => {
-        console.log(res.data.data)
         this.editMsg = res.data.data
       })
     }
@@ -365,7 +363,6 @@ export default class PostResume extends Vue {
     addBlock (type) {
       if (this.handleStatus === 'add') return
       if (type) {
-        console.log(Object.keys(this[`form${type}`]))
         let name = `isEditForm${type}`
         let keys = Object.keys(this[`form${type}`])
         this[name] = true
@@ -435,7 +432,6 @@ export default class PostResume extends Vue {
 
       // this.$router.go(-1)
       } catch (e) {
-        console.log(e)
         this.$message.error(e.msg)
       } finally {
       }
@@ -458,7 +454,6 @@ export default class PostResume extends Vue {
       }
 
       if (type === 1) {
-        console.log(this.editMsg.mobile)
         this[`form${type}`].mobile = this.editMsg.mobile
         this[`form${type}`].name = this.editMsg.name
         this[`form${type}`].gender = String(this.editMsg.gender)
@@ -648,8 +643,6 @@ export default class PostResume extends Vue {
       if (name === 'form7') {
         newForm.attachIds = this.introImgList.map(field => field.id).join(',')
       }
-
-      console.log(newForm, this[name])
       return newForm
     }
 
@@ -666,9 +659,7 @@ export default class PostResume extends Vue {
       let formData = new FormData()
       formData.append('attach_type', 'img')
       formData.append('img', e)
-      console.log(e.uploadType)
       uploadApi(formData).then(res => {
-        console.log(res.data)
         if (e.uploadType === 'headicon') {
           this.form1.avatar = String(res.data.data[0].id)
         }
@@ -690,7 +681,6 @@ export default class PostResume extends Vue {
      */
     handleChangeImage () {
       this.files = document.querySelector('#image').files
-      console.log(this.files)
       let num = this.files.length + this.introImgList.length
       if (num > 20) {
         this.$message.error('图片最多只能有20张')
@@ -737,8 +727,6 @@ export default class PostResume extends Vue {
       // 上传成功
       this.xhr.onload = (res) => {
         this.introImgList.push(JSON.parse(res.target.responseText).data[0])
-
-        console.log(this.introImgList)
       }
       // 上传失败
       this.xhr.onerror = (res) => {}
@@ -751,7 +739,6 @@ export default class PostResume extends Vue {
      * @detail  点击选择图片
      */
     handleChooseImage (e) {
-      console.log(e)
       document.querySelector('#image').click()
       document.querySelector('#image').value = ''
     }
@@ -804,7 +791,6 @@ export default class PostResume extends Vue {
     }
     mobileToGetInfo (mobile) {
       return haveMobile(mobile).then(res => {
-        console.log(res.data.data.cardInfo)
         let data = res.data.data
         if (data.userExist) {
           this.haveCard = data.haveCard
@@ -815,8 +801,6 @@ export default class PostResume extends Vue {
             gender: data.cardInfo.gender,
             name: data.cardInfo.name
           }
-
-          console.log(this.editMsg)
         }
       })
     }
@@ -835,14 +819,13 @@ export default class PostResume extends Vue {
       this.closeModel = true
     }
     verificationMobile () {
-      console.log(this.checkMobileVal)
+      // console.log(this.checkMobileVal)
     }
     changeTimeStamp (e, type) {
       this.form[type] = parseInt(e / 1000)
     }
 
     beforeUpload (param) {
-      console.log(param.name)
       let name = param.name.split('.')[1]
       let fileNames = ['png', 'jpg', 'pdf', 'doc', 'docx']
       let isUpload = fileNames.indexOf(name)
@@ -881,7 +864,6 @@ export default class PostResume extends Vue {
         })
       } else {
         haveMobile(e).then(res => {
-          console.log(res)
           if (!res.data.data.userExist) {
             this.$message({
               message: '该用户不存在，请去创建用户',
@@ -905,7 +887,7 @@ export default class PostResume extends Vue {
       }
     }
     choiceMax (e) {
-      console.log(e)
+      // console.log(e)
     }
     submitForm (form) {
       this.changeTimeStamp(this.form.birth, 'birth')
@@ -915,7 +897,6 @@ export default class PostResume extends Vue {
       this.$refs[form].validate(valid => {
         if (valid) {
           createResume(this.form.mobile, this.form).then(res => {
-            console.log(res)
             this.$message({
               message: '创建成功',
               type: 'success'
@@ -928,7 +909,6 @@ export default class PostResume extends Vue {
             })
           })
         } else {
-          console.log(this.form)
           return false
         }
       })
@@ -949,7 +929,6 @@ export default class PostResume extends Vue {
         }
       })
       this.selectedJobList.push(res)
-      console.log(this.selectedJobList)
     }
     changeSetSkillLabels (e) {
       this.professionalSkillsList.map((item, index) => {
@@ -1028,15 +1007,14 @@ export default class PostResume extends Vue {
       this.form3.salaryCeil = ''
     }
     changeCity (e) {
-      console.log(e)
     // this.form3.cityNum = e[e.length - 1]
     }
     changepositionId (e) {
-      console.log(e)
-    // this.form3.cityNum = e[e.length - 1]
+      // console.log(e)
+      // this.form3.cityNum = e[e.length - 1]
     }
     changefieldIds (e) {
-      console.log(e)
+      // console.log(e)
     // this.form3.cityNum = e[e.length - 1]
     }
     getCityData () {

@@ -369,7 +369,7 @@ export default class user extends Vue {
     label: 'name',
     children: 'children'
   }; // 职位类别的配置
-  
+
   form = {
     admin_uid: '', // 跟进人
     keyword: '',
@@ -592,7 +592,6 @@ export default class user extends Vue {
     getUserListApi(params).then(res => {
       this.list = res.data.data
       this.total = res.data.meta.total
-      console.log(this.list)
       this.pageCount = res.data.meta.lastPage
       if (this.form.searchType1 && this.form[this.form.searchType1]) {
         params = Object.assign(params, { searchType1: this.form.searchType1, [this.form.searchType1]: this.form[this.form.searchType1] })
@@ -622,7 +621,7 @@ export default class user extends Vue {
       }
     })
   }
-  //将招聘官添加到24h招聘官
+  // 将招聘官添加到24h招聘官
   checkRecruitment (id) {
     this.$router.push({
       name: '24h_recruiter_add',

@@ -249,7 +249,7 @@
       <div class="html_content_box_01" v-if="model.type === 'customize' || model.type === 'customize_life'">
         <el-input v-model="model.value2" placeholder="请输入标签名称" maxlength="6"></el-input>
       </div>
-      
+
       <!-- 官方标签 -->
       <div class="html_content_box" v-if="model.type === 'official'">
         <div class="m_h1">已选择标签：</div>
@@ -297,7 +297,7 @@ import {
   uploadApi,
   getLabelProfessionalLiteracyListApi,
   getLabelProfessionalSkillsListApi,
-  getLabelProfessionalOfficialListApi,
+  getLabelProfessionalOfficialListApi
 } from 'API/common'
 import {
   upload_api
@@ -324,7 +324,7 @@ import {
 
 import {
   editApplyUserInfoApi,
-  getRecruitersListApi,
+  getRecruitersListApi
 } from 'API/company'
 import { getAccessToken } from '@/api/cacheService.js'
 // 邮箱
@@ -504,7 +504,6 @@ export default class EditRecruiter extends Vue {
     this.model.list = [].concat(this.labelProfessionalLiteracyList)
   }
   removeLifeItem (index, item) {
-    console.log(index, item)
     if (this.model.selected.length < 2) {
       this.$message({
         message: '至少选择一个标签',
@@ -543,7 +542,7 @@ export default class EditRecruiter extends Vue {
     return getRecruiterLabelApi({ uid: this.$route.params.id })
       .then(res => (this.userInfos = Object.assign(this.userInfos, { label: res.data.data })))
   }
-  //拿到招聘官标签列表
+  // 拿到招聘官标签列表
   getRecruiterLabelsLists () {
     getofficialLifeLabelsApi({ uid: this.$route.params.id }).then(res => {
       let official = []
@@ -552,9 +551,7 @@ export default class EditRecruiter extends Vue {
         official.push(item)
       })
       this.userInfos.official = official
-      console.log(this.userInfos.official)
     })
-    console.log(this.userInfos.official)
 
     return getRecruiterLabelsListsApi({ uid: this.$route.params.id }).then(res => {
       let literacyLabels = []
@@ -589,7 +586,6 @@ export default class EditRecruiter extends Vue {
   todoAction (type) {
     let literacyLabels = this.userInfos.literacyLabels.map(field => field.labelId)
     switch (type) {
-
       case 'official':
         let official = [].concat(this.userInfos.official)
         if (official.length >= 2) {
@@ -599,7 +595,7 @@ export default class EditRecruiter extends Vue {
         this.model.show = true
         this.model.title = '添加官方标签'
         this.model.type = 'official'
-        // this.model.selected = 
+        // this.model.selected =
         break
 
       case 'literacy':
@@ -695,7 +691,7 @@ export default class EditRecruiter extends Vue {
         break
     }
   }
-  //向后端发送标签信息
+  // 向后端发送标签信息
   confirm () {
     let skillLabels = []
     let literacyLabels = []
@@ -720,23 +716,21 @@ export default class EditRecruiter extends Vue {
       literacyLabels,
       lifeLabels
     }
-    //官方标签数据
+    // 官方标签数据
     let officialData = {
       uid: this.$route.params.id,
-      labelId: official,
+      labelId: official
     }
     switch (this.model.type) {
-
       case 'official':
         officialData.labelId = []
         this.model.selected.forEach(item => {
-          if(item.type === 'label_professional_official') {
+          if (item.type === 'label_professional_official') {
             officialData.labelId.push({ labelId: item.labelId, source: item.source })
           }
         })
-        console.log(officialData)
-          addofficialLifeLabelsApi(officialData).then()
-          break;
+        addofficialLifeLabelsApi(officialData).then()
+        break
 
       case 'literacy':
         data.literacyLabels = []
@@ -844,13 +838,13 @@ export default class EditRecruiter extends Vue {
     return getLabelProfessionalLiteracyListApi().then(res => (this.labelProfessionalLiteracyList = res.data.data))
   }
   getLabelProfessionalSkillsList () {
-    return getLabelProfessionalSkillsListApi().then(res => {(this.labelProfessionalSkillsList = res.data.data.labelProfessionalSkills)})
+    return getLabelProfessionalSkillsListApi().then(res => { (this.labelProfessionalSkillsList = res.data.data.labelProfessionalSkills) })
   }
   createLabelProfessionalSkills () {
     return createLabelProfessionalSkillsApi({ uid: this.$route.params.id })
   }
   getLabelProfessionalOfficialList () {
-    return getLabelProfessionalOfficialListApi().then(res => this.labelProfessionalofficial = res.data.data)
+    return getLabelProfessionalOfficialListApi().then(res => (this.labelProfessionalofficial = res.data.data))
   }
   getLabelItem (index, item) {
     let selected = this.model.selected

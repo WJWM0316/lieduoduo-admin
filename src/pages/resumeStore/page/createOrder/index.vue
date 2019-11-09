@@ -190,7 +190,6 @@ export default class OrderDetail extends Vue {
           type: 'warning'
         })
       } else {
-        console.log('成功通过')
         createOrder(this.form.positionId, { vkeys: this.form.vkeys })
           .then(res => {
             this.$nextTick(() => {
@@ -200,19 +199,14 @@ export default class OrderDetail extends Vue {
             this.tableData = res.data.data.result
             this.sumbitRusult = true
             // this.operating(this.nowResumeMsg.uid, { action: "删除", desc: "简历附件" });
-            console.log(res)
           })
           .catch(err => {
             this.isShowForm = true
             if (err.data.data.list === null) {
-              console.log('-----')
               this.$set(this.resultmsg, 'failNum', err.data.data.result.length)
               this.$set(this.resultmsg, 'succeedNum', 0)
-              // this.resultmsg.failNum = res.data.data.result.length;
-              console.log(this.resultmsg)
             }
             this.tableData = err.data.data.result
-            console.log(this.tableData)
           })
       }
     } else {

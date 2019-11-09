@@ -54,14 +54,7 @@ export default {
     this.AdminShow = sessionStorage.getItem('AdminShow')
   },
   methods: {
-    handleOpen (key, keyPath) {
-      console.log(key, keyPath)
-    },
-    handleClose (key, keyPath) {
-      console.log(key, keyPath)
-    },
     judge (adminGrade) {
-    // console.log("+adminGrade", +adminGrade);
       if (/(0|1|2)/.test(+adminGrade)) {
       // console.log("显示简历库");
         this.$set(this.itemList, 5, {

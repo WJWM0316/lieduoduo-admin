@@ -131,10 +131,8 @@ export default class reviewDetails extends Vue {
   getReviewDetails () {
     const { id } = this.$route.query
     getReviewDetailsApi(id).then(res => {
-      console.log(res)
       this.personalInfo = res.data.data.applyInfo
       this.identityInfo = res.data.data.identityInfo
-      console.log(this.personalInfo)
       this.recruiterInfo = res.data.data.recruiterInfo
     })
   }

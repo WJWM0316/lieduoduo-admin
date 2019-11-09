@@ -43,9 +43,6 @@ export default {
       })
     }
   },
-  mounted () {
-    console.log(this.breadCrumbs)
-  },
   methods: {
     toLogin () {
       clear()

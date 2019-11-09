@@ -112,7 +112,6 @@ export default class List extends Vue {
    */
   clearSelection () {
     if (!this.$table) {
-      console.log('表格元素还未渲染')
       return
     }
 
@@ -126,7 +125,6 @@ export default class List extends Vue {
    */
   toggleRowSelection (row, selected) {
     if (!this.$table) {
-      console.log('表格元素还未渲染')
       return
     }
 
@@ -138,7 +136,6 @@ export default class List extends Vue {
    */
   selectAll () {
     if (!this.$table) {
-      console.log('表格元素还未渲染')
       return
     }
 

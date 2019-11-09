@@ -151,10 +151,8 @@ export default class filterAnswer extends Vue {
   /* 单选 */
   checkReason (index) {
     this.cities[index].status = !this.cities[index].status
-    console.log(this.nowCheckList)
     for (let i = 0; i < this.nowCheckList.length; i++) {
       if (this.nowCheckList[i].labelId === '0') {
-        console.log(this.nowCheckList[i])
         this.nowCheckList.splice(i, 1)
       }
     }
@@ -176,7 +174,6 @@ export default class filterAnswer extends Vue {
   }
   /* 单选 */
   removeAarry (_arr, _obj) {
-    console.log('fsddfsfs')
     var length = _arr.length
     for (var i = 0; i < length; i++) {
       if (_arr[i] === _obj) {
@@ -188,7 +185,6 @@ export default class filterAnswer extends Vue {
           return _arr
         } else {
           _arr.splice(i, 1) // 删除下标为i的元素
-          console.log(_arr)
           return _arr
         }
       }

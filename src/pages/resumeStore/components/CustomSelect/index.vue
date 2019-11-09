@@ -87,7 +87,6 @@ export default class CustomSelect extends Vue {
 
     if (item === undefined) {
       /* 自定义 字段 */
-      console.log('我点击了确认')
       this.workExpLower = document.getElementById('minYear').value
       this.workExpUpper = document.getElementById('maxYear').value
       if (/\d/.test(this.workExpLower) && /\d/.test(this.workExpUpper)) {
@@ -107,7 +106,6 @@ export default class CustomSelect extends Vue {
       obj.value = `${obj.min}-${obj.max}`
     } else if (!item.isSection) {
       /*   特殊字段处理， 如 无   不限 */
-      console.log('this.SubType', this.SubpType)
       if (this.SubpType === 'work') {
         if (item.text === '不限') {
           obj.isStudent = 0
@@ -129,7 +127,6 @@ export default class CustomSelect extends Vue {
     }
     this.closeSelect()
     this.isCheck = false
-    console.log(obj, 'sdf')
     this.$emit('callback', obj)
   }
 }

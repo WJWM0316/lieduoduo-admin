@@ -45,7 +45,7 @@
               >
                 <el-select
                   class="selectTitle"
-                  
+
                   v-model="searchType.condition2"
                   slot="prepend"
                   placeholder="请选择"
@@ -395,7 +395,6 @@ export default class user extends Vue {
     this.$router.push({ path: '/user/addUser' })
   }
   mounted () {
-    console.log('1231')
     this.AdminShow = +sessionStorage.getItem('AdminShow')
     this.getSalerList()
   }
@@ -469,7 +468,6 @@ export default class user extends Vue {
     this.$route.meta.scrollY = 0
     window.scrollTo(0, 0)
     this.form.page = nowPage
-    console.log(this.form)
     let searchCondition = {}
     if (this.searchType.condition1 && this.searchType.keyword1) { searchCondition[this.searchType.condition1] = this.searchType.keyword1 }
     if (this.searchType.condition2 && this.searchType.keyword2) { searchCondition[this.searchType.condition2] = this.searchType.keyword2 }

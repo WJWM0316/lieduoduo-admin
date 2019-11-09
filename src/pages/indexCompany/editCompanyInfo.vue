@@ -320,9 +320,7 @@ export default class editCompany extends Vue {
             this.adressList.splice(index, 1)
           }
         })
-      }).catch(err => {
-        console.log(err)
-      })
+      }).catch(() => {})
     }).catch(() => {
       this.$message({
         type: 'info',
@@ -416,7 +414,6 @@ export default class editCompany extends Vue {
   getCompanyInfo () {
     const { id } = this.$route.query
     getCompanyInfoApi(id).then(res => {
-      console.log('ressfdsdfs', res)
       this.form = {
         logo: res.data.data.companyInfo.logoInfo.url,
         icon1: res.data.data.companyInfo.businessLicenseInfo.url,

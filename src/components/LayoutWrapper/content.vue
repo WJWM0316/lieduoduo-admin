@@ -74,7 +74,7 @@ export default class lyoutContent extends Vue {
   /* 监听布局高度，以改变table高度,兼容其他浏览器 */
   clientHeight () {
     let lyoutHeight = document.getElementById('lyoutScroll').offsetHeight
-    console.log('lyoutHeight', lyoutHeight)
+    if (!lyoutHeight) return
     let isMaxHeight = !!((lyoutHeight > 800) & (lyoutHeight < 900))
     let centerHeight = !!((lyoutHeight > 700) & (lyoutHeight < 800))
     let isMixHeight = !!((lyoutHeight > 600) & (lyoutHeight < 700))
