@@ -576,6 +576,7 @@ export default class companyCheck extends Vue {
   }
 
   checkPosition (id) {
+    id = id + ''
     this.$router.push({
       name: 'h24_position_post',
       query: {

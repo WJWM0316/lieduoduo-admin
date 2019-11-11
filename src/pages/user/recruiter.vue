@@ -623,6 +623,7 @@ export default class user extends Vue {
   }
   // 将招聘官添加到24h招聘官
   checkRecruitment (id) {
+    id = id + ''
     this.$router.push({
       name: '24h_recruiter_add',
       query: {
