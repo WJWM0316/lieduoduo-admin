@@ -2,18 +2,24 @@
   <div id="H24" class="H24">
     <div class="app-title">
       <div class="title">24h职位</div>
-      <el-button class="btn-group-wrapper" type="primary" @click="todoAction('add')">新增</el-button>
+      <router-link class="btn-group-wrapper" target="_blank" :to="{name: 'h24_position_post'}">
+        <el-button type="primary">新增</el-button>
+      </router-link>
     </div>
     <header-filter ref="headerFilter" @on-search="handleSearch" />
-    <el-form ref="form" :model="form" label-width="80px" :inline="true">
+    <el-form ref="form" :model="form" label-width="90px" :inline="true">
       <el-form-item label="职位ID">
         <el-input v-model="form.positionId"></el-input>
       </el-form-item>
-      <el-form-item label="上架时间">
-        <el-date-picker type="datetime" placeholder="选择日期" v-model="form.startTime" style="width: 100%;" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
-      </el-form-item>
-      <el-form-item label="下架时间">
-        <el-date-picker type="datetime" placeholder="选择日期" v-model="form.endTime" style="width: 100%;" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+      <el-form-item label="上下架时间">
+        <el-date-picker
+          v-model="times"
+          type="datetimerange"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          style="width: 100%;"
+          start-placeholder="上架时间"
+          end-placeholder="下架时间">
+        </el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleSearch()">搜索</el-button>
@@ -60,10 +66,20 @@
         width="150"
         prop="action"
         label="操作">
-        <template slot-scope="scope">
-          <span class="btn_deal" @click="todoAction('edit', scope.row)" v-if="scope.row.status !== 4">编辑</span>
-          <span class="btn_deal" @click="todoAction('view', scope.row)">相关24h面试</span>
-          <span class="btn_deal" @click="todoAction('details', scope.row)">查看职位</span>
+        <template slot-scope="{row}">
+          <router-link class="btn_deal" v-if="row.status !== 4" target="_blank" :to="{ name: 'h24_position_edit', query: { id: row.id } }">编辑</router-link>
+          <router-link class="btn_deal" target="_blank" :to="{
+            name: 'interview24h',
+            query: {
+              tab_status: 1,
+              searchType: 'position',
+              content: row.positionName
+            }
+          }">相关24h面试</router-link>
+          <router-link class="btn_deal" target="_blank" :to="{
+            name: 'positionAuditDetail',
+            query: { id: row.positionId }
+          }">查看职位</router-link>
         </template>
       </el-table-column>
     </el-table>
@@ -99,13 +115,17 @@ export default class H24 extends Vue {
     positionId: '',
     startTime: '',
     endTime: '',
+    times: [],
     count: this.pageSize
   }
+  times = []
   lists = []
   getRapidlySurfaceList (query = {}) {
     let params = {
       ...this.form,
-      ...query
+      ...query,
+      startTime: this.times[0] || '',
+      endTime: this.times[1] || ''
     }
     this.form = params
     this.getLoading = true
@@ -127,34 +147,6 @@ export default class H24 extends Vue {
     }
     this.getRapidlySurfaceList()
   }
-  todoAction (type, data) {
-    switch (type) {
-      case 'add':
-        this.$router.push({ name: 'h24_position_post' })
-        break
-      case 'edit':
-        this.$router.push({ name: 'h24_position_edit', query: { id: data.id } })
-        break
-      case 'view':
-        this.$router.push({
-          name: 'interview24h',
-          query: {
-            tab_status: 1,
-            searchType: 'position',
-            content: data.positionName
-          }
-        })
-        break
-      case 'details':
-        this.$router.push({
-          name: 'positionAuditDetail',
-          query: { id: data.positionId }
-        })
-        break
-      default:
-        break
-    }
-  }
   reset () {
     this.form = {
       page: 1,
@@ -163,6 +155,7 @@ export default class H24 extends Vue {
       endTime: '',
       count: 20
     }
+    this.times = []
     this.$refs.headerFilter.clear().then(val => {
       this.handleSearch(val)
     })
@@ -170,6 +163,9 @@ export default class H24 extends Vue {
   mounted () {
     let query = this.$route.query
     this.form = Object.assign(this.form, query)
+    if (query.startTime && query.endTime) {
+      this.times = [query.startTime, query.endTime]
+    }
     this.getLoading = true
     this.$refs.headerFilter.getList().then(val => {
       this.getLoading = false

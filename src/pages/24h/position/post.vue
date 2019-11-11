@@ -18,6 +18,7 @@
           :disabled="form.is_online === 2"
           v-model="form.times"
           type="datetimerange"
+          :picker-options="dateOpt"
           value-format="yyyy-MM-dd HH:mm:ss"
           style="width: 400px"
           start-placeholder="上架时间"
@@ -79,6 +80,11 @@ export default {
         times: [{ required: true, type: 'array', message: '请选择上下架时间', trigger: 'change' }],
         is_online: [{ type: 'number', message: '', trigger: 'change' }],
         sort: [{ type: 'number', message: '请输入正确的格式', trigger: 'blur' }]
+      },
+      dateOpt: {
+        disabledDate: (time) => {
+          return time.getTime() < new Date(new Date().toLocaleDateString()).getTime()
+        }
       }
     }
   },

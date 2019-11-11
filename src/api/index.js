@@ -52,6 +52,7 @@ export const request = ({
   url,
   data = {},
   globalLoading,
+  globalTips = true,
   config = {}
 } = {}) => {
   if (globalLoading) {
@@ -61,7 +62,7 @@ export const request = ({
     err => {
       /* 通用的错误捕获可以在这里操作 */
       // Message.error(`啊，好像出错了，数据跑到银河系外面去了。`)
-      Message.error(`${err.data.msg}`)
+      if (globalTips) Message.error(`${err.data.msg}`)
       return Promise.reject(err)
     }
   )

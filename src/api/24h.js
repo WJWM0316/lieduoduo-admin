@@ -59,7 +59,8 @@ export const getRapidlyRecruiterAttr = data => request({
 export const addRapidlyRecruiter = data => request({
   url: '/surfaceRapidlyRecruiter/info',
   type: 'post',
-  data
+  data,
+  globalTips: false
 })
 
 /** 修改24h招聘官  */

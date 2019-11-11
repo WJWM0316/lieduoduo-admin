@@ -3,7 +3,9 @@
     <layout-content
       :leftcontent="{ title: '24h招聘官'}"
       :isShowbtn="true">
-      <el-button type="primary" slot="text" @click="todoAction('add')">新建</el-button>
+      <router-link slot="text" target="_blank" :to="{name: '24h_recruiter_add'}">
+        <el-button type="primary">新增</el-button>
+      </router-link>
       <template slot="formContent">
         <header-filter
           ref="headerFilter"
@@ -14,15 +16,19 @@
           }"
           @on-search="handleSearch"
           method-type="getRapidlyRecruiterAttr"/>
-        <el-form ref="form" :model="form" label-width="80px" :inline="true">
-          <el-form-item label="用户Id">
+        <el-form ref="form" :model="form" label-width="90px" :inline="true">
+          <el-form-item label="用户ID">
             <el-input v-model="form.uid"></el-input>
           </el-form-item>
-          <el-form-item label="上架时间">
-            <el-date-picker type="datetime" placeholder="选择日期" v-model="form.start_time" style="width: 100%;" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
-          </el-form-item>
-          <el-form-item label="下架时间">
-            <el-date-picker type="datetime" placeholder="选择日期" v-model="form.end_time" style="width: 100%;" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+          <el-form-item label="上下架时间">
+            <el-date-picker
+              v-model="times"
+              type="datetimerange"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              style="width: 100%"
+              start-placeholder="上架时间"
+              end-placeholder="下架时间">
+            </el-date-picker>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="handleSearch()">搜索</el-button>
@@ -37,7 +43,7 @@
               {{row.surfaceRapidlyInfo && row.surfaceRapidlyInfo.sort}}
             </template>
           </el-table-column>
-          <el-table-column prop="uid" label="用户Id"></el-table-column>
+          <el-table-column prop="uid" label="用户ID"></el-table-column>
           <el-table-column prop="name" label="招聘官名称" width="120"></el-table-column>
           <el-table-column label="所属公司" width="250">
             <template slot-scope="{row}">
@@ -55,9 +61,6 @@
           <el-table-column prop="positionNum" label="在线职位数"></el-table-column>
           <el-table-column prop="isOnline" label="上架状态">
             <template slot-scope="{row}">
-              <!-- <span v-if="row.isOnline === 1">上架</span>
-              <span v-if="row.isOnline === 2">下架</span>
-              <span v-if="row.isOnline === 3">截止</span> -->
               {{row.surfaceRapidlyInfo && row.surfaceRapidlyInfo.isOnlineDesc}}
             </template>
           </el-table-column>
@@ -77,9 +80,9 @@
             prop="action"
             label="操作">
             <template slot-scope="{row}">
-              <span class="btn_deal" @click="todoAction('edit', row)">编辑</span>
-              <span class="btn_deal" @click="todoAction('details', row)">查看招聘官</span>
-              <span class="btn_deal" @click="todoAction('view', row)">相关24h面试</span>
+              <router-link class="btn_deal" target="_blank" :to="{ name: '24h_recruiter_edit', query: { id: row.surfaceRapidlyInfo.id } }">编辑</router-link>
+              <router-link class="btn_deal" target="_blank" :to="{ name: 'interview24h', query: { tab_status: 1, searchType: 'recruiter', content: row.id } }">相关24h面试</router-link>
+              <router-link class="btn_deal" target="_blank" :to="{ name: 'recruiter_info', params: { id: row.id } }">查看招聘官</router-link>
             </template>
           </el-table-column>
         </el-table>
@@ -109,6 +112,7 @@ export default {
     return {
       getLoading: false,
       lists: [],
+      times: [],
       total: 0,
       form: {
         page: 1,
@@ -122,6 +126,9 @@ export default {
   mounted () {
     let query = this.$route.query
     this.form = Object.assign(this.form, query)
+    if (query.start_time && query.end_time) {
+      this.times = [query.start_time, query.end_time]
+    }
     this.getLoading = true
     this.$refs.headerFilter.getList().then(val => {
       this.getLoading = false
@@ -132,7 +139,9 @@ export default {
     getPageList (query = {}) {
       let params = {
         ...this.form,
-        ...query
+        ...query,
+        start_time: this.times[0] || '',
+        end_time: this.times[1] || ''
       }
       this.form = params
       this.getLoading = true
@@ -184,7 +193,17 @@ export default {
       this.getPageList()
     },
     reset () {
-
+      this.form = {
+        page: 1,
+        uid: '',
+        start_time: '',
+        end_time: '',
+        count: 20
+      }
+      this.times = []
+      this.$refs.headerFilter.clear().then(val => {
+        this.handleSearch(val)
+      })
     }
   }
 }

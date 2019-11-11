@@ -3,7 +3,9 @@
     <layout-content
       :leftcontent="{ title: '24h公司'}"
       :isShowbtn="true">
-      <el-button type="primary" slot="text" @click="todoAction('add')">新增</el-button>
+      <router-link slot="text" target="_blank" :to="{name: '24h_company_add'}">
+        <el-button type="primary">新增</el-button>
+      </router-link>
       <template slot="formContent">
         <header-filter
           ref="headerFilter"
@@ -28,18 +30,22 @@
             <el-button type="default" icon="el-icon-setting">管理24h分类</el-button>
           </router-link></template>
         </header-filter>
-        <el-form ref="form" :model="form" label-width="80px" :inline="true">
+        <el-form ref="form" :model="form" label-width="90px" :inline="true">
           <el-form-item label="公司ID:">
             <el-input v-model="form.company_id"></el-input>
           </el-form-item>
           <el-form-item label="公司名称:">
             <el-input v-model="form.company_name"></el-input>
           </el-form-item>
-          <el-form-item label="上架时间:">
-            <el-date-picker type="datetime" placeholder="选择日期" v-model="form.start_time" style="width: 100%;" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
-          </el-form-item>
-          <el-form-item label="下架时间:">
-            <el-date-picker type="datetime" placeholder="选择日期" v-model="form.end_time" style="width: 100%;" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+          <el-form-item label="上下架时间">
+            <el-date-picker
+              v-model="times"
+              type="datetimerange"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              style="width: 100%"
+              start-placeholder="上架时间"
+              end-placeholder="下架时间">
+            </el-date-picker>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="handleSearch()">搜索</el-button>
@@ -90,9 +96,9 @@
             prop="action"
             label="操作">
             <template slot-scope="{row}">
-              <span class="btn_deal" @click="todoAction('edit', row)">编辑</span>
-              <span class="btn_deal" @click="todoAction('details', row)">查看公司</span>
-              <span class="btn_deal" @click="todoAction('view', row)">相关24h面试</span>
+              <router-link class="btn_deal" target="_blank" :to="{ name: '24h_company_edit', query: { id: row.surfaceRapidlyInfo.id } }">编辑</router-link>
+              <router-link class="btn_deal" target="_blank" :to="{ name: 'index', query: { searchType: 'companyId', content: row.id } }">查看公司</router-link>
+              <router-link class="btn_deal" target="_blank" :to="{ name: 'interview24h', query: { searchType: 'company_id', content: row.id } }">相关24h面试</router-link>
             </template>
           </el-table-column>
         </el-table>
@@ -123,6 +129,7 @@ export default {
       getLoading: false,
       lists: [],
       total: 0,
+      times: [],
       form: {
         page: 1,
         company_id: '',
@@ -136,6 +143,9 @@ export default {
   mounted () {
     let query = this.$route.query
     this.form = Object.assign(this.form, query)
+    if (query.start_time && query.end_time) {
+      this.times = [query.start_time, query.end_time]
+    }
     this.getLoading = true
     this.$refs.headerFilter.getList().then(val => {
       this.getLoading = false
@@ -146,7 +156,9 @@ export default {
     getPageList (query = {}) {
       let params = {
         ...this.form,
-        ...query
+        ...query,
+        start_time: this.times[0] || '',
+        end_time: this.times[1] || ''
       }
       this.form = params
       this.getLoading = true
@@ -156,36 +168,6 @@ export default {
         this.lists = data.data
         this.$router.replace({ query: params })
       })
-    },
-    todoAction (type, data) {
-      switch (type) {
-        case 'add':
-          this.$router.push({ name: '24h_company_add' })
-          break
-        case 'edit':
-          this.$router.push({ name: '24h_company_edit', query: { id: data.surfaceRapidlyInfo.id } })
-          break
-        case 'view':
-          this.$router.push({
-            name: 'interview24h',
-            query: {
-              searchType: 'company_id',
-              content: data.id
-            }
-          })
-          break
-        case 'details':
-          this.$router.push({
-            name: 'index',
-            query: {
-              searchType: 'companyId',
-              content: data.id
-            }
-          })
-          break
-        default:
-          break
-      }
     },
     handleSearch (value, type) {
       if (type !== 'page') this.form.page = 1
@@ -206,6 +188,7 @@ export default {
         end_time: '',
         count: 20
       }
+      this.times = []
       this.$refs.headerFilter.clear().then(val => {
         this.handleSearch(val)
       })

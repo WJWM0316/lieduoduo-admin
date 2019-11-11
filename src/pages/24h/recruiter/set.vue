@@ -13,6 +13,7 @@
           type="datetimerange"
           value-format="yyyy-MM-dd HH:mm:ss"
           style="width: 400px"
+          :picker-options="dateOpt"
           start-placeholder="上架时间"
           end-placeholder="下架时间">
         </el-date-picker>
@@ -88,6 +89,11 @@ export default {
         is_online: [{ type: 'number', message: '', trigger: 'change' }],
         sort: [{ type: 'number', message: '请输入正确的格式', trigger: 'blur' }]
       },
+      dateOpt: {
+        disabledDate: (time) => {
+          return time.getTime() < new Date(new Date().toLocaleDateString()).getTime()
+        }
+      },
       citys: [],
       positionTypes: []
     }
@@ -142,16 +148,21 @@ export default {
               area_id, position_type_id, recruiter_uid, start_time, end_time, sort
             }).then(({ data }) => {
               this.btnLoading = false
-              const { code, msg, httpStatus } = data
+              const { httpStatus } = data
               if (httpStatus === 200) {
                 this.$router.push({
                   name: '24h_recruiter'
                 })
-              } else if (code === 919) {
-                this.$alert(`${msg}`, '以下用户非招聘官', {
+              }
+            }).catch(({ data }) => {
+              this.btnLoading = false
+              if (data.code === 919) {
+                this.$alert(`${data.msg}`, '以下用户非招聘官', {
                   confirmButtonText: '确定',
                   type: 'warning'
                 })
+              } else {
+                this.$message.error(data.msg)
               }
             })
           }

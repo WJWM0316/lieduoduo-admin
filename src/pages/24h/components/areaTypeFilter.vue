@@ -6,7 +6,7 @@
         <li
           :key="item[propsKey.city]"
           :class="{active: item[propsKey.city] === params[props.city]}"
-          @click="tabClick(item, propsKey.city, props.city, true)">{{item.name}}</li>
+          @click="tabClick(item, propsKey.city, props.city)">{{item.name}}</li>
       </template>
     </ul>
     <ul class="h24_navigation">

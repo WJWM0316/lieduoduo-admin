@@ -10,6 +10,7 @@
         <el-date-picker
           :disabled="form.is_online === 2"
           v-model="form.times"
+          :picker-options="dateOpt"
           type="datetimerange"
           value-format="yyyy-MM-dd HH:mm:ss"
           style="width: 400px"
@@ -79,7 +80,12 @@ export default {
         is_online: [{ type: 'number', message: '', trigger: 'change' }],
         sort: [{ type: 'number', message: '请输入正确的格式', trigger: 'blur' }]
       },
-      labelArr: []
+      labelArr: [],
+      dateOpt: {
+        disabledDate: (time) => {
+          return time.getTime() < new Date(new Date().toLocaleDateString()).getTime()
+        }
+      }
     }
   },
   computed: {
