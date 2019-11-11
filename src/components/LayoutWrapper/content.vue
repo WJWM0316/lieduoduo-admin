@@ -170,9 +170,7 @@ export default class lyoutContent extends Vue {
   position: fixed;
   left: 200px;
   bottom: 0;
-  padding-left: 200px;
   padding: 8px;
-  padding-left: 52px;
   width: 100%;
   background-color: #ffffff;
   box-shadow: 0px -1px 0px 0px rgba(232, 233, 235, 1);
