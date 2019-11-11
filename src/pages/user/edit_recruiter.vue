@@ -885,7 +885,7 @@ export default class EditRecruiter extends Vue {
       position: this.userInfos.position,
       email: this.userInfos.email,
       companyEmail: this.userInfos.companyEmail,
-      positionTypeId: this.userInfos.positionTypeId
+      positionTypeId: this.userInfos.positionTypeId[this.userInfos.positionTypeId.length-1]
     }
     if (this.userInfos.avatars.length) {
       params = Object.assign(params, { avatars: this.userInfos.avatars.map(field => field.id).join(',') })
