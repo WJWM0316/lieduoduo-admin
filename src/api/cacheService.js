@@ -10,25 +10,7 @@ const ssCache = new Cache({ storage: 'sessionStorage' })
 // 所有存储键
 const KEYS = {
   token: 'zike',
-  userInfo: {
-    avatarId: null,
-    email: null,
-    gender: 1,
-    genderDesc: '男',
-    id: null,
-    mobile: null,
-    nickname: null,
-    occupation: null,
-    realname: null,
-    status: null,
-    statusDesc: null,
-    token: null,
-    vkey: null,
-    wechat: null,
-    avatarInfo: {
-      smallUrl: ''
-    }
-  }
+  userInfo: 'lieduoduo'
 }
 
 const namespace = 'zike'

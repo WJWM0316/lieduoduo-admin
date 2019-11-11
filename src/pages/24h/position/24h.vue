@@ -7,19 +7,16 @@
       </router-link>
     </div>
     <header-filter ref="headerFilter" @on-search="handleSearch" />
-    <el-form ref="form" :model="form" label-width="90px" :inline="true">
+    <el-form ref="form" :model="form" style="margin-left: 12px" :inline="true">
       <el-form-item label="职位ID">
         <el-input v-model="form.positionId"></el-input>
       </el-form-item>
       <el-form-item label="上下架时间">
-        <el-date-picker
-          v-model="times"
-          type="datetimerange"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          style="width: 100%;"
-          start-placeholder="上架时间"
-          end-placeholder="下架时间">
-        </el-date-picker>
+        <date-filter
+            ref="dateFilter"
+            :start-time.sync="form.startTime"
+            :end-time.sync="form.endTime"
+            :queryName="{start: 'startTime', end: 'endTime'}" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleSearch()">搜索</el-button>
@@ -102,9 +99,10 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { getRapidlyPositionList } from 'API/24h'
 import HeaderFilter from '../components/areaTypeFilter'
+import DateFilter from '../components/dateFilter'
 @Component({
   name: 'H24',
-  components: { HeaderFilter }
+  components: { HeaderFilter, DateFilter }
 })
 export default class H24 extends Vue {
   total = 0
@@ -115,17 +113,13 @@ export default class H24 extends Vue {
     positionId: '',
     startTime: '',
     endTime: '',
-    times: [],
     count: this.pageSize
   }
-  times = []
   lists = []
   getRapidlySurfaceList (query = {}) {
     let params = {
       ...this.form,
-      ...query,
-      startTime: this.times[0] || '',
-      endTime: this.times[1] || ''
+      ...query
     }
     this.form = params
     this.getLoading = true
@@ -155,7 +149,7 @@ export default class H24 extends Vue {
       endTime: '',
       count: 20
     }
-    this.times = []
+    this.$refs.dateFilter.clear()
     this.$refs.headerFilter.clear().then(val => {
       this.handleSearch(val)
     })
@@ -163,9 +157,6 @@ export default class H24 extends Vue {
   mounted () {
     let query = this.$route.query
     this.form = Object.assign(this.form, query)
-    if (query.startTime && query.endTime) {
-      this.times = [query.startTime, query.endTime]
-    }
     this.getLoading = true
     this.$refs.headerFilter.getList().then(val => {
       this.getLoading = false

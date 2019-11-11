@@ -128,6 +128,8 @@ export default {
               if (httpStatus === 200) {
                 this.$message.success('信息修改成功！')
               }
+            }).catch(() => {
+              this.btnLoading = false
             })
           } else {
             addRapidlyCompany({
@@ -140,6 +142,8 @@ export default {
                   name: '24h_company'
                 })
               }
+            }).catch(() => {
+              this.btnLoading = false
             })
           }
         }

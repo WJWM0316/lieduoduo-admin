@@ -58,6 +58,8 @@ export default {
               if (httpStatus === 200) {
                 this.$message.success('标签修改成功！')
               }
+            }).catch(() => {
+              this.btnLoading = false
             })
           } else {
             addRapidlyLabel({
@@ -70,6 +72,8 @@ export default {
                   name: '24h_labels'
                 })
               }
+            }).catch(() => {
+              this.btnLoading = false
             })
           }
         }

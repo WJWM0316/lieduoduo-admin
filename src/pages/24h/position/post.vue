@@ -118,6 +118,8 @@ export default {
             }).then(() => {
               this.btnLoading = false
               this.$router.push({ name: '24h_position' })
+            }).catch(() => {
+              this.btnLoading = false
             })
           } else {
             addRapidlySurfaceApi({
@@ -125,6 +127,8 @@ export default {
             }).then(() => {
               this.btnLoading = false
               this.$router.push({ name: '24h_position' })
+            }).catch(() => {
+              this.btnLoading = false
             })
           }
         }

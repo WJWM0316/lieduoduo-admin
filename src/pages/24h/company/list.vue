@@ -30,7 +30,7 @@
             <el-button type="default" icon="el-icon-setting">管理24h分类</el-button>
           </router-link></template>
         </header-filter>
-        <el-form ref="form" :model="form" label-width="90px" :inline="true">
+        <el-form ref="form" :model="form" style="margin-left: 12px" :inline="true">
           <el-form-item label="公司ID:">
             <el-input v-model="form.company_id"></el-input>
           </el-form-item>
@@ -38,14 +38,10 @@
             <el-input v-model="form.company_name"></el-input>
           </el-form-item>
           <el-form-item label="上下架时间">
-            <el-date-picker
-              v-model="times"
-              type="datetimerange"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              style="width: 100%"
-              start-placeholder="上架时间"
-              end-placeholder="下架时间">
-            </el-date-picker>
+            <date-filter
+              ref="dateFilter"
+              :start-time.sync="form.start_time"
+              :end-time.sync="form.end_time" />
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="handleSearch()">搜索</el-button>
@@ -120,16 +116,16 @@
 </template>
 <script>
 import LayoutContent from 'COMPONENTS/LayoutWrapper/content'
+import DateFilter from '../components/dateFilter'
 import HeaderFilter from '../components/areaTypeFilter'
 import { getRapidlyCompanyList } from 'API/24h'
 export default {
-  components: { LayoutContent, HeaderFilter },
+  components: { LayoutContent, HeaderFilter, DateFilter },
   data () {
     return {
       getLoading: false,
       lists: [],
       total: 0,
-      times: [],
       form: {
         page: 1,
         company_id: '',
@@ -143,9 +139,6 @@ export default {
   mounted () {
     let query = this.$route.query
     this.form = Object.assign(this.form, query)
-    if (query.start_time && query.end_time) {
-      this.times = [query.start_time, query.end_time]
-    }
     this.getLoading = true
     this.$refs.headerFilter.getList().then(val => {
       this.getLoading = false
@@ -156,9 +149,7 @@ export default {
     getPageList (query = {}) {
       let params = {
         ...this.form,
-        ...query,
-        start_time: this.times[0] || '',
-        end_time: this.times[1] || ''
+        ...query
       }
       this.form = params
       this.getLoading = true
@@ -188,7 +179,7 @@ export default {
         end_time: '',
         count: 20
       }
-      this.times = []
+      this.$refs.dateFilter.clear()
       this.$refs.headerFilter.clear().then(val => {
         this.handleSearch(val)
       })
