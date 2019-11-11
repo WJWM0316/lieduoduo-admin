@@ -103,6 +103,7 @@ export const getLabelProfessionalSkillsListApi = data => request({
 export const getLabelProfessionalOfficialListApi = data => request({
   url: `/label/recruiter_official/list`,
   type: 'get',
+  data,
   noGlobalLoading: false
 })
 
