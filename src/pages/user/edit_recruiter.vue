@@ -522,7 +522,6 @@ export default class EditRecruiter extends Vue {
     this.model.list = [].concat(this.labelProfessionalLiteracyList)
   }
   removeLifeItem (index, item) {
-    console.log(index, item)
     if (this.model.selected.length < 2) {
       this.$message({
         message: '至少选择一个标签',
@@ -563,14 +562,17 @@ export default class EditRecruiter extends Vue {
   }
   // 拿官方标签库
   getLabelProfessionalOfficialList () {
-    getLabelProfessionalOfficialListApi ({ uid: this.$route.params.id , count: 10 })
+    getLabelProfessionalOfficialListApi ({ count: 10 })
     .then(res => {
       let datas = JSON.parse(JSON.stringify(res.data.data).replace(/id/g,"labelId"))
       this.labelProfessionalOfficial = datas
       this.labelProfessionalOfficial.forEach(item => {
-      this.officialObtainedType.forEach(i => {
         item.active = false
-        if(item.labelId === i.labelId) { item.active = true }
+      this.officialObtainedType.forEach(s => {
+        if(item.labelId === s.labelId) {
+          item.active = true
+          s.active = true
+          }
         })
       })
     })
@@ -1281,8 +1283,8 @@ export default class EditRecruiter extends Vue {
     this.getRecruiterBrief()
     this.getRecruiterLabel()
     this.getRecruiterLabelsLists()
-    this.getLabelProfessionalOfficialList() // 拿招聘官官方标签库
     this.getLifeLabelsLists()
+    this.getLabelProfessionalOfficialList() // 拿招聘官官方标签库
   }
   created () {
     this.init()

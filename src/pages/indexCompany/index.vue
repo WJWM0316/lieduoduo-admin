@@ -224,7 +224,7 @@
               </div>
               <div>
                 <span class="check"
-                v-if="props.scope.row.highQuality === 0"
+                v-if="props.scope.row.isRaipdly === 0"
                 @click="toPost(props.scope.row.id)"
                 >添加到24h公司</span>
               </div>
