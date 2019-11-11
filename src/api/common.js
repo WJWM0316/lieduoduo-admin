@@ -99,9 +99,32 @@ export const getLabelProfessionalSkillsListApi = data => request({
   noGlobalLoading: false
 })
 
-/* 官方标签列表 */
+/* 官方标签库列表 */
 export const getLabelProfessionalOfficialListApi = data => request({
   url: `/label/recruiter_official/list`,
   type: 'get',
+  noGlobalLoading: false
+})
+
+/* 自定义官方标签 */
+export const postLabelProfessionalOfficialListApi = data => request({
+  url: `/label/recruiter_official`,
+  type: 'post',
+  data,
+  noGlobalLoading: false
+})
+
+/* 获取当前招聘官官方标签 */
+export const getLabelProfessionalOfficialListtypeApi = data => request({
+  url: `/recruiter/official_labels/${data.uid}`,
+  type: 'get',
+  noGlobalLoading: false
+})
+
+/* 批量创建官方标签 */
+export const postLabelProfessionalOfficialListtypeApi = data => request({
+  url: `/recruiter/official_labels/${data.uid}`,
+  type: 'post',
+  data,
   noGlobalLoading: false
 })

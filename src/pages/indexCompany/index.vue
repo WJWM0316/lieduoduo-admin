@@ -646,6 +646,7 @@ export default class indexPage extends Vue {
     this.$router.push({ path: `/user/userInfo/${uid}` })
   }
   toPost (id) {
+    id = id + ''
     this.$router.push({ name: '24h_company_add', query: { company_id: id } })
   }
   download () {

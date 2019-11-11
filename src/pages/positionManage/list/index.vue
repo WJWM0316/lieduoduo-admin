@@ -171,7 +171,7 @@
                 style="width: 100%; cursor: pointer; color: #652791;"
                 @click.stop="creatLink($event, props.scope.row.id, props.scope.$index)"
               >扫码看职位</div>
-              <div class="check" v-if="props.scope.row.isRapidly === 1" @click.stop="checkPosition(props.scope.row.id)">添加到24h职位（限席位）</div>
+              <div class="check" v-if="props.scope.row.isRapidly === 0" @click.stop="checkPosition(props.scope.row.id)">添加到24h职位（限席位）</div>
             </div>
 
             <div
@@ -576,6 +576,7 @@ export default class companyCheck extends Vue {
   }
 
   checkPosition (id) {
+    id = id + ''
     this.$router.push({
       name: 'h24_position_post',
       query: {
