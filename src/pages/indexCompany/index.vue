@@ -180,6 +180,15 @@
             <!-- 是否优质公司 -->
             <el-form-item label-width="100px" label="是否优质公司" prop="high_quality">
               <el-select v-model="form.high_quality" placeholder="全部">
+                <el-option label="全部" value=''></el-option>
+                <el-option label="否" value=0></el-option>
+                <el-option label="是" value=1></el-option>
+              </el-select>
+            </el-form-item>
+            <!-- 是否有上线职位 -->
+            <el-form-item label-width="110px" label="是否有上线职位" prop="high_quality">
+              <el-select v-model="form.online_position" placeholder="全部">
+                <el-option label="全部" value=''></el-option>
                 <el-option label="否" value=0></el-option>
                 <el-option label="是" value=1></el-option>
               </el-select>
@@ -343,7 +352,8 @@ export default class indexPage extends Vue {
   pageCount = 0; // 请求回的数据共几页
   AdminShow = ''; // 权限字段，限制搜索
   form = {
-    high_quality: '0',
+    online_position: '',
+    high_quality: '',
     wherefrom: '',
     is_license: '',
     start: '',
@@ -543,6 +553,7 @@ export default class indexPage extends Vue {
       }
     }
     params = Object.assign(params, { high_quality: this.form.high_quality })
+    params = Object.assign(params, { online_position: this.form.online_position })
     this.getLoading = true
     getCompanyListApi(params).then(res => {
       this.getLoading = false

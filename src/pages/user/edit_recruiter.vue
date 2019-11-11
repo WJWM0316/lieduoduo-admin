@@ -563,7 +563,7 @@ export default class EditRecruiter extends Vue {
   }
   // 拿官方标签库
   getLabelProfessionalOfficialList () {
-    getLabelProfessionalOfficialListApi ({ uid: this.$route.params.id })
+    getLabelProfessionalOfficialListApi ({ uid: this.$route.params.id , count: 10 })
     .then(res => {
       let datas = JSON.parse(JSON.stringify(res.data.data).replace(/id/g,"labelId"))
       this.labelProfessionalOfficial = datas
@@ -571,8 +571,8 @@ export default class EditRecruiter extends Vue {
       this.officialObtainedType.forEach(i => {
         item.active = false
         if(item.labelId === i.labelId) { item.active = true }
+        })
       })
-    })
     })
 
   }
@@ -1132,6 +1132,7 @@ export default class EditRecruiter extends Vue {
         active: true
       }
       this.officialObtainedType.push(data)
+      this.getLabelProfessionalOfficialList()
     })
     this.officialCustomize = '' // 初始化输入框value
   }
