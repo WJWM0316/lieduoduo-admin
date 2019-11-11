@@ -65,6 +65,17 @@ export default {
   },
   methods: {
     handleChange (type, value) {
+      if (type === 'startTime') {
+        if (this.times.endTime && new Date(this.times.endTime).getTime() < new Date(value).getTime()) {
+          this.times.startTime = ''
+          return
+        }
+      } else {
+        if (this.times.startTime && new Date(this.times.startTime).getTime() > new Date(value).getTime()) {
+          this.times.endTime = ''
+          return
+        }
+      }
       this.$emit(`update:${type}`, value)
     },
     clear () {

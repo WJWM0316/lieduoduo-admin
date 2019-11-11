@@ -62,7 +62,7 @@ export const request = ({
     err => {
       /* 通用的错误捕获可以在这里操作 */
       // Message.error(`啊，好像出错了，数据跑到银河系外面去了。`)
-      if (globalTips) Message.error(`${err.data.msg}`)
+      if (globalTips) Message.error((err.data && err.data.msg) || '请求失败')
       return Promise.reject(err)
     }
   )
