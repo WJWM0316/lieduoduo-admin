@@ -69,8 +69,8 @@
             name: 'interview24h',
             query: {
               tab_status: 1,
-              searchType: 'position',
-              content: row.positionName
+              searchType: 'position_id',
+              content: row.positionId
             }
           }">相关24h面试</router-link>
           <router-link class="btn_deal" target="_blank" :to="{

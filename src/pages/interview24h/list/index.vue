@@ -452,6 +452,7 @@
         label="约面信息">
         <template slot-scope="scope">
           <div>
+            <span>职位ID：{{scope.row.positionId}}</span> <br>
             <span class="strong_name" @click="readPosition(scope.row.positionId)">职位： {{scope.row.positionName}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
             <el-popover
               placement="bottom"
@@ -762,6 +763,10 @@ export default class Interview24h extends Vue {
     {
       value: 'position',
       label: '职位'
+    },
+    {
+      value: 'position_id',
+      label: '职位ID'
     },
     {
       value: 'company_id',
