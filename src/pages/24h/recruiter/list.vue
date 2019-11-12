@@ -77,7 +77,7 @@
             label="操作">
             <template slot-scope="{row}">
               <router-link class="btn_deal" target="_blank" :to="{ name: '24h_recruiter_edit', query: { id: row.surfaceRapidlyInfo.id } }">编辑</router-link>
-              <router-link class="btn_deal" target="_blank" :to="{ name: 'interview24h', query: { tab_status: 1, searchType: 'recruiter', content: row.id } }">相关24h面试</router-link>
+              <router-link class="btn_deal" target="_blank" :to="{ name: 'interview24h', query: { tab_status: 1, searchType: 'recruiter', content: row.name } }">相关24h面试</router-link>
               <router-link class="btn_deal" target="_blank" :to="{ name: 'recruiter_info', params: { id: row.id } }">查看招聘官</router-link>
             </template>
           </el-table-column>
