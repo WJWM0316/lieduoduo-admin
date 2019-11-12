@@ -50,16 +50,15 @@ export default class login extends Vue {
     password: ''
   };
   login () {
-    loginApi(this.loginForm)
-      .then(res => {
-        const userinfo = res.data.data || {}
-        // 保存userinfo 到vuex
-        this.$store.dispatch('update_userinfo', { userinfo })
-
+    loginApi(this.loginForm).then(res => {
+      const userinfo = res.data.data || {}
+      // 保存userinfo 到vuex
+      this.$store.dispatch('update_userinfo', { userinfo }).then(() => {
         this.$router.push({
-          path: '/index'
+          name: 'index'
         })
       })
+    })
       .catch(err => {
         console(err)
         // this.$message.error(`用户账号或密码错误`);
