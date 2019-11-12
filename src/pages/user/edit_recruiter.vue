@@ -230,12 +230,21 @@
         <ul class="label_ul_dialog" v-if="officialObtainedType.length">
           <li :class="{active: item.active}" v-for="(item, index) in officialObtainedType" :key="index"  @click="removeOfficial(index,item)">{{item.name || item.labelName}}</li>
         </ul>
-        <el-form>
-          <el-form-item label="请输入自定义标签">
-            <el-input v-model="officialCustomize" maxlength=10></el-input>
-            <el-button type="primary" @click="getofficialCustomize()">添加自定义标签</el-button>
-          </el-form-item>
-        </el-form>
+        
+        <el-autocomplete
+        popper-class="my-autocomplete"
+          placeholder="请输入官方标签"
+          v-model="officialCustomize"
+          :maxlength=10
+          :fetch-suggestions="officialSearchFun"
+          @select="officialSelect"
+        >
+          <template slot-scope="{ item }">
+            <div class="label">{{ item.name || item.labelName }}</div>
+          </template>
+        </el-autocomplete>
+
+        <el-button class="autocomplete-button" type="primary" @click="getofficialCustomize()">添加自定义标签</el-button>
         <div class="m_h2">请选择标签：</div>
         <ul class="label_ul_dialog" style="margin-top: 20px;">
           <li :class="{active: item.active}" v-for="(item, index) in labelProfessionalOfficial" :key="index" @click="getOfficial(index,item)">{{item.name}}</li>
@@ -463,6 +472,8 @@ export default class EditRecruiter extends Vue {
   officialObtainedType = [] // 已选择官方标签
   officialCustomize = ''// 自定义官方标签
   official = [] // 展示的官方标签
+  officialSearchmodel = [] // 模糊搜索拿到的数据
+  
   // 关闭移除招聘官
   closeAdmin () {
     this.showAdminWindow = false
@@ -590,6 +601,28 @@ export default class EditRecruiter extends Vue {
       this.officialObtainedType = JSON.parse(JSON.stringify(data))
     })
   }
+  // 官方标签模糊搜索
+  officialSearchFun (queryString, cb) {
+    if (!queryString.length) { return cb([]) }
+    let officialSearchmodel = []
+    getLabelProfessionalOfficialListApi({ name : queryString })
+    .then(res => {
+      let officialSearchmodel = res.data.data
+      cb(officialSearchmodel)
+    })
+  }
+  // 模糊搜索列表按钮点击
+  officialSelect (item) {
+    if (this.officialObtainedType.length > 1) {
+      this.$message({ message: '最多只能添加两个标签', type: 'warning' })
+      return
+    }
+    item.active = true
+    let official = JSON.parse(JSON.stringify(item).replace(/id/g,"labelId"))
+    this.officialObtainedType.push(official)
+    this.labelProfessionalOfficial.push(official)
+  }
+
   getRecruiterLabelsLists () {
     return getRecruiterLabelsListsApi({ uid: this.$route.params.id }).then(res => {
       let literacyLabels = []
@@ -870,11 +903,12 @@ export default class EditRecruiter extends Vue {
     this.userInfos.lifeLabels.map(field => delete field.delete)
     this.officialObtainedType = JSON.parse(JSON.stringify(this.official))
     this.labelProfessionalOfficial.forEach(item => {
+      item.active = false
       this.officialObtainedType.forEach(i => {
-        item.active = false
         if(item.labelId === i.labelId) { item.active = true }
       })
     })
+    this.officialCustomize = ''
   }
   saveUser () {
     let params = {
@@ -1108,14 +1142,27 @@ export default class EditRecruiter extends Vue {
 
   // 从官方标签库中选择一个标签添加进已选择
   getOfficial (index,item) {
-    if (this.officialObtainedType.length > 1) {
-      this.$message({ message: '最多只能添加两个标签', type: 'warning' })
-      return
+    if (item.active) {
+      this.officialObtainedType.forEach((item1,index1) => {
+        if(item1.labelId === item.labelId) {
+          if (this.officialObtainedType.length < 1) {
+            this.$message({ message: '至少选择一个标签', type: 'warning' })
+            return
+          } else {
+            this.officialObtainedType.splice(index1)
+            item.active = false
+          }
+        }
+      })
+    } else {
+      if (this.officialObtainedType.length > 1) {
+        this.$message({ message: '最多只能添加两个标签', type: 'warning' })
+        return
+      } else {
+        this.officialObtainedType.push(this.labelProfessionalOfficial[index])
+        item.active = true
+      }
     }
-    if (item.active === true){ return }
-    
-    this.officialObtainedType.push(this.labelProfessionalOfficial[index])
-    item.active = true
   }
   // 自定义官方标签
   getofficialCustomize () {
@@ -1359,7 +1406,32 @@ export default class EditRecruiter extends Vue {
     height: 250px;
     overflow: hidden;
     overflow-y: scroll;
+    position: relative;
   }
+  .my-autocomplete{
+    .label{
+      padding: 0 20px;
+      line-height: 30px;
+      box-sizing: border-box;
+      border-width: 1px;
+      border-style: solid;
+      border-color: #ccc;
+      border-radius: 2px;
+      -moz-box-shadow: none;
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      vertical-align: middle;
+      display: inline-block;
+      margin-right: 20px;
+      cursor: pointer;
+    }
+  }
+  .autocomplete-button{
+    position: relative;
+    left: 20px;
+    top: -12px;
+  }
+
   .html_content_box::-webkit-scrollbar {
    width: 4px;
   }
