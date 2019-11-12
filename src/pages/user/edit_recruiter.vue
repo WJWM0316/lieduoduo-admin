@@ -866,7 +866,10 @@ export default class EditRecruiter extends Vue {
         })
         break
       case 'official':
-        if (!this.officialObtainedType.length){ return }
+        if (this.officialObtainedType.length < 1) {
+          this.$message({ message: '至少选择一个标签', type: 'warning' })
+          return
+        }
         let labelIds = []
         let uid = this.$route.params.id
         this.officialObtainedType.forEach(item => {
@@ -1143,17 +1146,19 @@ export default class EditRecruiter extends Vue {
   // 从官方标签库中选择一个标签添加进已选择
   getOfficial (index,item) {
     if (item.active) {
-      this.officialObtainedType.forEach((item1,index1) => {
-        if(item1.labelId === item.labelId) {
-          if (this.officialObtainedType.length < 1) {
-            this.$message({ message: '至少选择一个标签', type: 'warning' })
-            return
-          } else {
-            this.officialObtainedType.splice(index1)
+      if (this.officialObtainedType.length < 2) {
+        this.$message({ message: '至少选择一个标签', type: 'warning' })
+        return
+      } else {
+        this.officialObtainedType.forEach((item1,index1) => {
+          if(item1.labelId === item.labelId) {
+            this.officialObtainedType.splice(index1,1)
             item.active = false
+          } else {
+            return
           }
-        }
-      })
+        })
+      }
     } else {
       if (this.officialObtainedType.length > 1) {
         this.$message({ message: '最多只能添加两个标签', type: 'warning' })
