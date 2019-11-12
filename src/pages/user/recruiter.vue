@@ -387,6 +387,7 @@ export default class user extends Vue {
     count: 20,
     searchType1: 'companyName',
     searchType2: 'userName',
+    searchType3: 'uid',
     keyword1: '',
     keyword2: '',
     type: '',
@@ -535,6 +536,7 @@ export default class user extends Vue {
   getRecruiterList (newForm) {
     this.form[this.form.searchType1] = this.form.keyword1
     this.form[this.form.searchType2] = this.form.keyword2
+    this.form[this.form.searchType3] = this.form.keyword1
     let params = {
       page: this.form.page,
       count: this.form.count
@@ -544,6 +546,9 @@ export default class user extends Vue {
     }
     if (this.form.keyword) {
       params = Object.assign(params, { keyword: this.form.keyword })
+    }
+    if (this.form.keyword1 && this.form.searchType1 === this.form.searchType3) {
+      params = Object.assign(params, { uid: this.form.keyword1})
     }
     if (this.form.status) {
       params = Object.assign(params, { status: this.form.status })
