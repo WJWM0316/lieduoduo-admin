@@ -138,6 +138,7 @@ export default {
     display: inline-block;
     padding: 12px 15px;
     font-size: 12px;
+    border-radius: 2px;
     color: #909399;
     margin-bottom: 10px;
     cursor: pointer;

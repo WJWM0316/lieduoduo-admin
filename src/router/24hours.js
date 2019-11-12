@@ -14,7 +14,7 @@ export default [
           {
             path: '',
             name: '24h_position',
-            meta: { title: '24h职位管理' },
+            meta: { title: '24h职位列表' },
             component: resolve => require(['@/pages/24h/position/24h.vue'], resolve)
           },
           {
@@ -43,7 +43,7 @@ export default [
           {
             path: '',
             name: '24h_recruiter',
-            meta: { title: '24h招聘官理' },
+            meta: { title: '24h招聘官列表' },
             component: resolve => require(['@/pages/24h/recruiter/list.vue'], resolve)
           },
           {
@@ -62,25 +62,25 @@ export default [
       },
       {
         path: 'company',
-        meta: { title: '24h招聘官' },
+        meta: { title: '24h酷公司' },
         component: { render (c) { return c('router-view') } },
         children: [
           {
             path: '',
             name: '24h_company',
-            meta: { title: '24h招聘官理' },
+            meta: { title: '24h酷公司列表' },
             component: resolve => require(['@/pages/24h/company/list.vue'], resolve)
           },
           {
             path: 'add',
             name: '24h_company_add',
-            meta: { title: '新增24招聘官' },
+            meta: { title: '新增24酷公司' },
             component: resolve => require(['@/pages/24h/company/set.vue'], resolve)
           },
           {
             path: 'edit',
             name: '24h_company_edit',
-            meta: { title: '编辑24招聘官' },
+            meta: { title: '编辑24酷公司' },
             component: resolve => require(['@/pages/24h/company/set.vue'], resolve)
           }
         ]

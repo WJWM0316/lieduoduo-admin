@@ -121,9 +121,7 @@ export default class lyoutContent extends Vue {
 
   .contentStyle {
     margin: 22px;
-    padding: 20px;
-    padding-top: 0px;
-    padding-bottom: 0px;
+    padding:0 20px 5px;
     border: 1px solid #eeeeee;
     background: #fff;
     position: relative;

@@ -9,7 +9,7 @@
       @change="(val) => handleChange('startTime', val)"
       :picker-options="startDateOpt">
     </el-date-picker>
-    <span class="data-separator">-</span>
+    <span class="date-separator">-</span>
     <el-date-picker
       v-model="times.endTime"
       :default-value="endTime"
@@ -88,7 +88,7 @@ export default {
 <style lang="less" scoped>
 .date-filter {
   display: inline-block;
-  .data-separator {
+  .date-separator {
     padding: 0 4px;
     color: #666;
   }
