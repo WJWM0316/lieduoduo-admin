@@ -224,7 +224,7 @@
               </div>
               <div>
                 <span class="check"
-                v-if="props.scope.row.isRapidly === 0 && ( AdminShow ==! 4 && AdminShow ==! 5 && AdminShow ==! 6 )"
+                v-if="props.scope.row.isRapidly === 0 && AdminShow != 4 && AdminShow != 5 && AdminShow != 6"
                 @click="toPost(props.scope.row.id)"
                 >添加到24h公司</span>
               </div>
