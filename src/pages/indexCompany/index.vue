@@ -644,6 +644,7 @@ export default class indexPage extends Vue {
     this.form.advisorUid = ''
     this.form.exportStart = undefined
     this.form.exportEnd = undefined
+    this.form.online_position = ''
     this.getCompanyList()
   }
   check (id) {
