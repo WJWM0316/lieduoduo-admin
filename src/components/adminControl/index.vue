@@ -82,51 +82,51 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import ImageUploader from '@/components/imageUploader'
-import { checkIdentityApi, bindCompanyApi, deleteAdminApi, deleteRecruiterApi, checkCompanyNameApi,checkOldCompanyName,createCompanyApi } from 'API/company'
+import { checkIdentityApi, bindCompanyApi, deleteAdminApi, deleteRecruiterApi, checkCompanyNameApi, checkOldCompanyName, createCompanyApi } from 'API/company'
 @Component({
-    name: 'adminBox',
-    props: {
-        isBindAdmin: {
-            type: Boolean
-        },
-        // 是否是旧公司公司绑定管理员
-        isOldEdit:{
-            type:Boolean
-        },
-        // 公司信息
-        companyInfo:{
-            type:Object,
-        },
-        /* 是否在用户详情编辑 */
-        isFromUser: {
-            type: Boolean,
-            default: false
-        },
-        /* 用户当前身份 */
-        isAdmin: {
-            type: Number,
-            default: 0
-        },
-        companyId: {
-            type: Number,
-            default: 0
-        },
-        // 当前公司招聘官名字,在点击移除管理员时使用
-        companyName: {
-            type: String,
-            default: ''
-        },
-        userName: {
-            type: String,
-            default: ''
-        },
-        nextAdmin: {
-            type: Object
-        }
+  name: 'adminBox',
+  props: {
+    isBindAdmin: {
+      type: Boolean
     },
-    components: {
-        ImageUploader
+    // 是否是旧公司公司绑定管理员
+    isOldEdit: {
+      type: Boolean
+    },
+    // 公司信息
+    companyInfo: {
+      type: Object
+    },
+    /* 是否在用户详情编辑 */
+    isFromUser: {
+      type: Boolean,
+      default: false
+    },
+    /* 用户当前身份 */
+    isAdmin: {
+      type: Number,
+      default: 0
+    },
+    companyId: {
+      type: Number,
+      default: 0
+    },
+    // 当前公司招聘官名字,在点击移除管理员时使用
+    companyName: {
+      type: String,
+      default: ''
+    },
+    userName: {
+      type: String,
+      default: ''
+    },
+    nextAdmin: {
+      type: Object
     }
+  },
+  components: {
+    ImageUploader
+  }
 })
 export default class adminBox extends Vue {
     toCretedUser = false
@@ -135,255 +135,253 @@ export default class adminBox extends Vue {
     bindCompanyId = '' // 当前要绑定的公司id
     /* 新建公司提交的数据 */
     bindForm = {
-      user_email:'',//邮箱地址
-      user_position:'',//担任职务
-      mobile: "", //管理员(招聘官)手机号码
+      user_email: '', // 邮箱地址
+      user_position: '', // 担任职务
+      mobile: '' // 管理员(招聘官)手机号码
     }
     /* 编辑状态提交的数据 */
     bindCompanyForm = {
-        mobile: '',
-        is_admin: '1',
-        uid: '', // 管理员账号
-        position: '', // 担任职务
-        email: '',
-        position:""
+      mobile: '',
+      is_admin: '1',
+      uid: '', // 管理员账号
+      position: '', // 担任职务
+      email: ''
     }
     // 公共提交
     commonForm={
-        uid:''
+      uid: ''
     }
     // 由于这个组件 数据太乱 ，把一些公用的数据放到这里自己取
     commonFrom={
-        uid:'' ///管理员id
+      uid: '' /// 管理员id
     }
     // wait
     nameRule = (rule, value, callback) => {
-        checkCompanyNameApi({company_name:value}).then(res => {
-            if (res.data.data.exist) {
-                callback()
-            } else {
-                callback(new Error(`${res.data.msg}`))
-            }
-        })
-    }
-    emailRule=(rule,value,callback)=>{
-    //    const emailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
-    const emailReg = /^([a-zA-Z0-9]+[_|\_|\.|\-]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[-_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,8}$/;
-        if (!value) {
-            return callback(new Error('邮箱不能为空'))
+      checkCompanyNameApi({ company_name: value }).then(res => {
+        if (res.data.data.exist) {
+          callback()
+        } else {
+          callback(new Error(`${res.data.msg}`))
         }
-        // console.log(emailReg.test(value),'emailReg.test(value)')
-        setTimeout(() => {
-            if (emailReg.test(value)) {
-                callback()
-                } else {
-                    callback(new Error('请输入正确的邮箱格式'))
-                }
-            }, 100) 
+      })
+    }
+    emailRule=(rule, value, callback) => {
+      // const emailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+      // eslint-disable-next-line no-useless-escape
+      const emailReg = /^([a-zA-Z0-9]+[_|\_|\.|\-]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[-_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,8}$/
+      if (!value) {
+        return callback(new Error('邮箱不能为空'))
+      }
+      // console.log(emailReg.test(value),'emailReg.test(value)')
+      setTimeout(() => {
+        if (emailReg.test(value)) {
+          callback()
+        } else {
+          callback(new Error('请输入正确的邮箱格式'))
+        }
+      }, 100)
     }
     phoneRule = (rule, value, callback) => {
-        checkIdentityApi(value).then(res => {
-            if (res.data.data.isExisted) {
-                if (!res.data.data.isAdmin && !res.data.data.companyId) {
-                    callback()
-                } else {
-                    callback(new Error(`该用户已绑定在${res.data.data.companyName},请重新绑定用户`))
-                }
-            } else {
-                callback(new Error('手机号码尚未注册，请先注册用户'))
-            }
-        })
+      checkIdentityApi(value).then(res => {
+        if (res.data.data.isExisted) {
+          if (!res.data.data.isAdmin && !res.data.data.companyId) {
+            callback()
+          } else {
+            callback(new Error(`该用户已绑定在${res.data.data.companyName},请重新绑定用户`))
+          }
+        } else {
+          callback(new Error('手机号码尚未注册，请先注册用户'))
+        }
+      })
     }
     iconUploader = {
-        point: '',
-        width: 100,
-        height: '',
-        tips: '建议尺寸400X400px，JPG、PNG格式，图片小于5M。'
+      point: '',
+      width: 100,
+      height: '',
+      tips: '建议尺寸400X400px，JPG、PNG格式，图片小于5M。'
     }
     bindRules = {
-        "adminUser": [
-            { required: true, message: '请输入正确的手机号码', trigger: 'blur', min: 11, max: 11 },
-            { validator: this.phoneRule, trigger: 'blur' } 
-        ],
-        "position": [
-            { required: true, message: '请输入担任职务', trigger: 'blur' }
-        ],
-        "user_email": [
-            { required: true, message: '请输入邮箱', trigger: 'blur'},
-            { required: true, message: '请输入正确的邮箱', trigger: 'blur', validator:this.emailRule }
-        ],
+      'adminUser': [
+        { required: true, message: '请输入正确的手机号码', trigger: 'blur', min: 11, max: 11 },
+        { validator: this.phoneRule, trigger: 'blur' }
+      ],
+      'position': [
+        { required: true, message: '请输入担任职务', trigger: 'blur' }
+      ],
+      'user_email': [
+        { required: true, message: '请输入邮箱', trigger: 'blur' },
+        { required: true, message: '请输入正确的邮箱', trigger: 'blur', validator: this.emailRule }
+      ]
     }
     companyRules = {
-        "name": [
-            { required: true, message: '请输入公司名字', trigger: 'blur' },
-            // { validator: this.nameRule, trigger: 'blur' }
-        ],
-        "is_admin": [
-            { required: true, message: '请选择身份', trigger: 'blur' },
-        ],
-        "position": [
-            { required: true, message: '请输入担任职务', trigger: 'blur' },
-        ],
-        "email": [
-            { required: true, message: '请输入接收简历邮箱', trigger: 'blur' },
-        ]
+      'name': [
+        { required: true, message: '请输入公司名字', trigger: 'blur' }
+        // { validator: this.nameRule, trigger: 'blur' }
+      ],
+      'is_admin': [
+        { required: true, message: '请选择身份', trigger: 'blur' }
+      ],
+      'position': [
+        { required: true, message: '请输入担任职务', trigger: 'blur' }
+      ],
+      'email': [
+        { required: true, message: '请输入接收简历邮箱', trigger: 'blur' }
+      ]
     }
     /* 绑定管理员 */
     async done () {
-        let company=this.companyInfo;
-        // console.log(company,'company')
-        
-        let NewcompanyInfo={...company,...this.bindForm}
-        // console.log(NewcompanyInfo)
-        // return
-        if (!this.newUserInfo.name && !this.isFromUser) {
-            this.$message({
-                type: 'error',
-                message: '用户信息不完善，请先完善后再绑定！'
-            })
-            return
-        }
-        if (!this.isFromUser) {
-            if(this.isOldEdit){
-                /* 旧公司绑定管理员 */
-                // console.log('旧公司绑定管理员')
-                // console.log(this.companyInfo,'this.bindCompanyId')
-                // console.log(this.bindCompanyForm)
-                // console.log(this.bindForm,'bindForm')
-                // console.log('公用数据',this.commonFrom)
-                this.bindCompanyForm={
-                    email: this.bindForm.user_email,
-                    is_admin: "1",
-                    mobile: this.bindForm.mobile,
-                    position: this.bindForm.user_position,
-                    uid: this.commonFrom.uid
-                }
-                // console.log('修改后的数据',this.bindCompanyForm)
-                let res = await bindCompanyApi(this.companyInfo.id, this.bindCompanyForm)
-                this.$message({type: 'success', message: '绑定成功'})
-                this.$emit('closeAdminWindow', {'needLoad': true})
-            }else{
-                /* 新公司创建 */
-                this.$refs['form'].validate(async (valid) => {
-                if (valid) {
-                    let res = await createCompanyApi(NewcompanyInfo)
-                    this.$message({type: 'success', message: '公司创建成功'})
-                     this.$emit('close',{needLoad:true})
-                } else {
-                    return false
-                }
-            })
-            }
+      let company = this.companyInfo
+      // console.log(company,'company')
+
+      let NewcompanyInfo = { ...company, ...this.bindForm }
+      // console.log(NewcompanyInfo)
+      // return
+      if (!this.newUserInfo.name && !this.isFromUser) {
+        this.$message({
+          type: 'error',
+          message: '用户信息不完善，请先完善后再绑定！'
+        })
+        return
+      }
+      if (!this.isFromUser) {
+        if (this.isOldEdit) {
+          /* 旧公司绑定管理员 */
+          // console.log('旧公司绑定管理员')
+          // console.log(this.companyInfo,'this.bindCompanyId')
+          // console.log(this.bindCompanyForm)
+          // console.log(this.bindForm,'bindForm')
+          // console.log('公用数据',this.commonFrom)
+          this.bindCompanyForm = {
+            email: this.bindForm.user_email,
+            is_admin: '1',
+            mobile: this.bindForm.mobile,
+            position: this.bindForm.user_position,
+            uid: this.commonFrom.uid
+          }
+          // console.log('修改后的数据',this.bindCompanyForm)
+          await bindCompanyApi(this.companyInfo.id, this.bindCompanyForm)
+          this.$message({ type: 'success', message: '绑定成功' })
+          this.$emit('closeAdminWindow', { 'needLoad': true })
         } else {
-            console.log('绑定公司招聘官')
-            this.$refs['bindCompanyForm'].validate(async (valid) => {
-                if (valid) {
-                    this.bindCompanyForm.uid = this.$route.params.id
-                    let res = await bindCompanyApi(this.bindCompanyId, this.bindCompanyForm)
-                    this.$message({type: 'success', message: '绑定成功'})
-                    this.$emit('closeAdminWindow', {'needLoad': true})
-                } else {
-                    return false
-                }
-            })
+          /* 新公司创建 */
+          this.$refs['form'].validate(async (valid) => {
+            if (valid) {
+              await createCompanyApi(NewcompanyInfo)
+              this.$message({ type: 'success', message: '公司创建成功' })
+              this.$emit('close', { needLoad: true })
+            } else {
+              return false
+            }
+          })
         }
+      } else {
+        console.log('绑定公司招聘官')
+        this.$refs['bindCompanyForm'].validate(async (valid) => {
+          if (valid) {
+            this.bindCompanyForm.uid = this.$route.params.id
+            await bindCompanyApi(this.bindCompanyId, this.bindCompanyForm)
+            this.$message({ type: 'success', message: '绑定成功' })
+            this.$emit('closeAdminWindow', { 'needLoad': true })
+          } else {
+            return false
+          }
+        })
+      }
     }
     cancel () {
-        this.$emit('close')
+      this.$emit('close')
     }
     // 检测手机号码
     checkUser () {
-        console.log()
-        checkIdentityApi(this.bindForm.mobile).then(res => {
-            if (res.data.data.isExisted) {
-                if(res.data.data.companyId!==0||res.data.data.companyName!==""){
-                    this.$message({
-                        message:`该用户已经绑定了公司!`,
-                        type: 'warning'
-                    })
-                }else if (!res.data.data.isAdmin && !res.data.data.companyId) {
-                    // console.log('输入手机号码',res.data.data)
-                    // console.log(this.bindCompanyForm)
-                    this.isNewUser = true
-                    this.toCretedUser = false
-                    // this.newUserInfo.name=res.data.data.name;
-                    // this.newUserInfo.gender=res.data.data.gender;
-                    this.bindForm.real_name=res.data.data.realname
-                    this.companyInfo.created_uid=res.data.data.uid
-                    // this.bindCompanyForm.uid=res.data.data.data.uid
-                    this.$set(this.commonFrom,'uid',res.data.data.uid)
-                    // console.log(this.commonFrom)
-                    this.newUserInfo = {
-                        name: res.data.data.realname,
-                        gender: res.data.data.gender === 1? '男' : '女'
-                    }
-                    // console.log(this.newUserInfo)
-                } else {
-                    new Error(`该用户已绑定在${res.data.data.companyName},请重新绑定用户`)
-                    this.toCretedUser = false
-                }
-            } else {
-                this.toCretedUser = true
-                new Error('手机号码尚未注册，请先注册用户')
+      checkIdentityApi(this.bindForm.mobile).then(res => {
+        if (res.data.data.isExisted) {
+          if (res.data.data.companyId !== 0 || res.data.data.companyName !== '') {
+            this.$message({
+              message: `该用户已经绑定了公司!`,
+              type: 'warning'
+            })
+          } else if (!res.data.data.isAdmin && !res.data.data.companyId) {
+            // console.log('输入手机号码',res.data.data)
+            // console.log(this.bindCompanyForm)
+            this.isNewUser = true
+            this.toCretedUser = false
+            // this.newUserInfo.name=res.data.data.name;
+            // this.newUserInfo.gender=res.data.data.gender;
+            this.bindForm.real_name = res.data.data.realname
+            this.companyInfo.created_uid = res.data.data.uid
+            // this.bindCompanyForm.uid=res.data.data.data.uid
+            this.$set(this.commonFrom, 'uid', res.data.data.uid)
+            // console.log(this.commonFrom)
+            this.newUserInfo = {
+              name: res.data.data.realname,
+              gender: res.data.data.gender === 1 ? '男' : '女'
             }
-        })
+            // console.log(this.newUserInfo)
+          } else {
+            // eslint-disable-next-line no-new
+            new Error(`该用户已绑定在${res.data.data.companyName},请重新绑定用户`)
+            this.toCretedUser = false
+          }
+        } else {
+          this.toCretedUser = true
+          // eslint-disable-next-line no-new
+          new Error('手机号码尚未注册，请先注册用户')
+        }
+      })
     }
     // 检测已有公司名，并且将该公司与管理员绑定
     checkCompany () {
-        checkOldCompanyName(this.bindCompanyForm.name).then(res => {
-            if (res.data.data.exist) {
-                this.bindCompanyId = res.data.data.id
-            }
-        })
+      checkOldCompanyName(this.bindCompanyForm.name).then(res => {
+        if (res.data.data.exist) {
+          this.bindCompanyId = res.data.data.id
+        }
+      })
     }
     handleIconLoaded (e) {}
     /* 添加用户 */
     addUser () {
-        sessionStorage.setItem("up_router", this.$route.path);
-        console.log(this.$route.query)
-        this.$router.push({
-            path: '/user/addUser',
-            query:{
-                id:this.$route.query.id
-            }
-        })
+      sessionStorage.setItem('up_router', this.$route.path)
+      console.log(this.$route.query)
+      this.$router.push({
+        path: '/user/addUser',
+        query: {
+          id: this.$route.query.id
+        }
+      })
     }
     /* 移除管理员 */
     async removeAdmin () {
-        // console.log('移除管理员')
-        // console.log( this.isFromUser,this.isAdmin)
-       
-        if (!this.isFromUser || !!this.isAdmin) {
-            // 从公司信息入口编辑或编辑管理员
-            
-            // console.log('公司入口进入')
-            let param = {
-                newAdmin: this.nextAdmin? this.nextAdmin.uid : 0
-            }
-            let nowCompanyId = this.isFromUser? this.companyId : this.$route.query.id
-            await deleteAdminApi (nowCompanyId, param)
-            this.$message({
-                type: 'success',
-                message: '管理员已移除'
-            })
-        } else {
-            // 从用户入口编辑
-            //  console.log('从用户入口编辑')
-            //   return
-            let param = {
-                uid: this.$route.params.id
-            }
-            await deleteRecruiterApi(this.companyId, this.$route.params.id)
-            this.$message({
-                type: 'success',
-                message: '招聘官已移除'
-            })
+      // console.log('移除管理员')
+      // console.log( this.isFromUser,this.isAdmin)
+
+      if (!this.isFromUser || !!this.isAdmin) {
+        // 从公司信息入口编辑或编辑管理员
+
+        // console.log('公司入口进入')
+        let param = {
+          newAdmin: this.nextAdmin ? this.nextAdmin.uid : 0
         }
-        this.$emit('closeAdminWindow', {'needLoad': true})
+        let nowCompanyId = this.isFromUser ? this.companyId : this.$route.query.id
+        await deleteAdminApi(nowCompanyId, param)
+        this.$message({
+          type: 'success',
+          message: '管理员已移除'
+        })
+      } else {
+        // 从用户入口编辑
+        //  console.log('从用户入口编辑')
+        //   return
+        await deleteRecruiterApi(this.companyId, this.$route.params.id)
+        this.$message({
+          type: 'success',
+          message: '招聘官已移除'
+        })
+      }
+      this.$emit('closeAdminWindow', { 'needLoad': true })
     }
     created () {
-        // console.log(this.companyInfo,'companyInfo')
-        // console.log(this.isBindAdmin,'isBindAdmin')
+      // console.log(this.companyInfo,'companyInfo')
+      // console.log(this.isBindAdmin,'isBindAdmin')
 
     }
 }
@@ -468,4 +466,3 @@ export default class adminBox extends Vue {
     }
 }
 </style>
-

@@ -4,7 +4,8 @@ const resolve = dir => {
 }
 
 module.exports = {
-  lintOnSave: false,
+  publicPath: '/',
+  lintOnSave: true,
   productionSourceMap: false,
   configureWebpack: {
     entry: {
@@ -28,7 +29,6 @@ module.exports = {
     },
     plugins: []
   },
-  css: {},
   chainWebpack: config => {
     config.plugins.delete('prefetch')
   }
