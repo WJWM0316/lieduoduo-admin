@@ -22,37 +22,17 @@ export default {
   }
 }
 
+const roleList = [
+  { role: 1, roleName: '超管', isShowAdmin: [0] },
+  { role: 2, roleName: '客服组', isShowAdmin: [1, 2] },
+  { role: 3, roleName: '商务组', isShowAdmin: [3, 4] },
+  { role: 4, roleName: '商务组', isShowAdmin: [3, 4] },
+  { role: 5, roleName: '猎头组', isShowAdmin: [5, 6] },
+  { role: 6, roleName: '运营组', isShowAdmin: [7, 8] }
+]
 // 等级,身份
 const judge = (groupId, isAdmin, isGroupAdmin) => {
-  let AdminShow
-  // 3||4销售主管
-  if (isAdmin) {
-    console.log('超管')
-    AdminShow = 0
-  } else if (isGroupAdmin && groupId === 2) {
-    console.log('客服组长')
-    AdminShow = 1
-  } else if (!isGroupAdmin && groupId === 2) {
-    console.log('客服组员')
-    AdminShow = 2
-  } else if (!isGroupAdmin && groupId === 3) {
-    console.log('商务组员')
-    AdminShow = 3
-  } else if (!isGroupAdmin && groupId === 4) {
-    AdminShow = 3
-    console.log('商务组员')
-  } else if (isGroupAdmin && groupId === 3) {
-    console.log('商务组长')
-    AdminShow = 4
-  } else if (isGroupAdmin && groupId === 4) {
-    console.log('商务组长')
-    AdminShow = 4
-  } else if (isGroupAdmin && groupId === 5) {
-    console.log('猎头主管&顾问主管')
-    AdminShow = 5
-  } else if (!isGroupAdmin && groupId === 5) {
-    console.log('猎头组员')
-    AdminShow = 6
-  }
-  return AdminShow
+  if (isAdmin) return 0
+  const role = roleList.find(val => val.role === groupId)
+  return isGroupAdmin ? role.isShowAdmin[0] : role.isShowAdmin[1]
 }
