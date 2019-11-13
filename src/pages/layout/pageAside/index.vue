@@ -12,18 +12,18 @@
       class="el-menu-vertical-demo">
       <template v-for="item in itemList">
         <template v-if="item.children && item.children.length">
-          <el-submenu :index="item.path"  :key="item.name">
+          <el-submenu :index="item.path" :key="item.path">
             <template slot="title">
               <i :class="item.icon"></i>
               <span>{{item.title}}</span>
             </template>
             <template v-for="child in item.children">
-              <el-menu-item :index="child.path" :key="child.name">{{child.title}}</el-menu-item>
+              <el-menu-item :index="child.path" :key="child.path">{{child.title}}</el-menu-item>
             </template>
           </el-submenu>
         </template>
         <template v-else>
-          <el-menu-item :index="item.path"  :key="item.name">
+          <el-menu-item :index="item.path"  :key="item.path">
             <i :class="item.icon"></i>
             <span slot="title">{{item.title}}</span>
           </el-menu-item>
