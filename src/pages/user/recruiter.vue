@@ -192,7 +192,8 @@
                 style="width: 100%; cursor: pointer; color: #652791;"
                 @click.stop="creatLink($event, props.scope.row, props.scope.$index)"
               >小程序码</div>
-              <div v-if="props.scope.row.isRapidlyRecruiter === 0" class="check" @click="checkRecruitment(props.scope.row.uid)">添加到24h招聘官</div>
+              <div v-if="props.scope.row.isRapidlyRecruiter === 0 && (AdminShow ==! 4 && AdminShow ==! 5 && AdminShow ==! 6)"
+              class="check" @click="checkRecruitment(props.scope.row.uid)">添加到24h招聘官</div>
             </div>
             <!-- 序号 -->
             <div class="btn-container" v-else-if="props.scope.column.property === 'index'">
