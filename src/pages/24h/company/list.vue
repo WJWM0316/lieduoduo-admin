@@ -3,7 +3,7 @@
     <layout-content
       :leftcontent="{ title: '24h公司'}"
       :isShowbtn="true">
-      <router-link slot="text" target="_blank" :to="{name: '24h_company_add'}" v-if="AdminShow != 3 && AdminShow != 4">
+      <router-link slot="text" target="_blank" :to="{name: '24h_company_add'}" v-if="AdminShow != 4 && AdminShow != 5 && AdminShow != 6">
         <el-button type="primary">新增</el-button>
       </router-link>
       <template slot="formContent">
@@ -26,7 +26,7 @@
           }"
           @on-search="handleSearch"
           method-type="getRapidlyCompanyAttr">
-          <template slot="add-type-btn"><router-link style="margin-left: 8px" :to="{name: '24h_labels'}" v-if="AdminShow != 3 && AdminShow != 4">
+          <template slot="add-type-btn"><router-link style="margin-left: 8px" :to="{name: '24h_labels'}" v-if="AdminShow != 4 && AdminShow != 5 && AdminShow != 6">
             <el-button type="default" icon="el-icon-setting">管理24h分类</el-button>
           </router-link></template>
         </header-filter>
@@ -92,7 +92,7 @@
             prop="action"
             label="操作">
             <template slot-scope="{row}">
-              <router-link class="btn_deal" target="_blank" :to="{ name: '24h_company_edit', query: { id: row.surfaceRapidlyInfo.id } }" v-if="AdminShow != 3 && AdminShow != 4">编辑</router-link>
+              <router-link class="btn_deal" target="_blank" :to="{ name: '24h_company_edit', query: { id: row.surfaceRapidlyInfo.id } }" v-if="AdminShow != 4 && AdminShow != 5 && AdminShow != 6">编辑</router-link>
               <router-link class="btn_deal" target="_blank" :to="{ name: 'index', query: { searchType: 'companyId', content: row.id } }">查看公司</router-link>
               <router-link class="btn_deal" target="_blank" :to="{ name: 'interview24h', query: { searchType: 'company_id', content: row.id } }">相关24h面试</router-link>
             </template>

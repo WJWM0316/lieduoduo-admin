@@ -3,7 +3,7 @@
     <layout-content
       :leftcontent="{ title: '24h招聘官'}"
       :isShowbtn="true">
-      <router-link slot="text" target="_blank" :to="{name: '24h_recruiter_add'}" v-if="AdminShow != 3 && AdminShow != 4">
+      <router-link slot="text" target="_blank" :to="{name: '24h_recruiter_add'}" v-if="AdminShow != 4 && AdminShow != 5 && AdminShow != 6">
         <el-button type="primary">新增</el-button>
       </router-link>
       <template slot="formContent">
@@ -76,7 +76,7 @@
             prop="action"
             label="操作">
             <template slot-scope="{row}">
-              <router-link class="btn_deal" target="_blank" :to="{ name: '24h_recruiter_edit', query: { id: row.surfaceRapidlyInfo.id } }" v-if="AdminShow != 3 && AdminShow != 4">编辑</router-link>
+              <router-link class="btn_deal" target="_blank" :to="{ name: '24h_recruiter_edit', query: { id: row.surfaceRapidlyInfo.id } }" v-if="AdminShow != 4 && AdminShow != 5 && AdminShow != 6">编辑</router-link>
               <router-link class="btn_deal" target="_blank" :to="{ name: 'interview24h', query: { tab_status: 1, searchType: 'recruiter', content: row.name } }">相关24h面试</router-link>
               <router-link class="btn_deal" target="_blank" :to="{ name: 'recruiter_info', params: { id: row.id } }">查看招聘官</router-link>
             </template>

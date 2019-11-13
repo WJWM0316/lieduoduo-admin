@@ -787,7 +787,7 @@ export default class createCompany extends Vue {
       field.isEditing = false
       field.actionType = 'edit'
     })
-    newCompanyInfo.highQuality = newCompanyInfo.highQuality.toString()
+    newCompanyInfo.highQuality = (newCompanyInfo.highQuality && newCompanyInfo.highQuality.toString()) || ''
     this.companyInfo = {
       high_quality: newCompanyInfo.highQuality,
       company_name: newCompanyInfo.companyName,

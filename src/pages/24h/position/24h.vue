@@ -2,7 +2,7 @@
   <div id="H24" class="H24">
     <div class="app-title">
       <div class="title">24h职位</div>
-      <router-link class="btn-group-wrapper" target="_blank" :to="{name: 'h24_position_post'}" v-if="AdminShow != 3 && AdminShow != 4">
+      <router-link class="btn-group-wrapper" target="_blank" :to="{name: 'h24_position_post'}" v-if="AdminShow != 4 && AdminShow != 5 && AdminShow != 6">
         <el-button type="primary">新增</el-button>
       </router-link>
     </div>
@@ -64,7 +64,7 @@
         prop="action"
         label="操作">
         <template slot-scope="{row}">
-          <router-link class="btn_deal" v-if="row.status !== 4 && AdminShow != 3 && AdminShow != 4" target="_blank" :to="{ name: 'h24_position_edit', query: { id: row.id } }">编辑</router-link>
+          <router-link class="btn_deal" v-if="row.status !== 4 && AdminShow != 4 && AdminShow != 5 && AdminShow != 6" target="_blank" :to="{ name: 'h24_position_edit', query: { id: row.id } }">编辑</router-link>
           <router-link class="btn_deal" target="_blank" :to="{
             name: 'interview24h',
             query: {
