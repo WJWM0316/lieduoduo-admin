@@ -33,7 +33,7 @@
   </div>
 </template>
 <script>
-import routelist from './route.json'
+// import routelist from './route.json'
 
 export default {
   data () {
@@ -44,7 +44,7 @@ export default {
   },
   computed: {
     itemList () {
-      return routelist || this.$store.state.common.menuList || []
+      return this.$store.state.common.menuList || []
     },
     currentRoute () {
       return this.$route.path
