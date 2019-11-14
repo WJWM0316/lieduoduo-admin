@@ -469,7 +469,10 @@ export default class companyCheck extends Vue {
   toEditSaller (id) {
     this.$route.meta.scrollY = window.scrollY
     this.$router.push({
-      path: `/check/companyCheck/${id}`,
+      name: 'editCheckCompany',
+      params: {
+        id
+      },
       query: { isEditSaller: true }
     })
   }

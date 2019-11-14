@@ -431,10 +431,7 @@ export default class officerManage extends Vue {
   border-radius: 4px;
 }
 .qrCode {
-  width: 300px;
-  height: 300px;
   border-radius: 4px;
-  transform: translateY(-90%) translateX(-20%);
   color: #652791;
   position: absolute;
   top: -999px;
@@ -450,6 +447,7 @@ export default class officerManage extends Vue {
   }
 }
 .qrCode {
+    text-align: center;
     width: 300px;
     height: 300px;
     /*background-color: #CCCCCC;*/
