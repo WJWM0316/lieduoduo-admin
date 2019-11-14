@@ -99,7 +99,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { getRapidlyPositionList } from 'API/24h'
 import HeaderFilter from '../components/areaTypeFilter'
-import DateFilter from '../components/dateFilter'
+import DateFilter from 'COMPONENTS/dateFilterPicker'
 @Component({
   name: 'H24',
   components: { HeaderFilter, DateFilter }

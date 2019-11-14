@@ -101,7 +101,7 @@
 <script>
 import LayoutContent from 'COMPONENTS/LayoutWrapper/content'
 import HeaderFilter from '../components/areaTypeFilter'
-import DateFilter from '../components/dateFilter'
+import DateFilter from 'COMPONENTS/dateFilterPicker'
 import { getRapidlyRecruiterList } from 'API/24h'
 export default {
   components: { LayoutContent, HeaderFilter, DateFilter },

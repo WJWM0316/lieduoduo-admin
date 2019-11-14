@@ -116,7 +116,7 @@
 </template>
 <script>
 import LayoutContent from 'COMPONENTS/LayoutWrapper/content'
-import DateFilter from '../components/dateFilter'
+import DateFilter from 'COMPONENTS/dateFilterPicker'
 import HeaderFilter from '../components/areaTypeFilter'
 import { getRapidlyCompanyList } from 'API/24h'
 export default {
