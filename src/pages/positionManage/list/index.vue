@@ -816,6 +816,9 @@ export default class companyCheck extends Vue {
 }
 .positionManage {
   text-align: unset;
+  .qrCode{
+    text-align: center;
+  }
   .el-main,
   .m-list{
     padding-left: 0;

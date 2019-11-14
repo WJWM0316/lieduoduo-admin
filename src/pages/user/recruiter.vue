@@ -822,6 +822,7 @@ export default class user extends Vue {
   left: -999px;
   z-index: 3;
   line-height: 60px;
+  text-align: center;
   .phoneBg {
     display: block;
     position: absolute;
