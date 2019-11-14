@@ -471,7 +471,7 @@ export default class companyCheck extends Vue {
     this.$router.push({
       name: 'editCheckCompany',
       params: {
-        id
+        checkId: id
       },
       query: { isEditSaller: true }
     })
