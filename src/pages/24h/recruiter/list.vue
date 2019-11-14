@@ -78,7 +78,7 @@
             <template slot-scope="{row}">
               <router-link class="btn_deal" target="_blank" :to="{ name: '24h_recruiter_edit', query: { id: row.surfaceRapidlyInfo.id } }" v-if="AdminShow != 4 && AdminShow != 5 && AdminShow != 6">编辑</router-link>
               <router-link class="btn_deal" target="_blank" :to="{ name: 'interview24h', query: { tab_status: 1, searchType: 'recruiter', content: row.name } }">相关24h面试</router-link>
-              <router-link class="btn_deal" target="_blank" :to="{ name: 'recruiter_info', params: { id: row.id } }">查看招聘官</router-link>
+              <router-link class="btn_deal" target="_blank" :to="{ name: 'recruiter_info', params: { id: row.uid } }">查看招聘官</router-link>
             </template>
           </el-table-column>
         </el-table>
