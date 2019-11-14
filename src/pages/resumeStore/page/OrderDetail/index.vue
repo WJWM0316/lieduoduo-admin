@@ -388,16 +388,13 @@ export default class OrderDetail extends Vue {
     switch (type) {
       case 1:
         // 招聘官主页
-        getRecruiterCodeUrlApi({ id: uid })
-        break
+        return getRecruiterCodeUrlApi({ id: uid })
       case 2:
         // 简历二维码
-        getResumeCodeUrlApi({ id: uid })
-        break
+        return getResumeCodeUrlApi({ id: uid })
       case 3:
         if (uid === 0) return
-        getPositionCodeUrlApi({ id: uid })
-        break
+        return getPositionCodeUrlApi({ id: uid })
     }
   }
   toPositionPath (id) {

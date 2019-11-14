@@ -537,15 +537,12 @@ export default class application extends Vue {
   getQr (type, uid) {
     switch (type) {
       case 1:
-        getRecruiterCodeUrlApi({ id: uid })
-        break
+        return getRecruiterCodeUrlApi({ id: uid })
       case 2:
-        getResumeCodeUrlApi({ id: uid })
-        break
+        return getResumeCodeUrlApi({ id: uid })
       case 3:
         if (uid === 0) return
-        getPositionCodeUrlApi({ id: uid })
-        break
+        return getPositionCodeUrlApi({ id: uid })
     }
   }
 
@@ -825,6 +822,7 @@ export default class application extends Vue {
   /*电话号码展示框*/
   .phone,
   .qrCode {
+    text-align: center;
     width: 150px;
     height: 70px;
     border-radius: 4px;

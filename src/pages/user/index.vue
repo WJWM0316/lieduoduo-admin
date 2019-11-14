@@ -667,6 +667,7 @@ export default class user extends Vue {
   border-radius: 4px;
 }
 .qrCode {
+  text-align: center;
   width: 300px;
   height: 300px;
   border-radius: 4px;

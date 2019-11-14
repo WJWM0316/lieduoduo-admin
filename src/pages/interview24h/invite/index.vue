@@ -640,15 +640,12 @@ export default class invite extends Vue {
   getQr (type, uid) {
     switch (type) {
       case 1:
-        getRecruiterCodeUrlApi({ id: uid })
-        break
+        return getRecruiterCodeUrlApi({ id: uid })
       case 2:
-        getResumeCodeUrlApi({ id: uid })
-        break
+        return getResumeCodeUrlApi({ id: uid })
       case 3:
         if (uid === 0) return
-        getPositionCodeUrlApi({ id: uid })
-        break
+        return getPositionCodeUrlApi({ id: uid })
     }
   }
 
@@ -942,6 +939,7 @@ export default class invite extends Vue {
   }
   .phone,
   .qrCode {
+    text-align: center;
     width: 150px;
     height: 75px;
     border-radius: 4px;

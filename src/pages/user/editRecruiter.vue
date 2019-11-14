@@ -133,6 +133,7 @@ export default class editRecruiter extends Vue {
     .creatTab {
       height: 100%;
       > div {
+        text-align: center;
         cursor: pointer;
         line-height: 80px;
         border: 1px solid #cccccc;

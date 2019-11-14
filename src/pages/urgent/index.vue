@@ -195,7 +195,7 @@
             width="300"
             v-model="scope.row.canDisplay"
             trigger="click">
-            <div>
+            <div style="text-align: center;">
               <div style="text-align: center;" v-if="!form.qrCode">
                 <img style="height: 38px;width: 38px; margin-top: 10px;" src="../../assets/loading.gif" />
                 <div style="margin-top: 20px;">正在加载中…</div>
