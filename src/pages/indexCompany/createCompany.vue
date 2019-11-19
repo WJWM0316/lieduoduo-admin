@@ -288,7 +288,7 @@
     </div>
     <!-- 跟进销售设置 -->
     <div class="editWindow" v-if="active === 1">
-      <div class="sales" v-if="AdminShow === 0 || AdminShow === 4 || AdminShow === 2">
+      <div class="sales" v-if="AdminShow === 0 || AdminShow === 3 || AdminShow === 4 || AdminShow === 2 || AdminShow === 1">
         <h3>跟进销售</h3>
         <el-form>
           <el-form-item label="跟进销售">
@@ -311,7 +311,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <div class="sales" v-if="(AdminShow === 0||AdminShow === 5) && $route.path.includes('/index/editCompany')">
+      <div class="sales" v-if="(AdminShow === 0 || AdminShow === 5) && $route.path.includes('/index/editCompany')">
 
         <h3>跟进顾问</h3>
         <el-form>
