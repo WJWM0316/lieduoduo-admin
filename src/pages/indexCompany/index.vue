@@ -178,7 +178,7 @@
               </el-col>
             </el-form-item>
             <!-- 是否优质公司 -->
-            <el-form-item label-width="100px" label="是否优质公司" prop="high_quality">
+            <el-form-item label-width="100px" label="是否优质公司">
               <el-select v-model="form.high_quality" placeholder="全部">
                 <el-option label="全部" value=''></el-option>
                 <el-option label="否" value=0></el-option>
@@ -186,11 +186,17 @@
               </el-select>
             </el-form-item>
             <!-- 是否有上线职位 -->
-            <el-form-item label-width="110px" label="是否有上线职位" prop="high_quality">
+            <el-form-item label-width="110px" label="是否有上线职位">
               <el-select v-model="form.online_position" placeholder="全部">
                 <el-option label="全部" value=''></el-option>
                 <el-option label="否" value=0></el-option>
                 <el-option label="是" value=1></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label-width="90px" label="行业类别">
+              <el-select v-model="form.industry_id" placeholder="全部">
+                <el-option label="全部" value=''></el-option>
+                <el-option :label="industryItem.name" :value="industryItem.labelId" v-for="(industryItem, industryIndex)  in industryFieldlists" :key="industryIndex"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item class="btn">
@@ -329,7 +335,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { getCompanyListApi, getCityApi, setCompanyCustomerLevelApi } from 'API/company'
-import { rightInfoApi, getSalerListApi, getCompanyCustomerLevelRangeApi, getAdvisorUserListApi } from 'API/common'
+import { rightInfoApi, getSalerListApi, getCompanyCustomerLevelRangeApi, getAdvisorUserListApi, fieldApi } from 'API/common'
 import { getAccessToken } from 'API/cacheService'
 import { API_ROOT } from 'API/index.js'
 import List from '@/components/list'
@@ -373,7 +379,8 @@ export default class indexPage extends Vue {
     keyword: '',
     companyId: '',
     mobile: '',
-    content: ''
+    content: '',
+    industry_id: ''
   };
   rightList = []; // 权益列表
   salerLis = []; // 销售人员列表
@@ -443,6 +450,10 @@ export default class indexPage extends Vue {
   ];
   companyCustomerLevelRange = []
   advisorUserList = []
+  industryFieldlists = []
+  getFieldLists() {
+    fieldApi().then(({data}) => this.industryFieldlists = data.data)
+  }
   changeSearchMethods (e) {
     this.form.content = ''
     this.form.keyword = ''
@@ -541,6 +552,9 @@ export default class indexPage extends Vue {
         params = Object.assign(params, { exportStart: this.form.exportStart, exportEnd: this.form.exportEnd })
       }
     }
+    if(this.form.industry_id) {
+      params = Object.assign(params, {industry_id: this.form.industry_id})
+    }
     // if(this.form.exportStart && this.form.exportEnd) {
     //   params = Object.assign(params, {exportStart: this.form.exportStart, exportEnd: this.form.exportEnd})
     // }
@@ -552,8 +566,12 @@ export default class indexPage extends Vue {
         params = Object.assign(params, { firstAreaId: this.form.firstAreaId, area_id: this.form.area_id })
       }
     }
-    params = Object.assign(params, { high_quality: this.form.high_quality })
-    params = Object.assign(params, { online_position: this.form.online_position })
+    if(this.form.high_quality) {
+      params = Object.assign(params, { high_quality: this.form.high_quality })
+    }
+    if(this.form.online_position) {
+      params = Object.assign(params, { online_position: this.form.online_position })
+    }
     this.getLoading = true
     getCompanyListApi(params).then(res => {
       this.getLoading = false
@@ -569,11 +587,11 @@ export default class indexPage extends Vue {
         params = Object.assign(params, { searchType: this.form.searchType, content: this.form.content })
       }
 
-      this.$router.push({
-        query: {
-          ...params
-        }
-      })
+      // this.$router.push({
+      //   query: {
+      //     ...params
+      //   }
+      // })
     })
   }
   /* 翻页 */
@@ -722,6 +740,9 @@ export default class indexPage extends Vue {
           url += `&firstAreaId=${this.form.firstAreaId}&area_id=${this.form.area_id}`
         }
       }
+      if(this.form.industry_id) {
+        url += `&industry_id=${this.form.industry_id}`
+      }
       this.canDownloadData = false
       url = url.replace(/\s*/g, '')
       let xmlResquest = new XMLHttpRequest()
@@ -752,6 +773,7 @@ export default class indexPage extends Vue {
   created () {
     this.form = Object.assign(this.form, this.$route.query)
     this.getCompanyList()
+    this.getFieldLists()
     this.getCity().then(() => {
       this.form.firstAreaId = Number(this.form.firstAreaId) > 0 ? Number(this.form.firstAreaId) : ''
       this.form.area_id = Number(this.form.area_id) > 0 ? Number(this.form.area_id) : ''

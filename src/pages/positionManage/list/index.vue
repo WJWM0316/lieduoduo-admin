@@ -137,6 +137,23 @@
                 placeholder="请选择结束时间">
               </el-date-picker>
             </el-form-item>
+            <el-form-item label="创建时间">
+              <el-date-picker
+                v-model="form.create_start"
+                :picker-options="pickerOptionsStart"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                type="datetime"
+                placeholder="选择日期">
+              </el-date-picker>
+              -
+              <el-date-picker
+                v-model="form.create_end"
+                :picker-options="pickerOptionsEnd"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                type="datetime"
+                placeholder="选择日期">
+              </el-date-picker>
+            </el-form-item>
           </el-form>
           <div class="SumbitBtn" style="overflow: hidden; text-align: right;">
             <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -352,7 +369,9 @@ export default class companyCheck extends Vue {
     emolument_max: '',
     city: '',
     cityName: '',
-    work_experience: ''
+    work_experience: '',
+    create_start: '',
+    create_end: ''
   };
   cityLists = [];
   positionManage = {
@@ -370,7 +389,7 @@ export default class companyCheck extends Vue {
     {
       prop: 'id',
       label: '职位ID',
-      width: 150
+      width: 80
     },
     {
       prop: 'positionMsg',
@@ -398,9 +417,14 @@ export default class companyCheck extends Vue {
       width: 150
     },
     {
+      prop: 'createdAt',
+      label: '创建时间',
+      width: 150
+    },
+    {
       prop: 'updatedAt',
       label: '更新时间',
-      width: 200
+      width: 150
     },
     {
       prop: 'emolumentMin',
@@ -604,7 +628,9 @@ export default class companyCheck extends Vue {
       emolument_max: '',
       city: '',
       cityName: '',
-      work_experience: ''
+      work_experience: '',
+      create_start: '',
+      create_end: ''
     }
     let obj = {}
     obj.stopPropagation = () => {}
@@ -633,13 +659,32 @@ export default class companyCheck extends Vue {
     if (this.form.wherefrom) {
       params = Object.assign(params, { wherefrom: this.form.wherefrom })
     }
-    // 已经选择时间
+    // 已经选择更新时间
     if (this.form.update_start && this.form.update_end) {
       params = Object.assign(params, {
         update_start: this.form.update_start,
         update_end: this.form.update_end
       })
+    } else {
+      if((!this.form.update_start && this.form.update_end) || (this.form.update_start && !this.form.update_end)) {
+        this.$message({message: '请选择更新时间范围', type: 'warning'});
+        return
+      }
     }
+
+    // 已经选择创建时间
+    if (this.form.create_start && this.form.create_end) {
+      params = Object.assign(params, {
+        create_start: this.form.create_start,
+        create_end: this.form.create_end
+      })
+    } else {
+      if((!this.form.create_start && this.form.create_end) || (this.form.create_start && !this.form.create_end)) {
+        this.$message({message: '请选择创建的时间范围', type: 'warning'});
+        return
+      }
+    }
+
     // 已经选择城市
     if (this.form.city) {
       params = Object.assign(params, { city: this.form.city })

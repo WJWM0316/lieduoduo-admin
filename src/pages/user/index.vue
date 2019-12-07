@@ -344,7 +344,8 @@ export default class user extends Vue {
   keyword = [
     { label: '公司名字', value: 'companyName' },
     { label: '手机号', value: 'mobile' },
-    { label: '人名', value: 'userName' }
+    { label: '人名', value: 'userName' },
+    { label: '用户ID', value: 'uid' }
   ];
   fields = [
     {

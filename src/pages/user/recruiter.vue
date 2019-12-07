@@ -159,10 +159,45 @@
             </el-form-item>
 
             <!-- 职务名称 -->
-          <el-form-item label="职务名称">
-            <el-input placeholder="请输入职务名称" v-model="form.position"></el-input>
-          </el-form-item>
+            <el-form-item label="职务名称">
+              <el-input placeholder="请输入职务名称" v-model="form.position"></el-input>
+            </el-form-item>
 
+            <!-- 跟进人筛选 -->
+            <el-form-item class="area" label="在线职位数" label-width="90px">
+              <el-select v-model="form.onlinePositionNum" placeholder="请选择" style="margin-right: 10px;">
+                <el-option label="全部" value></el-option>
+                <el-option
+                  v-for="item in 250"
+                  :key="item"
+                  :label="`${item}个`"
+                  :value="item"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item class="time" label="访问时间" prop="createTimeStart" label-width="100px">
+              <el-col :span="11">
+                <el-date-picker
+                  type="date"
+                  placeholder="选择日期"
+                  value-format="yyyy-MM-dd"
+                  v-model="form.rVisitTimeStart"
+                  style="width: 100%;"
+                ></el-date-picker>
+              </el-col>
+              <el-col class="line" :span="1">—</el-col>
+              <el-col :span="11">
+                <el-date-picker
+                  type="date"
+                  placeholder="选择日期"
+                  value-format="yyyy-MM-dd"
+                  v-model="form.rVisitTimeEnd"
+                  style="width: 100%;"
+                ></el-date-picker>
+              </el-col>
+            </el-form-item>
+            
             <el-form-item class="btn">
               <el-button @click.stop="onSubmit" style="color: white !important" type="primary">查询</el-button>
               <el-button @click.stop="resetForm('form')">重置</el-button>
@@ -392,7 +427,10 @@ export default class user extends Vue {
     keyword1: '',
     keyword2: '',
     type: '',
-    position: ''
+    position: '',
+    onlinePositionNum: '',
+    rVisitTimeStart: '',
+    rVisitTimeStart: ''
   };
   /* 搜索关键字 */
   keyword = [
@@ -582,9 +620,18 @@ export default class user extends Vue {
     }
     if ((this.form.createTimeStart && !this.form.createTimeEnd) || (!this.form.createTimeStart && this.form.createTimeEnd)) {
       this.$message({ message: '必须选择一个时间区间', type: 'warning' })
+      return
     } else {
       if (this.form.createTimeStart && this.form.createTimeEnd) {
         params = Object.assign(params, { createTimeStart: this.form.createTimeStart, createTimeEnd: this.form.createTimeEnd })
+      }
+    }
+    if ((this.form.rVisitTimeStart && !this.form.rVisitTimeEnd) || (!this.form.rVisitTimeStart && this.form.rVisitTimeEnd)) {
+      this.$message({ message: '必须选择一个时间区间', type: 'warning' })
+      return
+    } else {
+      if (this.form.rVisitTimeStart && this.form.rVisitTimeEnd) {
+        params = Object.assign(params, { rVisitTimeStart: this.form.rVisitTimeStart, rVisitTimeEnd: this.form.rVisitTimeEnd })
       }
     }
     // 已经选择职位类别
@@ -594,6 +641,9 @@ export default class user extends Vue {
     // 已经选择职位类别
     if (this.form.position) {
       params = Object.assign(params, { position: this.form.position })
+    }
+    if(this.form.onlinePositionNum) {
+      params = Object.assign(params, {onlinePositionNum: this.form.onlinePositionNum})
     }
     getUserListApi(params).then(res => {
       this.list = res.data.data

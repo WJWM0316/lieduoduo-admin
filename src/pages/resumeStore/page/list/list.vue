@@ -22,6 +22,8 @@
               <el-cascader
                 ref="cascader"
                 class="formItem"
+                filterable
+                change-on-select
                 placeholder="职位类别"
                 :options="options"
                 filterable
@@ -92,7 +94,7 @@
               </el-select>
             </el-form-item>
 
-            <el-form-item label="最高学历" class="formItem" prop="degree">
+            <el-form-item label="最高学历" class="formItem">
               <el-select v-model="form.degree" placeholder="请选择">
                 <el-option
                   v-for="(item,index) in degreeList"
@@ -118,7 +120,7 @@
                 <el-option label="后台创建" value="20"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item class="time" label="更新时间" prop="updateTimeLower" label-width="100px">
+            <el-form-item class="time" label="更新时间" label-width="100px">
               <el-col :span="11">
                 <el-date-picker
                   type="date"
@@ -140,7 +142,7 @@
               </el-col>
             </el-form-item>
 
-            <el-form-item class="time" label="访问时间" prop="visitTimeLower" label-width="100px">
+            <el-form-item class="time" label="访问时间" label-width="100px">
               <el-col :span="11">
                 <el-date-picker
                   type="date"
@@ -160,6 +162,37 @@
                   style="width: 142px;"
                 ></el-date-picker>
               </el-col>
+            </el-form-item>
+            
+            <el-form-item class="time" label="创建时间" label-width="100px">
+              <el-col :span="11">
+                <el-date-picker
+                  type="date"
+                  placeholder="选择日期"
+                  v-model="form.createTimeLower"
+                  value-format="yyyy-MM-dd"
+                  style="width: 142px;"
+                ></el-date-picker>
+              </el-col>
+              <el-col class="line" :span="1">—</el-col>
+              <el-col :span="11">
+                <el-date-picker
+                  type="date"
+                  placeholder="选择日期"
+                  value-format="yyyy-MM-dd"
+                  v-model="form.createTimeUpper"
+                  style="width: 142px;"
+                ></el-date-picker>
+              </el-col>
+            </el-form-item>
+            
+            <el-form-item label="简历类型" class="formItem">
+              <el-select v-model="form.resumeType" placeholder="请选择">
+                <el-option label="全部" value="" ></el-option>
+                <el-option label="微简历" value="1" ></el-option>
+                <el-option label="可以投递简历" value="2" ></el-option>
+                <el-option label="完整简历" value="3" ></el-option>
+              </el-select>
             </el-form-item>
 
             <div class="BtnList">
@@ -594,7 +627,10 @@ export default class resumeStore extends Vue {
     resumeLabel: '', // 简历标签名
     count: 20, // 每页条数
     expectFieldId: [], /* 期望行业 */
-    resumeGrades: ''
+    resumeGrades: '',
+    createTimeLower: '',
+    createTimeLower: '',
+    resumeType: ''
   };
   tabList = []; /* 标签栏 */
   isSales = 0; /* 权限字段 */
@@ -924,7 +960,7 @@ export default class resumeStore extends Vue {
       if (this.form.workExpLower) {
         url += `&workExpLower=${this.form.workExpLower}&workExpUpper=${this.form.workExpUpper}`
       }
-      if (this.form.visitTimeLower) {
+      if (this.form.visitTimeLower && this.form.visitTimeUpper) {
         url += `&visitTimeLower=${this.form.visitTimeLower}&visitTimeUpper=${this.form.visitTimeUpper}`
       }
       if (this.form.completeCareer) {
@@ -950,6 +986,12 @@ export default class resumeStore extends Vue {
       }
       if (this.form.updateTimeLower && this.form.updateTimeUpper) {
         url += `&updateTimeLower=${this.form.updateTimeLower}&updateTimeUpper=${this.form.updateTimeUpper}`
+      }
+      if (this.form.createTimeUpper && this.form.createTimeLower) {
+        url += `&createTimeUpper=${this.form.createTimeUpper}&createTimeLower=${this.form.createTimeLower}`
+      }
+      if(this.form.resumeType) {
+        url += `&resumeType=${this.form.resumeType}`
       }
       url = url.replace(/\s*/g, '')
       let xmlResquest = new XMLHttpRequest()
@@ -1097,12 +1139,96 @@ export default class resumeStore extends Vue {
     })
   }
   getData () {
-    this.comexpectFieldId.length > 0
-      ? (this.form.expectFieldId = this.comexpectFieldId.join(','))
-      : (this.form.expectFieldId = [])
-    let params = this.form
-    if (params.resumeGrades === '') delete params.resumeGrades
-    GetResumeAPI(params).then(res => {
+    let params1 = {
+      page: 1,
+      count: 20
+    }
+    if(this.form.keyword) {
+      params1 = Object.assign(params1, {keyword: this.form.keyword})
+    }
+    if(this.form.name) {
+      params1 = Object.assign(params1, {name: this.form.name})
+    }
+    if(this.form.expectPositionId) {
+      params1 = Object.assign(params1, {expectPositionId: this.form.expectPositionId})
+    }
+    if(this.form.expectPosition) {
+      params1 = Object.assign(params1, {expectPosition: this.form.expectPosition})
+    }
+    if(this.form.expectCityNum) {
+      params1 = Object.assign(params1, {expectCityNum: this.form.expectCityNum})
+    }
+    if(this.form.skillLabel) {
+      params1 = Object.assign(params1, {skillLabel: this.form.skillLabel})
+    }
+    if(this.form.jobStatus) {
+      params1 = Object.assign(params1, {jobStatus: this.form.jobStatus})
+    }
+    if(this.form.degree) {
+      params1 = Object.assign(params1, {degree: this.form.degree})
+    }
+    if(this.form.isStudent) {
+      params1 = Object.assign(params1, {isStudent: this.form.isStudent})
+    }
+    if(this.form.salaryLower) {
+      params1 = Object.assign(params1, {salaryLower: this.form.salaryLower})
+    }
+    if(this.form.salaryUpper) {
+      params1 = Object.assign(params1, {salaryUpper: this.form.salaryUpper})
+    }
+    if(this.form.ageLower) {
+      params1 = Object.assign(params1, {ageLower: this.form.ageLower})
+    }
+    if(this.form.ageUpper) {
+      params1 = Object.assign(params1, {ageUpper: this.form.ageUpper})
+    }
+    if(this.form.wherefrom) {
+      params1 = Object.assign(params1, {wherefrom: this.form.wherefrom})
+    }
+    if(this.form.resumeLabel) {
+      params1 = Object.assign(params1, {resumeLabel: this.form.resumeLabel})
+    }
+    if(this.form.resumeGrades) {
+      params1 = Object.assign(params1, {resumeGrades: this.form.resumeGrades})
+    }
+    if(this.form.workExpLower) {
+      params1 = Object.assign(params1, {workExpLower: this.form.workExpLower})
+    }
+    if(this.form.workExpUpper) {
+      params1 = Object.assign(params1, {workExpUpper: this.form.workExpUpper})
+    }
+    if(this.comexpectFieldId.length) {
+      params1 = Object.assign(params1, {expectFieldId: this.comexpectFieldId.join(',')})
+    }
+    if(this.form.resumeType) {
+      params1 = Object.assign(params1, {resumeType: this.form.resumeType})
+    }
+    if ((this.form.createTimeUpper && !this.form.createTimeLower) || (!this.form.createTimeUpper && this.form.createTimeLower)) {
+      this.$message({ message: '必须选择一个创建时间区间', type: 'warning' })
+      return
+    } else {
+      if (this.form.createTimeUpper && this.form.createTimeLower) {
+        params1 = Object.assign(params1, { createTimeUpper: this.form.createTimeUpper, createTimeLower: this.form.createTimeLower })
+      }
+    }
+    if ((this.form.updateTimeLower && !this.form.updateTimeUpper) || (!this.form.updateTimeLower && this.form.updateTimeUpper)) {
+      this.$message({ message: '必须选择一个更新时间区间', type: 'warning' })
+      return
+    } else {
+      if (this.form.updateTimeLower && this.form.updateTimeUpper) {
+        params1 = Object.assign(params1, { updateTimeLower: this.form.updateTimeLower, updateTimeUpper: this.form.updateTimeUpper })
+      }
+    }
+    if ((this.form.visitTimeLower && !this.form.visitTimeUpper) || (!this.form.visitTimeLower && this.form.visitTimeUpper)) {
+      this.$message({ message: '必须选择一个访问时间区间', type: 'warning' })
+      return
+    } else {
+      if (this.form.visitTimeLower && this.form.visitTimeUpper) {
+        params1 = Object.assign(params1, { visitTimeLower: this.form.visitTimeLower, visitTimeUpper: this.form.visitTimeUpper })
+      }
+    }
+    if (params1.resumeGrades === '') delete params.resumeGrades
+    GetResumeAPI(params1).then(res => {
       this.itemList = res.data.data
       this.leftcontent.total = parseInt(res.data.meta.total)
       this.leftcontent.lastPage = parseInt(res.data.meta.lastPage)
