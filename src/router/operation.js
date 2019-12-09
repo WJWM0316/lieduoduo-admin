@@ -18,7 +18,7 @@ export default [
         component: resolve => require(['@/pages/operation/index.vue'], resolve)
       },
       {
-        path: 'add',
+        path: 'post',
         name: 'operationAdd',
         meta: {
           title: '运营位新增'
@@ -26,7 +26,7 @@ export default [
         component: resolve => require(['@/pages/operation/post.vue'], resolve)
       },
       {
-        path: 'edit',
+        path: 'update',
         name: 'operationEdit',
         meta: {
           title: '运营位编辑'

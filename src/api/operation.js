@@ -20,14 +20,22 @@ export const getBannerListsApi = data => request({
   data
 })
 
-/* 获取急聘职位详情 */
-export const getUrgencyApi = data => request({
-  url: `/urgency/info/${data.id}`,
+/* 获取广告图信息 */
+export const getBannerDetailApi = data => request({
+  url: `/banner/details/${data.id}`,
   type: 'get'
 })
 
-/* 删除急聘职位 */
-export const deleteUrgencyApi = data => request({
-  url: `/urgency/del/${data.id}`,
-  type: 'delete'
+/* 编辑广告图信息 */
+export const updateBannerDetailApi = data => request({
+  url: `/banner/edit/${data.id}`,
+  type: 'post',
+  data
+})
+
+/* 添加广告图信息 */
+export const postBannerDetailApi = data => request({
+  url: `/banner/add`,
+  type: 'post',
+  data
 })

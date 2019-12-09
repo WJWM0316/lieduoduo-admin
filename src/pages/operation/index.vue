@@ -3,7 +3,7 @@
   	<div class="header">
 	  	<div class="floor-one">
 	  		<div class="item" v-for="(item, index) in portData" :key="item.key" :class="{active: item.active}" @click="changeBannerDevice(item, index)">{{item.text}}</div>
-				<router-link :to="{ name: 'operationAdd', query: {key: portItem.key} }" class="add item">新 增</router-link>
+				<router-link :to="{ name: 'operationAdd' }" class="add item">新 增</router-link>
 	  	</div>
 	  	<div class="floor-tow">
 				<el-input v-model="form.name" placeholder="搜索广告位名称" style="width: 400px;"></el-input>
@@ -52,6 +52,7 @@
 					    <el-option label="全部" value=""></el-option>
 					    <el-option label="上线" value="1"></el-option>
 					    <el-option label="下线" value="0"></el-option>
+					    <el-option label="未上架" value="2"></el-option>
 					  </el-select>
 					</div>
 					<div class="mydate">
@@ -67,7 +68,7 @@
 					</div>
 				</template>
 				<div class="submit item" @click="getLists">查 询</div>
-				<div class="add item" @click="toggleSwitch">切换排期视窗</div>
+				<div class="add item" @click="toggleSwitch">{{form.type === 1 ? '切换排期视窗' : '切换列表视窗'}}</div>
 	  	</div>
   	</div>
   	<div v-if="form.type === 1">
@@ -85,7 +86,7 @@
 		        label="广告位名称">
 		      </el-table-column>
 		      <el-table-column
-		        prop="createdAt"
+		        prop="startTime"
 		        sortable
 		        label="上架时间">
 		      </el-table-column>
@@ -125,10 +126,22 @@
 		        prop="address"
 		        label="操作">
 		        <template slot-scope="{row}">
-		        	<router-link :to="{ name: 'operationEdit', query: {id: row.id} }">编辑</router-link>
+		        	<router-link :to="{ name: 'operationEdit', query: {id: row.id} }" tag="span" style="cursor: pointer;">编辑</router-link>
             </template>
 		      </el-table-column>
 	    </el-table>
+	    <div class="list-footer"  v-if="total > form.count">
+        <el-pagination
+	        layout="prev, pager, next, slot"
+	        :total="total"
+	        :page-size="form.count"
+	        prev-text="上一页"
+	        next-text="下一页"
+	        :current-page="Number(form.page)"
+	        @current-change="changePage">
+	        <span class="total">共{{ Math.ceil(total/20) }}页, {{total}}条记录</span>
+	      </el-pagination>
+			</div>
     </div>
     <div class="operation-content" v-if="form.type === 2">
 	    <datePicker :replaceItemHtml="replaceItemHtml" @changeDay="changeDay" />
@@ -137,10 +150,10 @@
 					<h2 class="rank-item-tips">2019年12月05日-排期明细 （剩余<span class="rank-item-week-strong">3个</span>可用）</h2>
 					<span class="rank-item-week-tips">*以下运营位按权重排序</span>
 	    	</li>
-	    	<li v-for="item in 3" :key="item" class="rank-item">
-	    		<h2 class="rank-item-title">运营招聘专场     </h2>
-	    		<p>2019-11-28 至2019-12-09</p>
-	    		<router-link :to="{ name: 'operationEdit', query: {id: row.id} }" class="rank-item-edit" tag="span">编辑</router-link>
+	    	<li v-for="(liItem, liIndex) in tableData" :key="liIndex" class="rank-item" v-if="liIndex <= 2">
+	    		<h2 class="rank-item-title">{{liItem.name}}</h2>
+	    		<p>{{liItem.createdAt}} 至{{liItem.endTime}}</p>
+	    		<router-link :to="{ name: 'operationEdit', query: {id: liItem.id} }" class="rank-item-edit" tag="span">编辑</router-link>
 	    	</li>
 	    </ul>
 	  </div>
@@ -193,6 +206,7 @@ export default {
       		allNumber: 8
       	}
       ],
+      total: 0,
       form: {
       	time: [],
       	name: '',
@@ -200,7 +214,8 @@ export default {
       	status: '',
       	area_id: '',
       	client: '',
-      	location: ''
+      	location: '',
+      	count: 20
       },
       portItem: {}
 		}
@@ -238,7 +253,6 @@ export default {
 			return html
 		},
 		sortChange(e) {
-			console.log(e)
 			switch(e.prop) {
 				case 'online_date':
 					break
@@ -300,12 +314,15 @@ export default {
 			}
 			getBannerListsApi(params).then(({ data }) => {
 				this.tableData = data.data
-				console.log(data)
+				this.total = data.meta.total
 			})
 		},
 		choose(item, index, key) {
 			this.filter[key].map((v, i) => v.active = index === i ? true : false)
 			this.form[key] = item.key
+		},
+		changePage(page) {
+			console.log(page)
 		}
 	},
 	created() {
@@ -315,6 +332,19 @@ export default {
 </script>
 <style lang="less">
 #operation-index{
+	.list-footer {
+    text-align: center;
+    box-sizing: border-box;
+    z-index: 200;
+    position: fixed;
+    left: 200px;
+    bottom: 0;
+    padding: 8px;
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0px -1px 0px 0px rgba(232, 233, 235, 1);
+    border: 1px solid #e8e9eb;
+  }
 	.header{
 		margin-bottom: 30px;
 	}
@@ -413,7 +443,7 @@ export default {
       }
     }
     .active{
-      font-weight:500;
+      font-weight:700;
       color:#3e294d;
     }
     .type-item {
@@ -475,6 +505,7 @@ export default {
   }
   .el-table{
   	margin-top: 30px;
+  	padding-bottom: 50px;
   }
   .rank-ul{
   	flex: 1;
