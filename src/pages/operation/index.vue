@@ -407,6 +407,7 @@ export default {
 			this.filter[key].map((v, i) => v.active = index === i ? true : false)
 			this.form[key] = item.key
 			this.changeCalendarStatus()
+			this.tableData.page = 1
 		},
 		changePage(page) {
 			this.tableData.page = page
