@@ -88,7 +88,7 @@
           :width="imagesUploader.width"
           :height="imagesUploader.height"
           type="big_img_id"
-          :tips="imagesUploader.tips1"
+          :tips="imagesUploader[form.location]"
           v-model="form.big_img_id.smallUrl"
           @loaded="uploadImage" />
       </el-form-item>
@@ -98,7 +98,7 @@
           :width="imagesUploader.width"
           :height="imagesUploader.height"
           type="small_img_id"
-          :tips="imagesUploader.tips1"
+          :tips="imagesUploader[form.location]"
           v-model="form.small_img_id.smallUrl"
           @loaded="uploadImage" />
       </el-form-item>
