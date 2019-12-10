@@ -146,8 +146,8 @@
     </div>
     <div class="operation-content" v-if="form.type === 2">
     	<div class="date-box" :class="{active: !rankData.show}">
-    		<datePicker :replaceItemHtml="replaceItemHtml" @changeDay="changeDay" v-show="rankData.show" />
-    		<div class="disable" v-show="!rankData.show">
+    		<datePicker :replaceItemHtml="replaceItemHtml" @changeDay="changeDay" v-if="rankData.show" @change="changeMounth" />
+    		<div class="disable" v-if="!rankData.show">
     			<div class="circle">?</div>
     			<div class="tips">选择对应查询条件后，点击查询查看排期</div>
     		</div>
@@ -157,7 +157,7 @@
 					<h2 class="rank-item-tips">{{rankData.date}}-排期明细 （剩余<span class="rank-item-week-strong">{{rankData.number}}个</span>可用）</h2>
 					<span class="rank-item-week-tips">*以下运营位按权重排序</span>
 	    	</li>
-	    	<li v-for="(rank, rankIndex) in rankData.list" :key="rankIndex" class="rank-item" v-if="rankData.list.length">
+	    	<li v-for="(rank, rankIndex) in rankData.list" :key="rankIndex" class="rank-item" v-if="rankData.list.length && rankIndex <= 5">
 	    		<h2 class="rank-item-title">{{rank.name}}</h2>
 	    		<p>{{rank.createdAt}} 至{{rank.endTime}}</p>
 	    		<router-link :to="{ name: 'operationEdit', query: {id: rank.id} }" class="rank-item-edit" tag="span">编辑</router-link>
@@ -177,6 +177,7 @@ import {
 	getBannerListsApi
 } from 'API/operation'
 
+const currentDate = new Date()
 const formatDate = (timestamp) => {
 	let date = new Date(timestamp)
 	let YY = date.getFullYear() + '-'
@@ -186,6 +187,11 @@ const formatDate = (timestamp) => {
  //  var minute = date.getMinutes() + ':'
  //  var second = date.getSeconds() 
 	return YY + MM + DD
+}
+
+const getDays = (year =  currentDate.getFullYear(), month = currentDate.getMonth()) => {
+	var d = new Date(year, month - 1, 0);
+  return d.getDate();
 }
 
 const curTimestamp = Date.parse(new Date(formatDate(Date.parse(new Date()))))
@@ -202,15 +208,17 @@ export default {
 				list: [],
 				total: 0,
 				isLoaded: false,
-				count: 20
+				count: 20,
+				page: 1
 			},
       rankData: {
       	list: [],
       	total: 0,
       	isLoaded: false,
       	number: 0,
-      	count: 3,
-      	show: true
+      	count: 6,
+      	show: true,
+      	calendarList: []
       },
       form: {
       	time: [],
@@ -256,23 +264,31 @@ export default {
 			this.changeCalendarStatus()
 			this.form.type = num
 			let tem = this.getCurrentTime().split('-')
+			this.changeMounth()
 			if(num === 2 && !this.rankData.isLoaded) {
 				this.form.time = [
 					`${this.getCurrentTime()} 00:00:00`,
 					`${this.getCurrentTime()} 23:59:59`
 				]
-				this.getRankLists()
 				this.rankData.date = `${tem[0]}年${tem[1]}月${tem[2]}日`
+				this.getRankLists()
 			}
-			console.log(this.rankData)
 		},
-		edit(item, index) {
-			console.log(item)
+		changeMounth(e) {
+			if(!e) return
+			let tem = e.time.split('-');
+			this.rankData.count = getDays(Number(tem[0]), Number(tem[1]))
+			this.rankData.date = `${tem[0]}年${tem[1]}月${tem[2]}日`
+			this.form.time = [
+				`${e.time} 00:00:00`,
+				`${e.time} 23:59:59`
+			]
+			this.getRankLists()
 		},
 		replaceItemHtml(item, index) {
 			let html = item.content
 			let curDate = formatDate(Date.parse(new Date()))
-			this.list.map(v => {
+			this.rankData.list.map(v => {
 				if(v.date === item.date && v.number) {
 					// 当天数字显示黄色
 					if(Date.parse(new Date(v.date)) === curTimestamp) {
@@ -327,7 +343,7 @@ export default {
 		},
 		getLists() {
 			let params = {
-				page: 1,
+				page: this.tableData.page,
 				count: this.tableData.count
 			}
 			if(this.form.name) {
@@ -393,7 +409,8 @@ export default {
 			this.changeCalendarStatus()
 		},
 		changePage(page) {
-			console.log(page)
+			this.tableData.page = page
+			this.getLists()
 		}
 	},
 	created() {

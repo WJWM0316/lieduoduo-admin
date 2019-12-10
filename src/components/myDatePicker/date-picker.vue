@@ -15,7 +15,7 @@
         :class="`${item.type !== 'normal' ? 'gray' : ''} ${item.content === selectedDate && item.type === 'normal' ? 'today' : ''}`"
         @click="__clickDay(item)"
         v-html="replaceItemHtml(item, index)"
-        v-for="(item, index) in displayDaysPerMonthT(selectedYear)[selectedMonth]"
+        v-for="(item, index) in __getAllDays(selectedYear)[selectedMonth]"
         :key="item.type + item.content + `${index}`"> {{item.content}}
       </div>
     </div>
@@ -37,7 +37,7 @@ export default {
     };
   },
   methods: {
-    displayDaysPerMonthT(year) {
+    __getAllDays(year) {
       let daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
       let nextYear = this.selectedYear + 1
       let beforeYear = this.selectedYear - 1
@@ -125,6 +125,9 @@ export default {
         this.selectedMonth = this.selectedMonth - 1
         this.selectedDate = 1
       }
+      this.$emit('change', {
+        time: `${this.selectedYear}-${this.selectedMonth + 1 < 10 ? '0' + (this.selectedMonth + 1) : this.selectedMonth + 1}-${this.selectedDate < 10 ? '0' + this.selectedDate : this.selectedDate}`
+      })
     },
     __nextMonth() {
       if (this.selectedMonth === 11) {
@@ -135,6 +138,9 @@ export default {
         this.selectedMonth = this.selectedMonth + 1
         this.selectedDate = 1
       }
+      this.$emit('change', {
+        time: `${this.selectedYear}-${this.selectedMonth + 1 < 10 ? '0' + (this.selectedMonth + 1) : this.selectedMonth + 1}-${this.selectedDate < 10 ? '0' + this.selectedDate : this.selectedDate}`
+      })
     },
     __changeYear() {},
     __changeMonth() {}

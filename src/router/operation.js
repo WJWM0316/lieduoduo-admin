@@ -7,6 +7,9 @@ export default [
       title: '运营位管理',
       auth: false
     },
+    redirect: {
+      name: 'operationList'
+    },
     component: Layout,
     children: [
       {
