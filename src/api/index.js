@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Loading, Message } from 'element-ui'
+import Store from '@/store/store'
 import router from '@/router/index'
 // const Version=107;
 import { getAccessToken, removeAccessToken } from './cacheService'
@@ -38,6 +39,8 @@ axios.interceptors.response.use(
   err => {
     // 登陆过期或者未登录
     if (err.response.data.httpStatus === 401) {
+      Store.commit('removeMenus')
+      Store.commit('REMOVE_USERINFO')
       router.push({ name: 'login' })
       removeAccessToken()
       // Message.error(`登录状态已过期,请重新登录`);

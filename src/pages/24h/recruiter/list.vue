@@ -45,7 +45,7 @@
             <template slot-scope="{row}">
               <div class="company-wrapper"  v-if="row.companyInfo">
                 <div class="company-image" v-if="row.companyInfo.logoInfo">
-                  <img :src="row.companyInfo.logoInfo.middleUrl" alt="">
+                  <img :src="row.companyInfo.logoInfo.smallUrl" alt="">
                 </div>
                 <div class="company-title">
                   <p>{{row.companyInfo.companyShortname}}</p>
