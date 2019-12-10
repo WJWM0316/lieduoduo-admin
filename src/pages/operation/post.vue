@@ -88,7 +88,7 @@
           :width="imagesUploader.width"
           :height="imagesUploader.height"
           type="big_img_id"
-          :tips="imagesUploader.tips"
+          :tips="imagesUploader[form.location]"
           v-model="form.big_img_id.smallUrl"
           @loaded="uploadImage" />
       </el-form-item>
@@ -98,7 +98,7 @@
           :width="imagesUploader.width"
           :height="imagesUploader.height"
           type="small_img_id"
-          :tips="imagesUploader.tips"
+          :tips="imagesUploader[form.location]"
           v-model="form.small_img_id.smallUrl"
           @loaded="uploadImage" />
       </el-form-item>
@@ -270,7 +270,7 @@
         rules: {
           name: [
             { required: true, message: '请输入广告位名称', trigger: 'change' },
-            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'change' }
+            { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'change' }
           ],
           device: [
             { type: 'string', required: true, message: '请选择端口', trigger: 'change' }
@@ -317,7 +317,10 @@
           point: '',
           width: 690,
           height: 140,
-          tips: '建议尺寸690X140px，JPG、PNG格式，图片小于5M。'
+          tips1: '建议尺寸690X140px，JPG、PNG格式，图片小于5M。', // c首页-24小时急速约面
+          job_hunter_24h: '建议尺寸690X190px，JPG、PNG格式，图片小于5M。', // C端24h约面中间banner
+          job_hunter_index: '建议尺寸690X140px，JPG、PNG格式，图片小于5M。', // C端创建简历banner
+          recruiter_index: '建议尺寸690X168px，JPG、PNG格式，图片小于5M。' // B端首页banner
         },
         placeholder: '请输入落地页页面',
         pickerOptionsStart: {

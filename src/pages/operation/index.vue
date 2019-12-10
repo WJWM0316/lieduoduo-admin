@@ -5,7 +5,7 @@
 	  		<div class="item" v-for="(item, index) in portData" :key="item.key" :class="{active: item.active}" @click="changeBannerDevice(item, index)">{{item.text}}</div>
 				<router-link :to="{ name: 'operationAdd' }" class="add item">新 增</router-link>
 	  	</div>
-	  	<div class="floor-tow">
+	  	<div class="floor-tow" v-if="form.type === 1">
 				<el-input v-model="form.name" placeholder="搜索广告位名称" style="width: 400px;"></el-input>
 	      <div class="item mybutton">搜 索</div>
 	  	</div>
