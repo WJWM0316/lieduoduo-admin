@@ -260,7 +260,7 @@
           }, // 小图ID
           small_img_id_checked: '',
           area_id: '', // 城市
-          sort: '', // 排序
+          sort: 1, // 排序
           start_time: '', // 开始时间
           end_time: '', // 结束时间
           status: 1,
@@ -378,7 +378,8 @@
       },
       getBannerDevice() {
         return getBannerDeviceApi().then(({ data }) => {
-          this.portData = data.data
+          let portData = data.data.filter(v => v.key !== 'pc')
+          this.portData = portData
           // this.getBannerParameter(this.portData[0])
         })
       },

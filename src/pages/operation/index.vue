@@ -10,7 +10,7 @@
 	      <div class="item mybutton">搜 索</div>
 	  	</div>
 	  	<div class="bank-type-box">
-	  		<div class="type-item" v-if="filter.client">
+	  		<div class="type-item" v-if="filter.client && filter.client.length">
           <div class="type-filter">用户端：</div>
           <div class="type-ul">
             <span
@@ -21,7 +21,7 @@
             	@click="choose(clientItem, clientIndex, 'client')">{{clientItem.text}}</span>
           </div>
         </div>
-        <div class="type-item" v-if="filter.location">
+        <div class="type-item" v-if="filter.location && filter.location.length">
           <div class="type-filter">运营位：</div>
           <div class="type-ul">
             <span
@@ -32,7 +32,7 @@
             	@click="choose(locationItem, locationIndex, 'location')">{{locationItem.text}}</span>
           </div>
         </div>
-        <div class="type-item" v-if="filter.area">
+        <div class="type-item" v-if="filter.area && filter.area.length">
           <div class="type-filter">城市：</div>
           <div class="type-ul">
             <span
@@ -59,8 +59,8 @@
 						上下架时间：
 						<el-date-picker
 				      v-model="form.time"
-				      type="daterange"
-				      value-format="yyyy-MM-dd"
+				      type="datetimerange"
+				      value-format="yyyy-MM-dd HH:mm:ss"
 				      range-separator="至"
 				      start-placeholder="开始日期"
 				      end-placeholder="结束日期">
@@ -68,12 +68,13 @@
 					</div>
 				</template>
 				<div class="submit item" @click="getLists">查 询</div>
-				<div class="add item" @click="toggleSwitch">{{form.type === 1 ? '切换排期视窗' : '切换列表视窗'}}</div>
+				<div class="add item" @click="toggleSwitch(2)" v-show="form.type === 1">切换排期视窗</div>
+				<div class="add item" @click="toggleSwitch(1)" v-show="form.type === 2">切换列表视窗</div>
 	  	</div>
   	</div>
   	<div v-if="form.type === 1">
 	  	<el-table
-	      :data="tableData"
+	      :data="tableData.list"
 	      :default-sort = "{prop: 'date', order: 'descending'}"
 	      @sort-change="sortChange"
 	      style="width: 100%">
@@ -130,30 +131,39 @@
             </template>
 		      </el-table-column>
 	    </el-table>
-	    <div class="list-footer"  v-if="total > form.count">
+	    <div class="list-footer"  v-if="tableData.total > form.count">
         <el-pagination
 	        layout="prev, pager, next, slot"
-	        :total="total"
+	        :total="tableData.total"
 	        :page-size="form.count"
 	        prev-text="上一页"
 	        next-text="下一页"
 	        :current-page="Number(form.page)"
 	        @current-change="changePage">
-	        <span class="total">共{{ Math.ceil(total/20) }}页, {{total}}条记录</span>
+	        <span class="total">共{{ Math.ceil(tableData.total/20) }}页, {{tableData.total}}条记录</span>
 	      </el-pagination>
 			</div>
     </div>
     <div class="operation-content" v-if="form.type === 2">
-	    <datePicker :replaceItemHtml="replaceItemHtml" @changeDay="changeDay" />
+    	<div class="date-box" :class="{active: !rankData.show}">
+    		<datePicker :replaceItemHtml="replaceItemHtml" @changeDay="changeDay" v-show="rankData.show" />
+    		<div class="disable" v-show="!rankData.show">
+    			<div class="circle">?</div>
+    			<div class="tips">选择对应查询条件后，点击查询查看排期</div>
+    		</div>
+    	</div>
 	    <ul class="rank-ul">
 	    	<li>
-					<h2 class="rank-item-tips">2019年12月05日-排期明细 （剩余<span class="rank-item-week-strong">3个</span>可用）</h2>
+					<h2 class="rank-item-tips">{{rankData.date}}-排期明细 （剩余<span class="rank-item-week-strong">{{rankData.number}}个</span>可用）</h2>
 					<span class="rank-item-week-tips">*以下运营位按权重排序</span>
 	    	</li>
-	    	<li v-for="(liItem, liIndex) in tableData" :key="liIndex" class="rank-item" v-if="liIndex <= 2">
-	    		<h2 class="rank-item-title">{{liItem.name}}</h2>
-	    		<p>{{liItem.createdAt}} 至{{liItem.endTime}}</p>
-	    		<router-link :to="{ name: 'operationEdit', query: {id: liItem.id} }" class="rank-item-edit" tag="span">编辑</router-link>
+	    	<li v-for="(rank, rankIndex) in rankData.list" :key="rankIndex" class="rank-item" v-if="rankData.list.length">
+	    		<h2 class="rank-item-title">{{rank.name}}</h2>
+	    		<p>{{rank.createdAt}} 至{{rank.endTime}}</p>
+	    		<router-link :to="{ name: 'operationEdit', query: {id: rank.id} }" class="rank-item-edit" tag="span">编辑</router-link>
+	    	</li>
+	    	<li class="nodata-rank" v-if="!rankData.list.length">
+	    		暂无数据
 	    	</li>
 	    </ul>
 	  </div>
@@ -188,25 +198,20 @@ export default {
 		return {
 			portData: [],
 			filter: {},
-			tableData: [],
-      list: [
-      	{
-      		date: '2019-12-05',
-      		number: 1,
-      		allNumber: 8
-      	},
-      	{
-      		date: '2019-12-03',
-      		number: 5,
-      		allNumber: 8
-      	},
-      	{
-      		date: '2019-12-04',
-      		number: 8,
-      		allNumber: 8
-      	}
-      ],
-      total: 0,
+			tableData: {
+				list: [],
+				total: 0,
+				isLoaded: false,
+				count: 20
+			},
+      rankData: {
+      	list: [],
+      	total: 0,
+      	isLoaded: false,
+      	number: 0,
+      	count: 3,
+      	show: true
+      },
       form: {
       	time: [],
       	name: '',
@@ -221,11 +226,45 @@ export default {
 		}
 	},
 	methods: {
+		getCurrentTime() {
+			let date = new Date()
+			let YY = date.getFullYear() + '-'
+			let MM = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
+			let DD = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate())
+			var hour = date.getHours() + ':'
+		  var minute = date.getMinutes() + ':'
+		  var second = date.getSeconds()
+		  return `${YY}${MM}${DD}`
+		},
 		changeDay(infos) {
-			console.log(infos)
+			let tem = infos.date.split('-')
+			this.form.time = [
+				`${infos.date} 00:00:00`,
+				`${infos.date} 23:59:59`
+			]
+			this.getRankLists()
+			this.rankData.date = `${tem[0]}年${tem[1]}月${tem[2]}日`
+		},
+		changeCalendarStatus() {
+			if(!this.filter.client[0].active && !this.filter.location[0].active) {
+				this.rankData.show = true
+			} else {
+				this.rankData.show = false
+			}
 		},
 		toggleSwitch(num) {
-			this.form.type = this.form.type === 1 ? 2 : 1
+			this.changeCalendarStatus()
+			this.form.type = num
+			let tem = this.getCurrentTime().split('-')
+			if(num === 2 && !this.rankData.isLoaded) {
+				this.form.time = [
+					`${this.getCurrentTime()} 00:00:00`,
+					`${this.getCurrentTime()} 23:59:59`
+				]
+				this.getRankLists()
+				this.rankData.date = `${tem[0]}年${tem[1]}月${tem[2]}日`
+			}
+			console.log(this.rankData)
 		},
 		edit(item, index) {
 			console.log(item)
@@ -266,7 +305,7 @@ export default {
 		},
 		getBannerDevice() {
 			return getBannerDeviceApi().then(({ data }) => {
-				let portData = data.data
+				let portData = data.data.filter(v => v.key !== 'pc')
 				portData.map((v, i) => v.active = !i ? true : false)
 				this.portData = portData
 				this.portItem = portData[0]
@@ -289,7 +328,7 @@ export default {
 		getLists() {
 			let params = {
 				page: 1,
-				count: 20
+				count: this.tableData.count
 			}
 			if(this.form.name) {
 				params = Object.assign(params, {name: this.form.name})
@@ -313,13 +352,45 @@ export default {
 				params = Object.assign(params, {status: this.form.status})
 			}
 			getBannerListsApi(params).then(({ data }) => {
-				this.tableData = data.data
-				this.total = data.meta.total
+				this.tableData.list = data.data
+				this.tableData.total = data.meta.total
+			})
+		},
+		getRankLists() {
+			let params = {
+				page: 1,
+				count: this.rankData.count
+			}
+			if(this.form.name) {
+				params = Object.assign(params, {name: this.form.name})
+			}
+			if(this.form.time && this.form.time.length) {
+				params = Object.assign(params, {start_time: this.form.time[0], end_time: this.form.time[1]})
+			}
+			if(this.form.area) {
+				params = Object.assign(params, {area_id: this.form.area})
+			}
+			if(this.form.client) {
+				params = Object.assign(params, {client: this.form.client})
+			}
+			if(this.form.location) {
+				params = Object.assign(params, {location: this.form.location})
+			}
+			if(this.form.device) {
+				params = Object.assign(params, {device: this.form.device})
+			}
+			if(this.form.status) {
+				params = Object.assign(params, {status: this.form.status})
+			}
+			getBannerListsApi(params).then(({ data }) => {
+				this.rankData.list = data.data
+				this.rankData.total = data.meta.total
 			})
 		},
 		choose(item, index, key) {
 			this.filter[key].map((v, i) => v.active = index === i ? true : false)
 			this.form[key] = item.key
+			this.changeCalendarStatus()
 		},
 		changePage(page) {
 			console.log(page)
@@ -540,6 +611,44 @@ export default {
   }
   .operation-content{
   	display: flex;
+  }
+  .nodata-rank{
+		line-height: 50px;
+		color: #666666;
+  }
+  .date-box{
+    width: 300px;
+    height: 300px;
+    border-radius: 4px;
+    background-color: white;
+    position: relative;
+    .disable {
+			text-align: center;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			width: 100%;
+    }
+    .circle{
+	    width: 84px;
+	    height: 84px;
+	    font-size: 36px;
+	    color: #666666;
+	    border: 1px dashed rgba(0,0,0,.1);
+	    line-height: 84px;
+	    text-align: center;
+	    border-radius: 50%;
+	    display: inline-block;
+    }
+    .tips{
+    	text-align: center;
+    	color: rgba(0,0,0,.4);
+    	margin-top: 10px;
+    }
+  }
+  .date-box.active{
+  	box-shadow: 0 0 10px rgba(208,208,208,0.5)
   }
 }
 .reset-el-date-picker{
