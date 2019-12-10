@@ -44,7 +44,7 @@
           <el-table-column label="所属公司" width="250">
             <template slot-scope="{row}">
               <div class="company-wrapper"  v-if="row.companyInfo">
-                <div class="company-image">
+                <div class="company-image" v-if="row.companyInfo.logoInfo">
                   <img :src="row.companyInfo.logoInfo.middleUrl" alt="">
                 </div>
                 <div class="company-title">
