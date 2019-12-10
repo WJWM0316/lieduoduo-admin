@@ -1,5 +1,5 @@
 <template>
-  <div id="operation-create">
+  <div id="operation-create" style="width: 800px;">
   	<el-form
       :model="form"
       :rules="rules"
@@ -345,21 +345,6 @@
           setTimeout(() => { this.$refs.form.clearValidate('end_time') }, 16.7)
         }
       },
-      bindInput(e) {
-        debounce(() => {
-          let item = this.bannerParameter.bannerType.find(v => v.type === this.form.type)
-          switch(e.limitType) {
-            case 1:
-              break
-            case 2:
-              break
-            case 3:
-              break
-            default:
-              break
-          }
-        }, 300)
-      },
       uploadImage(e) {
         let formData = new FormData()
         formData.append('attach_type', 'img')
@@ -407,7 +392,6 @@
         }).then(() => {
           this.$router.go(-1)
         }).catch(() => {});
-        // this.$refs['form'].resetFields();
       },
       getBannerDetail() {
         getBannerDetailApi({id: this.$route.query.id}).then(({data}) => {
