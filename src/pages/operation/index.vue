@@ -275,15 +275,15 @@ export default {
 			}
 		},
 		changeMounth(e) {
-			if(!e) return
-			let tem = e.time.split('-');
-			this.rankData.count = getDays(Number(tem[0]), Number(tem[1]))
-			this.rankData.date = `${tem[0]}年${tem[1]}月${tem[2]}日`
-			this.form.time = [
-				`${e.time} 00:00:00`,
-				`${e.time} 23:59:59`
-			]
-			this.getRankLists()
+			// if(!e) return
+			// let tem = e.time.split('-');
+			// this.rankData.count = getDays(Number(tem[0]), Number(tem[1]))
+			// this.rankData.date = `${tem[0]}年${tem[1]}月${tem[2]}日`
+			// this.form.time = [
+			// 	`${e.time} 00:00:00`,
+			// 	`${e.time} 23:59:59`
+			// ]
+			// this.getRankLists()
 		},
 		replaceItemHtml(item, index) {
 			let html = item.content
