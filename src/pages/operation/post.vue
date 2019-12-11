@@ -1,5 +1,5 @@
 <template>
-  <div id="operation-create" style="width: 1200px;">
+  <div id="operation-create">
   	<el-form
       :model="form"
       :rules="rules"
@@ -28,7 +28,7 @@
           v-model="form.client"
           placeholder="请选择用户端"
           style="width: 100%"
-          :disabled="$route.name === 'operationEdit'">
+          :disabled="!!!form.device || $route.name === 'operationEdit'">
           <el-option
             :label="item.text"
             :value="item.key"
@@ -43,7 +43,7 @@
           v-model="form.location"
           placeholder="请选择运营位"
           style="width: 100%"
-          :disabled="$route.name === 'operationEdit'">
+          :disabled="!!!form.client || $route.name === 'operationEdit'">
           <el-option
             :label="item.text"
             :value="item.key"
@@ -57,6 +57,7 @@
         <el-select
           v-model="form.type"
           placeholder="请选择落地页类行"
+          :disabled="!!!form.location"
           style="width: 100%">
           <el-option
             :label="item.name"
@@ -71,6 +72,7 @@
         <el-input
           type="text"
           v-model="form.inputAny"
+          :disabled="!!!form.type"
           :placeholder="placeholder">
         </el-input>
       </el-form-item>
