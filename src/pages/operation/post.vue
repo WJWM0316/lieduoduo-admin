@@ -1,5 +1,5 @@
 <template>
-  <div id="operation-create" style="width: 800px;">
+  <div id="operation-create" style="width: 1200px;">
   	<el-form
       :model="form"
       :rules="rules"
@@ -398,37 +398,39 @@
           let form = data.data
           this.form.device = form.device
           this.form.location = form.location
-          this.form.type = form.type || 'page'
-          this.form.big_img_id = form.bigImg
-          this.form.small_img_id = form.smallImg
-          this.form.big_img_id_checked = form.bigImg.id
-          this.form.small_img_id_checked = form.smallImg.id
           this.form.name = form.name
           this.form.start_time = form.startTime
           this.form.end_time = form.endTime
           this.form.sort = form.sort
           this.form.vkey = form.vkey
-          this.form.area_id = form.areaId
           this.form.url = form.url
           this.form.h5_url = form.h5Url
           this.form.id = form.id
           this.form.status = form.status
           this.form.client = form.client
           this.getBannerParameter({key: form.device}).then(res => {
+            this.form.big_img_id = form.bigImg
+            this.form.small_img_id = form.smallImg
+            this.form.big_img_id_checked = form.bigImg.id
+            this.form.small_img_id_checked = form.smallImg.id
+            this.form.type = form.type || 'page'
+            this.form.area_id = form.areaId
             let data = res.bannerType.find(v => v.type === form.type)
-            switch(data.limitType) {
-              case 1:
-                this.form.inputAny = form.typeId
-                break
-              case 2:
-                this.form.inputAny = form.h5Url
-                break
-              case 3:
-                this.form.inputAny = form.url
-                break
-              default:
-                break
-            }
+            setTimeout(() => {
+              switch(data.limitType) {
+                case 1:
+                  this.form.inputAny = form.typeId
+                  break
+                case 2:
+                  this.form.inputAny = form.h5Url
+                  break
+                case 3:
+                  this.form.inputAny = form.url
+                  break
+                default:
+                  break
+              }
+            }, 16.7)
           })
         })
       },
