@@ -1,23 +1,70 @@
 <template>
   <div class="calendar">
     <div class="calendar__header">
-      <i class="el-icon-arrow-left" @click="__preMonth"></i>
+      <!-- 年份选择器 start-->
+      <template v-if="currentType === 'year'">
+        <i class="el-icon-arrow-left" @click="__preMonth"></i>
         <div class="header__title">
-          <span @click="__changeYear">{{selectedYear}}年</span>
-          <span @click="__changeMonth">{{selectedMonth + 1}}月</span>
+          <span @click="changeType('year')">{{__getRangeYears()[0]}}年</span> -
+          <span @click="changeType('month')">{{__getRangeYears()[9]}}年</span>
         </div>
         <i class="el-icon-arrow-right" @click="__nextMonth"></i>
+      </template>
+      <!-- 年份选择器 end-->
+      <!-- 月份选择器 start-->
+      <template v-if="currentType === 'month'">
+        <i class="el-icon-arrow-left" @click="__preMonth"></i>
+        <div class="header__title">{{selectedYear}}年</div>
+        <i class="el-icon-arrow-right" @click="__nextMonth"></i>
+      </template>
+      <!-- 月份选择器 end-->
+      <!-- 日期选择器 start-->
+      <template v-if="currentType === 'day'">
+        <i class="el-icon-arrow-left" @click="__preMonth"></i>
+        <div class="header__title">
+<!--           <span @click="changeType('year')">{{selectedYear}}年</span>
+          <span @click="changeType('month')">{{selectedMonth + 1}}月</span> -->
+          <span>{{selectedYear}}年</span>
+          <span>{{selectedMonth + 1}}月</span>
+        </div>
+        <i class="el-icon-arrow-right" @click="__nextMonth"></i>
+      </template>
+      <!-- 日期选择器 end-->
     </div>
     <div class="calendar__main">
-      <div class="main__block-head" v-for="(item, index) in calendarHeader" :key="index"> {{item}} </div>
-      <div
-        class="main__block__item"
-        :class="`${item.type !== 'normal' ? 'gray' : ''} ${item.content === selectedDate && item.type === 'normal' ? 'today' : ''}`"
-        @click="__clickDay(item)"
-        v-html="replaceItemHtml(item, index)"
-        v-for="(item, index) in __getAllDays(selectedYear)[selectedMonth]"
-        :key="item.type + item.content + `${index}`"> {{item.content}}
-      </div>
+      <!-- 年选择器 start-->
+      <template v-if="currentType === 'year'">
+        <div
+          class="main__block__year"
+          @click="__clickYear(yearItem)"
+          v-for="yearItem in __getRangeYears()"
+          :key="yearItem"> {{ yearItem }}年
+        </div>
+      </template>
+      <!-- 年选择器 end-->
+      <!-- 月选择器 start-->
+      <template v-if="currentType === 'month'">
+        <div
+          class="main__block__month"
+          @click="__clickMonth(monthItem)"
+          v-for="monthItem in __getRangeMonths()"
+          :key="monthItem"> {{ monthItem + 1 }}月
+        </div>
+      </template>
+      <!-- 月选择器 end-->
+      <!-- 日期选择器 start-->
+      <template v-if="currentType === 'day'">
+        <div class="main__block-head" v-for="(item, index) in calendarHeader" :key="index"> {{item}} </div>
+        <div
+          class="main__block__day"
+          :class="`${item.type !== 'normal' ? 'gray' : ''} ${item.content === selectedDate && item.type === 'normal' ? 'today' : ''}`"
+          @click="__clickDay(item)"
+          v-html="replaceItemHtml(item, index)"
+          v-for="(item, index) in __getRangeDays(selectedYear)[selectedMonth]"
+          :key="item.type + item.content + `${index}`"> {{item.content}}
+        </div>
+      </template>
+      <!-- 日期选择器 end-->
     </div>
   </div>
 </template>
@@ -33,11 +80,27 @@ export default {
       calendarHeader: ['日', '一', '二', '三', '四', '五', '六'],
       selectedYear: new Date().getFullYear(),
       selectedMonth: new Date().getMonth(),
-      selectedDate: new Date().getDate()
+      selectedDate: new Date().getDate(),
+      currentType: 'day'
     };
   },
   methods: {
-    __getAllDays(year) {
+    __getRangeYears() {
+      let years = []
+      let base = String(this.selectedYear).slice(0,3)
+      for(let i = 0; i <= 9; i++) {
+        years.push(Number(String(this.selectedYear).slice(0,3) + i))
+      }
+      return years
+    },
+    __getRangeMonths() {
+      let months = []
+      for(let i = 0; i <= 11; i++) {
+        months.push(i)
+      }
+      return months
+    },
+    __getRangeDays(year) {
       let daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
       let nextYear = this.selectedYear + 1
       let beforeYear = this.selectedYear - 1
@@ -116,6 +179,15 @@ export default {
       this.selectedDate = Number(item.content)
       this.$emit('changeDay', item)
     },
+    __clickYear(year) {
+      this.selectedYear = year
+      this.currentType = 'month'
+    },
+    __clickMonth(month) {
+      this.selectedMonth = Number(month)
+      this.currentType = 'day'
+      this.__getRangeDays(this.selectedYear)
+    },
     __preMonth() {
       if (this.selectedMonth === 0) {
         this.selectedYear = this.selectedYear - 1
@@ -143,7 +215,10 @@ export default {
       })
     },
     __changeYear() {},
-    __changeMonth() {}
+    __changeMonth() {},
+    changeType(type) {
+      this.currentType = type
+    }
   }
 };
 </script>
@@ -181,17 +256,55 @@ export default {
       letter-spacing: 1px;
       display: inline;
       vertical-align: middle;
+      text-align: center;
+    }
+    span{
+      cursor: pointer;
     }
   }
   .calendar__main {
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    /*justify-content: space-around;*/
     flex-wrap: wrap;
     padding-top: 19px;
-    .main__block__item {
+    .main__block__day {
       width: 38px;
       height: 38px;
+      border-radius: 50%;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666666;
+      background-color: #fff;
+      flex-shrink: 0;
+      box-shadow: 0;
+      position: relative;
+      transition: 0.5s all;
+      cursor: pointer;
+      position: relative;
+    }
+    .main__block__year {
+      width: 67px;
+      height: 67px;
+      border-radius: 50%;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666666;
+      background-color: #fff;
+      flex-shrink: 0;
+      box-shadow: 0;
+      position: relative;
+      transition: 0.5s all;
+      cursor: pointer;
+      position: relative;
+    }
+    .main__block__month {
+      width: 67px;
+      height: 67px;
       border-radius: 50%;
       font-size: 12px;
       display: flex;

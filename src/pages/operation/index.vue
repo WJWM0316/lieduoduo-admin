@@ -45,7 +45,7 @@
         </div>
 	    </div>
 	    <div class="floor-three">
-	    	<template  v-if="form.type === 1">
+				<template v-if="form.type === 1">
 					<div class="myselected">
 						状态：
 						<el-select v-model="form.status" placeholder="请选择">
@@ -66,8 +66,8 @@
 				      end-placeholder="结束日期">
 				    </el-date-picker>
 					</div>
+					<div class="submit item" @click="getLists">查 询</div>
 				</template>
-				<div class="submit item" @click="getLists">查 询</div>
 				<div class="add item" @click="toggleSwitch(2)" v-show="form.type === 1">切换排期视窗</div>
 				<div class="add item" @click="toggleSwitch(1)" v-show="form.type === 2">切换列表视窗</div>
 	  	</div>
@@ -408,6 +408,7 @@ export default {
 			this.form[key] = item.key
 			this.changeCalendarStatus()
 			this.tableData.page = 1
+			if(this.rankData.show) this.getRankLists()
 		},
 		changePage(page) {
 			this.tableData.page = page
@@ -438,7 +439,7 @@ export default {
 		margin-bottom: 30px;
 	}
 	.floor-one{
-		margin: 20px 0;
+		margin-top: 20px;
 		.item{
 			display: inline-block;
 			background-color: #f4f4f5;
@@ -469,6 +470,7 @@ export default {
 		}
 	}
 	.floor-tow{
+		margin-top: 20px;
 		.el-input{
 			display: inline-block;
 			vertical-align: middle;

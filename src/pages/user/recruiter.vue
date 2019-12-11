@@ -165,15 +165,9 @@
 
             <!-- 跟进人筛选 -->
             <el-form-item class="area" label="在线职位数" label-width="90px">
-              <el-select v-model="form.onlinePositionNum" placeholder="请选择" style="margin-right: 10px;">
-                <el-option label="全部" value></el-option>
-                <el-option
-                  v-for="item in 250"
-                  :key="item"
-                  :label="`${item}个`"
-                  :value="item"
-                ></el-option>
-              </el-select>
+              <el-input placeholder="请输入在线职位下限" v-model="form.positionNumMin"></el-input>
+              -
+              <el-input placeholder="请输入在线职位上限" v-model="form.positionNumMax"></el-input>
             </el-form-item>
 
             <el-form-item class="time" label="访问时间" prop="createTimeStart" label-width="100px">
@@ -430,7 +424,9 @@ export default class user extends Vue {
     position: '',
     onlinePositionNum: '',
     rVisitTimeStart: '',
-    rVisitTimeStart: ''
+    rVisitTimeStart: '',
+    positionNumMin: '',
+    positionNumMax: ''
   };
   /* 搜索关键字 */
   keyword = [
@@ -619,7 +615,7 @@ export default class user extends Vue {
       params = Object.assign(params, { userName: this.form.userName })
     }
     if ((this.form.createTimeStart && !this.form.createTimeEnd) || (!this.form.createTimeStart && this.form.createTimeEnd)) {
-      this.$message({ message: '必须选择一个时间区间', type: 'warning' })
+      this.$message({ message: '必须选择一个创建时间区间', type: 'warning' })
       return
     } else {
       if (this.form.createTimeStart && this.form.createTimeEnd) {
@@ -627,11 +623,19 @@ export default class user extends Vue {
       }
     }
     if ((this.form.rVisitTimeStart && !this.form.rVisitTimeEnd) || (!this.form.rVisitTimeStart && this.form.rVisitTimeEnd)) {
-      this.$message({ message: '必须选择一个时间区间', type: 'warning' })
+      this.$message({ message: '必须选择一个访问时间区间', type: 'warning' })
       return
     } else {
       if (this.form.rVisitTimeStart && this.form.rVisitTimeEnd) {
         params = Object.assign(params, { rVisitTimeStart: this.form.rVisitTimeStart, rVisitTimeEnd: this.form.rVisitTimeEnd })
+      }
+    }
+    if ((this.form.positionNumMin && !this.form.positionNumMax) || (!this.form.positionNumMin && this.form.positionNumMax)) {
+      this.$message({ message: '必须选择职位范围', type: 'warning' })
+      return
+    } else {
+      if (this.form.positionNumMin && this.form.positionNumMax) {
+        params = Object.assign(params, { positionNumMin: this.form.positionNumMin, positionNumMax: this.form.positionNumMax })
       }
     }
     // 已经选择职位类别
