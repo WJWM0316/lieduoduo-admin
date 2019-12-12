@@ -406,10 +406,10 @@ export default {
 		},
 
 		choose(item, index, key) {
-			let deviceItem = this.portData.find(v => v.active)
-			if(key === 'client') {
-				this.getBannerParameter({key: deviceItem.key, client: item.key})
-			}
+			// let deviceItem = this.portData.find(v => v.active)
+			// if(key === 'client') {
+			// 	this.getBannerParameter({key: deviceItem.key, client: item.key})
+			// }
 			this.filter[key].map((v, i) => v.active = index === i ? true : false)
 			this.form[key] = item.key
 			this.changeCalendarStatus()
