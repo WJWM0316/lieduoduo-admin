@@ -194,38 +194,38 @@
   })()
   export default {
     watch: {
-      'form.device': {
-        handler(device) {
-          this.bannerParameter = {}
-          this.form.name = '' // 广告图名称
-          // this.form.device = '' // 推送端：miniProgram pc app
-          this.form.location = '' // banner运营位
-          this.form.type = '' // 落地页类型
-          this.form.type_id = '' // 落地页ID
-          this.form.url = '' // 落地页链接
-          this.form.h5_url = '' // 落地页H5链接
-          this.form.vkey = '' // 识别码
-          this.form.big_img_id = {
-            smallUrl: ''
-          } // 大图ID
-          this.form.big_img_id_checked = ''
-          this.form.small_img_id = {
-            smallUrl: ''
-          } // 小图ID
-          this.form.small_img_id_checked = ''
-          this.form.area_id = '' // 城市
-          this.form.sort = 1 // 排序
-          this.form.start_time = '' // 开始时间
-          this.form.end_time = '' // 结束时间
-          this.form.status = 1
-          this.form.inputAny = ''
-          this.form.client = ''
-          setTimeout(() => {
-            this.$refs.form.clearValidate()
-          }, 16.7)
-        },
-        immediate: true
-      },
+      // 'form.device': {
+      //   handler(device) {
+      //     this.bannerParameter = {}
+      //     this.form.name = '' // 广告图名称
+      //     // this.form.device = '' // 推送端：miniProgram pc app
+      //     this.form.location = '' // banner运营位
+      //     this.form.type = '' // 落地页类型
+      //     this.form.type_id = '' // 落地页ID
+      //     this.form.url = '' // 落地页链接
+      //     this.form.h5_url = '' // 落地页H5链接
+      //     this.form.vkey = '' // 识别码
+      //     this.form.big_img_id = {
+      //       smallUrl: ''
+      //     } // 大图ID
+      //     this.form.big_img_id_checked = ''
+      //     this.form.small_img_id = {
+      //       smallUrl: ''
+      //     } // 小图ID
+      //     this.form.small_img_id_checked = ''
+      //     this.form.area_id = '' // 城市
+      //     this.form.sort = 1 // 排序
+      //     this.form.start_time = '' // 开始时间
+      //     this.form.end_time = '' // 结束时间
+      //     this.form.status = 1
+      //     this.form.inputAny = ''
+      //     this.form.client = ''
+      //     setTimeout(() => {
+      //       this.$refs.form.clearValidate()
+      //     }, 16.7)
+      //   },
+      //   immediate: true
+      // },
       'form.type': {
         handler(str) {
           this.form.inputAny = ''
@@ -254,22 +254,21 @@
         },
         immediate: true
       },
-      'form.location': {
-        handler(str) {
-          this.form.big_img_id_checked = ''
-          this.form.small_img_id_checked = ''
-          this.form.small_img_id = {smallUrl: ''}
-          this.form.big_img_id = {smallUrl: ''}
-          this.form.area_id = ''
-          this.form.type = ''
-          setTimeout(() => {
-            this.$refs.form.clearValidate('big_img_id_checked')
-            this.$refs.form.clearValidate('small_img_id_checked')
-            this.$refs.form.clearValidate('type')
-          }, 16.7)
-        },
-        immediate: true
-      }
+      // 'form.location': {
+      //   handler(str) {
+      //     this.form.big_img_id_checked = ''
+      //     this.form.small_img_id_checked = ''
+      //     this.form.small_img_id = {smallUrl: ''}
+      //     this.form.big_img_id = {smallUrl: ''}
+      //     this.form.type = ''
+      //     setTimeout(() => {
+      //       this.$refs.form.clearValidate('big_img_id_checked')
+      //       this.$refs.form.clearValidate('small_img_id_checked')
+      //       this.$refs.form.clearValidate('type')
+      //     }, 16.7)
+      //   },
+      //   immediate: true
+      // }
     },
     components: {
       ImageUploader
@@ -437,39 +436,42 @@
       getBannerDetail() {
         getBannerDetailApi({id: this.$route.query.id}).then(({data}) => {
           let form = data.data
-          this.form.device = form.device
-          this.form.location = form.location
-          this.form.name = form.name
-          this.form.start_time = form.startTime
-          this.form.end_time = form.endTime
-          this.form.sort = form.sort
-          this.form.vkey = form.vkey
-          this.form.url = form.url
-          this.form.h5_url = form.h5Url
-          this.form.id = form.id
-          this.form.status = form.status
-          this.form.client = form.client
           this.getBannerParameter({key: form.device}).then(res => {
+            this.form.device = form.device
+            this.form.location = form.location
+            this.form.name = form.name
+            this.form.start_time = form.startTime
+            this.form.end_time = form.endTime
+            this.form.sort = form.sort
+            this.form.vkey = form.vkey
+            this.form.url = form.url
+            this.form.h5_url = form.h5Url
+            this.form.id = form.id
+            this.form.status = form.status
+            this.form.client = form.client
             this.form.big_img_id = form.bigImg
             this.form.small_img_id = form.smallImg
             this.form.big_img_id_checked = form.bigImg.id
             this.form.small_img_id_checked = form.smallImg.id
             this.form.type = form.type || 'page'
             this.form.area_id = form.areaId
+            // console.log(this.form, form.vkey)
             let data = res.bannerType.find(v => v.type === form.type)
             setTimeout(() => {
-              switch(data.limitType) {
-                case 1:
-                  this.form.inputAny = form.typeId
-                  break
-                case 2:
-                  this.form.inputAny = form.h5Url
-                  break
-                case 3:
-                  this.form.inputAny = form.url
-                  break
-                default:
-                  break
+              if(data) {
+                switch(data.limitType) {
+                  case 1:
+                    this.form.inputAny = form.typeId
+                    break
+                  case 2:
+                    this.form.inputAny = form.h5Url
+                    break
+                  case 3:
+                    this.form.inputAny = form.url
+                    break
+                  default:
+                    break
+                }
               }
             }, 16.7)
           })
