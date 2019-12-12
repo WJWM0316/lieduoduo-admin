@@ -232,7 +232,8 @@ export default {
       	area_id: '',
       	client: '',
       	location: '',
-      	count: 20
+      	count: 20,
+
       },
       portItem: {}
 		}
@@ -313,13 +314,27 @@ export default {
 		},
 		sortChange(e) {
 			let { order } = e
-			// console.log( e, order )
+			let params = {}
+			// console.log(e)
+			// console.log( e, order.replace('ending', '') )
 			switch(e.prop) {
-				case 'online_date':
+				case 'startTime':
+					if(order) {
+						params = {start_time_sort: order.replace('ending', '')}
+					}
+					this.getLists(params)
 					break
-				case 'offline_date':
+				case 'endTime':
+					if(order) {
+						params = {end_time_sort: order.replace('ending', '')}
+					}
+					this.getLists(params)
 					break
 				case 'sort':
+					if(order) {
+						params = {sort: order.replace('ending', '')}
+					}
+					this.getLists(params)
 					break
 				default:
 					break
@@ -364,11 +379,12 @@ export default {
 			this.form.device = item.key
 			this.getLists()
 		},
-		getLists() {
+		getLists(other = {}) {
 			let params = {
 				page: this.tableData.page,
 				count: this.tableData.count
 			}
+			params = Object.assign(params, other)
 			if(this.form.name) {
 				params = Object.assign(params, {name: this.form.name})
 			}
