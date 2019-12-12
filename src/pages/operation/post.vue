@@ -315,9 +315,9 @@
           client: [
             { type: 'string', required: true, message: '请选择用户端', trigger: 'change' }
           ],
-          // location: [
-          //   { required: true, message: '请选择运营位', trigger: 'change' }
-          // ],
+          location: [
+            { required: true, message: '请选择运营位', trigger: 'change' }
+          ],
           area_id: [
             { required: true, message: '请选择城市', trigger: 'change' }
           ],
@@ -413,7 +413,10 @@
         })
       },
       reGetBannerDevice(client) {
-        this.getBannerParameter({key: this.form.device, client})
+        this.getBannerParameter({
+          key: this.form.device,
+          client
+        }).then(() => this.form.location = '')
       },
       changeDevice(key) {
         let item = this.portData.find(v => v.key === key)
@@ -511,19 +514,21 @@
         if(form.type) {
           params = Object.assign(params, {type: form.type})
         }
-        let item = this.bannerParameter.bannerType.find(v => v.type === this.form.type)
-        switch(item.limitType) {
-          case 1:
-            if(form.inputAny) params = Object.assign(params, {type_id: form.inputAny})
-            break
-          case 2:
-            if(form.inputAny) params = Object.assign(params, {h5_url: form.inputAny})
-            break
-          case 3:
-            if(form.inputAny) params = Object.assign(params, {url: form.inputAny})
-            break
-          default:
-            break
+        let item = this.bannerParameter.bannerType.find(v => v.type === form.type)
+        if(item) {
+          switch(item.limitType) {
+            case 1:
+              if(form.inputAny) params = Object.assign(params, {type_id: form.inputAny})
+              break
+            case 2:
+              if(form.inputAny) params = Object.assign(params, {h5_url: form.inputAny})
+              break
+            case 3:
+              if(form.inputAny) params = Object.assign(params, {url: form.inputAny})
+              break
+            default:
+              break
+          }
         }
         if(form.device && form.device !== 'pc' && form.small_img_id.id) {
           params = Object.assign(params, {small_img_id: form.small_img_id.id})

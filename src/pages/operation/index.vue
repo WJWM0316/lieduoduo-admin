@@ -345,6 +345,18 @@ export default {
 				this.filter = filter
 			})
 		},
+		reGetBannerParameter(item) {
+			let params = {device: item.key}
+      if(item.client) {
+        params = Object.assign(params, {client: item.client})
+      }
+			getBannerParameterApi(params).then(({data}) => {
+				let filter = data.data
+				Object.keys(filter).map(v => filter[v].map((field, index) => field.active = !index ? true : false))
+				delete filter.client
+				this.filter = Object.assign(this.filter, filter)
+			})
+		},
 		changeBannerDevice(item, index) {
 			this.portItem = item
 			this.portData.map((v, i) => v.active = i === index ? true : false)
@@ -406,10 +418,10 @@ export default {
 		},
 
 		choose(item, index, key) {
-			// let deviceItem = this.portData.find(v => v.active)
-			// if(key === 'client') {
-			// 	this.getBannerParameter({key: deviceItem.key, client: item.key})
-			// }
+			let deviceItem = this.portData.find(v => v.active)
+			if(key === 'client') {
+				this.reGetBannerParameter({key: deviceItem.key, client: item.key})
+			}
 			this.filter[key].map((v, i) => v.active = index === i ? true : false)
 			this.form[key] = item.key
 			this.changeCalendarStatus()
