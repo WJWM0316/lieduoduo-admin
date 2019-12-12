@@ -35,7 +35,14 @@ export const updateBannerDetailApi = data => request({
 
 /* 添加广告图信息 */
 export const postBannerDetailApi = data => request({
-  url: `/banner/add`,
+  url: '/banner/add',
   type: 'post',
+  data
+})
+
+/* 获取月度数量列表 */
+export const getBannerTimeNumApi = data => request({
+  url: '/banner/list/timeNum',
+  type: 'get',
   data
 })

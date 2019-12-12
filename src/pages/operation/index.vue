@@ -154,7 +154,7 @@
     	</div>
 	    <ul class="rank-ul">
 	    	<li>
-					<h2 class="rank-item-tips">{{rankData.date}}-排期明细 （剩余<span class="rank-item-week-strong">{{rankData.number}}个</span>可用）</h2>
+					<h2 class="rank-item-tips">{{rankData.date}}-排期明细 （剩余<span class="rank-item-week-strong">{{rankData.surplusNum}}个</span>可用）</h2>
 					<span class="rank-item-week-tips">*以下运营位按权重排序</span>
 	    	</li>
 	    	<li v-for="(rank, rankIndex) in rankData.list" :key="rankIndex" class="rank-item" v-if="rankData.list.length && rankIndex <= 5">
@@ -174,7 +174,8 @@ import datePicker from '@/components/myDatePicker/date-picker.vue'
 import {
 	getBannerDeviceApi,
 	getBannerParameterApi,
-	getBannerListsApi
+	getBannerListsApi,
+	getBannerTimeNumApi
 } from 'API/operation'
 
 const currentDate = new Date()
@@ -218,7 +219,9 @@ export default {
       	number: 0,
       	count: 6,
       	show: true,
-      	calendarList: []
+      	calendarList: [],
+      	hasLoadCalendar: false,
+      	surplusNum: 0
       },
       form: {
       	time: [],
@@ -250,8 +253,10 @@ export default {
 				`${infos.date} 00:00:00`,
 				`${infos.date} 23:59:59`
 			]
-			this.getRankLists()
+			console.log(infos)
 			this.rankData.date = `${tem[0]}年${tem[1]}月${tem[2]}日`
+			this.rankData.list = this.rankData.calendarList.find(v => infos.date === v.date).arrDate
+			this.rankData.surplusNum = this.rankData.calendarList.find(v => infos.date === v.date).surplusNum
 		},
 		changeCalendarStatus() {
 			if(!this.filter.client[0].active && !this.filter.location[0].active) {
@@ -271,10 +276,17 @@ export default {
 					`${this.getCurrentTime()} 23:59:59`
 				]
 				this.rankData.date = `${tem[0]}年${tem[1]}月${tem[2]}日`
-				this.getRankLists()
+				// this.getRankLists()
+			}
+			if(this.rankData.show && num === 2) {
+				this.getBannerTimeNum()
 			}
 		},
 		changeMounth(e) {
+			if(!e) return
+			let tem = e.time.split('-')
+			this.getBannerTimeNum(Number(tem[0]), Number(tem[1]))
+			console.log(e)
 			// if(!e) return
 			// let tem = e.time.split('-');
 			// this.rankData.count = getDays(Number(tem[0]), Number(tem[1]))
@@ -288,19 +300,19 @@ export default {
 		replaceItemHtml(item, index) {
 			let html = item.content
 			let curDate = formatDate(Date.parse(new Date()))
-			this.rankData.list.map(v => {
-				if(v.date === item.date && v.number) {
+			this.rankData.calendarList.map(v => {
+				if(v.date === item.date && v.useNum) {
 					// 当天数字显示黄色
-					if(Date.parse(new Date(v.date)) === curTimestamp) {
-						html = item.content + `<span class="yellow">${v.number}</span>`
+					if(Date.parse(new Date(v.date)) >= curTimestamp) {
+						html = item.content + `<span class="yellow">${v.useNum}</span>`
 					}
 					// 早于当前日期，数字显示紫色
 					if(Date.parse(new Date(v.date)) < curTimestamp) {
-						html = item.content + `<span class="purple">${v.number}</span>`
+						html = item.content + `<span class="purple">${v.useNum}</span>`
 					}
 					// 运营位已满则显示红色
-					if(v.allNumber === v.number) {
-						html = item.content + `<span class="red">${v.number}</span>`
+					if(!v.surplusNum) {
+						html = item.content + `<span class="red">${v.useNum}</span>`
 					}
 				}
 			})
@@ -372,19 +384,11 @@ export default {
 				this.tableData.total = data.meta.total
 			})
 		},
-		getRankLists() {
+		getBannerTimeNum(year =  currentDate.getFullYear(), month = currentDate.getMonth() + 1) {
+			let deviceItem = this.portData.find(v => v.active)
 			let params = {
-				page: 1,
-				count: this.rankData.count
-			}
-			if(this.form.name) {
-				params = Object.assign(params, {name: this.form.name})
-			}
-			if(this.form.time && this.form.time.length) {
-				params = Object.assign(params, {start_time: this.form.time[0], end_time: this.form.time[1]})
-			}
-			if(this.form.area) {
-				params = Object.assign(params, {area_id: this.form.area})
+				year,
+				month
 			}
 			if(this.form.client) {
 				params = Object.assign(params, {client: this.form.client})
@@ -392,23 +396,23 @@ export default {
 			if(this.form.location) {
 				params = Object.assign(params, {location: this.form.location})
 			}
-			if(this.form.device) {
-				params = Object.assign(params, {device: this.form.device})
+			if(deviceItem) {
+				params = Object.assign(params, {device: deviceItem.key})
 			}
-			if(this.form.status) {
-				params = Object.assign(params, {status: this.form.status})
-			}
-			getBannerListsApi(params).then(({ data }) => {
-				this.rankData.list = data.data
-				this.rankData.total = data.meta.total
+			getBannerTimeNumApi(params).then(({ data }) => {
+				let calendarList = data.data
+				this.rankData.calendarList = calendarList
+				this.rankData.hasLoadCalendar = true
 			})
 		},
+
 		choose(item, index, key) {
 			this.filter[key].map((v, i) => v.active = index === i ? true : false)
 			this.form[key] = item.key
 			this.changeCalendarStatus()
-			this.tableData.page = 1
-			if(this.rankData.show) this.getRankLists()
+			if(this.rankData.show) {
+				if(!this.rankData.hasLoadCalendar) this.getBannerTimeNum()
+			}
 		},
 		changePage(page) {
 			this.tableData.page = page
