@@ -1,9 +1,10 @@
 import { request } from './index.js'
 
 /* 获取推送端 */
-export const getBannerDeviceApi = () => request({
+export const getBannerDeviceApi = data => request({
   url: '/banner/device',
-  type: 'get'
+  type: 'get',
+  data
 })
 
 /* 获取广告参数 */

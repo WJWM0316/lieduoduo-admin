@@ -98,7 +98,7 @@
 		        label="下架时间">
 		      </el-table-column>
 		      <el-table-column
-		        prop="type"
+		        prop="locationName"
 		        label="运营位类型">
 		      </el-table-column>
 		      <el-table-column
@@ -254,7 +254,6 @@ export default {
 				`${infos.date} 00:00:00`,
 				`${infos.date} 23:59:59`
 			]
-			console.log(infos)
 			this.rankData.date = `${tem[0]}年${tem[1]}月${tem[2]}日`
 			this.rankData.list = this.rankData.calendarList.find(v => infos.date === v.date).arrDate
 			this.rankData.surplusNum = this.rankData.calendarList.find(v => infos.date === v.date).surplusNum
@@ -546,6 +545,7 @@ export default {
     }
   }
   .floor-three{
+  	overflow: hidden;
   	.myselected{
   		line-height: 40px;
   		display: inline-block;

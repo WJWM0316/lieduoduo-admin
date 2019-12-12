@@ -28,6 +28,7 @@
           v-model="form.client"
           placeholder="请选择用户端"
           style="width: 100%"
+          @change="reGetBannerDevice"
           :disabled="!!!form.device || $route.name === 'operationEdit'">
           <el-option
             :label="item.text"
@@ -100,7 +101,7 @@
           :width="imagesUploader.width"
           :height="imagesUploader.height"
           type="small_img_id"
-          :tips="imagesUploader[form.location]"
+          :tips="imagesUploader[`${form.location}_small`] ? imagesUploader[`${form.location}_small`] : imagesUploader[form.location]"
           v-model="form.small_img_id.smallUrl"
           @loaded="uploadImage" />
       </el-form-item>
@@ -193,6 +194,38 @@
   })()
   export default {
     watch: {
+      'form.device': {
+        handler(device) {
+          this.bannerParameter = {}
+          this.form.name = '' // 广告图名称
+          // this.form.device = '' // 推送端：miniProgram pc app
+          this.form.location = '' // banner运营位
+          this.form.type = '' // 落地页类型
+          this.form.type_id = '' // 落地页ID
+          this.form.url = '' // 落地页链接
+          this.form.h5_url = '' // 落地页H5链接
+          this.form.vkey = '' // 识别码
+          this.form.big_img_id = {
+            smallUrl: ''
+          } // 大图ID
+          this.form.big_img_id_checked = ''
+          this.form.small_img_id = {
+            smallUrl: ''
+          } // 小图ID
+          this.form.small_img_id_checked = ''
+          this.form.area_id = '' // 城市
+          this.form.sort = 1 // 排序
+          this.form.start_time = '' // 开始时间
+          this.form.end_time = '' // 结束时间
+          this.form.status = 1
+          this.form.inputAny = ''
+          this.form.client = ''
+          setTimeout(() => {
+            this.$refs.form.clearValidate()
+          }, 16.7)
+        },
+        immediate: true
+      },
       'form.type': {
         handler(str) {
           this.form.inputAny = ''
@@ -322,6 +355,7 @@
           tips1: '建议尺寸690X140px，JPG、PNG格式，图片小于5M。', // c首页-24小时急速约面
           job_hunter_24h: '建议尺寸690X190px，JPG、PNG格式，图片小于5M。', // C端24h约面中间banner
           job_hunter_index: '建议尺寸690X140px，JPG、PNG格式，图片小于5M。', // C端创建简历banner
+          job_hunter_index_small: '建议尺寸750X430px，JPG、PNG格式，图片小于5M。', // C端创建简历banner
           recruiter_index: '建议尺寸690X168px，JPG、PNG格式，图片小于5M。' // B端首页banner
         },
         placeholder: '请输入落地页页面',
@@ -372,6 +406,11 @@
           this.portData = portData
           // this.getBannerParameter(this.portData[0])
         })
+      },
+      reGetBannerDevice(client) {
+        console.log(client)
+        return
+        this.getBannerParameter({device: this.form.device, client})
       },
       changeDevice(key) {
         let item = this.portData.find(v => v.key === key)
@@ -466,10 +505,10 @@
             params = Object.assign(params, {type_id: form.inputAny})
             break
           case 2:
-            params = Object.assign(params, {url: form.inputAny})
+            params = Object.assign(params, {h5_url: form.inputAny})
             break
           case 3:
-            params = Object.assign(params, {h5_url: form.inputAny})
+            params = Object.assign(params, {url: form.inputAny})
             break
           default:
             break
