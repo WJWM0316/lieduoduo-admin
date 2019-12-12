@@ -346,6 +346,7 @@ export default {
 			this.portData.map((v, i) => v.active = i === index ? true : false)
 			this.getBannerParameter(item)
 			this.form.device = item.key
+			this.getLists()
 		},
 		getLists() {
 			let params = {

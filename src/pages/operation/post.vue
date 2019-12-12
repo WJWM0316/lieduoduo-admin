@@ -54,7 +54,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="落地页类行" prop="type">
+      <el-form-item label="落地页类型">
         <el-select
           v-model="form.type"
           placeholder="请选择落地页类行"
@@ -69,7 +69,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="落地页页面" prop="inputAny">
+      <el-form-item label="落地页页面">
         <el-input
           type="text"
           v-model="form.inputAny"
@@ -96,7 +96,7 @@
           @loaded="uploadImage" />
       </el-form-item>
       
-      <el-form-item label="小图片上传" prop="small_img_id_checked" v-if="form.device && form.device !== 'pc'">
+      <el-form-item label="小图片上传" v-if="form.device && form.device !== 'pc'">
         <image-uploader
           :width="imagesUploader.width"
           :height="imagesUploader.height"
