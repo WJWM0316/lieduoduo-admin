@@ -279,23 +279,15 @@ export default {
 				// this.getRankLists()
 			}
 			if(this.rankData.show && num === 2) {
-				this.getBannerTimeNum()
+				this.getBannerTimeNum().then(() => {
+					console.log(this.tableData)
+				})
 			}
 		},
 		changeMounth(e) {
 			if(!e) return
 			let tem = e.time.split('-')
 			this.getBannerTimeNum(Number(tem[0]), Number(tem[1]))
-			console.log(e)
-			// if(!e) return
-			// let tem = e.time.split('-');
-			// this.rankData.count = getDays(Number(tem[0]), Number(tem[1]))
-			// this.rankData.date = `${tem[0]}年${tem[1]}月${tem[2]}日`
-			// this.form.time = [
-			// 	`${e.time} 00:00:00`,
-			// 	`${e.time} 23:59:59`
-			// ]
-			// this.getRankLists()
 		},
 		replaceItemHtml(item, index) {
 			let html = item.content
@@ -320,12 +312,14 @@ export default {
 			return html
 		},
 		sortChange(e) {
+			let { order } = e
+			// console.log( e, order )
 			switch(e.prop) {
 				case 'online_date':
 					break
 				case 'offline_date':
 					break
-				case 'id':
+				case 'sort':
 					break
 				default:
 					break
@@ -399,7 +393,7 @@ export default {
 			if(deviceItem) {
 				params = Object.assign(params, {device: deviceItem.key})
 			}
-			getBannerTimeNumApi(params).then(({ data }) => {
+			return getBannerTimeNumApi(params).then(({ data }) => {
 				let calendarList = data.data
 				this.rankData.calendarList = calendarList
 				this.rankData.hasLoadCalendar = true
