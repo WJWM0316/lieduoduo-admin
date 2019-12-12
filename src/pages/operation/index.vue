@@ -335,7 +335,11 @@ export default {
 			})
 		},
 		getBannerParameter(item) {
-			getBannerParameterApi({device: item.key}).then(({data}) => {
+			let params = {device: item.key}
+      if(item.client) {
+        params = Object.assign(params, {client: item.client})
+      }
+			getBannerParameterApi(params).then(({data}) => {
 				let filter = data.data
 				Object.keys(filter).map(v => filter[v].map((field, index) => field.active = !index ? true : false))
 				this.filter = filter
@@ -402,6 +406,10 @@ export default {
 		},
 
 		choose(item, index, key) {
+			let deviceItem = this.portData.find(v => v.active)
+			if(key === 'client') {
+				this.getBannerParameter({key: deviceItem.key, client: item.key})
+			}
 			this.filter[key].map((v, i) => v.active = index === i ? true : false)
 			this.form[key] = item.key
 			this.changeCalendarStatus()
