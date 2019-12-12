@@ -345,7 +345,7 @@ export default {
     .today {
       color: #3e294d;
       font-weight: bolder;
-      pointer-events: none;
+      // pointer-events: none;
     }
     .main__block-head {
       width: 38px;
