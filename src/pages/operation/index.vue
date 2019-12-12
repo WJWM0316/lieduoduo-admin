@@ -6,8 +6,9 @@
 				<router-link :to="{ name: 'operationAdd' }" class="add item">新 增</router-link>
 	  	</div>
 	  	<div class="floor-tow" v-if="form.type === 1">
+	  		广告位名称：
 				<el-input v-model="form.name" placeholder="搜索广告位名称" style="width: 400px;"></el-input>
-	      <div class="item mybutton">搜 索</div>
+	      <!-- <div class="item mybutton" @click="getLists">搜 索</div> -->
 	  	</div>
 	  	<div class="bank-type-box">
 	  		<div class="type-item" v-if="filter.client && filter.client.length">
