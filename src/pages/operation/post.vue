@@ -43,6 +43,7 @@
         <el-select
           v-model="form.location"
           placeholder="请选择运营位"
+          clearable
           style="width: 100%"
           :disabled="!!!form.client || $route.name === 'operationEdit'">
           <el-option
@@ -57,6 +58,7 @@
       <el-form-item label="落地页类型">
         <el-select
           v-model="form.type"
+          clearable
           placeholder="请选择落地页类行"
           :disabled="!!!form.location"
           style="width: 100%">
@@ -82,6 +84,7 @@
         <el-input
           type="text"
           v-model="form.vkey"
+          :disabled="$route.name === 'operationEdit'"
           placeholder="请填写数据识别码">
         </el-input>
       </el-form-item>
@@ -312,9 +315,9 @@
           client: [
             { type: 'string', required: true, message: '请选择用户端', trigger: 'change' }
           ],
-          location: [
-            { required: true, message: '请选择运营位', trigger: 'change' }
-          ],
+          // location: [
+          //   { required: true, message: '请选择运营位', trigger: 'change' }
+          // ],
           area_id: [
             { required: true, message: '请选择城市', trigger: 'change' }
           ],
@@ -391,7 +394,11 @@
         })
       },
       getBannerParameter(item) {
-        return getBannerParameterApi({device: item.key}).then(({data}) => {
+        let params = {device: item.key}
+        if(item.client) {
+          params = Object.assign(params, {client: item.client})
+        }
+        return getBannerParameterApi(params).then(({data}) => {
           let bannerParameter = data.data
           bannerParameter.client.shift()
           bannerParameter.location.shift()
@@ -403,13 +410,10 @@
         return getBannerDeviceApi().then(({ data }) => {
           let portData = data.data.filter(v => v.key !== 'pc')
           this.portData = portData
-          // this.getBannerParameter(this.portData[0])
         })
       },
       reGetBannerDevice(client) {
-        console.log(client)
-        return
-        this.getBannerParameter({device: this.form.device, client})
+        this.getBannerParameter({key: this.form.device, client})
       },
       changeDevice(key) {
         let item = this.portData.find(v => v.key === key)
@@ -488,8 +492,8 @@
         let params = {
           name: form.name, // 广告图名称
           device: form.device, // 推送端：miniProgram, pc, app
-          location: form.location, // banner运营位
-          type: form.type, // 落地页类型
+          // location: form.location, // banner运营位
+          // type: form.type, // 落地页类型
           // type_id: form.type_id, // 落地页ID
           // url: form.url, // 落地页链接
           // h5_url: form.h5_url, // 落地页H5链接
@@ -501,21 +505,27 @@
           start_time: form.start_time, // 开始时间
           end_time: form.end_time, // 结束时间
         }
+        if(form.location) {
+          params = Object.assign(params, {location: form.location})
+        }
+        if(form.type) {
+          params = Object.assign(params, {type: form.type})
+        }
         let item = this.bannerParameter.bannerType.find(v => v.type === this.form.type)
         switch(item.limitType) {
           case 1:
-            params = Object.assign(params, {type_id: form.inputAny})
+            if(form.inputAny) params = Object.assign(params, {type_id: form.inputAny})
             break
           case 2:
-            params = Object.assign(params, {h5_url: form.inputAny})
+            if(form.inputAny) params = Object.assign(params, {h5_url: form.inputAny})
             break
           case 3:
-            params = Object.assign(params, {url: form.inputAny})
+            if(form.inputAny) params = Object.assign(params, {url: form.inputAny})
             break
           default:
             break
         }
-        if(form.device && form.device !== 'pc') {
+        if(form.device && form.device !== 'pc' && form.small_img_id.id) {
           params = Object.assign(params, {small_img_id: form.small_img_id.id})
         }
         if(form.id) {
