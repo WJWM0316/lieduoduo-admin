@@ -406,7 +406,7 @@ export default {
 			this.form[key] = item.key
 			this.changeCalendarStatus()
 			if(this.rankData.show) {
-				if(!this.rankData.hasLoadCalendar) this.getBannerTimeNum()
+				this.getBannerTimeNum()
 			}
 		},
 		changePage(page) {
