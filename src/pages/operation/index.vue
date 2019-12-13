@@ -315,8 +315,6 @@ export default {
 		sortChange(e) {
 			let { order } = e
 			let params = {}
-			// console.log(e)
-			// console.log( e, order.replace('ending', '') )
 			switch(e.prop) {
 				case 'startTime':
 					if(order) {
@@ -349,8 +347,9 @@ export default {
 				let portData = data.data.filter(v => v.key !== 'pc')
 				portData.map((v, i) => {
 					v.active = false
-					if((!i && !query.tab) || (v.key === query.tab)) {
+					if((!i && !query.device) || (v.key === query.device)) {
 						v.active = true
+						this.form.device = query.device
 						this.getBannerParameter(v)
 					}
 				})
