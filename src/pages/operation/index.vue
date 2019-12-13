@@ -400,7 +400,7 @@ export default {
       	count: 20,
       }
       this.$router.push({query: {
-				tab: item.key
+				device: item.key
 			}})
 			this.portData.map((v, i) => v.active = i === index ? true : false)
 			this.getBannerParameter(item)
@@ -484,10 +484,10 @@ export default {
 		}
 	},
 	created() {
-		let { query } = this.$route
-		if(query.tab) {
-			this.form.device = query.tab
-		}
+		// let { query } = this.$route
+		// if(query.device) {
+		// 	this.form.device = query.device
+		// }
 		this.getBannerDevice().then(() => this.getLists())
 	}
 }
