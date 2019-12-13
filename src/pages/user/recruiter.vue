@@ -477,6 +477,10 @@ export default class user extends Vue {
       label: '创建时间'
     },
     {
+      prop: 'visitTimeDesc',
+      label: '访问时间'
+    },
+    {
       prop: 'id',
       fixed: 'right',
       width: 150,

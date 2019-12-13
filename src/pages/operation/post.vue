@@ -59,7 +59,7 @@
         <el-select
           v-model="form.type"
           clearable
-          placeholder="请选择落地页类行"
+          placeholder="请选择落地页类型"
           :disabled="!!!form.location"
           style="width: 100%">
           <el-option

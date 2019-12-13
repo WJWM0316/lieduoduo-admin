@@ -663,6 +663,7 @@ export default class indexPage extends Vue {
     this.form.exportStart = undefined
     this.form.exportEnd = undefined
     this.form.online_position = ''
+    this.form.industry_id = ''
     this.getCompanyList()
   }
   check (id) {
