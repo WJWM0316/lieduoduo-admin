@@ -113,10 +113,10 @@
             </template>
 		      </el-table-column>
 		      <el-table-column
-		        prop="smallImg"
+		        prop="bigImg"
 		        label="图片">
 		        <template slot-scope="{row}">
-		        	<img :src="row.smallImg.smallUrl" alt="" v-if="row.smallImg">
+		        	<img :src="row.bigImg.smallUrl" alt="" v-if="row.bigImg">
             </template>
 		      </el-table-column>
 		      <el-table-column
@@ -136,7 +136,7 @@
         <el-pagination
 	        layout="prev, pager, next, slot"
 	        :total="tableData.total"
-	        :page-size="form.count"
+	        :page-size="Number(form.count)"
 	        prev-text="上一页"
 	        next-text="下一页"
 	        :current-page="Number(form.page)"
@@ -358,25 +358,34 @@ export default {
 			})
 		},
 		getBannerParameter(item) {
+			let { query } = this.$route
+			this.form = Object.assign(this.form, query)
 			let params = {device: item.key}
       if(item.client) {
         params = Object.assign(params, {client: item.client})
       }
 			getBannerParameterApi(params).then(({data}) => {
 				let filter = data.data
-				Object.keys(filter).map(v => filter[v].map((field, index) => field.active = !index ? true : false))
+				filter.client.map((v, i) =>  v.active = (v.key === query.client) || (!i && !query.client) ? true : false)
+				filter.location.map((v, i) =>  v.active = (v.key === query.location) || (!i && !query.location) ? true : false)
+				filter.area.map((v, i) =>  v.active = (v.key === query.area_id) || (!i && !query.area_id) ? true : false)
 				this.filter = filter
 			})
 		},
 		reGetBannerParameter(item) {
+			let {query} = this.$route
 			let params = {device: item.key}
       if(item.client) {
         params = Object.assign(params, {client: item.client})
       }
 			getBannerParameterApi(params).then(({data}) => {
+				this.form.area_id = ''
+      	this.form.location = ''
 				let filter = data.data
 				Object.keys(filter).map(v => filter[v].map((field, index) => field.active = !index ? true : false))
 				delete filter.client
+				filter.location.map((v, i) =>  v.active = (v.key === query.location) || (!i && !query.location) ? true : false)
+				filter.area.map((v, i) =>  v.active = (v.key === query.area_id) || (!i && !query.area_id) ? true : false)
 				this.filter = Object.assign(this.filter, filter)
 			})
 		},
@@ -391,14 +400,14 @@ export default {
       	location: '',
       	count: 20,
       }
+      this.$router.push({query: {
+				tab: item.key
+			}})
 			this.portData.map((v, i) => v.active = i === index ? true : false)
 			this.getBannerParameter(item)
 			this.form.device = item.key
 			this.tableData.page = 1
 			this.getLists()
-			this.$router.push({query: {
-				tab: item.key
-			}})
 		},
 		getLists() {
 			let params = {
@@ -430,6 +439,7 @@ export default {
 			getBannerListsApi(params).then(({ data }) => {
 				this.tableData.list = data.data
 				this.tableData.total = data.meta.total
+				this.$router.push({query: params})
 			})
 		},
 		getBannerTimeNum(year =  currentDate.getFullYear(), month = currentDate.getMonth() + 1) {
@@ -455,12 +465,15 @@ export default {
 		},
 
 		choose(item, index, key) {
-			let deviceItem = this.portData.find(v => v.active)
-			if(key === 'client') {
-				this.reGetBannerParameter({key: deviceItem.key, client: item.key})
-			}
 			this.filter[key].map((v, i) => v.active = index === i ? true : false)
 			this.form[key] = item.key
+			let deviceItem = this.portData.find(v => v.active)
+			if(key === 'client') {
+				this.form.area_id = ''
+				this.form.location = ''
+				this.reGetBannerParameter({key: deviceItem.key, client: item.key})
+				return
+			}
 			this.changeCalendarStatus()
 			if(this.rankData.show) {
 				this.getBannerTimeNum()

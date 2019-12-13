@@ -45,6 +45,7 @@
           placeholder="请选择运营位"
           clearable
           style="width: 100%"
+          @change="changeLocation"
           :disabled="!!!form.client || $route.name === 'operationEdit'">
           <el-option
             :label="item.text"
@@ -370,6 +371,35 @@
       };
     },
     methods: {
+      changeLocation() {
+        let form = {
+          name: '', // 广告图名称
+          type: '', // 落地页类型
+          type_id: '', // 落地页ID
+          url: '', // 落地页链接
+          h5_url: '', // 落地页H5链接
+          vkey: '', // 识别码
+          big_img_id: {
+            url: ''
+          }, // 大图ID
+          big_img_id_checked: '',
+          small_img_id: {
+            url: ''
+          }, // 小图ID
+          area_id: '', // 城市
+          sort: 1, // 排序
+          start_time: '', // 开始时间
+          end_time: '', // 结束时间
+          status: 1,
+          inputAny: ''
+        }
+        if(this.$route.name === 'operationAdd') {
+          this.form = Object.assign(this.form, form)
+          setTimeout(() => {
+            this.$refs.form.clearValidate()
+          }, 16.7)
+        }
+      },
       changeStartTime(date) {
         this.form.end_time = ''
       },
@@ -418,10 +448,67 @@
           key: this.form.device,
           client
         }).then(() => this.form.location = '')
+        let form = {
+          name: '', // 广告图名称
+          type: '', // 落地页类型
+          type_id: '', // 落地页ID
+          url: '', // 落地页链接
+          h5_url: '', // 落地页H5链接
+          vkey: '', // 识别码
+          big_img_id: {
+            url: ''
+          }, // 大图ID
+          big_img_id_checked: '',
+          small_img_id: {
+            url: ''
+          }, // 小图ID
+          area_id: '', // 城市
+          sort: 1, // 排序
+          start_time: '', // 开始时间
+          end_time: '', // 结束时间
+          status: 1,
+          inputAny: '',
+          location: ''
+        }
+        if(this.$route.name === 'operationAdd') {
+          this.form = Object.assign(this.form, form)
+          setTimeout(() => {
+            this.$refs.form.clearValidate()
+          }, 16.7)
+        }
       },
       changeDevice(key) {
         let item = this.portData.find(v => v.key === key)
         this.getBannerParameter(item)
+        let form = {
+          name: '', // 广告图名称
+          type: '', // 落地页类型
+          type_id: '', // 落地页ID
+          url: '', // 落地页链接
+          h5_url: '', // 落地页H5链接
+          vkey: '', // 识别码
+          big_img_id: {
+            url: ''
+          }, // 大图ID
+          big_img_id_checked: '',
+          small_img_id: {
+            url: ''
+          }, // 小图ID
+          area_id: '', // 城市
+          sort: 1, // 排序
+          start_time: '', // 开始时间
+          end_time: '', // 结束时间
+          status: 1,
+          inputAny: '',
+          location: '',
+          client: ''
+        }
+        if(this.$route.name === 'operationAdd') {
+          this.form = Object.assign(this.form, form)
+          setTimeout(() => {
+            this.$refs.form.clearValidate()
+          }, 16.7)
+        }
       },
       check() {
         this.$refs['form'].validate((valid) => {
