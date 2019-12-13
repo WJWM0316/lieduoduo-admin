@@ -360,7 +360,8 @@
           job_hunter_24h: '建议尺寸690X190px，JPG、PNG格式，图片小于5M。', // C端24h约面中间banner
           job_hunter_index: '建议尺寸690X140px，JPG、PNG格式，图片小于5M。', // C端创建简历banner
           job_hunter_index_small: '建议尺寸750X430px，JPG、PNG格式，图片小于5M。', // C端创建简历banner
-          recruiter_index: '建议尺寸690X168px，JPG、PNG格式，图片小于5M。' // B端首页banner
+          recruiter_index: '建议尺寸690X168px，JPG、PNG格式，图片小于5M。', // B端首页banner
+          miniProgram_c_index_find_opportunity: '建议尺寸570X604px，JPG、PNG格式，图片小于5M。', // B端首页banner
         },
         placeholder: '请输入落地页页面',
         pickerOptionsStart: {
