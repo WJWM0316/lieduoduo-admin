@@ -235,7 +235,7 @@ export default {
       	count: 20,
 
       },
-      portItem: {}
+      other: {}
 		}
 	},
 	methods: {
@@ -260,7 +260,7 @@ export default {
 			this.rankData.surplusNum = this.rankData.calendarList.find(v => infos.date === v.date).surplusNum
 		},
 		changeCalendarStatus() {
-			if(!this.filter.client[0].active && !this.filter.location[0].active) {
+			if(!this.filter.client[0].active && this.filter.location.length && !this.filter.location[0].active) {
 				this.rankData.show = true
 			} else {
 				this.rankData.show = false
@@ -322,31 +322,39 @@ export default {
 					if(order) {
 						params = {start_time_sort: order.replace('ending', '')}
 					}
-					this.getLists(params)
+					this.other = params
+					this.getLists()
 					break
 				case 'endTime':
 					if(order) {
 						params = {end_time_sort: order.replace('ending', '')}
 					}
-					this.getLists(params)
+					this.other = params
+					this.getLists()
 					break
 				case 'sort':
 					if(order) {
 						params = {sort: order.replace('ending', '')}
 					}
-					this.getLists(params)
+					this.other = params
+					this.getLists()
 					break
 				default:
 					break
 			}
 		},
 		getBannerDevice() {
+			let { query } = this.$route
 			return getBannerDeviceApi().then(({ data }) => {
 				let portData = data.data.filter(v => v.key !== 'pc')
-				portData.map((v, i) => v.active = !i ? true : false)
+				portData.map((v, i) => {
+					v.active = false
+					if((!i && !query.tab) || (v.key === query.tab)) {
+						v.active = true
+						this.getBannerParameter(v)
+					}
+				})
 				this.portData = portData
-				this.portItem = portData[0]
-				this.getBannerParameter(this.portItem)
 			})
 		},
 		getBannerParameter(item) {
@@ -373,19 +381,31 @@ export default {
 			})
 		},
 		changeBannerDevice(item, index) {
-			this.portItem = item
+			this.form = {
+      	time: [],
+      	name: '',
+      	type: 1,
+      	status: '',
+      	area_id: '',
+      	client: '',
+      	location: '',
+      	count: 20,
+      }
 			this.portData.map((v, i) => v.active = i === index ? true : false)
 			this.getBannerParameter(item)
 			this.form.device = item.key
 			this.tableData.page = 1
 			this.getLists()
+			this.$router.push({query: {
+				tab: item.key
+			}})
 		},
-		getLists(other = {}) {
+		getLists() {
 			let params = {
 				page: this.tableData.page,
 				count: this.tableData.count
 			}
-			params = Object.assign(params, other)
+			params = Object.assign(params, this.other)
 			if(this.form.name) {
 				params = Object.assign(params, {name: this.form.name})
 			}
@@ -452,6 +472,10 @@ export default {
 		}
 	},
 	created() {
+		let { query } = this.$route
+		if(query.tab) {
+			this.form.device = query.tab
+		}
 		this.getBannerDevice().then(() => this.getLists())
 	}
 }

@@ -95,7 +95,7 @@
           :height="imagesUploader.height"
           type="big_img_id"
           :tips="imagesUploader[form.location]"
-          v-model="form.big_img_id.smallUrl"
+          v-model="form.big_img_id.url"
           @loaded="uploadImage" />
       </el-form-item>
       
@@ -105,7 +105,7 @@
           :height="imagesUploader.height"
           type="small_img_id"
           :tips="imagesUploader[`${form.location}_small`] ? imagesUploader[`${form.location}_small`] : imagesUploader[form.location]"
-          v-model="form.small_img_id.smallUrl"
+          v-model="form.small_img_id.url"
           @loaded="uploadImage" />
       </el-form-item>
 
@@ -157,11 +157,12 @@
 		  </el-form-item>
 
 		  <el-form-item label="权重排序" prop="sort">
-		    <el-input
-          type="text"
+<!-- 		    <el-input
+          type="number"
           v-model="form.sort"
           placeholder="请输入权重排序">
-        </el-input>
+        </el-input> -->
+        <el-input-number v-model="form.sort" :step="2" :controls="false" class="input-type"></el-input-number>
 		  </el-form-item>
       
       <el-form-item label="状态" prop="status" v-if="$route.name === 'operationEdit'">
@@ -289,13 +290,13 @@
           h5_url: '', // 落地页H5链接
           vkey: '', // 识别码
           big_img_id: {
-            smallUrl: ''
+            url: ''
           }, // 大图ID
           big_img_id_checked: '',
           small_img_id: {
-            smallUrl: ''
+            url: ''
           }, // 小图ID
-          small_img_id_checked: '',
+          // small_img_id_checked: '',
           area_id: '', // 城市
           sort: 1, // 排序
           start_time: '', // 开始时间
@@ -339,9 +340,9 @@
           big_img_id_checked: [
             { type: 'date', required: true, message: '请选择大图图片', trigger: 'change' }
           ],
-          small_img_id_checked: [
-            { type: 'date', required: true, message: '请选择小图图片', trigger: 'change' }
-          ],
+          // small_img_id_checked: [
+          //   { type: 'date', required: true, message: '请选择小图图片', trigger: 'change' }
+          // ],
           sort: [
             { required: true, message: '请输入权重排序', trigger: 'change' }
           ],
@@ -378,7 +379,7 @@
         let timestamp_end = Date.parse(new Date(date))
         // this.$message({message, type: 'success'});
         if(timestamp_end - timestamp_start < distance) {
-          this.$message({message: '截止时间不能晚于一个钟~', type: 'warning'});
+          this.$message({message: '上下架时间间隔需大于60分钟~', type: 'warning'});
           this.form.end_time = ''
           setTimeout(() => { this.$refs.form.clearValidate('end_time') }, 16.7)
         }
@@ -457,9 +458,9 @@
             this.form.status = form.status
             this.form.client = form.client
             this.form.big_img_id = form.bigImg
-            this.form.small_img_id = form.smallImg
+            this.form.small_img_id = form.smallImgId && form.smallImg || {url: ''}
             this.form.big_img_id_checked = form.bigImg.id
-            this.form.small_img_id_checked = form.smallImg.id
+            // this.form.small_img_id_checked = form.smallImg.id
             this.form.type = form.type || 'page'
             this.form.area_id = form.areaId
             // console.log(this.form, form.vkey)
@@ -551,5 +552,11 @@
 <style lang="less">
 #operation-create {
 	margin: 50px 0;
+  .input-type{
+    width: 100%;
+    .el-input__inner{
+      text-align: left;
+    }
+  }
 }
 </style>
