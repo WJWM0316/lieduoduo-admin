@@ -155,7 +155,7 @@
     	</div>
 	    <ul class="rank-ul">
 	    	<li>
-					<h2 class="rank-item-tips">{{rankData.date}}-排期明细 （剩余<span class="rank-item-week-strong">{{rankData.surplusNum}}个</span>可用）</h2>
+					<h2 class="rank-item-tips">{{rankData.date}}-排期明细</h2>
 					<span class="rank-item-week-tips">*以下运营位按权重排序</span>
 	    	</li>
 	    	<li v-for="(rank, rankIndex) in rankData.list" :key="rankIndex" class="rank-item" v-if="rankData.list.length && rankIndex <= 5">
@@ -280,9 +280,7 @@ export default {
 				// this.getRankLists()
 			}
 			if(this.rankData.show && num === 2) {
-				this.getBannerTimeNum().then(() => {
-					console.log(this.tableData)
-				})
+				this.getBannerTimeNum()
 			}
 		},
 		changeMounth(e) {
@@ -458,6 +456,11 @@ export default {
 			}
 			return getBannerTimeNumApi(params).then(({ data }) => {
 				let calendarList = data.data
+				let now = formatDate(Date.parse(new Date()))
+				let tem = now.split('-')
+				this.rankData.date = `${tem[0]}年${tem[1]}月${tem[2]}日`
+				this.rankData.list = calendarList.find(v => now === v.date).arrDate
+				this.rankData.surplusNum = calendarList.find(v => now === v.date).surplusNum
 				this.rankData.calendarList = calendarList
 				this.rankData.hasLoadCalendar = true
 			})
@@ -476,6 +479,8 @@ export default {
 			this.changeCalendarStatus()
 			if(this.rankData.show) {
 				this.getBannerTimeNum()
+			} else {
+				this.rankData.list = []
 			}
 		},
 		changePage(page) {

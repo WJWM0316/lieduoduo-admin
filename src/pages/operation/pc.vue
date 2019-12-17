@@ -9,17 +9,56 @@
 export default {
 	methods: {
 		init() {
+
 			let tem = [
-        'http://lib.sinaapp.com/js/jquery/1.9.1/jquery-1.9.1.min.js',
+        'https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js',
         'http://lib.sinaapp.com/js/jquery-ui/1.9.2/jquery-ui.min.js'
       ]
-      for(let i = 0; i < tem.length; i++) {
-        console.log(i)
+
+      let dom = document.querySelector('#table')
+
+      let render = (dom, boxwidth, boxHeight, row, column) => {
+        let fragment = document.createDocumentFragment()
+        for(let i = 0; i < row; i++) {
+          let tr = document.createElement('tr')
+          for(let j = 0; j < column; j++) {
+            let td = document.createElement('td')
+            td.innerHTML = `${i} --- ${j}`
+            tr.appendChild(td)
+          }
+          fragment.appendChild(tr)
+        }
+        dom.appendChild(fragment)
       }
+
+      let setDefault = () => {
+        let nodeLists = Array.from(dom.getElementsByTagName('td'))
+        nodeLists.map(node => {
+          let params = node.getBoundingClientRect()
+          node.innerHTML = `${params.width}px -- ${params.height}px`
+        })
+      }
+
+      for(let i = 0; i < tem.length; i++) {
+        var head = document.getElementsByTagName('head')[0]
+        var script = document.createElement('script')
+        script.src = tem[i]
+        head.appendChild(script)
+      }
+
+      render(dom, 763, 414, 4, 3)
+      setDefault()
+
+      window.onload = function() {
+        // $('#table').selectable();
+      }
+    
 		}
 	},
 	mounted() {
-		this.init()
+		this.$nextTick(function() {
+      this.init()
+    })
 	}
 }
 </script>

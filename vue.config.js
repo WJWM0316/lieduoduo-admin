@@ -2,6 +2,7 @@ const path = require('path')
 const resolve = dir => {
   return path.join(__dirname, dir)
 }
+const webpack = require('webpack')
 
 module.exports = {
   publicPath: '/',
@@ -27,7 +28,12 @@ module.exports = {
         COLORS: resolve('src/eleui/colors')
       }
     },
-    plugins: []
+    plugins: [
+      new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery'
+      })
+    ]
   },
   chainWebpack: config => {
     config.plugins.delete('prefetch')
