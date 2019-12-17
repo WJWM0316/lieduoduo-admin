@@ -55,7 +55,45 @@
           </el-option>
         </el-select>
       </el-form-item>
+      
+      <template v-if="form.location === 'app_start_popup' || form.location === 'miniProgram_c_index_find_opportunity'">
 
+        <el-form-item label="弹窗" prop="is_popup">
+          <el-radio v-model="form.is_popup" :label="1" :disabled="$route.name === 'operationEdit'">是</el-radio>
+          <el-radio v-model="form.is_popup" :label="0" :disabled="$route.name === 'operationEdit'">否</el-radio>
+        </el-form-item>
+
+        <el-form-item label="弹出页面" prop="popup_type">
+          <el-select
+            v-model="form.popup_type"
+            placeholder="请选择运营位"
+            clearable
+            :disabled="$route.name === 'operationEdit' && !form.is_popup"
+            style="width: 100%">
+            <el-option
+              :label="item.text"
+              :value="item.key"
+              v-for="item in bannerParameter.popupType"
+              :key="item.key">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="弹出次数" prop="popup_num">
+          <el-select
+            v-model="form.popup_num"
+            placeholder="请选择运营位"
+            clearable
+            :disabled="$route.name === 'operationEdit' && !form.is_popup"
+            style="width: 100%">
+            <el-option label="1/天" value="1"></el-option>
+            <el-option label="2/天" value="2"></el-option>
+            <el-option label="3/天" value="3"></el-option>
+            <el-option label="4/天" value="4"></el-option>
+            <el-option label="5/天" value="5"></el-option>
+          </el-select>
+        </el-form-item>
+      </template>
       <el-form-item label="落地页类型">
         <el-select
           v-model="form.type"
@@ -158,11 +196,6 @@
 		  </el-form-item>
 
 		  <el-form-item label="权重排序" prop="sort">
-<!-- 		    <el-input
-          type="number"
-          v-model="form.sort"
-          placeholder="请输入权重排序">
-        </el-input> -->
         <el-input-number v-model="form.sort" :step="2" :controls="false" class="input-type"></el-input-number>
 		  </el-form-item>
       
@@ -199,38 +232,6 @@
   })()
   export default {
     watch: {
-      // 'form.device': {
-      //   handler(device) {
-      //     this.bannerParameter = {}
-      //     this.form.name = '' // 广告图名称
-      //     // this.form.device = '' // 推送端：miniProgram pc app
-      //     this.form.location = '' // banner运营位
-      //     this.form.type = '' // 落地页类型
-      //     this.form.type_id = '' // 落地页ID
-      //     this.form.url = '' // 落地页链接
-      //     this.form.h5_url = '' // 落地页H5链接
-      //     this.form.vkey = '' // 识别码
-      //     this.form.big_img_id = {
-      //       smallUrl: ''
-      //     } // 大图ID
-      //     this.form.big_img_id_checked = ''
-      //     this.form.small_img_id = {
-      //       smallUrl: ''
-      //     } // 小图ID
-      //     this.form.small_img_id_checked = ''
-      //     this.form.area_id = '' // 城市
-      //     this.form.sort = 1 // 排序
-      //     this.form.start_time = '' // 开始时间
-      //     this.form.end_time = '' // 结束时间
-      //     this.form.status = 1
-      //     this.form.inputAny = ''
-      //     this.form.client = ''
-      //     setTimeout(() => {
-      //       this.$refs.form.clearValidate()
-      //     }, 16.7)
-      //   },
-      //   immediate: true
-      // },
       'form.type': {
         handler(str) {
           this.form.inputAny = ''
@@ -258,22 +259,7 @@
           }
         },
         immediate: true
-      },
-      // 'form.location': {
-      //   handler(str) {
-      //     this.form.big_img_id_checked = ''
-      //     this.form.small_img_id_checked = ''
-      //     this.form.small_img_id = {smallUrl: ''}
-      //     this.form.big_img_id = {smallUrl: ''}
-      //     this.form.type = ''
-      //     setTimeout(() => {
-      //       this.$refs.form.clearValidate('big_img_id_checked')
-      //       this.$refs.form.clearValidate('small_img_id_checked')
-      //       this.$refs.form.clearValidate('type')
-      //     }, 16.7)
-      //   },
-      //   immediate: true
-      // }
+      }
     },
     components: {
       ImageUploader
@@ -304,7 +290,10 @@
           end_time: '', // 结束时间
           status: 1,
           inputAny: '',
-          client: ''
+          client: '',
+          is_popup: 0,
+          popup_type: '',
+          popup_num: ''
         },
         rules: {
           name: [
@@ -331,6 +320,15 @@
           ],
           status: [
             { required: true, message: '请选择上线状态', trigger: 'change' }
+          ],
+          popup_type: [
+            { required: true, message: '请选择弹窗位置', trigger: 'change' }
+          ],
+          is_popup: [
+            { required: true, message: '请选择是否出现弹窗', trigger: 'change' }
+          ],
+          popup_num: [
+            { required: true, message: '请选择弹出次数', trigger: 'change' }
           ],
           start_time: [
             { type: 'string', required: true, message: '请选择上架时间', trigger: 'change' }
@@ -362,6 +360,7 @@
           job_hunter_index_small: '建议尺寸750X430px，JPG、PNG格式，图片小于5M。', // C端创建简历banner
           recruiter_index: '建议尺寸690X168px，JPG、PNG格式，图片小于5M。', // B端首页banner
           miniProgram_c_index_find_opportunity: '建议尺寸570X604px，JPG、PNG格式，图片小于5M。', // B端首页banner
+          app_start_popup: '建议尺寸690X140px，JPG、PNG格式，图片小于5M。', // B端首页banner
         },
         placeholder: '请输入落地页页面',
         pickerOptionsStart: {
@@ -392,7 +391,9 @@
           start_time: '', // 开始时间
           end_time: '', // 结束时间
           status: 1,
-          inputAny: ''
+          inputAny: '',
+          popup_type: '',
+          popup_num: ''
         }
         if(this.$route.name === 'operationAdd') {
           this.form = Object.assign(this.form, form)
@@ -469,7 +470,10 @@
           end_time: '', // 结束时间
           status: 1,
           inputAny: '',
-          location: ''
+          location: '',
+          is_popup: 0,
+          popup_type: '',
+          popup_num: ''
         }
         if(this.$route.name === 'operationAdd') {
           this.form = Object.assign(this.form, form)
@@ -502,7 +506,10 @@
           status: 1,
           inputAny: '',
           location: '',
-          client: ''
+          client: '',
+          popup_type: '',
+          is_popup: 0,
+          popup_type: 0
         }
         if(this.$route.name === 'operationAdd') {
           this.form = Object.assign(this.form, form)
@@ -549,8 +556,11 @@
             this.form.small_img_id = form.smallImgId && form.smallImg || {url: ''}
             this.form.big_img_id_checked = form.bigImg.id
             // this.form.small_img_id_checked = form.smallImg.id
-            this.form.type = form.type || 'page'
+            this.form.type = form.type
             this.form.area_id = form.areaId
+            this.form.is_popup = form.isPopup
+            this.form.popup_num = form.popupNum
+            this.form.popup_type = form.popupType
             // console.log(this.form, form.vkey)
             let data = res.bannerType.find(v => v.type === form.type)
             setTimeout(() => {
@@ -625,14 +635,16 @@
         if(form.id) {
           params = Object.assign(params, {id: form.id, status: form.status})
         }
+        // 确保是弹窗类型
+        if(form.popup_type) {
+          params = Object.assign(params, {is_popup: form.is_popup, popup_type: form.popup_type, popup_num: form.popup_num})
+        }
         funcApi(params).then(() => callback())
       }
     },
     created() {
       this.getBannerDevice().then(res => {
-        if(this.$route.name === 'operationEdit') {
-          this.getBannerDetail()
-        }
+        this.$route.name === 'operationEdit' && this.getBannerDetail()
       })
     }
   }
