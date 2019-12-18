@@ -622,15 +622,27 @@ export default class createCompany extends Vue {
             delete this.companyInfo.adminUid
             let images = this.commonList.map(field => field.id).join(',')
             let params = Object.assign(this.companyInfo, { images })
+            if(!params.logo) {
+              this.$message({ message: '必须上传logo图片', type: 'warning' })
+              return
+            }
+            if(!params.intro) {
+              this.$message({ message: '必须填写公司简介', type: 'warning' })
+              return
+            }
             await editCompanyApi(id, params)
-            this.$message({
-              message: '编辑成功',
-              type: 'success'
-            })
+            this.$message({message: '编辑成功', type: 'success'})
           } else {
             /* 编辑审核库 */
             delete this.companyInfo.admin_uid
-
+            if(!params.logo) {
+              this.$message({ message: '必须上传logo图片', type: 'warning' })
+              return
+            }
+            if(!params.intro) {
+              this.$message({ message: '必须填写公司简介', type: 'warning' })
+              return
+            }
             try {
               await editCheckCompanyInfoApi(checkId, this.companyInfo)
               this.$message({

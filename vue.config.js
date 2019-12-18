@@ -2,6 +2,7 @@ const path = require('path')
 const resolve = dir => {
   return path.join(__dirname, dir)
 }
+const webpack = require('webpack')
 
 module.exports = {
   publicPath: '/',
