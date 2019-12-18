@@ -28,12 +28,7 @@ module.exports = {
         COLORS: resolve('src/eleui/colors')
       }
     },
-    plugins: [
-      new webpack.ProvidePlugin({
-        $: 'jquery',
-        jQuery: 'jquery'
-      })
-    ]
+    plugins: []
   },
   chainWebpack: config => {
     config.plugins.delete('prefetch')

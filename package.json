@@ -14,7 +14,6 @@
     "babel-plugin-component": "^1.1.1",
     "cropperjs": "^1.4.1",
     "element-ui": "^2.11.1",
-    "jquery": "^3.4.1",
     "moment": "^2.22.2",
     "node-sass": "^4.13.0",
     "register-service-worker": "^1.0.0",
