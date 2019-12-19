@@ -617,11 +617,11 @@ export default class createCompany extends Vue {
         let { id, checkId } = this.$route.params
 
         if (this.isEdit) {
+          let images = this.commonList.map(field => field.id).join(',')
+          let params = Object.assign(this.companyInfo, { images })
           // 编辑正式库
           if (id) {
             delete this.companyInfo.adminUid
-            let images = this.commonList.map(field => field.id).join(',')
-            let params = Object.assign(this.companyInfo, { images })
             if(!params.logo) {
               this.$message({ message: '必须上传logo图片', type: 'warning' })
               return

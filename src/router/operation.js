@@ -35,15 +35,15 @@ export default [
           title: '运营位编辑'
         },
         component: resolve => require(['@/pages/operation/post.vue'], resolve)
+      },
+      {
+        path: 'pc',
+        name: 'pc',
+        meta: {
+          title: '运营位编辑'
+        },
+        component: resolve => require(['@/pages/operation/pc.vue'], resolve)
       }
-      // {
-      //   path: 'pc',
-      //   name: 'pc',
-      //   meta: {
-      //     title: '运营位编辑'
-      //   },
-      //   component: resolve => require(['@/pages/operation/pc.vue'], resolve)
-      // }
     ]
   }
 ]
