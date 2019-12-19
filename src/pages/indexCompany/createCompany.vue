@@ -617,8 +617,11 @@ export default class createCompany extends Vue {
         let { id, checkId } = this.$route.params
 
         if (this.isEdit) {
-          let images = this.commonList.map(field => field.id).join(',')
-          let params = Object.assign(this.companyInfo, { images })
+          let params = this.companyInfo
+          if(this.commonList) {
+            let images = this.commonList.map(field => field.id).join(',')
+            params = Object.assign(params, { images })
+          }
           // 编辑正式库
           if (id) {
             delete this.companyInfo.adminUid
