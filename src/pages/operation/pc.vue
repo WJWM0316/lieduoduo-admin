@@ -1,73 +1,128 @@
 <template>
 	<div id="pc-banner">
-    <div id="box" class="table-box">
-      <table id="table" class="my_table"></table>
-      <div class="action">
-        <el-button type="primary">合并选中</el-button>
-        <el-button type="warning">拆分选中</el-button>
+    <div class="table-box">
+      <table id="table" class="my_table">
+        <tr
+          v-for="(trNode, trNodeIndex) in table"
+          :key="trNodeIndex"
+          v-if="trNode.length"
+          class="ui-selectee">
+          <td
+            v-for="(tdNode, tdNodeIndex) in trNode"
+            :key="tdNodeIndex"
+            :colSpan="tdNode.colSpan"
+            :rowSpan="tdNode.rowSpan"
+            class="ui-selectee"
+            :class="{'ui-selected': tdNode.selected}">
+            {{tdNode.iwidth}}px-{{tdNode.iheight}}px
+          </td>
+        </tr>
+      </table>
+      <div class="mask" v-show="showMergeBtn || showSplitBtn">
+        <span @click="merge" vshowf="showMergeBtn" class="btn-action">合并</span>
+        <span v-show="showSplitBtn" class="btn-action" @click="split">拆分</span>
       </div>
     </div>
 	</div>
 </template>
 <script>
-const render = (dom, boxwidth, boxHeight, row, column) => {
-  let fragment = document.createDocumentFragment()
-  for(let i = 0; i < row; i++) {
-    let tr = document.createElement('tr')
-    for(let j = 0; j < column; j++) {
-      let td = document.createElement('td')
-      td.innerHTML = `${i} --- ${j}`
-      tr.appendChild(td)
-    }
-    fragment.appendChild(tr)
-  }
-  dom.appendChild(fragment)
-}
-
-const setDefault = () => {
-  let dom = document.querySelector('#table')
-  render(dom, 763, 414, 4, 3)
-  let nodeLists = Array.from(dom.getElementsByTagName('td'))
-  nodeLists.map(node => {
-    let params = node.getBoundingClientRect()
-    node.innerHTML = `${params.width}px -- ${params.height}px`
-  })
-}
-/**
- * 合并单元格(如果结束行传0代表合并所有行)
- * @param table1    表格的ID
- * @param startRow  起始行
- * @param endRow    结束行
- * @param col   合并的列号，对第几列进行合并(从0开始)。第一行从0开始
- */
-const mergeCell = (table1, startRow, endRow, col) => {
-  var tb = document.getElementById(table1);
-  if(!tb || !tb.rows || tb.rows.length <= 0) {
-    return;
-  }
-  if(col >= tb.rows[0].cells.length || (startRow >= endRow && endRow != 0)) {
-    return;
-  }
-  if(endRow == 0) {
-    endRow = tb.rows.length - 1;
-  }
-  for(let i = startRow; i < endRow; i++) {
-    if(tb.rows[startRow].cells[col].innerHTML == tb.rows[i + 1].cells[col].innerHTML) { //如果相等就合并单元格,合并之后跳过下一行
-      tb.rows[i + 1].removeChild(tb.rows[i + 1].cells[col]);
-      tb.rows[startRow].cells[col].rowSpan = (tb.rows[startRow].cells[col].rowSpan) + 1;
-    } else {
-      mergeCell(table1, i + 1, endRow, col);
-      break;
-    }
-  }
-}
-
 export default {
+  data() {
+    return {
+      dom: '',
+      table: [],
+      showMergeBtn: false,
+      showSplitBtn: false
+    }
+  },
 	methods: {
+    create(row, column) {
+      let table = []
+      for(let i = 0; i < row; i++) {
+        let tr = []
+        for(let j = 0; j < column; j++) {
+          let td = {iwidth: 0, iheight: 0, colSpan: 1, rowSpan: 1, selected: false, show: true}
+          tr.push(td)
+        }
+        table.push(tr)
+      }
+      this.table = table
+    },
+    setSelectable() {
+      $('#table').selectable({
+        stop: (event, ui) => {
+          let trNodeLists = Array.from(this.dom.getElementsByTagName('tr'))
+          trNodeLists.map((trNode, trNodeIndex) => {
+            let tdNodeLists = Array.from(trNode.getElementsByTagName('td'))
+            tdNodeLists.map((tdNode, tdNodeIndex) => {
+              if($(tdNode).hasClass('ui-selected')) this.table[trNodeIndex][tdNodeIndex].selected = true
+            })
+          })
+          if(this.dom.querySelectorAll('td.ui-selected').length > 1) {
+            this.showMergeBtn = true
+            this.showSplitBtn = false
+          } else {
+            this.showSplitBtn = true
+            this.showMergeBtn = false
+          }
+        }
+      })
+    },
 		initTable() {
-      setDefault()
-      $('#table').selectable()
-		}
+      this.dom = document.querySelector('#table')
+      this.setSelectable()
+      this.create(4, 3)
+      setTimeout(() => this.initText(), 16.7)
+		},
+    initText() {
+      let trNodeLists = Array.from(this.dom.getElementsByTagName('tr'))
+      trNodeLists.map((trNode, trNodeIndex) => {
+        let tdNodeLists = Array.from(trNode.getElementsByTagName('td'))
+        tdNodeLists.map((tdNode, tdNodeIndex) => {
+          let params = tdNode.getBoundingClientRect()
+          this.table[trNodeIndex][tdNodeIndex].iwidth = params.width
+          this.table[trNodeIndex][tdNodeIndex].iheight = params.height
+        })
+      })
+      // this.table.map(v => v.map(v => v.selected = false))
+    },
+    merge() {
+      let row = []
+      // 合并选中的列
+      let columnReplaint = (i, j) => {
+        if(table[i][j] && table[i][j].selected && table[i][j+1] && table[i][j+1].selected) {
+          table[i][j].colSpan++
+          table[i].splice(j+1, 1)
+          columnReplaint(i, j)
+        }
+      }
+      // 合并选中的行
+      let rowReplaint = (i, j) => {
+        console.log(i, '====', j)
+        // console.log(table[i], '===', i)
+        // if(table[i][j] && table[i][j].selected && table[i+1][j] && table[i+1][j].selected) {
+        //   if(table[i+1][j+1] && table[i+1][j+1].selected) {
+        //     table[i+1][j].colSpan++
+        //     table[i+1].splice(j, 1)
+        //   }
+        //   table[i][j].rowSpan++
+        //   table[i+1][j].rowSpan++
+        //   table[i+1].splice(j, 1)
+        // }
+      }
+      let table = this.table
+      this.showMergeBtn = false
+      for(let i = 0; i < table.length; i++) {
+        for(let j = 0; j < table[i].length; j++) {
+          columnReplaint(i, j)
+          rowReplaint(i, j)
+        }
+      }
+      setTimeout(() => this.initText(), 16.7)
+    },
+    split() {
+      this.showSplitBtn = false
+    }
 	},
 	mounted() {
 		this.initTable()
@@ -76,9 +131,42 @@ export default {
 </script>
 <style lang="less">
 #pc-banner {
-  .v-selected-box{
+  .mask{
     position: absolute;
-    border: dashed 1px rgba(0,0,0,.1);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background: rgba(0,0,0,.3);
+    text-align: center;
+  }
+  .btn-action{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: white;
+    text-align: center;
+    line-height: 60px;
+  }
+  .table-box{
+    text-align: center;
+    position: relative;
+    border: unset;
+    border-collapse:collapse;
+    border-spacing:0;
+    user-select:none;
+    table-layout: fixed;
+    height: 414px;
+    width:763px;
+    text-align:center;
+    border-collapse:collapse;
+    border-spacing:0;
+    margin-top: 20px;
   }
 	.my_table {
     text-align: center;
@@ -90,40 +178,36 @@ export default {
     user-select:none;
     table-layout: fixed;
     position: relative;
-    height: 414px;
-    width:763px;
+    height: 100%;
+    width:100%;
     text-align:center;
     border-collapse:collapse;
     border-spacing:0;
-    margin-top: 20px;
-    float: left;
-  }
-  .my_table td {
-    border: unset;
-    background: rgba(0,0,0,.1);
-    word-break: break-all;
-    word-wrap:break-word;
-    border-right:3px solid white;
-    border-bottom:3px solid white;
-    box-sizing: border-box;
-    transition: all ease .4s;
-    color: #666666;
-    /*font-style: italic;*/
-  }
-  .my_table td.ui-selecting { background: rgba(3, 179, 187,.5); color: rgba(255,255,255,.5) }
-	.my_table td.ui-selected  { background: #03b3bb; color: rgba(255,255,255,1); }
-	.my_table tr td:last-child {
-		border-right-width:0px;
-	}
-	.my_table tr:last-child td{
-		border-bottom-width:0px;
-	}
-	.ui-selectable-helper {
-		position: absolute;
-	}
-  .action{
-    margin: 20px;
-    display: inline-block;
+    td {
+      border: unset;
+      background: rgba(0,0,0,.05);
+      word-break: break-all;
+      word-wrap:break-word;
+      border-right:3px solid white;
+      border-bottom:3px solid white;
+      box-sizing: border-box;
+      transition: all ease .4s;
+      color: #666666;
+      &.ui-selecting {
+        background: rgba(3, 179, 187,.5);
+        color: rgba(255,255,255,.5)
+      }
+      &.ui-selected {
+        background: #03b3bb;
+        color: rgba(255,255,255,1);
+      }
+    }
+    tr td:last-child {
+      border-right-width:0px;
+    }
+    tr:last-child td{
+      border-bottom-width:0px;
+    }
   }
 }
 .ui-selectable-helper{

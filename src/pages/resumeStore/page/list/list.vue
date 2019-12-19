@@ -630,7 +630,8 @@ export default class resumeStore extends Vue {
     resumeGrades: '',
     createTimeLower: '',
     createTimeLower: '',
-    resumeType: ''
+    resumeType: '',
+    page: 1
   };
   tabList = []; /* 标签栏 */
   isSales = 0; /* 权限字段 */
@@ -859,6 +860,7 @@ export default class resumeStore extends Vue {
     this.form.expectCityNum = ''
     this.form.updateTimeUpper = ''
     this.form.visitTimeUpper = ''
+    this.form.page = 1
     this.$nextTick(() => {
       let obj = {}
       obj.stopPropagation = () => {}
@@ -930,6 +932,9 @@ export default class resumeStore extends Vue {
       let date = new Date()
       let downloadName = `简历列表-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}.xlsx`
       let url = `${API_ROOT}/resume/export?p=1`
+      if (this.form.page) {
+        url += `&page=${this.form.page}`
+      }
       if (this.form.keyword) {
         url += `&keyword=${this.form.keyword}`
       }
@@ -1140,7 +1145,7 @@ export default class resumeStore extends Vue {
   }
   getData () {
     let params1 = {
-      page: 1,
+      page: this.form.page,
       count: 20
     }
     if(this.form.keyword) {
@@ -1232,6 +1237,7 @@ export default class resumeStore extends Vue {
       this.itemList = res.data.data
       this.leftcontent.total = parseInt(res.data.meta.total)
       this.leftcontent.lastPage = parseInt(res.data.meta.lastPage)
+      // this.$router.push({query: params1})
     })
   }
   // 翻页
@@ -1241,6 +1247,7 @@ export default class resumeStore extends Vue {
     this.form.page = nowPage
     this.form.page = nowPage
     this.getData()
+    console.log(nowPage)
   }
   changeGrade (e, uid) {
     setResumeLevelApi({ grade: e, uid })
