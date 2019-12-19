@@ -148,5 +148,13 @@
 			"isShow": true
 		}
 	]
+},
+{
+	"path": "/category",
+	"title": "品类管理",
+	"name": "categoryList",
+	"icon": "el-icon-s-grid",
+	"isShow": true,
+	"children": []
 }
 ]

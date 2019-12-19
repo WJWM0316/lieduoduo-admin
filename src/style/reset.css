@@ -35,7 +35,7 @@ img {
   vertical-align: bottom;
 }
 .el-input--medium {
-  width: 114px !important;
+  /* width: 114px !important; */
 }
 /*行内元素*/
 a,
