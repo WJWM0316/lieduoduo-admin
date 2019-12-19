@@ -831,7 +831,7 @@ export default class createCompany extends Vue {
       product: productList
     }
     this.temProductList = [].concat(productList)
-    this.commonList = newCompanyInfo.albumInfo
+    this.commonList = newCompanyInfo.albumInfo || []
     if (Reflect.has(newCompanyInfo, 'albumInfo')) {
       this.imagesLists = newCompanyInfo.albumInfo.map(field => field.url)
     }
