@@ -171,11 +171,11 @@ export default class user extends Vue {
   list = [];
   // 新增分类
   addCategory () {
-    this.$router.push({ path: '/addCategory', query: { level: this.$route.query.level } })
+    this.$router.push({ path: '/addCategory', query: { level: this.$route.query.level, id: this.$route.query.id } })
   }
   // 编辑分类
   editcategory (id) {
-    this.$router.push({ path: '/addCategory', query: { level: this.$route.query.level, id: id } })
+    this.$router.push({ path: '/addCategory', query: { level: this.$route.query.level, id: id, isedit: true } })
   }
   // 列表的添加移动复制操作
   copyandmove (listid, num) {
