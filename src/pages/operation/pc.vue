@@ -5,22 +5,19 @@
         <tr
           v-for="(trNode, trNodeIndex) in table"
           :key="trNodeIndex"
-          v-if="trNode.length"
           class="ui-selectee">
           <td
             v-for="(tdNode, tdNodeIndex) in trNode"
             :key="tdNodeIndex"
-            :colSpan="tdNode.colSpan"
-            :rowSpan="tdNode.rowSpan"
             class="ui-selectee"
             :class="{'ui-selected': tdNode.selected}">
             {{tdNode.iwidth}}px-{{tdNode.iheight}}px
           </td>
         </tr>
       </table>
-      <div class="mask" v-show="showMergeBtn || showSplitBtn">
-        <span @click="merge" vshowf="showMergeBtn" class="btn-action">合并</span>
-        <span v-show="showSplitBtn" class="btn-action" @click="split">拆分</span>
+      <div class="mask" v-show="type">
+        <span @click="merge" v-show="type === 1" class="btn-action">合并</span>
+        <span v-show="type === 2" class="btn-action" @click="split">拆分</span>
       </div>
     </div>
 	</div>
@@ -32,7 +29,8 @@ export default {
       dom: '',
       table: [],
       showMergeBtn: false,
-      showSplitBtn: false
+      showSplitBtn: false,
+      type: 0
     }
   },
 	methods: {
@@ -41,7 +39,7 @@ export default {
       for(let i = 0; i < row; i++) {
         let tr = []
         for(let j = 0; j < column; j++) {
-          let td = {iwidth: 0, iheight: 0, colSpan: 1, rowSpan: 1, selected: false, show: true}
+          let td = {iwidth: 0, iheight: 0, colspan: 1, rowspan: 1, selected: false, row: i, column: j}
           tr.push(td)
         }
         table.push(tr)
@@ -54,17 +52,11 @@ export default {
           let trNodeLists = Array.from(this.dom.getElementsByTagName('tr'))
           trNodeLists.map((trNode, trNodeIndex) => {
             let tdNodeLists = Array.from(trNode.getElementsByTagName('td'))
-            tdNodeLists.map((tdNode, tdNodeIndex) => {
+            tdNodeLists.map((tdNode, tdNodeIndex, tdArr) => {
               if($(tdNode).hasClass('ui-selected')) this.table[trNodeIndex][tdNodeIndex].selected = true
             })
           })
-          if(this.dom.querySelectorAll('td.ui-selected').length > 1) {
-            this.showMergeBtn = true
-            this.showSplitBtn = false
-          } else {
-            this.showSplitBtn = true
-            this.showMergeBtn = false
-          }
+          this.type = this.dom.querySelectorAll('td.ui-selected').length > 1 ? 1: 2
         }
       })
     },
@@ -87,41 +79,45 @@ export default {
       // this.table.map(v => v.map(v => v.selected = false))
     },
     merge() {
-      let row = []
-      // 合并选中的列
-      let columnReplaint = (i, j) => {
-        if(table[i][j] && table[i][j].selected && table[i][j+1] && table[i][j+1].selected) {
-          table[i][j].colSpan++
-          table[i].splice(j+1, 1)
-          columnReplaint(i, j)
-        }
-      }
-      // 合并选中的行
-      let rowReplaint = (i, j) => {
-        console.log(i, '====', j)
-        // console.log(table[i], '===', i)
-        // if(table[i][j] && table[i][j].selected && table[i+1][j] && table[i+1][j].selected) {
-        //   if(table[i+1][j+1] && table[i+1][j+1].selected) {
-        //     table[i+1][j].colSpan++
-        //     table[i+1].splice(j, 1)
-        //   }
-        //   table[i][j].rowSpan++
-        //   table[i+1][j].rowSpan++
-        //   table[i+1].splice(j, 1)
-        // }
-      }
       let table = this.table
-      this.showMergeBtn = false
-      for(let i = 0; i < table.length; i++) {
-        for(let j = 0; j < table[i].length; j++) {
-          columnReplaint(i, j)
-          rowReplaint(i, j)
-        }
-      }
+      let rowMaxIndex = table.length - 1
+      this.type = 0
+      table.forEach((row, rowIndex, rowArr) => {
+        row.forEach((column, columnIndex, columnArr) => {
+          // 列操作
+          let rowStartIndex = columnArr.findIndex(v => v.selected)
+          let rowSelectedNum = columnArr.filter(v => v.selected).length
+          let rowLastIndex = rowStartIndex + rowSelectedNum - 1
+          if(columnIndex === rowStartIndex) {
+            column.colspan = rowSelectedNum
+          } else if(columnIndex < rowStartIndex) {
+            column.colspan = 1
+          } else if(columnIndex > rowStartIndex && columnIndex <= rowLastIndex) {
+            column.colspan = 0
+          } else {
+            column.colspan = 1
+          }
+          // 行操作
+          let callback = () => {
+            if(table[rowMaxIndex - rowIndex][columnIndex].selected) {
+              // if(table[rowMaxIndex - rowIndex - 1][columnIndex].selected) {
+              //   table[rowMaxIndex - rowIndex][columnIndex].rowspan = table[rowMaxIndex - rowIndex - 1][columnIndex].rowspan + table[rowMaxIndex - rowIndex][columnIndex].rowspan
+              // } else {
+              //   table[rowMaxIndex - rowIndex][columnIndex].rowspan = 0
+              // }
+            } else {
+              table[rowMaxIndex - rowIndex][columnIndex].rowspan = 1
+            }
+          }
+          callback()
+        })
+      })
+      this.table = table
+      console.log(table)
       setTimeout(() => this.initText(), 16.7)
     },
     split() {
-      this.showSplitBtn = false
+      this.type = 0
     }
 	},
 	mounted() {

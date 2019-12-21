@@ -905,6 +905,7 @@ export default class resumeStore extends Vue {
   /* 满意度 */
   returnKeys (obj) {
     this.form = { ...this.form, ...obj }
+    console.log(this.form)
   }
   // 点击切换
   check (index) {
@@ -997,6 +998,24 @@ export default class resumeStore extends Vue {
       }
       if(this.form.resumeType) {
         url += `&resumeType=${this.form.resumeType}`
+      }
+      if(this.form.completeExpect) {
+        url += `&completeExpect=${this.form.completeExpect}`
+      }
+      if(this.form.completeCareer) {
+        url += `&completeCareer=${this.form.completeCareer}`
+      }
+      if(this.form.completeEducation) {
+        url += `&completeEducation=${this.form.completeEducation}`
+      }
+      if(this.form.completeProject) {
+        url += `&completeProject=${this.form.completeProject}`
+      }
+      if(this.form.completeMoreIntro) {
+        url += `&completeMoreIntro=${this.form.completeMoreIntro}`
+      }
+      if(this.form.completeResumeAttach) {
+        url += `&completeResumeAttach=${this.form.completeResumeAttach}`
       }
       url = url.replace(/\s*/g, '')
       let xmlResquest = new XMLHttpRequest()
@@ -1231,6 +1250,24 @@ export default class resumeStore extends Vue {
       if (this.form.visitTimeLower && this.form.visitTimeUpper) {
         params1 = Object.assign(params1, { visitTimeLower: this.form.visitTimeLower, visitTimeUpper: this.form.visitTimeUpper })
       }
+    }
+    if(this.form.completeExpect) {
+      params1 = Object.assign(params1, {completeExpect: this.form.completeExpect})
+    }
+    if(this.form.completeCareer) {
+      params1 = Object.assign(params1, {completeCareer: this.form.completeCareer})
+    }
+    if(this.form.completeEducation) {
+      params1 = Object.assign(params1, {completeEducation: this.form.completeEducation})
+    }
+    if(this.form.completeProject) {
+      params1 = Object.assign(params1, {completeProject: this.form.completeProject})
+    }
+    if(this.form.completeMoreIntro) {
+      params1 = Object.assign(params1, {completeMoreIntro: this.form.completeMoreIntro})
+    }
+    if(this.form.completeResumeAttach) {
+      params1 = Object.assign(params1, {completeResumeAttach: this.form.completeResumeAttach})
     }
     if (params1.resumeGrades === '') delete params.resumeGrades
     GetResumeAPI(params1).then(res => {
