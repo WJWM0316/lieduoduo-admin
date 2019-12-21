@@ -111,7 +111,7 @@ export default {
           this.name = v.name
         }
       })
-      this.$emit('handlerPosition', this.radio, this.name, this.secondlist, this.thirdlist)
+      this.$emit('handlerPosition', this.radio, this.name, this.secondlist, this.thirdlist, this.hotlist)
     },
     movePosition () {
       this.$emit('movePosition', this.radio)
@@ -148,10 +148,10 @@ export default {
         v.open = false
       })
       this.selectedData = item.children
+      this.gethotselectlist()
     },
     // 三级分类选择
     handleSelected (item) {
-      console.log(this.selectlevel === 4)
       if (this.selectlevel === 4) {
         this.selectedData.map((v, k) => {
           v.open = item === v
@@ -159,6 +159,7 @@ export default {
         this.parentSelectData.map((v, k) => {
           v.open = false
         })
+        this.gethotselectlist()
       } else {
         item.open = !item.open
         this.thirdlist = []
@@ -170,6 +171,7 @@ export default {
       }
     },
     gethotselectlist () {
+      this.hotlist = []
       this.selectedData.map((v, k) => {
         if (v.open) {
           this.hotlist.push({ label_id: v.labelId, name: v.name })
