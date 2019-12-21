@@ -148,5 +148,26 @@
 			"isShow": true
 		}
 	]
+},
+{
+	"path": "",
+	"title": "职位列表管理",
+	"name": "categoryList",
+	"icon": "el-icon-s-grid",
+	"isShow": true,
+	"children": [
+		{
+			"path": "/category",
+			"title": "PC首页职位类别",
+			"name": "categoryList",
+			"isShow": true
+		},
+		{
+			"path": "/hotpositionlist",
+			"title": "PC热门职位类别",
+			"name": "hotposition",
+			"isShow": true
+		}
+	]
 }
 ]

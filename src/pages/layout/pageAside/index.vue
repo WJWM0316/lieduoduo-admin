@@ -33,7 +33,7 @@
   </div>
 </template>
 <script>
-// import routelist from './route.json'
+import routelist from './route.json'
 
 export default {
   data () {
@@ -44,13 +44,15 @@ export default {
   },
   computed: {
     itemList () {
-      return this.$store.state.common.menuList || []
+      // return this.$store.state.common.menuList || []
+      return routelist || []
     },
     currentRoute () {
       return this.$route.path
     }
   },
   mounted () {
+    console.log(routelist)
     this.AdminShow = sessionStorage.getItem('AdminShow')
   },
   methods: {
