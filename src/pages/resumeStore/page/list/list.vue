@@ -844,6 +844,12 @@ export default class resumeStore extends Vue {
   }
   /* 清除列表选项 */
   resetForm (name) {
+    this.form.completeExpect = 0
+    this.form.completeCareer = 0
+    this.form.completeEducation = 0
+    this.form.completeProject = 0
+    this.form.completeMoreIntro = 0
+    this.form.completeResumeAttach = 0
     this.$refs.Satisfaction.noReason()
     this.$refs[name].resetFields()
     this.form.page = 1
@@ -904,8 +910,13 @@ export default class resumeStore extends Vue {
   }
   /* 满意度 */
   returnKeys (obj) {
+    this.form.completeExpect = 0
+    this.form.completeCareer = 0
+    this.form.completeEducation = 0
+    this.form.completeProject = 0
+    this.form.completeMoreIntro = 0
+    this.form.completeResumeAttach = 0
     this.form = { ...this.form, ...obj }
-    console.log(this.form)
   }
   // 点击切换
   check (index) {

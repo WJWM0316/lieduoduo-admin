@@ -206,6 +206,9 @@ export default class filterAnswer extends Vue {
   closeSelect () {
     this.startSelect = false
   }
+  mounted() {
+    this.cities = this.cityOptions
+  }
 }
 </script>
 <style lang='less' scoped>
