@@ -91,11 +91,11 @@
         </list>
       </el-main>
     </el-container>
-    <!-- 修改公司名 -->
+    <!-- 修改权重 -->
     <el-dialog
       :close-on-click-modal="false"
       :show-close="false"
-      title="调整排序"
+      title="调整权重"
       :visible.sync="isShowsort"
       width="30%"
       :center="true"
@@ -122,7 +122,6 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import List from '@/components/list'
-import { getLabelPositionListApi } from 'API/position'
 import SelectPositionRadio from '@/components/selectPositionRadio'
 import { getCategoryApi, editCategoryApi, positionlabelList, copylabelList } from 'API/category'
 @Component({
@@ -210,7 +209,7 @@ export default class user extends Vue {
   }
   // 移动
   movehandler (id) {
-    let data = { id: this.listid, to_pid: id }
+    let data = { id: this.listid, pid: id }
     editCategoryApi(data).then((res) => {
       this.isShowsort = false
       this.$message({
@@ -319,20 +318,6 @@ export default class user extends Vue {
   onSubmit () {
     this.getfirstlist()
   }
-  // 职位类别标签获取
-  ManageList () {
-    getLabelPositionListApi().then(res => {
-      this.options = res.data.data
-      this.options.forEach(item => {
-        item.children.forEach(item1 => {
-          item1.children.forEach(item2 => {
-            let result = JSON.stringify(item2.children)
-            if (result === '[]') delete item2.children
-          })
-        })
-      })
-    })
-  }
   getfirstlist () {
     getCategoryApi(this.form).then((res) => {
       this.list = res.data.data
@@ -399,7 +384,6 @@ export default class user extends Vue {
 
   created () {
     this.init()
-    this.ManageList()
     this.getlabellist()
   }
 }

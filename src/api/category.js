@@ -46,3 +46,17 @@ export const copylabelList = data => request({
   type: 'put',
   data
 })
+
+/* 热门职位类别列表 */
+export const hotpositionlabelList = data => request({
+  url: `/labelnew/hotlist`,
+  type: 'get',
+  data
+})
+
+/* 热门筛选的一级职位类别列表 */
+export const firstpositionlist = data => request({
+  url: `/labelnew/toplab`,
+  type: 'get',
+  data
+})

@@ -57,12 +57,6 @@
       <span style="padding:0 5px;">否</span>
       </div>
       </el-form-item>
-      <el-form-item label="上架状态">
-        <template>
-          <el-radio v-model="ruleForm.status" label="1">上架</el-radio>
-          <el-radio v-model="ruleForm.status" label="0">下架</el-radio>
-        </template>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">确定</el-button>
         <el-button @click="cancel">取消</el-button>

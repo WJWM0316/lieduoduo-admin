@@ -8,8 +8,20 @@ export default [
       {
         path: '/category',
         name: 'categoryList',
-        meta: { title: '品类管理' },
+        meta: { title: 'PC首页职位类别' },
         component: resolve => require(['@/pages/category/category.vue'], resolve)
+      },
+      {
+        path: '/hotpositionlist',
+        name: 'hotposition',
+        meta: { title: 'PC热门职位类别' },
+        component: resolve => require(['@/pages/category/hotposition.vue'], resolve)
+      },
+      {
+        path: '/addhotCategory',
+        name: 'addhotCategory',
+        meta: { title: '新增热门类别' },
+        component: resolve => require(['@/pages/category/addhotCategory.vue'], resolve)
       },
       {
         path: '/addCategory',
