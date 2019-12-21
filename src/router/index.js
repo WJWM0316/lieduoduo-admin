@@ -14,7 +14,6 @@ import Resume from './resume'
 import User from './user'
 import Operation from './operation'
 
-import Category from './category'
 Vue.use(Router)
 
 const router = new Router({
@@ -25,7 +24,6 @@ const router = new Router({
     ...Recruiter,
     ...Hours24,
     ...User,
-    ...Category,
     ...Check,
     ...Interview,
     ...PositionManage,
