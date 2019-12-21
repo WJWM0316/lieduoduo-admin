@@ -31,9 +31,8 @@
             </template>
           </div>
           <template>
-            <div class="lists-selected" v-if="selectedData.length && selectlevel === 3">
+            <div class="lists-selected" v-if="selectedData.length && selectlevel === 3 || selectlevel === 4">
               <template v-for="item in selectedData">
-                <!-- <span :key="item.labelId" @click="handleSelected(item)">{{item.name}}</span> -->
                 <span :key="item.labelId" @click="handleSelected(item)" :class="{active: item.open}">
                 <i class="iconfont el-icon-success" v-if="item.open"/>
                 <div class="isnocheck" v-else></div>
@@ -151,13 +150,20 @@ export default {
     },
     // 三级分类选择
     handleSelected (item) {
-      item.open = !item.open
-      this.thirdlist = []
+      console.log(this.selectlevel)
       this.selectedData.map((v, k) => {
-        if (v.open) {
-          this.thirdlist.push({ label_id: v.labelId, name: v.name })
-        }
+        v.open = item === v
       })
+      this.parentSelectData.map((v, k) => {
+        v.open = false
+      })
+      // item.open = !item.open
+      // this.thirdlist = []
+      // this.selectedData.map((v, k) => {
+      //   if (v.open) {
+      //     this.thirdlist.push({ label_id: v.labelId, name: v.name })
+      //   }
+      // })
     },
     getLists () {
       getLabelPositionListApi().then(({ data }) => {

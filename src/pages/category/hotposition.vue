@@ -43,7 +43,7 @@
             >
               <div
                 style="width: 100%; cursor: pointer; color: #652791;"
-                @click.stop="editcategory(props.scope.row.id)"
+                @click.stop="edithotcategory(props.scope.row.id)"
               >编辑</div>
             </div>
             <!-- 类别名字 -->
@@ -185,6 +185,9 @@ export default class user extends Vue {
   }
   addhotCategory () {
     this.$router.push({ name: 'addhotCategory' })
+  }
+  edithotcategory (id) {
+    this.$router.push({ path: '/addCategory', query: { id: id, isedit: true } })
   }
   onSubmit () {
     this.gethotlist()

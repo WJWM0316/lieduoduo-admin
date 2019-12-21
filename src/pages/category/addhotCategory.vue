@@ -2,38 +2,13 @@
   <!-- 新增|编辑招聘官 -->
   <div class="set-recruiter-wrapper">
     <el-form ref="form" :model="ruleForm" :rules="formRules" label-width="140px">
-      <el-form-item label="新增方式">
-        <template>
-          <el-radio-group v-model="ruleForm.radio" @change="radiochange">
-          <el-radio label="1">选择已有类别</el-radio>
-          <el-radio label="2">自定义类别</el-radio>
-        </el-radio-group>
-        </template>
-      </el-form-item>
-      <el-form-item label="选择类别" v-show="ruleForm.radio === '1'">
-        <el-input v-if="$route.query.level === '1'" v-model="ruleForm.name" placeholder="请选择一级职位类别" style="width: 400px;"></el-input>
-        <el-input v-if="$route.query.level === '2'" v-model="ruleForm.name" placeholder="请选择二级职位类别" style="width: 400px;"></el-input>
-        <el-input v-if="$route.query.level === '3'" v-model="ruleForm.name" placeholder="请选择三级职位类别" style="width: 400px;"></el-input>
-          <div class="selectitem" @click="selectPositionfirst">
-        </div>
-        <!-- <el-input v-model="ruleForm.name" style="width: 400px;"></el-input> -->
-      </el-form-item>
-      <el-form-item label="类别名称">
-        <el-input v-model="ruleForm.name" placeholder="请输入品类名称" style="width: 400px;"></el-input>
-      </el-form-item>
-      <el-form-item label="二级类别" v-if="$route.query.level === '1' && !$route.query.isedit" ref="twolabel">
-        <div class="selectitem" ref="categoryH" @click="selectPosition($event, 2)">
-           <input type="text" placeholder="请选择二级职位类别" v-if="ruleForm.secondname.length === 0">
-           <div class="second" v-else>
-           <span class="seconditem" :key="i" v-for="(item, i) in ruleForm.secondname">
-             <span>{{item.name}}</span>
-             <i class="iconfont el-icon-error" @click="delect(i)"></i>
-             </span>
-           </div>
+      <el-form-item label="一级类别">
+        <el-input v-model="ruleForm.name" placeholder="请选择一级类别" style="width: 400px;"></el-input>
+          <div class="selectitem haveheight" @click="selectPositionfirst">
         </div>
       </el-form-item>
-      <el-form-item label="三级类别" v-if="$route.query.level === '2' && !$route.query.isedit" ref="threelabel">
-      <div class="selectitem" ref="tcategoryH" @click="selectPosition($event, 3)">
+      <el-form-item label="热门职位" v-if="!$route.query.isedit" ref="threelabel">
+      <div class="selectitem" ref="tcategoryH" @click="selectPosition($event, 4)">
            <input type="text" placeholder="请选择三级职位类别" v-if="ruleForm.secondname.length === 0">
            <div class="second" v-else>
            <span class="seconditem" :key="i" v-for="(item, i) in ruleForm.secondname">
@@ -42,9 +17,6 @@
              </span>
            </div>
         </div>
-      </el-form-item>
-      <el-form-item label="权重">
-        <el-input v-model="ruleForm.sort" placeholder="请输入职位类别权重" style="width: 400px;"></el-input>
       </el-form-item>
       <el-form-item label="热门职位">
         <div style="display: flex;align-items: center;">
@@ -56,6 +28,9 @@
       </el-switch>
       <span style="padding:0 5px;">否</span>
       </div>
+      </el-form-item>
+      <el-form-item label="权重">
+        <el-input v-model="ruleForm.sort" placeholder="请输入职位类别权重" style="width: 400px;"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">确定</el-button>
@@ -111,7 +86,9 @@ export default {
     }
   },
   created () {
-    this.getlabeldetail()
+    if (this.$route.query.isedit) {
+      this.getlabeldetail()
+    }
   },
   methods: {
     onSubmit () {
@@ -164,36 +141,17 @@ export default {
       this.ruleForm.label_id = id
       this.isshowRadio = false
       this.ruleForm.secondname = []
-      if (this.$route.query.level === '1') {
-        this.ruleForm.secondname = secondlist
-        this.$nextTick(() => {
-          this.$refs.twolabel.$el.style.height = this.$refs.categoryH.offsetHeight + 'px'
-        })
-      } else {
-        this.ruleForm.secondname = thirdlist
-        this.$nextTick(() => {
-          this.$refs.threelabel.$el.style.height = this.$refs.tcategoryH.offsetHeight + 'px'
-        })
-      }
     },
     // 选择二级类别
     selectPosition (e, num) {
       if (!e.target.className || e.target.className === 'second') {
-        this.title = '请选择二级类别'
+        this.title = '请选择职位'
         this.selectlevel = num
         this.isshowRadio = true
       }
     },
     delect (i) {
       this.ruleForm.secondname.splice(i, 1)
-      this.$nextTick(() => {
-        if (this.$refs.twolabel) {
-          this.$refs.twolabel.$el.style.height = this.$refs.categoryH.offsetHeight + 'px'
-        }
-        if (this.$refs.threelabel) {
-          this.$refs.threelabel.$el.style.height = this.$refs.tcategoryH.offsetHeight + 'px'
-        }
-      })
     },
     addCategoryApi () {
       addCategoryApi(this.ruleForm).then((res) => {
@@ -222,14 +180,7 @@ export default {
         this.ruleForm.name = res.data.data.name
         this.ruleForm.sort = res.data.data.sort
         this.ruleForm.status = (res.data.data.status).toString()
-        console.log(res)
       })
-    },
-    radiochange (id) {
-      this.ruleForm.radio = id
-      if (id === '2') {
-        this.ruleForm.label_id = ''
-      }
     }
   }
 }
@@ -277,5 +228,8 @@ export default {
       padding: 0 10px;
     }
   }
+}
+.haveheight{
+  height: 40px;
 }
 </style>

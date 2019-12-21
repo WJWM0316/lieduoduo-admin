@@ -14,7 +14,7 @@
         <el-input v-if="$route.query.level === '1'" v-model="ruleForm.name" placeholder="请选择一级职位类别" style="width: 400px;"></el-input>
         <el-input v-if="$route.query.level === '2'" v-model="ruleForm.name" placeholder="请选择二级职位类别" style="width: 400px;"></el-input>
         <el-input v-if="$route.query.level === '3'" v-model="ruleForm.name" placeholder="请选择三级职位类别" style="width: 400px;"></el-input>
-          <div class="selectitem" @click="selectPositionfirst">
+          <div class="selectitem haveheight" @click="selectPositionfirst">
         </div>
         <!-- <el-input v-model="ruleForm.name" style="width: 400px;"></el-input> -->
       </el-form-item>
@@ -117,7 +117,9 @@ export default {
     }
   },
   created () {
-    this.getlabeldetail()
+    if (this.$route.query.isedit) {
+      this.getlabeldetail()
+    }
   },
   methods: {
     onSubmit () {
@@ -283,5 +285,8 @@ export default {
       padding: 0 10px;
     }
   }
+}
+.haveheight{
+  height: 40px;
 }
 </style>
