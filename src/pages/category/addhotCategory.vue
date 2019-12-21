@@ -2,23 +2,12 @@
   <!-- 新增|编辑招聘官 -->
   <div class="set-recruiter-wrapper">
     <el-form ref="form" :model="ruleForm" :rules="formRules" label-width="140px">
-      <el-form-item label="一级类别">
-        <el-input v-model="ruleForm.name" placeholder="请选择一级类别" style="width: 400px;"></el-input>
-          <div class="selectitem haveheight" @click="selectPositionfirst">
+      <el-form-item label="热门职位" v-if="!$route.query.isedit">
+        <el-input v-model="ruleForm.name" placeholder="请选择热门职位类别" style="width: 400px;"></el-input>
+          <div class="selectitem haveheight" @click="selectPosition(4)">
         </div>
       </el-form-item>
-      <el-form-item label="热门职位" v-if="!$route.query.isedit" ref="threelabel">
-      <div class="selectitem" ref="tcategoryH" @click="selectPosition($event, 4)">
-           <input type="text" placeholder=" 请选择热门职位类别" v-if="ruleForm.secondname.length === 0">
-           <div class="second" v-else>
-           <span class="seconditem" :key="i" v-for="(item, i) in ruleForm.secondname">
-             <span>{{item.name}}</span>
-             <i class="iconfont el-icon-error" @click="delect(i)"></i>
-             </span>
-           </div>
-        </div>
-      </el-form-item>
-      <el-form-item label="热门职位">
+      <el-form-item label="热门职位" v-if="$route.query.isedit">
         <div style="display: flex;align-items: center;">
         <span style="padding:0 5px;">是</span>
         <el-switch
@@ -51,9 +40,8 @@
   </div>
 </template>
 <script>
-import { addCategoryApi, getidCategoryApi, editCategoryApi } from 'API/category'
+import { getidCategoryApi, editCategoryApi } from 'API/category'
 import SelectPositionRadio from '@/components/selectPositionRadio'
-import { getLabelPositionListApi } from 'API/position'
 export default {
   components: {
     SelectPositionRadio
@@ -62,24 +50,16 @@ export default {
     return {
       ruleForm: {
         name: '',
-        label_id: '',
-        pid: 0,
         id: '',
         is_hot: 1,
-        sort: 1,
-        status: '1',
-        junior: [],
-        radio: '1',
-        secondname: ''
+        sort: 1
       },
-      secondname: [],
       isshowRadio: false,
       labelitem: [],
       selectlevel: 1,
       btntitle: '确定',
       title: '请选择一级类别',
       isshowmove: false,
-      level: 'level1',
       formRules: {
         id: [{ required: true, message: '不能为空', trigger: 'blur' }]
       }
@@ -92,16 +72,13 @@ export default {
   },
   methods: {
     onSubmit () {
-      this.ruleForm.pid = this.$route.query.id ? this.$route.query.id : 0
-      this.ruleForm.junior = this.ruleForm.secondname
+      if (this.ruleForm.is_hot) {
+        this.ruleForm.is_hot = 0
+      } else {
+        this.ruleForm.is_hot = 1
+      }
       if (this.$route.query.isedit) {
-        this.ruleForm.pid = undefined
         this.ruleForm.id = this.$route.query.id
-        if (this.ruleForm.is_hot) {
-          this.ruleForm.is_hot = 0
-        } else {
-          this.ruleForm.is_hot = 1
-        }
         this.editCategory()
       } else {
         this.addCategoryApi()
@@ -119,47 +96,24 @@ export default {
     cancelbtn () {
       this.isshowRadio = false
     },
-    selectedPosition (item) {
-      this.form.positionTypeName = item.name
-    },
-    // 选择一级职位类别
-    selectPositionfirst () {
-      this.title = '请选择一级类别'
-      this.selectlevel = 1
-      getLabelPositionListApi().then(({ data }) => {
-        let listData = data.data || []
-        this.labelitem = []
-        this.isshowRadio = true
-        listData.map((v, k) => {
-          this.labelitem.push({ name: v.name, labelid: v.labelId })
-        })
-      })
-    },
     // 确定
-    surehandler (id, name, secondlist, thirdlist) {
-      this.ruleForm.name = name
-      this.ruleForm.label_id = id
+    surehandler (id, name, secondlist, thirdlist, hotlist) {
+      this.ruleForm.name = hotlist[0].name
+      this.ruleForm.id = hotlist[0].label_id
       this.isshowRadio = false
-      this.ruleForm.secondname = []
     },
     // 选择二级类别
-    selectPosition (e, num) {
-      if (!e.target.className || e.target.className === 'second') {
-        this.title = '请选择职位'
-        this.selectlevel = num
-        this.isshowRadio = true
-      }
-    },
-    delect (i) {
-      this.ruleForm.secondname.splice(i, 1)
+    selectPosition (num) {
+      this.title = '请选择职位'
+      this.selectlevel = num
+      this.isshowRadio = true
     },
     addCategoryApi () {
-      addCategoryApi(this.ruleForm).then((res) => {
+      editCategoryApi(this.ruleForm).then((res) => {
         this.$message({
           message: '新增成功',
           type: 'success'
         })
-        this.$router.go(-1)
       })
     },
     editCategory () {
@@ -174,12 +128,8 @@ export default {
     getlabeldetail () {
       let data = { id: this.$route.query.id }
       getidCategoryApi(data).then((res) => {
-        if (res.data.data.labelId === 0) {
-          this.ruleForm.radio = '2'
-        }
         this.ruleForm.name = res.data.data.name
         this.ruleForm.sort = res.data.data.sort
-        this.ruleForm.status = (res.data.data.status).toString()
       })
     }
   }

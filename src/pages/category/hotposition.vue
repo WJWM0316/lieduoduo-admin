@@ -187,7 +187,7 @@ export default class user extends Vue {
     this.$router.push({ name: 'addhotCategory' })
   }
   edithotcategory (id) {
-    this.$router.push({ path: '/addCategory', query: { id: id, isedit: true } })
+    this.$router.push({ path: '/addhotCategory', query: { id: id, isedit: true } })
   }
   onSubmit () {
     this.gethotlist()

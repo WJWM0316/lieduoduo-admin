@@ -125,14 +125,14 @@ export default {
     onSubmit () {
       this.ruleForm.pid = this.$route.query.id ? this.$route.query.id : 0
       this.ruleForm.junior = this.ruleForm.secondname
+      if (this.ruleForm.is_hot) {
+        this.ruleForm.is_hot = 0
+      } else {
+        this.ruleForm.is_hot = 1
+      }
       if (this.$route.query.isedit) {
         this.ruleForm.pid = undefined
         this.ruleForm.id = this.$route.query.id
-        if (this.ruleForm.is_hot) {
-          this.ruleForm.is_hot = 0
-        } else {
-          this.ruleForm.is_hot = 1
-        }
         this.editCategory()
       } else {
         this.addCategoryApi()
@@ -230,7 +230,6 @@ export default {
         this.ruleForm.name = res.data.data.name
         this.ruleForm.sort = res.data.data.sort
         this.ruleForm.status = (res.data.data.status).toString()
-        console.log(res)
       })
     },
     radiochange (id) {
