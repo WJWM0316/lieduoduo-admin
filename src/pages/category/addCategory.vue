@@ -2,7 +2,7 @@
   <!-- 新增|编辑招聘官 -->
   <div class="set-recruiter-wrapper">
     <el-form ref="form" :model="ruleForm" :rules="formRules" label-width="140px">
-      <el-form-item label="新增方式">
+      <el-form-item label="新增方式" v-if="$route.query.level !== '3'">
         <template>
           <el-radio-group v-model="ruleForm.radio" @change="radiochange">
           <el-radio label="1">选择已有类别</el-radio>

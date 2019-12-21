@@ -91,6 +91,7 @@ export default {
       name: '',
       secondlist: [],
       thirdlist: [],
+      hotlist: [],
       selectedData: [], // 展示可选择的内容
       parentListId: null, // 当前选择parentid
       parentSelectData: [], // 父级选择的内容
@@ -150,20 +151,35 @@ export default {
     },
     // 三级分类选择
     handleSelected (item) {
-      console.log(this.selectlevel)
+      console.log(this.selectlevel === 4)
+      if (this.selectlevel === 4) {
+        this.selectedData.map((v, k) => {
+          v.open = item === v
+        })
+        this.parentSelectData.map((v, k) => {
+          v.open = false
+        })
+      } else {
+        item.open = !item.open
+        this.thirdlist = []
+        this.selectedData.map((v, k) => {
+          if (v.open) {
+            this.thirdlist.push({ label_id: v.labelId, name: v.name })
+          }
+        })
+      }
+    },
+    gethotselectlist () {
       this.selectedData.map((v, k) => {
-        v.open = item === v
+        if (v.open) {
+          this.hotlist.push({ label_id: v.labelId, name: v.name })
+        }
       })
       this.parentSelectData.map((v, k) => {
-        v.open = false
+        if (v.open) {
+          this.hotlist.push({ label_id: v.labelId, name: v.name })
+        }
       })
-      // item.open = !item.open
-      // this.thirdlist = []
-      // this.selectedData.map((v, k) => {
-      //   if (v.open) {
-      //     this.thirdlist.push({ label_id: v.labelId, name: v.name })
-      //   }
-      // })
     },
     getLists () {
       getLabelPositionListApi().then(({ data }) => {

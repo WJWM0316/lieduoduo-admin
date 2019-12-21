@@ -9,7 +9,7 @@
       </el-form-item>
       <el-form-item label="热门职位" v-if="!$route.query.isedit" ref="threelabel">
       <div class="selectitem" ref="tcategoryH" @click="selectPosition($event, 4)">
-           <input type="text" placeholder="请选择三级职位类别" v-if="ruleForm.secondname.length === 0">
+           <input type="text" placeholder=" 请选择热门职位类别" v-if="ruleForm.secondname.length === 0">
            <div class="second" v-else>
            <span class="seconditem" :key="i" v-for="(item, i) in ruleForm.secondname">
              <span>{{item.name}}</span>
