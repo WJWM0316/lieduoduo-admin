@@ -114,6 +114,7 @@ export default {
           message: '新增成功',
           type: 'success'
         })
+        this.$router.go(-1)
       })
     },
     editCategory () {
