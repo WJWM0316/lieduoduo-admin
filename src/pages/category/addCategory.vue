@@ -11,12 +11,19 @@
         </template>
       </el-form-item>
       <el-form-item label="选择类别" v-show="ruleForm.radio === '1'">
-        <el-input v-if="$route.query.level === '1'" v-model="ruleForm.name" placeholder="请选择一级职位类别" style="width: 400px;"></el-input>
-        <el-input v-if="$route.query.level === '2'" v-model="ruleForm.name" placeholder="请选择二级职位类别" style="width: 400px;"></el-input>
-        <el-input v-if="$route.query.level === '3'" v-model="ruleForm.name" placeholder="请选择三级职位类别" style="width: 400px;"></el-input>
-          <div class="selectitem haveheight" @click="selectPositionfirst">
-        </div>
-        <!-- <el-input v-model="ruleForm.name" style="width: 400px;"></el-input> -->
+        <el-input v-if="$route.query.level === '1'" v-model="ruleForm.name" placeholder="请选择一级职位类别" style="width: 400px;">
+        </el-input>
+        <template v-if="$route.query.level === '2'">
+          <el-input v-model="ruleForm.name" placeholder="请选择二级职位类别" style="width: 400px;">
+        </el-input>
+        </template>
+        <template v-if="$route.query.level === '3'">
+          <el-input v-model="ruleForm.name" placeholder="请选择三级职位类别" style="width: 400px;">
+        </el-input>
+        </template>
+         <div v-if="$route.query.level === '1'" class="selectitem haveheight" @click="selectPositionfirst"></div>
+          <div v-if="$route.query.level === '2'" class="selectitem haveheight" @click="selectPosition($event, 6)"></div>
+          <div v-if="$route.query.level === '3'" class="selectitem haveheight" @click="selectPosition($event, 5)"></div>
       </el-form-item>
       <el-form-item label="类别名称">
         <el-input v-model="ruleForm.name" placeholder="请输入品类名称" style="width: 400px;"></el-input>
@@ -167,9 +174,21 @@ export default {
       })
     },
     // 确定
-    surehandler (id, name, secondlist, thirdlist) {
+    surehandler (id, name, secondlist, thirdlist, hotlist) {
       this.ruleForm.name = name
       this.ruleForm.label_id = id
+      if (!name && secondlist.length > 0 && hotlist.length < 0) {
+        this.ruleForm.name = secondlist[0].name
+        this.ruleForm.label_id = secondlist[0].labelId
+      }
+      if (!name && thirdlist.length > 0) {
+        this.ruleForm.name = thirdlist[0].name
+        this.ruleForm.label_id = thirdlist[0].labelId
+      }
+      if (!name && hotlist.length > 0) {
+        this.ruleForm.name = hotlist[0].name
+        this.ruleForm.label_id = hotlist[0].labelId
+      }
       this.isshowRadio = false
       this.ruleForm.secondname = []
       if (this.$route.query.level === '1') {
@@ -177,17 +196,23 @@ export default {
         this.$nextTick(() => {
           this.$refs.twolabel.$el.style.height = this.$refs.categoryH.offsetHeight + 'px'
         })
-      } else {
+      } else if (this.$route.query.level === '2') {
         this.ruleForm.secondname = thirdlist
         this.$nextTick(() => {
           this.$refs.threelabel.$el.style.height = this.$refs.tcategoryH.offsetHeight + 'px'
         })
+      } else {
+        this.ruleForm.secondname = []
       }
     },
     // 选择二级类别
     selectPosition (e, num) {
-      if (!e.target.className || e.target.className === 'second') {
+      if (num === 2 || num === 6) {
         this.title = '请选择二级类别'
+      } else {
+        this.title = '请选择三级类别'
+      }
+      if (!e.target.className || e.target.className === 'second' || e.target.className === 'selectitem haveheight') {
         this.selectlevel = num
         this.isshowRadio = true
       }

@@ -31,7 +31,7 @@
             </template>
           </div>
           <template>
-            <div class="lists-selected" v-if="selectedData.length && selectlevel === 3 || selectlevel === 4">
+            <div class="lists-selected" v-if="selectedData.length && selectlevel === 3 || selectlevel === 4 || selectlevel === 5">
               <template v-for="item in selectedData">
                 <span :key="item.labelId" @click="handleSelected(item)" :class="{active: item.open}">
                 <i class="iconfont el-icon-success" v-if="item.open"/>
@@ -75,6 +75,7 @@ export default {
     labelitem: {
       type: Array
     },
+    // selectlevel默认为1级单选，2是2级多选，3是3级多选，4是2级或者3级的单选任何一个, 5是3级单选, 6是2级单选。
     selectlevel: {
       type: [String, Number],
       default: 1
@@ -92,6 +93,7 @@ export default {
       secondlist: [],
       thirdlist: [],
       hotlist: [],
+      threeradio: [],
       selectedData: [], // 展示可选择的内容
       parentListId: null, // 当前选择parentid
       parentSelectData: [], // 父级选择的内容
@@ -111,7 +113,7 @@ export default {
           this.name = v.name
         }
       })
-      this.$emit('handlerPosition', this.radio, this.name, this.secondlist, this.thirdlist, this.hotlist)
+      this.$emit('handlerPosition', this.radio, this.name, this.secondlist, this.thirdlist, this.hotlist, this.threeradio)
     },
     movePosition () {
       this.$emit('movePosition', this.radio)
@@ -122,21 +124,37 @@ export default {
     // 左侧内容选择
     handleAsideCheck (item) {
       this.parentListId = item.labelId
-      item.children.map((v, k) => {
-        v.open = false
-      })
-      this.parentSelectData = item.children
+      this.parentSelectData = item.children || []
       this.selectedData = []
     },
     // 二级分类选择
     handleShowDetails (item) {
       if (this.selectlevel === 2) {
-        item.open = !item.open
+        const open = !item.open
+        this.$set(item, 'open', open)
+      } else if (this.selectlevel === 4) {
+        const open = !item.open
+        this.parentSelectData.forEach(val => {
+          if (val.open) val.open = false
+        })
+        this.$set(item, 'open', open)
+        this.selectedData.forEach(val => {
+          if (val.open) val.open = false
+        })
+      } else if (this.selectlevel === 5) {
+        this.parentSelectData.forEach(val => {
+          if (val.open) val.open = false
+        })
+        this.selectedData.forEach(val => {
+          if (val.open) val.open = false
+        })
+        this.$set(item, 'open', open)
       } else {
         // 收起其他
-        this.parentSelectData.map((v, k) => {
-          v.open = item === v
+        this.parentSelectData.forEach(val => {
+          if (val.open) val.open = false
         })
+        this.$set(item, 'open', open)
       }
       this.secondlist = []
       this.parentSelectData.map((v, k) => {
@@ -144,37 +162,47 @@ export default {
           this.secondlist.push({ label_id: v.labelId, name: v.name })
         }
       })
-      item.children.map((v, k) => {
-        v.open = false
-      })
       this.selectedData = item.children
       this.gethotselectlist()
     },
     // 三级分类选择
     handleSelected (item) {
       if (this.selectlevel === 4) {
-        this.selectedData.map((v, k) => {
-          v.open = item === v
+        // 收起其他
+        this.selectedData.forEach(val => {
+          if (val.open) val.open = false
         })
+        this.$set(item, 'open', open)
         this.parentSelectData.map((v, k) => {
           v.open = false
         })
         this.gethotselectlist()
-      } else {
-        item.open = !item.open
-        this.thirdlist = []
-        this.selectedData.map((v, k) => {
-          if (v.open) {
-            this.thirdlist.push({ label_id: v.labelId, name: v.name })
-          }
+      } else if (this.selectlevel === 5) {
+        this.parentSelectData.forEach(val => {
+          if (val.open) val.open = false
         })
+        this.selectedData.forEach(val => {
+          if (val.open) val.open = false
+        })
+        this.$set(item, 'open', open)
+        this.gethotselectlist()
+      } else {
+        const open = !item.open
+        this.$set(item, 'open', open)
+        if (item.open) {
+          this.thirdlist.push({ label_id: item.labelId, name: item.name })
+        } else {
+          this.thirdlist.splice(this.thirdlist.findIndex(v => v.labelId === item.labelId), 1)
+        }
       }
     },
     gethotselectlist () {
       this.hotlist = []
+      this.threeradio = []
       this.selectedData.map((v, k) => {
         if (v.open) {
           this.hotlist.push({ label_id: v.labelId, name: v.name })
+          this.threeradio.push({ label_id: v.labelId, name: v.name })
         }
       })
       this.parentSelectData.map((v, k) => {
@@ -185,17 +213,7 @@ export default {
     },
     getLists () {
       getLabelPositionListApi().then(({ data }) => {
-        let arr = data.data
-        arr.map((v, k) => {
-          v.open = false
-          v.children.map((v, k) => {
-            v.open = false
-            v.children.map((v, k) => {
-              v.open = false
-            })
-          })
-        })
-        this.listData = arr || []
+        this.listData = data.data || []
       })
     }
   }
