@@ -52,6 +52,16 @@
                 @click.stop="copyandmove(props.scope.row.id, $route.query.level)"
               >添加</div>
             </div>
+            <!-- 类别id -->
+            <div
+              v-else-if="props.scope.column.property === 'id'"
+            >
+              <span style="text-align: left;">
+                <span>
+                  {{props.scope.row.id}}
+                  </span>
+              </span>
+            </div>
             <!-- 类别名字 -->
             <div
               v-else-if="props.scope.column.property === 'name'"
