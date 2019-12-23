@@ -100,7 +100,7 @@ export default {
     // 确定
     surehandler (id, name, secondlist, thirdlist, hotlist) {
       this.ruleForm.name = hotlist[0].name
-      this.ruleForm.id = hotlist[0].label_id
+      this.ruleForm.id = hotlist[0].id
       this.isshowRadio = false
     },
     // 选择二级类别

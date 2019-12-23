@@ -6,7 +6,7 @@
         <div class="title">
           <span class="s-title" @click="backto('1')" v-if="$route.query.level >= '1'">一级类别</span>
           <span v-if="$route.query.level >= '2'" style="padding:0 10px">></span>
-          <span class="s-title" @click="backto('2')" v-if="$route.query.level >= '2'">二级类别</span>
+          <span class="s-title" @click="backto('2')" v-if="$route.query.level >= '2'">二级类别（{{this.$route.query.levelSname}}）</span>
           <span v-if="$route.query.level >= '3'" style="padding:0 10px">></span>
           <span class="s-title" @click="backto('3')" v-if="$route.query.level >= '3'">三级类别</span>
           </div>
@@ -37,7 +37,7 @@
               v-if="props.scope.column.property === 'level'"
             >
               <div v-if="$route.query.level === '1'">
-                <span class="check" @click.stop="check(props.scope.row.id, 2)">查看二级</span>
+                <span class="check" @click.stop="check(props.scope.row.id, 2, props.scope.row.name)">查看二级</span>
               </div>
               <div v-if="$route.query.level === '2'">
                 <span class="check" @click.stop="check(props.scope.row.id, 3)">查看三级</span>
@@ -155,6 +155,7 @@ export default class user extends Vue {
     name: '',
     pid: ''
   };
+  oldname = ''
   labellist = []
   listid = ''
   labelitem = []
@@ -298,7 +299,7 @@ export default class user extends Vue {
         this.form.pid = this.$route.query.id
       }
       this.getfirstlist()
-      this.$router.push({ name: 'categoryList', query: { level: num, id: this.form.pid } })
+      this.$router.push({ name: 'categoryList', query: { level: num, id: this.form.pid, levelSname: this.oldname } })
     } else {
       this.list = []
       this.form.pid = ''
@@ -307,16 +308,19 @@ export default class user extends Vue {
     }
   }
   // 查看分类
-  check (id, num) {
+  check (id, num, name) {
+    if (name) {
+      this.oldname = name
+    }
     this.list = []
     if (num === 2) {
       this.form.pid = id
       this.getfirstlist()
-      this.$router.push({ name: 'categoryList', query: { level: '2', id: id } })
+      this.$router.push({ name: 'categoryList', query: { level: '2', id: id, levelSname: this.oldname } })
     } else {
       this.form.pid = id
       this.getfirstlist()
-      this.$router.push({ name: 'categoryList', query: { level: '3', id: id, secodeid: this.$route.query.id } })
+      this.$router.push({ name: 'categoryList', query: { level: '3', id: id, secodeid: this.$route.query.id, levelSname: this.oldname } })
     }
   }
   // 搜索

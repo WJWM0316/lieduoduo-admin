@@ -54,6 +54,7 @@
 </template>
 <script>
 import { getLabelPositionListApi } from 'API/position'
+import { positionlabelList } from 'API/category'
 export default {
   props: {
     visible: {
@@ -101,7 +102,11 @@ export default {
     }
   },
   created () {
-    this.getLists()
+    if (this.$route.name === 'addhotCategory') {
+      this.getnewposition()
+    } else {
+      this.getLists()
+    }
   },
   methods: {
     radiochange (id) {
@@ -201,19 +206,24 @@ export default {
       this.threeradio = []
       this.selectedData.map((v, k) => {
         if (v.open) {
-          this.hotlist.push({ label_id: v.labelId, name: v.name })
+          this.hotlist.push({ label_id: v.labelId, name: v.name, id: v.id })
           this.threeradio.push({ label_id: v.labelId, name: v.name })
         }
       })
       this.parentSelectData.map((v, k) => {
         if (v.open) {
-          this.hotlist.push({ label_id: v.labelId, name: v.name })
+          this.hotlist.push({ label_id: v.labelId, name: v.name, id: v.id })
         }
       })
     },
     getLists () {
       getLabelPositionListApi().then(({ data }) => {
         this.listData = data.data || []
+      })
+    },
+    getnewposition () {
+      positionlabelList().then((res) => {
+        this.listData = res.data.data || []
       })
     }
   }

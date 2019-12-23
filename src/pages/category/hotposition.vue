@@ -62,7 +62,7 @@
             >
               <span style="text-align: left;">
                 <span>
-                  {{props.scope.row.name}}
+                  {{props.scope.row.name}}{{props.scope.row.status === 0 ? '（下线）' : '' }}
                   </span>
               </span>
             </div>
