@@ -55,13 +55,13 @@
       </el-form-item>
       <el-form-item label="热门职位">
         <div style="display: flex;align-items: center;">
-        <span style="padding:0 5px;">是</span>
+        <span style="padding:0 5px;">否</span>
         <el-switch
-        v-model="ruleForm.is_hot"
-        active-color="#ff4949"
-        inactive-color="#13ce66">
+        v-model="ruleForm.is_hotcur"
+        active-color="#13ce66"
+        inactive-color="#ff4949">
       </el-switch>
-      <span style="padding:0 5px;">否</span>
+      <span style="padding:0 5px;">是</span>
       </div>
       </el-form-item>
       <el-form-item label="上架状态">
@@ -104,6 +104,7 @@ export default {
         pid: 0,
         id: '',
         is_hot: 1,
+        is_hotcur: true,
         sort: 1,
         status: '1',
         junior: [],
@@ -132,10 +133,10 @@ export default {
     onSubmit () {
       this.ruleForm.pid = this.$route.query.id ? this.$route.query.id : 0
       this.ruleForm.junior = this.ruleForm.secondname
-      if (this.ruleForm.is_hot) {
-        this.ruleForm.is_hot = 0
-      } else {
+      if (this.ruleForm.is_hotcur) {
         this.ruleForm.is_hot = 1
+      } else {
+        this.ruleForm.is_hot = 0
       }
       if (this.$route.query.isedit) {
         this.ruleForm.pid = undefined
@@ -254,6 +255,11 @@ export default {
         }
         this.ruleForm.name = res.data.data.name
         this.ruleForm.sort = res.data.data.sort
+        if (res.data.data.isHot) {
+          this.ruleForm.is_hotcur = true
+        } else {
+          this.ruleForm.is_hotcur = false
+        }
         this.ruleForm.status = (res.data.data.status).toString()
       })
     },

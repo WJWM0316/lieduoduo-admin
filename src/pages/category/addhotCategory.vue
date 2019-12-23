@@ -9,13 +9,13 @@
       </el-form-item>
       <el-form-item label="热门职位" v-if="$route.query.isedit">
         <div style="display: flex;align-items: center;">
-        <span style="padding:0 5px;">是</span>
+        <span style="padding:0 5px;">否</span>
         <el-switch
-        v-model="ruleForm.is_hot"
-        active-color="#ff4949"
-        inactive-color="#13ce66">
+        v-model="ruleForm.is_hotcur"
+        active-color="#13ce66"
+        inactive-color="#ff4949">
       </el-switch>
-      <span style="padding:0 5px;">否</span>
+      <span style="padding:0 5px;">是</span>
       </div>
       </el-form-item>
       <el-form-item label="权重">
@@ -52,6 +52,7 @@ export default {
         name: '',
         id: '',
         is_hot: 1,
+        is_hotcur: true,
         sort: 1
       },
       isshowRadio: false,
@@ -72,10 +73,10 @@ export default {
   },
   methods: {
     onSubmit () {
-      if (this.ruleForm.is_hot) {
-        this.ruleForm.is_hot = 0
-      } else {
+      if (this.ruleForm.is_hotcur) {
         this.ruleForm.is_hot = 1
+      } else {
+        this.ruleForm.is_hot = 0
       }
       if (this.$route.query.isedit) {
         this.ruleForm.id = this.$route.query.id
