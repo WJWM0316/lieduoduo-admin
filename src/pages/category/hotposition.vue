@@ -70,12 +70,11 @@
             <div
             @click="toSetsort(props.scope.row.id, props.scope.row.sort)"
               v-else-if="props.scope.column.property === 'sort'"
+              style="cursor: pointer;"
             >
-              <span style="text-align: left;">
-                <span>
-                  {{props.scope.row.sort}}
-                  </span>
-              </span>
+            <span>
+              {{props.scope.row.sort}}
+            </span>
             </div>
           </template>
         </list>

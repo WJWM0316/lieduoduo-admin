@@ -307,6 +307,10 @@ export default {
     border: 1px solid #DCDFE6;
     .seconditem{
       padding: 0 10px;
+      i{
+        padding: 0 5px;
+        font-size: 14px;
+      }
     }
   }
 }

@@ -21,7 +21,7 @@ export const deleteCategoryApi = data => request({
 
 /* 添加职位类别 */
 export const addCategoryApi = data => request({
-  url: `/labelnew/add`,
+  url: '/labelnew/add',
   type: 'post',
   data
 })
@@ -35,7 +35,7 @@ export const editCategoryApi = data => request({
 
 /* 职位标签列表 */
 export const positionlabelList = data => request({
-  url: `/labelnew/position`,
+  url: '/labelnew/position',
   type: 'get',
   data
 })
@@ -49,14 +49,14 @@ export const copylabelList = data => request({
 
 /* 热门职位类别列表 */
 export const hotpositionlabelList = data => request({
-  url: `/labelnew/hotlist`,
+  url: '/labelnew/hotlist',
   type: 'get',
   data
 })
 
 /* 热门筛选的一级职位类别列表 */
 export const firstpositionlist = data => request({
-  url: `/labelnew/toplab`,
+  url: '/labelnew/toplab',
   type: 'get',
   data
 })

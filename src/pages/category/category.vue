@@ -56,31 +56,26 @@
             <div
               v-else-if="props.scope.column.property === 'id'"
             >
-              <span style="text-align: left;">
-                <span>
-                  {{props.scope.row.id}}
-                  </span>
+            <span>
+              {{props.scope.row.id}}
               </span>
             </div>
             <!-- 类别名字 -->
             <div
               v-else-if="props.scope.column.property === 'name'"
             >
-              <span style="text-align: left;">
-                <span>
-                  {{props.scope.row.name}}{{props.scope.row.status === 0 ? '（下线）' : '' }}
-                  </span>
-              </span>
+            <span>
+              {{props.scope.row.name}}{{props.scope.row.status === 0 ? '（下线）' : '' }}
+            </span>
             </div>
             <!-- 类别排序 -->
             <div
             @click="toSetsort(props.scope.row.id, props.scope.row.sort)"
               v-else-if="props.scope.column.property === 'sort'"
+              style="cursor: pointer;"
             >
-              <span style="text-align: left;">
-                <span>
-                  {{props.scope.row.sort}}
-                  </span>
+            <span>
+              {{props.scope.row.sort}}
               </span>
             </div>
             <!-- 是否热门 -->
@@ -388,6 +383,13 @@ export default class user extends Vue {
         width: 150,
         label: '操作'
       }]
+    }
+    if (this.$route.query.level === '1') {
+      this.fields[1].label = '一级类别'
+    } else if (this.$route.query.level === '2') {
+      this.fields[1].label = '二级类别'
+    } else {
+      this.fields[1].label = '三级类别'
     }
     this.getfirstlist()
   }
