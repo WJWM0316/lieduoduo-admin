@@ -57,22 +57,27 @@ import { getLabelPositionListApi } from 'API/position'
 import { positionlabelList } from 'API/category'
 export default {
   props: {
+    // 显示隐藏
     visible: {
       type: Boolean,
       default: false
     },
+    // 是否显示移动按钮
     isshowmove: {
       type: Boolean,
       default: true
     },
+    // 弹窗标题
     title: {
       type: String,
       default: '请选择一级类别'
     },
+    // 确定的btn操作的名字
     btntitle: {
       type: String,
       default: '复制'
     },
+    // 数据列表
     labelitem: {
       type: Array
     },
@@ -80,11 +85,6 @@ export default {
     selectlevel: {
       type: [String, Number],
       default: 1
-    }
-  },
-  watch: {
-    'visible': function (n) {
-      this.visibleold = n
     }
   },
   data () {

@@ -16,7 +16,7 @@
         <!--筛选-->
         <div class="selectionBox" @keyup.enter="onSubmit">
           <el-form ref="form" label-width="80px" validate="validate">
-             <el-input v-model="form.name" placeholder="搜索品类名称"></el-input>
+             <el-input v-model="form.name" placeholder="搜索类别名称"></el-input>
              <el-button @click.stop="onSubmit" style="color: white !important" type="primary">搜索</el-button>
           </el-form>
         </div>
@@ -341,12 +341,12 @@ export default class user extends Vue {
       this.$router.push({ name: 'categoryList', query: { level: '1' } })
       this.fields = [{
         prop: 'id',
-        label: '品类ID',
+        label: '职位类别ID',
         width: 400
       },
       {
         prop: 'name',
-        label: '一级类别',
+        label: '一级类别名称',
         width: 400
       },
       {
@@ -364,12 +364,12 @@ export default class user extends Vue {
       this.form.pid = this.$route.query.id
       this.fields = [{
         prop: 'id',
-        label: '品类ID',
+        label: '职位类别ID',
         width: 400
       },
       {
         prop: 'name',
-        label: '一级类别',
+        label: '一级类别名称',
         width: 400
       },
       {
@@ -389,11 +389,11 @@ export default class user extends Vue {
       }]
     }
     if (this.$route.query.level === '1') {
-      this.fields[1].label = '一级类别'
+      this.fields[1].label = '一级类别名称'
     } else if (this.$route.query.level === '2') {
-      this.fields[1].label = '二级类别'
+      this.fields[1].label = '二级类别名称'
     } else {
-      this.fields[1].label = '三级类别'
+      this.fields[1].label = '三级类别名称'
     }
     this.getfirstlist()
   }
