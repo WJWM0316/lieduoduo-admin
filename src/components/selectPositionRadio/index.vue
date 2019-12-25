@@ -137,6 +137,11 @@ export default {
       if (this.selectlevel === 2) {
         const open = !item.open
         this.$set(item, 'open', open)
+        if (item.open) {
+          this.secondlist.push({ label_id: item.labelId, name: item.name })
+        } else {
+          this.secondlist.splice(this.hotlist.findIndex(v => v.labelId === item.labelId), 1)
+        }
       } else if (this.selectlevel === 4) {
         const open = !item.open
         this.parentSelectData.forEach(val => {
@@ -161,12 +166,6 @@ export default {
         })
         this.$set(item, 'open', open)
       }
-      this.secondlist = []
-      this.parentSelectData.map((v, k) => {
-        if (v.open) {
-          this.secondlist.push({ label_id: v.labelId, name: v.name })
-        }
-      })
       this.selectedData = item.children
       this.gethotselectlist()
     },
