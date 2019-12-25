@@ -12,6 +12,7 @@ import PositionManage from './position-manage'
 import Recruiter from './recruiter'
 import Resume from './resume'
 import User from './user'
+import Category from './category'
 import Operation from './operation'
 
 Vue.use(Router)
@@ -24,6 +25,7 @@ const router = new Router({
     ...Recruiter,
     ...Hours24,
     ...User,
+    ...Category,
     ...Check,
     ...Interview,
     ...PositionManage,
