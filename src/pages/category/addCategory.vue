@@ -53,7 +53,7 @@
       <el-form-item label="权重">
         <el-input v-model="ruleForm.sort" placeholder="请输入职位类别权重" style="width: 400px;"></el-input>
       </el-form-item>
-      <el-form-item label="热门职位">
+      <el-form-item label="热门职位" v-if="$route.query.level !== '1'">
         <div style="display: flex;align-items: center;">
         <span style="padding:0 5px;">否</span>
         <el-switch
