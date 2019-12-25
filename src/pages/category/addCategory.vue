@@ -176,17 +176,19 @@ export default {
     },
     // 确定
     surehandler (id, name, secondlist, thirdlist, hotlist) {
-      this.ruleForm.name = name
-      this.ruleForm.label_id = id
-      if (!name && secondlist.length > 0 && hotlist.length < 0) {
+      if (!this.ruleForm.name) {
+        this.ruleForm.name = name
+        this.ruleForm.label_id = id
+      }
+      if (!name && secondlist.length > 0 && hotlist.length < 0 && !this.ruleForm.name) {
         this.ruleForm.name = secondlist[0].name
         this.ruleForm.label_id = secondlist[0].labelId
       }
-      if (!name && thirdlist.length > 0) {
+      if (!name && thirdlist.length > 0 && !this.ruleForm.name) {
         this.ruleForm.name = thirdlist[0].name
         this.ruleForm.label_id = thirdlist[0].labelId
       }
-      if (!name && hotlist.length > 0) {
+      if (!name && hotlist.length > 0 && !this.ruleForm.name) {
         this.ruleForm.name = hotlist[0].name
         this.ruleForm.label_id = hotlist[0].labelId
       }
