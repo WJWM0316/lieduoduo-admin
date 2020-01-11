@@ -9,7 +9,10 @@
           <td
             v-for="(tdNode, tdNodeIndex) in trNode"
             :key="tdNodeIndex"
+            :colspan="tdNode.colspan"
+            :rowspan="tdNode.rowspan"
             class="ui-selectee"
+            v-if="tdNode.rowspan && tdNode.colspan"
             :class="{'ui-selected': tdNode.selected}">
             {{tdNode.iwidth}}px-{{tdNode.iheight}}px
           </td>
@@ -30,7 +33,9 @@ export default {
       table: [],
       showMergeBtn: false,
       showSplitBtn: false,
-      type: 0
+      type: 0,
+      row: 4,
+      column: 3
     }
   },
 	methods: {
@@ -57,13 +62,14 @@ export default {
             })
           })
           this.type = this.dom.querySelectorAll('td.ui-selected').length > 1 ? 1: 2
+           $('#table').selectable( 'refresh' )
         }
       })
     },
 		initTable() {
       this.dom = document.querySelector('#table')
       this.setSelectable()
-      this.create(4, 3)
+      this.create(this.row, this.column)
       setTimeout(() => this.initText(), 16.7)
 		},
     initText() {
@@ -76,45 +82,64 @@ export default {
           this.table[trNodeIndex][tdNodeIndex].iheight = params.height
         })
       })
-      // this.table.map(v => v.map(v => v.selected = false))
+      this.table.map(v => v.map(v => v.selected = false))
     },
     merge() {
-      let table = this.table
+      let table = this.table.slice()
       let rowMaxIndex = table.length - 1
+      let copyTable = []
       this.type = 0
-      table.forEach((row, rowIndex, rowArr) => {
-        row.forEach((column, columnIndex, columnArr) => {
-          // 列操作
-          let rowStartIndex = columnArr.findIndex(v => v.selected)
-          let rowSelectedNum = columnArr.filter(v => v.selected).length
-          let rowLastIndex = rowStartIndex + rowSelectedNum - 1
-          if(columnIndex === rowStartIndex) {
-            column.colspan = rowSelectedNum
-          } else if(columnIndex < rowStartIndex) {
-            column.colspan = 1
-          } else if(columnIndex > rowStartIndex && columnIndex <= rowLastIndex) {
-            column.colspan = 0
-          } else {
-            column.colspan = 1
-          }
-          // 行操作
-          let callback = () => {
-            if(table[rowMaxIndex - rowIndex][columnIndex].selected) {
-              // if(table[rowMaxIndex - rowIndex - 1][columnIndex].selected) {
-              //   table[rowMaxIndex - rowIndex][columnIndex].rowspan = table[rowMaxIndex - rowIndex - 1][columnIndex].rowspan + table[rowMaxIndex - rowIndex][columnIndex].rowspan
-              // } else {
-              //   table[rowMaxIndex - rowIndex][columnIndex].rowspan = 0
-              // }
+      new Promise((resolve, reject) => {
+        table.forEach((row, rowIndex, rowArr) => {
+          row.forEach((column, columnIndex, columnArr) => {
+            let rowStartIndex = columnArr.findIndex(v => v.selected)
+            let rowSelectedNum = columnArr.filter(v => v.selected).length
+            let rowLastIndex = rowStartIndex + rowSelectedNum - 1
+            if(columnIndex === rowStartIndex) {
+              column.colspan = rowSelectedNum
+            } else if(columnIndex < rowStartIndex) {
+              column.colspan = 1
+            } else if(columnIndex > rowStartIndex && columnIndex <= rowLastIndex) {
+              column.colspan = 0
             } else {
-              table[rowMaxIndex - rowIndex][columnIndex].rowspan = 1
+              column.colspan = 1
             }
-          }
-          callback()
+          })
         })
+        resolve()
+      }).then(() => {
+        return new Promise((resolve, reject) => {
+          for(let i = 0; i < this.column; i++) {
+            copyTable.push([])
+          }
+          table.flat().map(v => copyTable[v.column].push(v))
+          copyTable.forEach((row, rowIndex, rowArr) => {
+            row.forEach((column, columnIndex, columnArr) => {
+              let rowStartIndex = columnArr.findIndex(v => v.selected)
+              let rowSelectedNum = columnArr.filter(v => v.selected).length
+              let rowLastIndex = rowStartIndex + rowSelectedNum - 1
+              if(columnIndex === rowStartIndex) {
+                column.rowspan = rowSelectedNum
+              } else if(columnIndex < rowStartIndex) {
+                column.rowspan = 1
+              } else if(columnIndex > rowStartIndex && columnIndex <= rowLastIndex) {
+                column.rowspan = 0
+              } else {
+                column.rowspan = 1
+              }
+            })
+          })
+          resolve()
+        })
+      }).then(() => {
+        return new Promise((resolve, reject) => {
+          copyTable.flat().map(v => table[v.row][v.column] = v)
+          resolve()
+        })
+      }).then(() => {
+        this.table = table
+        this.$nextTick(() => this.initText())
       })
-      this.table = table
-      console.log(table)
-      setTimeout(() => this.initText(), 16.7)
     },
     split() {
       this.type = 0

@@ -342,7 +342,7 @@ export default {
 		getBannerDevice() {
 			let { query } = this.$route
 			return getBannerDeviceApi().then(({ data }) => {
-				let portData = data.data.filter(v => v.key !== 'pc')
+				let portData = data.data
 				portData.map((v, i) => {
 					v.active = false
 					if((!i && !query.device) || (v.key === query.device)) {

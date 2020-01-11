@@ -441,7 +441,7 @@
       },
       getBannerDevice() {
         return getBannerDeviceApi().then(({ data }) => {
-          let portData = data.data.filter(v => v.key !== 'pc')
+          let portData = data.data
           this.portData = portData
         })
       },
