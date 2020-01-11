@@ -148,8 +148,6 @@
                       class="icon iconfont iconjiantouzuo"
                       v-if="scope.row.dealStatus==2||scope.row.dealStatus==0"
                     ></i>
-                    <div class="valethandler" @click="handlervale('accept')">代客操作</div>
-                    <div class="valethandler" v-if="0">修改时间</div>
                   </div>
                   <p class="companyName">
                     <span
@@ -211,7 +209,7 @@
                     >{{scope.row.interview.address}}{{scope.row.interview.doorplate}}</p>
                     <p
                       v-if="scope.row.arrangementInfo"
-                    >面试时间:{{scope.row.arrangementInfo.appointment_time}}</p>
+                    >时间:{{scope.row.arrangementInfo.appointment_time}}</p>
                   </div>
                 </div>
 
@@ -299,18 +297,6 @@
         <el-button type="primary" @click="checkNote">确 定</el-button>
       </span>
     </el-dialog>
-    <!-- 代客操作 -->
-    <el-dialog
-      title="面试信息"
-      :visible.sync="InterviewVisible"
-      width="30%">
-      <div class="position"><i class="el-icon-suitcase"></i><span>市场推广  10k-12k</span></div>
-      <div class="cpname"><i class="el-icon-office-building"></i><span>广州西洋汇信息技术有限公司</span></div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="InterviewVisible = false">暂不考虑</el-button>
-        <el-button type="primary" @click="acceptInterview">接受邀约</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -334,7 +320,6 @@ import { getResumeCodeUrlApi, getRecruiterCodeUrlApi, getPositionCodeUrlApi } fr
   }
 })
 export default class invitPro extends Vue {
-  InterviewVisible = false
   tableHeight = 0;
   showSecond = false; /* 当选择不合适才出现第二级 */
   form = {
@@ -373,7 +358,7 @@ export default class invitPro extends Vue {
 
   leftcontent = {
     total: 0,
-    title: '顾问推荐进展',
+    title: '顾问服务进展',
     lastPage: '',
     page: 1
   };
@@ -660,27 +645,6 @@ export default class invitPro extends Vue {
         this.getData()
         this.RusultForm.note = ''
       })
-    }
-  }
-  acceptInterview () {
-    this.$confirm('接受邀约后，企业将预扣多多币，请谨慎操作。确定操作为接受邀约？', '提示', {
-      confirmButtonText: '确认',
-      cancelButtonText: '取消',
-      type: 'warning'
-    }).then(() => {
-      this.InterviewVisible = false
-      this.$message({
-        type: 'success',
-        message: '删除成功!'
-      })
-    }).catch(() => {
-    })
-  }
-  handlervale (type) {
-    switch (type) {
-      case 'accept':
-        this.InterviewVisible = true
-        break
     }
   }
 }

@@ -136,6 +136,12 @@
 			"isShow": true
 		},
 		{
+			"path": "/resumeStore/talkList",
+			"title": "约聊列表",
+			"name": "talkList",
+			"isShow": true
+		},
+		{
 			"path": "/resumeStore/consultantRecommendation",
 			"title": "顾问推荐进展",
 			"name": "consultantRecommendation",
@@ -145,6 +151,11 @@
 			"path": "/resumeStore/hotRecommendation",
 			"title": "热门推荐进展",
 			"name": "hotRecommendation",
+			"isShow": true
+		},{
+			"path": "/resumeStore/consultantService",
+			"title": "顾问服务进展",
+			"name": "consultantService",
 			"isShow": true
 		}
 	]

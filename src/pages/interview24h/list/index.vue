@@ -510,7 +510,6 @@
       prev-text="上一页"
       next-text="下一页"
       :current-page="Number(form.page)"
-      v-if="total > pageSize"
       @current-change="pageChange">
       <span class="total">共{{ Math.ceil(total/20) }}页, {{total}}条记录</span>
     </el-pagination>
