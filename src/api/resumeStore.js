@@ -3,7 +3,7 @@ import { request } from './index.js'
 // 职位搜索列表
 export const GetResumeAPI = data =>
   request({
-    url: `/resume/search`,
+    url: '/resume/search',
     type: 'get',
     data
   })
@@ -29,14 +29,14 @@ export const delateResume = uid =>
 /* 简历标签 列表 */
 export const resumelist = data =>
   request({
-    url: `/label/resume/list`,
+    url: '/label/resume/list',
     type: 'get',
     data
   })
 /* 创建标签  */
 export const createLabel = data =>
   request({
-    url: `/label/resume`,
+    url: '/label/resume',
     type: 'post',
     data
   })
@@ -65,7 +65,7 @@ export const confgiLabel = (uid, data) =>
 // 获取所有学历定义
 export const degreeListAPI = () =>
   request({
-    url: `/degree/all`,
+    url: '/degree/all',
     type: 'get'
   })
 // 创建微简历
@@ -84,13 +84,13 @@ export const haveMobile = mobile =>
 // 顾问推荐邀约列表 - 处理状态列表、不合适原因列表 （作为邀约列表搜索条件）
 export const dealStatus = () =>
   request({
-    url: `/advisor/recommend/deal_status`,
+    url: '/advisor/recommend/deal_status',
     type: 'get'
   })
 // 求职状态列表
 export const jobhuntStatusAPI = data =>
   request({
-    url: `/jobhunt_status/all`,
+    url: '/jobhunt_status/all',
     type: 'get'
   })
 // 创建推荐单
@@ -119,7 +119,7 @@ export const GetResumeHistory = (uid, data) =>
 // 推荐清单列表
 export const recommendList = data =>
   request({
-    url: `/advisor/recommend_lists/search`,
+    url: '/advisor/recommend_lists/search',
     type: 'get',
     data
   })
@@ -162,7 +162,7 @@ export const recommendPay = (uid, data) =>
 // 推荐人
 export const userList = () =>
   request({
-    url: `/advisor/user/list`,
+    url: '/advisor/user/list',
     type: 'get'
   })
 // 推荐清单成功失败原因
@@ -175,13 +175,13 @@ export const resultList = uid =>
 // 邀约进展列表
 export const interviewsList = data =>
   request({
-    url: `/advisor/recommend/interviews/search`,
+    url: '/advisor/recommend/interviews/search',
     type: 'get',
     data
   })
 /* 平台热门简历推荐 - 面试邀约搜索 */
 export const getRecommendInterviewsSearchListApi = data => request({
-  url: `/recommend/interviews/search`,
+  url: '/recommend/interviews/search',
   type: 'get',
   data,
   noGlobalLoading: false
@@ -190,7 +190,7 @@ export const getRecommendInterviewsSearchListApi = data => request({
 /* 获取简历等级 */
 export const getResumeLevelApi = data =>
   request({
-    url: `/resume_grade/all`,
+    url: '/resume_grade/all',
     type: 'get'
   })
 
@@ -201,3 +201,30 @@ export const setResumeLevelApi = data => request({
   data,
   noGlobalLoading: false
 })
+
+// 顾问服务进展列表
+export const consultantServiceList = data => request({
+  url: '/advisor_help/search',
+  type: 'get',
+  data
+})
+// 顾问服务进展列表 - 处理状态列表、不合适原因列表 （作为邀约列表搜索条件）
+export const servicedealStatus = () => request({
+  url: '/advisor_help/deal_status',
+  type: 'get'
+})
+
+// 顾问服务 扣点原因
+export const servicePay = (uid, data) =>
+  request({
+    url: `/advisor_help/pay/${uid}`,
+    type: 'post',
+    data
+  })
+// 顾问服务 返点原因
+export const servicerefund = (uid, data) =>
+  request({
+    url: `/advisor_help/refund/${uid}`,
+    type: 'post',
+    data
+  })

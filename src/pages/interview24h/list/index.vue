@@ -473,7 +473,12 @@
               <span class="strong_name" @click="getPositionCodeUrl(scope.row.positionId)" slot="reference">扫码看职位</span>
             </el-popover>
           </div>
-          <div>地址：{{scope.row.address}}</div>
+          <div>面试形式：{{scope.row.sourceTypeDesc}}</div>
+          <div v-if="scope.row.sourceType === 1">地址：{{scope.row.address}}</div>
+          <div
+              class="btn"
+              v-if="scope.row.arrangementInfo && scope.row.arrangementInfo.appointmentTime"
+            >面试时间：{{scope.row.arrangementInfo.appointmentTime*1000 | date}}</div>
         </template>
       </el-table-column>
       <el-table-column

@@ -299,18 +299,6 @@
         <el-button type="primary" @click="checkNote">确 定</el-button>
       </span>
     </el-dialog>
-    <!-- 代客操作 -->
-    <el-dialog
-      title="面试信息"
-      :visible.sync="InterviewVisible"
-      width="30%">
-      <div class="position"><i class="el-icon-suitcase"></i><span>市场推广  10k-12k</span></div>
-      <div class="cpname"><i class="el-icon-office-building"></i><span>广州西洋汇信息技术有限公司</span></div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="InterviewVisible = false">暂不考虑</el-button>
-        <el-button type="primary" @click="acceptInterview">接受邀约</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -334,7 +322,6 @@ import { getResumeCodeUrlApi, getRecruiterCodeUrlApi, getPositionCodeUrlApi } fr
   }
 })
 export default class invitPro extends Vue {
-  InterviewVisible = false
   tableHeight = 0;
   showSecond = false; /* 当选择不合适才出现第二级 */
   form = {
@@ -660,27 +647,6 @@ export default class invitPro extends Vue {
         this.getData()
         this.RusultForm.note = ''
       })
-    }
-  }
-  acceptInterview () {
-    this.$confirm('接受邀约后，企业将预扣多多币，请谨慎操作。确定操作为接受邀约？', '提示', {
-      confirmButtonText: '确认',
-      cancelButtonText: '取消',
-      type: 'warning'
-    }).then(() => {
-      this.InterviewVisible = false
-      this.$message({
-        type: 'success',
-        message: '删除成功!'
-      })
-    }).catch(() => {
-    })
-  }
-  handlervale (type) {
-    switch (type) {
-      case 'accept':
-        this.InterviewVisible = true
-        break
     }
   }
 }
