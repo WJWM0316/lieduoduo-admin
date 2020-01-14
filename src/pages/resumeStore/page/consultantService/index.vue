@@ -156,12 +156,13 @@
               <template slot-scope="scope">
                 <div v-if="scope.row.interview!=null">
                   <div class="col_position">
-                    <i class="icon iconfont iconjiantou" v-if="scope.row.dealStatus==1"></i>
+                    <i class="icon iconfont iconjiantouzuo" v-if="scope.row.interview.status === 12 || scope.row.interview.status === 31"></i>
                     <i
-                      class="icon iconfont iconjiantouzuo"
-                      v-if="scope.row.dealStatus==2||scope.row.dealStatus==0"
+                      class="icon iconfont iconjiantou"
+                      v-else
                     ></i>
                     <div class="valethandler" v-if="scope.row.interview && scope.row.interview.action.length > 0 && scope.row.interview && scope.row.interview.action[0].action !== 'setInterviewSchedule'" @click="todoAction(scope.row.interview.action[0].action, scope.row)">代客操作</div>
+                    <div class="valethandler">
                     <el-button type="text" class="add_time" v-if="scope.row.interview && scope.row.interview.action.length > 0 && scope.row.interview && scope.row.interview.action[0].action === 'setInterviewSchedule'">
                     修改时间
                     <el-date-picker
@@ -173,16 +174,7 @@
                       placeholder="选择日期时间">
                     </el-date-picker>
                   </el-button>
-                    <!-- <div class="valethandler" v-if="scope.row.interview && scope.row.interview.action.length > 0 && scope.row.interview && scope.row.interview.action[0].action === 'setInterviewSchedule'" @click="editTime(scope.row.interview.action[0].action, scope.row)">
-                      修改时间
-                      <div class="block">
-                      <el-date-picker
-                        v-model="value"
-                        type="datetime"
-                        placeholder="选择日期时间">
-                      </el-date-picker>
-                    </div>
-                      </div> -->
+                  </div>
                   </div>
                   <p class="companyName">
                     <span
@@ -243,6 +235,7 @@
                     </div>
                     <p
                       class="companyName"
+                      v-if="scope.row.interview.sourceType === 1"
                     >{{scope.row.interview.address}}{{scope.row.interview.doorplate}}</p>
                     <p
                       class="companyName"
@@ -542,11 +535,9 @@ import {
   openPositionApi,
   createPositionAddressApi,
   editPositionAddressApi,
-  getLabelPositionListApi,
   getPositionAddressApi
 } from 'API/position'
 import {
-  getQuickApplyInterviewApi,
   interviewRetractApi,
   confirmvaletInterview,
   mvaletnoConsider,
@@ -562,14 +553,12 @@ import {
   getResumeCodeUrlApi,
   getRecruiterCodeUrlApi,
   getPositionCodeUrlApi,
-  getInterviewFisrtStatusListsApi,
-  getInterviewSecondStatusListsApi,
   getInterviewComment
 } from 'API/interview'
 import {
   consultantServiceList,
   servicePay,
-  refund,
+  servicerefund,
   servicedealStatus
 } from 'API/resumeStore'
 @Component({
@@ -794,7 +783,6 @@ export default class invitPro extends Vue {
   }
   servicedealStatus () {
     return servicedealStatus().then(res => {
-      console.log(res.data.data)
       this.dealStatusList = res.data.data
       this.reason = res.data.data.notSuitTypes
     })
@@ -967,12 +955,15 @@ export default class invitPro extends Vue {
       this.$message({
         type: 'info',
         message: '已取消'
-      })      
+      })
     })
   }
   settime (e) {
     this.interviewTimenum = new Date(e.interview.arrangementInfo.appointment)
     this.model.interviewId = e.interview.interviewId
+  }
+  deleteTime (index) {
+    this.model.dateLists.splice(index, 1)
   }
   todoAction (type, item) {
     let data = item || this.model.item
@@ -1406,6 +1397,31 @@ export default class invitPro extends Vue {
   setInterviewInfo (param) {
     return setInterviewInfoApi(param).then(() => this.getData())
   }
+  setUserInterviewAttend (params) {
+    return setUserInterviewAttendApi(params)
+  }
+  /* 说出不合适原因 */
+  sayResult (interviewId) {
+    return getInterviewComment(interviewId).then(res => (this.model.refuseReason = res.data.data.reason))
+  }
+  setUserInterviewComment (params) {
+    return setUserInterviewCommentApi(params)
+  }
+  getSimplepageAddressesLists (data) {
+    let params = {
+      page: this.addressNum,
+      count: this.pageSize
+    }
+    params = Object.assign(params, data)
+    return getSimplepageAddressesListsApi(params).then(res => {
+      let infos = res.data
+      let list = infos.data
+      list.map(field => (field.active = false))
+      this.addressLists = this.addressLists.concat(list)
+      this.isLastPageOfAddress = !((res.data.meta && res.data.meta.nextPageUrl))
+      this.addressNum++
+    })
+  }
   handertableHeight (e) {
     this.tableHeight = e
   }
@@ -1439,7 +1455,7 @@ export default class invitPro extends Vue {
       /* 扣点 */
     } else if (this.RusultForm.type === 2) {
       // console.log("返点"); /* 返点 */
-      refund(this.RusultForm.recommendId, {
+      servicerefund(this.RusultForm.recommendId, {
         note: this.RusultForm.note
       }).then(res => {
         // console.log(res);
@@ -1448,6 +1464,55 @@ export default class invitPro extends Vue {
         this.RusultForm.note = ''
       })
     }
+  }
+  getAddress (index) {
+    this.addressLists.map((field, i) => {
+      field.active = false
+      if (i === index) {
+        field.active = true
+        this.model.position.positionId = field.id
+        this.model.position.positionName = field.positionName
+      }
+    })
+  }
+  getPositionAddress (params) {
+    return getPositionAddressApi(params)
+  }
+  openPosition (params) {
+    return openPositionApi(params)
+  }
+  createPositionAddress (params) {
+    return createPositionAddressApi(params)
+  }
+  refuseJobhunterUidInterview (params) {
+    return refuseJobhunterUidInterviewApi(params).then(() => this.init())
+  }
+  editPositionAddress (params) {
+    if (!params.areaName) {
+      delete params.areaName
+      params.areaId = this.form.address.areaId
+    }
+    return editPositionAddressApi(params)
+  }
+  editAddress (index) {
+    let item = this.addressLists.find((field, i) => i === index)
+    let data = this.model.item
+    this.getPositionAddress({ id: item.id }).then(res => {
+      let infos = res.data.data
+      this.form.address = {
+        mobile: data.recruiterInfo.mobile,
+        areaName: infos.area,
+        address: infos.address,
+        doorplate: infos.doorplate,
+        lng: infos.lng,
+        lat: infos.lat,
+        id: infos.id,
+        areaId: infos.areaId
+      }
+      this.model.type = 'edit_address'
+      this.model.show = true
+      this.model.title = '编辑地址'
+    })
   }
 }
 </script>

@@ -228,3 +228,31 @@ export const servicerefund = (uid, data) =>
     type: 'post',
     data
   })
+
+// 约聊列表
+export const chatsearchList = data => request({
+  url: '/chat/search',
+  type: 'get',
+  data
+})
+// 约聊列表 - 处理状态列表、不合适原因列表 （作为邀约列表搜索条件）
+export const chatlistStatus = () => request({
+  url: '/chat/status/list',
+  type: 'get'
+})
+
+// 顾问服务 扣点原因
+export const chatlistPay = (uid, data) =>
+  request({
+    url: `/chat/pay/${uid}`,
+    type: 'post',
+    data
+  })
+
+// 顾问服务 返点原因
+export const chatlistrefund = (uid, data) =>
+  request({
+    url: `/chat/refund/${uid}`,
+    type: 'post',
+    data
+  })
