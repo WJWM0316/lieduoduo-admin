@@ -132,7 +132,7 @@
                 <p style="color:#000;font-size:14px;">{{scope.row.jobhunter.resumeNum}}</p>
               </template>
             </el-table-column>
-            <el-table-column prop="jobhunter" label="求职者信息" width="270">
+            <el-table-column prop="jobhunter" label="候选人信息" width="270">
               <template slot-scope="scope">
                 <div class="col_position">
                   <span>{{scope.row.jobhunter.name}}</span>

@@ -100,14 +100,10 @@
               </el-select>
             </el-form-item>
             <!-- 约面形式筛选条件 -->
-            <el-form-item label-width="77px" label="约面形式" prop="interviewMode">
-              <el-select v-model="form.interviewMode" placeholder="全部">
-                <el-option :label="item.name" :value="item.id" v-for="item in lqyoutList" :key="item.id"></el-option>
+            <el-form-item label-width="77px" label="发起方" prop="applyType">
+              <el-select v-model="form.applyType" placeholder="全部">
+                <el-option :label="item.name" :value="item.id" v-for="item in applyTypeList" :key="item.id"></el-option>
               </el-select>
-            </el-form-item>
-            <el-form-item label-width="1px" label prop="end"></el-form-item>
-            <el-form-item label-width="80px" prop="startd">
-              <el-checkbox v-model="form.isJobhunterApply">只看求职者自行约面</el-checkbox>
             </el-form-item>
           </el-form>
           <div class="BtnList">
@@ -132,7 +128,7 @@
                 <p style="color:#000;font-size:14px;">{{scope.row.jobhunter.resumeNum}}</p>
               </template>
             </el-table-column>
-            <el-table-column prop="jobhunter" label="求职者信息" width="270">
+            <el-table-column prop="jobhunter" label="候选人信息" width="270">
               <template slot-scope="scope">
                 <div class="col_position">
                   <span>{{scope.row.jobhunter.name}}</span>
@@ -154,8 +150,8 @@
             </el-table-column>
             <el-table-column prop="province" label="处理状态" width="200">
               <template slot-scope="scope">
-                <div v-if="scope.row.interview">
-                  <div class="col_position">
+                <div v-if="scope.row.statusDesc">
+                  <!-- <div class="col_position">
                     <i class="icon iconfont iconjiantouzuo" v-if="scope.row.interview.status === 12 || scope.row.interview.status === 31"></i>
                     <i
                       class="icon iconfont iconjiantou"
@@ -175,23 +171,14 @@
                     </el-date-picker>
                   </el-button>
                   </div>
-                  </div>
+                  </div> -->
                   <p class="companyName">
                     <span
                     style="color: #000;"
-                      v-if="!scope.row.chargeStatus&&!scope.row.isJobhunterApply"
-                    >{{scope.row.dealStatusDesc}}</span>
-                    <span
-                    style="color: #000;"
-                      v-else-if="scope.row.chargeStatus!==0||scope.row.isJobhunterApply!==0"
-                    >{{scope.row.interview.statusDesc}}</span>
-                    <span
-                      class="StatusResult"
-                      v-if="scope.row.interview.comment!==''"
-                      @click.stop="handleClick(false,'不感兴趣原因',scope.row.id,5)"
-                    >原因</span>
+                      v-if="scope.row.statusDesc"
+                    >{{scope.row.statusDesc}}</span>
                   </p>
-                  <p>{{scope.row.interview.updatedAt}}</p>
+                  <p v-if="scope.row.updatedAt">{{scope.row.updatedAt}}</p>
                 </div>
                 <div v-else>
                   <p>----------</p>
@@ -213,42 +200,13 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="address" label="约面信息" width="300">
+            <el-table-column prop="address" label="约聊信息" width="300">
               <template slot-scope="scope">
-                <!-- 推荐到其他地方 -->
-                <div v-if="scope.row.isValid===0">
-                  <p>{{scope.row.note}}</p>
+                <div v-if="scope.row.positionInfo">
+                  <p>职位：{{scope.row.positionInfo.positionName}} {{scope.row.positionInfo.emolumentMin}}k-{{scope.row.positionInfo.emolumentMax}}k</p>
                 </div>
-                <div v-else-if="scope.row.interview">
-                  <p
-                    style="text-align:left"
-                    v-if="scope.row.interview.positionId===0"
-                  >------------------------</p>
-                  <div v-else>
-                    <div class="positionRow">
-                      <span style>职位:</span>
-                      <span
-                        class="positionName"
-                        @click="toPositionPath(scope.row.interview.positionId)"
-                      >{{scope.row.interview.positionName}}</span>
-                      <span>{{scope.row.interview.emolumentMin}}k-{{scope.row.interview.emolumentMax}}k</span>
-                    </div>
-                    <p
-                      class="companyName"
-                      v-if="scope.row.interview.sourceType === 1"
-                    >{{scope.row.interview.address}}{{scope.row.interview.doorplate}}</p>
-                    <p
-                      class="companyName"
-                      v-if="scope.row.interview.sourceTypeDesc"
-                    >约面形式：{{scope.row.interview.sourceTypeDesc}}</p>
-                    <p
-                      v-if="scope.row.arrangementInfo"
-                    >面试时间:{{scope.row.arrangementInfo.appointment_time}}</p>
-                  </div>
-                </div>
-
                 <div v-else>
-                  <p style="color:red;font-size：14px;">{{scope.row.dealStatusDesc}}</p>
+                  <p>------------------------</p>
                 </div>
               </template>
             </el-table-column>
@@ -583,7 +541,7 @@ export default class invitPro extends Vue {
     count: 20,
     followAdvisorUid: '',
     chargeStatus: '',
-    interviewMode: '',
+    applyType: '',
     resumeType: '',
     address: {
       mobile: '',
@@ -673,7 +631,7 @@ export default class invitPro extends Vue {
   };
   tableHeight = 700;
   resumetypeList = [{ id: 0, name: '全部类型' }, { id: 1, name: '普通简历' }, { id: 2, name: '热门推荐简历' }]
-  lqyoutList = [{ id: 0, name: '全部' }, { id: 1, name: '见面聊' }, { id: 2, name: '电话聊' }]
+  applyTypeList = [{ id: 0, name: '全部' }, { id: 1, name: '候选人' }, { id: 2, name: '面试官' }]
   pointsList = [{ realname: '全部', id: 99 }, { realname: '未扣点', id: 0 }, { realname: '预扣点', id: 1 }, { realname: '已扣点', id: 2 }, { realname: '已返点', id: 3 }]
   advisorUserList = []
   /**
@@ -699,7 +657,7 @@ export default class invitPro extends Vue {
   resetForm (name) {
     this.form.commonKey1 = ''
     this.form.dealStatusId = ''
-    this.form.interviewMode = ''
+    this.form.applyType = ''
     this.form.resumeType = ''
     this.form.interviewNotSuitTypeId = ''
     this.form.startTime = ''
@@ -728,7 +686,7 @@ export default class invitPro extends Vue {
       endTime: form.endTime,
       followAdvisorUid: form.followAdvisorUid,
       chargeStatus: form.chargeStatus,
-      interviewMode: form.interviewMode,
+      applyType: form.applyType,
       resumeType: form.resumeType,
       isJobhunterApply: form.isJobhunterApply
     }
@@ -746,7 +704,7 @@ export default class invitPro extends Vue {
     if (obj.company && !obj.company.trim()) delete obj.company
     if (!obj.followAdvisorUid) delete obj.followAdvisorUid
     if (obj.chargeStatus === '') delete obj.chargeStatus
-    if (obj.interviewMode === '') delete obj.interviewMode
+    if (obj.applyType === '') delete obj.applyType
     if (obj.resumeType === '') delete obj.resumeType
     if (!obj.startTime || !obj.endTime) {
       delete obj.startTime
