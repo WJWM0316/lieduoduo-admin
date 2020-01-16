@@ -157,7 +157,7 @@
                       class="icon iconfont iconjiantou"
                       v-else
                     ></i>
-                    <!-- <div class="valethandler" v-if="scope.row.status === 305" @click.stop="handleClick(false,'扣点原因',scope.row.id,4)">原因</div> -->
+                    <div class="valethandler" v-if="scope.row.status === 305" @click.stop="watchreson(scope.row)">原因</div>
                     <div class="valethandler" v-if="scope.row.status === 501 || scope.row.status === 101" @click="todoAction(scope.row)">代客操作</div>
                   </div>
                   <p class="companyName">
@@ -302,6 +302,17 @@
         <el-button type="primary" @click="confirereson">确定</el-button>
       </span>
     </el-dialog>
+    <el-dialog
+      title="不合适原因"
+      :visible.sync="seeresonVisible"
+      width="30%">
+      <div class="resoncontent">
+        <span class="active" :key="i" v-for="(item, i) in seeresonlist">{{item}}</span> 
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="seeresonVisible = false">确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -356,6 +367,8 @@ import {
 export default class invitPro extends Vue {
   InterviewVisible = false
   resonVisible = false
+  seeresonVisible = false
+  seeresonlist = []
   resonlist = []
   tableHeight = 0;
   showSecond = false; /* 当选择不合适才出现第二级 */
@@ -720,6 +733,10 @@ export default class invitPro extends Vue {
   }
   selectreson (item) {
     item.cur = !item.cur
+  }
+  watchreson (item) {
+    this.seeresonVisible = true
+    this.seeresonlist = item.reason
   }
   confirereson () {
     let ids = []
