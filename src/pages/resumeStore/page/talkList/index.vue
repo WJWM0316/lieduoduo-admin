@@ -151,27 +151,15 @@
             <el-table-column prop="province" label="处理状态" width="200">
               <template slot-scope="scope">
                 <div v-if="scope.row.statusDesc">
-                  <!-- <div class="col_position">
-                    <i class="icon iconfont iconjiantouzuo" v-if="scope.row.interview.status === 12 || scope.row.interview.status === 31"></i>
+                  <div class="col_position">
+                    <i class="icon iconfont iconjiantouzuo" v-if="scope.row.status === 501 || scope.row.status === 305 || scope.row.status === 301 || scope.row.status === 315"></i>
                     <i
                       class="icon iconfont iconjiantou"
                       v-else
                     ></i>
-                    <div class="valethandler" v-if="scope.row.interview && scope.row.interview.action.length > 0 && scope.row.interview && scope.row.interview.action[0].action !== 'setInterviewSchedule'" @click="todoAction(scope.row.interview.action[0].action, scope.row)">代客操作</div>
-                    <div class="valethandler">
-                    <el-button type="text" class="add_time" v-if="scope.row.interview && scope.row.interview.action.length > 0 && scope.row.interview && scope.row.interview.action[0].action === 'setInterviewSchedule'">
-                    修改时间
-                    <el-date-picker
-                      v-model="interviewTimenum"
-                      type="datetime"
-                      @change="editTime"
-                      @focus="settime(scope.row)"
-                      value-format="yyyy-MM-dd HH:mm:ss"
-                      placeholder="选择日期时间">
-                    </el-date-picker>
-                  </el-button>
+                    <!-- <div class="valethandler" v-if="scope.row.status === 305" @click.stop="handleClick(false,'扣点原因',scope.row.id,4)">原因</div> -->
+                    <div class="valethandler" v-if="scope.row.status === 501 || scope.row.status === 101" @click="todoAction(scope.row)">代客操作</div>
                   </div>
-                  </div> -->
                   <p class="companyName">
                     <span
                     style="color: #000;"
@@ -289,195 +277,29 @@
         <el-button type="primary" @click="checkNote">确 定</el-button>
       </span>
     </el-dialog>
-    <!-- 代客操作弹窗 -->
-    <el-dialog
-      :title="model.title"
-      :visible.sync="model.show"
-      width="450px"
-      center>
-      <div class="html_content position_ul" v-show="model.type === 'position'">
-        <ul class="p_ul" id="scroll_div_ul_position">
-          <li class="position_item" v-for="(item, index) in positionLists" :key="index" @click="getPosition(index)">
-            <i class="icon_circle_my" v-show="!item.active"></i>
-            <i class="el-icon-success" v-show="item.active"></i>
-            <div class="name">{{item.positionName}}</div>
-            <span v-if="item.isOnline === 2" style="margin-left: 10px;color: rgba(0,0,0,.2);">(已关闭)</span>
-          </li>
-        </ul>
-      </div>
-      <div class="html_content" v-show="model.type === 'present'">
-        <div style="margin: 20px 0;">
-          <el-radio v-model="form.isAttend" label="0">未到场</el-radio>
-          <el-radio v-model="form.isAttend" label="1">已到场</el-radio>
-        </div>
-      </div>
-      <div class="html_content" v-show="model.type === 'add_address' || model.type === 'edit_address'">
-        <ul>
-          <li class="row">
-            <div class="label">地址：</div>
-            <div class="value">{{form.address.address ? form.address.address : '点击调用地图，选择地点 >>'}}</div>
-          </li>
-          <li class="row">
-            <div class="label">门牌：</div>
-            <div class="value"><input type="text" class="user_input" placeholder="请输入门牌号" v-model="form.address.doorplate" /></div>
-          </li>
-        </ul>
-      </div>
-      <div class="html_content position_ul" v-show="model.type === 'address'">
-        <ul class="p_ul" id="scroll_div_ul_address">
-          <li class="position_item" v-for="(item, index) in addressLists" :key="index">
-            <i class="icon_circle_my" v-show="!item.active"></i>
-            <i class="el-icon-success" v-show="item.active"></i>
-            <div class="name" @click="getAddress(index)">{{item.address}}</div>
-            <span class="edit" @click="editAddress(index)">编辑</span>
-          </li>
-        </ul>
-        <el-button type="text" class="add_time" @click="todoAction('add_address')"> +添加地址 </el-button>
-      </div>
-      <div class="html_content position_ul" v-show="model.type === 'improper'">
-        <div class="improper">确定标记为不合适吗？</div>
-      </div>
-      <div class="html_content position_ul" v-show="model.type === 'viewReason'">
-        <div style="padding: 10px 0 30px 0;">{{model.refuseReason}}</div>
-      </div>
-      <div class="html_content position_ul" v-show="model.type === 'reason'">
-        <ul>
-          <li
-            v-for="(item, index) in reasonList"
-            :key="index"
-            class="reason_item"
-            :class="{reason_item_active: item.active}"
-            @click="setReason(index)">{{item.title}}</li>
-        </ul>
-        <div class="content_01">
-          <h2>补充说明（选填）</h2>
-          <el-input
-            type="textarea"
-            :rows="2"
-            placeholder="请输入内容"
-            v-model="model.extra">
-          </el-input>
-        </div>
-      </div>
-      <div class="html_content" v-show="model.type === 'modify' || model.type === 'arrange'">
-        <ul>
-          <li class="row">
-            <div class="label">联系人：</div>
-            <div class="value"><!-- {{form.realname}} --><input v-model="form.realname" class="user_input" /></div>
-          </li>
-          <li class="row">
-            <div class="label">联系电话：</div>
-            <div class="value"><!-- {{form.mobile}} --><input v-model="form.mobile" class="user_input" /></div>
-          </li>
-          <li class="row">
-            <div class="label">职位：</div>
-            <div class="value">
-              <span class="user_input" style="cursor: pointer;color: #3a8ee6;" v-if="model.position.name" @click="todoAction('position')">{{model.position.name}}</span>
-              <el-button type="text" @click="todoAction('position')" v-else>+选择职位</el-button>
-            </div>
-          </li>
-          <li class="row">
-            <div class="label">地址：</div>
-            <div class="value">
-              <span class="user_input" style="cursor: pointer;color: #3a8ee6;" v-if="model.address.addressName" @click="todoAction('address')">{{model.address.addressName}}</span>
-              <el-button type="text" @click="todoAction('address')" v-else>+选择地址</el-button>
-            </div>
-          </li>
-        </ul>
-        <ul class="time_list" v-if="model.dateLists.length">
-          <li class="time_row" v-for="(item, index) in model.dateLists" :key="index">
-            <i class="el-icon-remove" @click="deleteTime(index)"></i>
-            {{item.appointment}}
-          </li>
-        </ul>
-        <el-button type="text" class="add_time" v-if="model.dateLists.length < 3">
-          +添加时间
-          <el-date-picker
-            v-model="form.date1"
-            type="datetime"
-            @change="getTime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="选择日期时间">
-          </el-date-picker>
-        </el-button>
-      </div>
-      <div class="html_content" v-show="model.type === 'preview'">
-        <ul>
-          <li class="row">
-            <div class="label">联系人：</div>
-            <div class="value">{{form.realname}}</div>
-          </li>
-          <li class="row">
-            <div class="label">联系电话：</div>
-            <div class="value">{{form.mobile}}</div>
-          </li>
-          <li class="row">
-            <div class="label">职位：</div>
-            <div class="value">
-              <span class="user_input" style="color: #3a8ee6;">{{model.position.name}}</span>
-            </div>
-          </li>
-          <li class="row">
-            <div class="label">地址：</div>
-            <div class="value">
-              <span class="user_input" style="color: #3a8ee6;">{{model.address.addressName}}</span>
-            </div>
-          </li>
-        </ul>
-        <ul class="time_list" v-if="model.dateLists.length">
-          <li class="time_row" v-for="(item, index) in model.dateLists" :key="index" style="cursor: unset;">
-            <!-- <i class="el-icon-remove"></i> -->
-            {{item.appointment}}
-          </li>
-        </ul>
-      </div>
-      <div class="html_content" v-show="model.type === 'confirmSchedule'">
-        <ul>
-          <li class="row">
-            <div class="label">联系人：</div>
-            <div class="value">{{form.realname}}</div>
-          </li>
-          <li class="row">
-            <div class="label">联系电话：</div>
-            <div class="value">{{form.mobile}}</div>
-          </li>
-          <li class="row">
-            <div class="label">职位：</div>
-            <div class="value">
-              <span class="user_input" style="color: #3a8ee6;">{{model.position.name}}</span>
-            </div>
-          </li>
-          <li class="row">
-            <div class="label">地址：</div>
-            <div class="value">
-              <span class="user_input" style="color: #3a8ee6;">{{model.address.addressName}}</span>
-            </div>
-          </li>
-        </ul>
-        <ul>
-          <li class="row">请在下面选择一个面试时间</li>
-          <li class="row" :key="i" v-for="(item, i) in arrangementlist">
-            <el-radio v-model="appointmentId" :label="item.id">{{item.appointment}}</el-radio>
-          </li>
-        </ul>
-      </div>
-       <!-- v-if="model.showFooter" -->
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="close" size="small">{{model.btnTxt}}</el-button>
-        <el-button type="primary" @click="confirm" size="small">确 定</el-button>
-      </div>
-    </el-dialog>
     <!-- 代客操作 -->
     <el-dialog
-      title="面试信息"
+      title="约聊信息"
       :visible.sync="InterviewVisible"
       width="30%">
-      <div class="position"><i class="el-icon-tickets"></i><span>{{interviewinfo.interviewModeDesc}}</span></div>
-      <div class="position"><i class="el-icon-suitcase"></i><span>{{interviewinfo.positionName}}  {{interviewinfo.emolument}}</span></div>
+      <div class="position"><i class="el-icon-tickets"></i><span>{{interviewinfo.name}}</span></div>
+      <div class="position"><i class="el-icon-suitcase"></i><span>{{interviewinfo.positionName}}  {{interviewinfo.emolumentMin}}k-{{interviewinfo.emolumentMax}}k</span></div>
       <div class="cpname"><i class="el-icon-office-building"></i><span>{{interviewinfo.companyName}}</span></div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="noacceptInterview">暂不考虑</el-button>
-        <el-button type="primary" @click="acceptInterview">接受邀约</el-button>
+        <el-button @click="noacceptInterview">{{btntext}}</el-button>
+        <el-button type="primary" @click="acceptInterview">聊一聊</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="请选择原因"
+      :visible.sync="resonVisible"
+      width="30%">
+      <div class="resoncontent">
+        <span :class="[item.cur ? 'active' : '']" @click="selectreson(item)" :key="i" v-for="(item, i) in resonlist">{{item.title}}</span> 
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="resonVisible = false">取消</el-button>
+        <el-button type="primary" @click="confirereson">确定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -501,6 +323,11 @@ import {
   mvaletnoConsider,
   confirmArrangementInfo,
   editScheduletime,
+  darenotinterestApi,
+  inappropriateApi,
+  jobhunteracceptchatApi,
+  recruiteracceptchatApi,
+  chatresonlist,
   getInterviewCommentReasonApi,
   getInterviewNotSuitReasonApi,
   refuseJobhunterUidInterviewApi,
@@ -528,6 +355,8 @@ import {
 })
 export default class invitPro extends Vue {
   InterviewVisible = false
+  resonVisible = false
+  resonlist = []
   tableHeight = 0;
   showSecond = false; /* 当选择不合适才出现第二级 */
   form = {
@@ -563,11 +392,13 @@ export default class invitPro extends Vue {
   interviewTime = ''
   interviewTimenum = ''
   interviewinfo = {
-    interviewModeDesc: '',
+    name: '',
     positionName: '',
-    emolument: '',
+    emolumentMin: '',
+    emolumentMax: '',
     companyName: ''
   }
+  btntext = '不感兴趣'
   addressLists = []
   reasonList = []
   positionLists = []
@@ -864,222 +695,104 @@ export default class invitPro extends Vue {
         break
     }
   }
-  // 接受邀约
+  // 聊一聊
   acceptInterview () {
-    this.$confirm('接受邀约后，企业将预扣多多币，请谨慎操作。确定操作为接受邀约？', '提示', {
+    this.$confirm('确认后，企业将扣除多多币，且会收到候选人同意约聊的消息提醒，请谨慎操作。确定操作为聊一聊？(确认后请联系双方进行约聊)', '提示', {
       confirmButtonText: '确认',
       cancelButtonText: '取消',
       type: 'warning'
     }).then(() => {
-      confirmvaletInterview({ interviewId: this.model.interviewId }).then(() => {
-        this.InterviewVisible = false
-        this.$message({
-          type: 'success',
-          message: '邀约成功!'
-        })
-        this.getData()
-      })
+      if (this.btntext === '不感兴趣') {
+        this.jobhunteracceptchatApi()
+      } else {
+        this.recruiteracceptchatApi()
+      }
     }).catch(() => {
     })
   }
-  // 暂不考虑
+  // 不敢兴趣或者不合适
   noacceptInterview () {
-    mvaletnoConsider({ interviewId: this.model.interviewId }).then(() => {
+    if (this.btntext === '不感兴趣') {
+      this.darenotinterestApi()
+    } else {
+      this.chatresonlist()
+    }
+  }
+  selectreson (item) {
+    item.cur = !item.cur
+  }
+  confirereson () {
+    let ids = []
+    this.resonlist.map((v, k) => {
+      if (v.cur) {
+        ids.push(v.id)
+      }
+    })
+    inappropriateApi({ chatId: this.chatid, reasonIds: ids.join(',') }).then((res) => {
+      this.$message({
+        type: 'success',
+        message: '操作成功!'
+      })
+      this.InterviewVisible = false
+      this.resonVisible = false
+      this.getData()
+    })
+  }
+  chatresonlist () {
+    chatresonlist().then((res) => {
+      let arr = res.data.data.recruiter
+      arr.map((v, k) => {
+        v.cur = false
+      })
+      this.resonlist = arr
+      this.resonVisible = true
+    })
+  }
+  todoAction (item) {
+    this.chatid = item.id
+    if (item.status === 501) {
+      this.btntext = '不感兴趣'
+    } else {
+      this.btntext = '不合适'
+    }
+    this.handlervale(item)
+  }
+  // 不感兴趣
+  darenotinterestApi () {
+    darenotinterestApi({ chatId: this.chatid }).then((res) => {
       this.InterviewVisible = false
       this.getData()
     })
   }
-  handlervale (vo) {
-    this.interviewinfo.interviewModeDesc = vo.interviewModeDesc
-    this.interviewinfo.positionName = vo.interview.positionName
-    this.interviewinfo.emolument = vo.interview.emolument
-    this.interviewinfo.companyName = vo.recrutier.companyName
-    this.InterviewVisible = true
-  }
-  editTime (e) {
-    this.interviewTime = new Date(e).getTime() / 1000
-    this.$confirm('修改后，面试详情中的面试时间将更新显示为你所修改的时间，确认修改？（请在修改后将最新时间告知用户）', '修改面试时间', {
-      confirmButtonText: '确认',
-      cancelButtonText: '取消',
-      type: 'warning'
-    }).then(() => {
-      editScheduletime({ interviewId: this.model.interviewId, interviewTime: this.interviewTime }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '修改成功!'
-        })
-        this.getData()
-      })
-    }).catch(() => {
+  // 求职者聊一聊
+  jobhunteracceptchatApi () {
+    jobhunteracceptchatApi({ chatId: this.chatid }).then((res) => {
+      this.InterviewVisible = false
       this.$message({
-        type: 'info',
-        message: '已取消'
+        type: 'success',
+        message: '操作成功!'
       })
+      this.getData()
     })
   }
-  settime (e) {
-    this.interviewTimenum = new Date(e.interview.arrangementInfo.appointment)
-    this.model.interviewId = e.interview.interviewId
+  // 招聘官聊一聊
+  recruiteracceptchatApi () {
+    recruiteracceptchatApi({ chatId: this.chatid }).then((res) => {
+      this.InterviewVisible = false
+      this.$message({
+        type: 'success',
+        message: '操作成功!'
+      })
+      this.getData()
+    })
   }
-  deleteTime (index) {
-    this.model.dateLists.splice(index, 1)
-  }
-  todoAction (type, item) {
-    let data = item || this.model.item
-    this.form.realname = data.jobhunter.name
-    this.form.mobile = data.jobhunter.mobile
-    this.model.item = data || this.model.item
-    this.model.beforeType = this.model.type
-    this.model.beforeTitle = this.model.title
-    this.model.dateLists = []
-    this.model.interviewId = data.interview.interviewId
-    let reason = this.model.reason.map(field => field.id).join(',')
-    switch (type) {
-      case 'recipe':
-        this.handlervale(item)
-        break
-      case 'confirmSchedule':
-        this.model.type = type
-        this.model.show = true
-        this.model.title = '面试信息'
-        this.model.position.name = data.interview.positionName
-        this.model.position.positionId = data.interview.positionId
-        this.model.address.addressName = data.interview.address
-        this.model.address.addressId = data.interview.addressId
-        let arr = data.interview.arrangementInfo.appointmentList
-        arr.push({ appointment: '以上时间都不合适我，请联系我', id: 0 })
-        this.appointmentId = arr[0].id
-        this.arrangementlist = arr
-        break
-      case 'improper':
-        this.getLabelComment({ status: data.interview.status }).then(() => {
-          this.model.type = type
-          this.model.show = true
-          this.model.title = '不合适'
-          this.model.item = data
-          this.model.showFooter = true
-        })
-        break
-      case 'arrange':
-        this.model.type = type
-        this.model.show = true
-        this.model.title = '安排面试'
-        this.model.position.name = data.interview.positionName
-        this.model.position.positionId = data.interview.positionId
-        this.model.address.addressName = data.interview.address
-        this.model.address.addressId = data.interview.addressId
-        break
-      case 'modify':
-        let dateLists1 = data.interview.arrangementInfo.appointmentList
-        dateLists1.map(field => (field.active = false))
-        this.model.type = type
-        this.model.show = true
-        this.model.title = '修改面试时间'
-        this.model.position.name = data.interview.positionName
-        this.model.position.positionId = data.interview.positionId
-        this.model.address.addressName = data.interview.address
-        this.model.address.addressId = data.interview.addressId
-        this.model.dateLists = dateLists1
-        break
-      case 'add_address':
-        this.model.type = 'add_address'
-        this.model.show = true
-        this.model.showMap = true
-        this.model.title = '新增地址'
-        break
-      case 'preview':
-        this.model.show = true
-        this.model.title = '查看面试'
-        this.model.type = type
-        this.model.showConfirmBtn = false
-        this.model.btnTxt = '返回'
-        if (data.interview.arrangementInfo) {
-          if (data.interview.arrangementInfo.appointmentList) {
-            let dateLists2 = data.interview.arrangementInfo.appointmentList
-            dateLists2.map(field => (field.active = false))
-            this.model.dateLists = dateLists2
-          } else {
-            this.model.dateLists.push({
-              active: true,
-              appointment: data.interview.arrangementInfo.appointment,
-              appointmentTime: data.interview.arrangementInfo.appointmentTime
-            })
-          }
-          this.model.position.name = data.interview.positionName
-          this.model.position.positionId = data.interview.positionId
-          this.model.address.addressName = data.interview.address
-          this.model.address.addressId = data.interview.addressId
-        }
-        break
-      case 'position':
-        this.positionLists = []
-        this.positionNum = 1
-        this.isLastPageOfPosition = false
-        this.getPositionList({
-          recruiter: data.jobhunter.uid
-        }).then(() => {
-          this.model.show = true
-          this.model.type = type
-          this.model.title = '选择职位'
-          this.model.btnTxt = '返回'
-          this.setPositionDomScroll({
-            recruiter: data.jobhunter.uid
-          })
-        })
-        break
-      case 'address':
-        this.addressLists = []
-        this.addressNum = 1
-        this.isLastPageOfAddress = false
-        this.getSimplepageAddressesLists({
-          mobile: data.jobhunter.mobile
-        }).then(() => {
-          this.model.show = true
-          this.model.title = '选择地址'
-          this.model.btnTxt = '返回'
-          this.model.type = type
-          this.setAddressDomScroll({
-            mobile: data.jobhunter.mobile
-          })
-        })
-        break
-      case 'reason':
-        this.model.show = true
-        this.model.title = '选择不合适原因'
-        this.model.type = 'reason'
-        this.model.type = type
-        this.refuseJobhunterUidInterview({
-          jobhunterUid: data.jobhunter.uid,
-          interviewId: data.interview.interviewId,
-          reason,
-          extra: this.model.extra
-        })
-        break
-      case 'withdraw':
-        this.interviewRetract({
-          jobhunterUid: data.jobhunter.uid,
-          interviewId: data.interview.interviewId
-        })
-        break
-      case 'present':
-        this.model.show = true
-        this.model.title = '标记候选人是否到场'
-        this.model.type = type
-        break
-      case 'evaluation':
-        this.setUserInterviewComment({ interviewId: data.interview.interviewId }).then(() => this.init())
-        break
-      case 'viewReason':
-        this.sayResult(data.interview.interviewId).then(() => {
-          this.model.show = true
-          this.model.title = '不合适原因'
-          this.model.type = type
-          this.model.showFooter = false
-        })
-        break
-      default:
-        break
-    }
+  handlervale (vo) {
+    this.interviewinfo.name = vo.jobhunter.name
+    this.interviewinfo.positionName = vo.positionInfo.positionName
+    this.interviewinfo.emolumentMin = vo.positionInfo.emolumentMin
+    this.interviewinfo.emolumentMax = vo.positionInfo.emolumentMax
+    this.interviewinfo.companyName = vo.recrutier.companyName
+    this.InterviewVisible = true
   }
   getPosition (index) {
     this.positionLists.map((field, i) => (field.active = i === index))
