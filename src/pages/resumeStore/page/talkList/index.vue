@@ -294,7 +294,7 @@
       title="请选择原因"
       :visible.sync="resonVisible"
       width="30%">
-      <div class="resoncontent">
+      <div class="resoncontent clearfix">
         <span :class="[item.cur ? 'active' : '']" @click="selectreson(item)" :key="i" v-for="(item, i) in resonlist">{{item.title}}</span> 
       </div>
       <span slot="footer" class="dialog-footer">
@@ -306,7 +306,7 @@
       title="不合适原因"
       :visible.sync="seeresonVisible"
       width="30%">
-      <div class="resoncontent">
+      <div class="resoncontent clearfix">
         <span class="active" :key="i" v-for="(item, i) in seeresonlist">{{item}}</span> 
       </div>
       <span slot="footer" class="dialog-footer">
