@@ -10,7 +10,7 @@
       <div class="formSumbit" slot="formContent">
         <div class="formReasult">
           <el-form ref="form" :inline="true" :model="form" class="form">
-            <!-- 简历类型筛选条件 -->
+            <!-- 简历类型筛选条件动漫 -->
             <!-- <el-form-item label-width="77px" label="简历类型" prop="resumeType">
               <el-select v-model="form.resumeType" placeholder="全部类型">
                 <el-option :label="item.name" :value="item.id" v-for="item in resumetypeList" :key="item.id"></el-option>
