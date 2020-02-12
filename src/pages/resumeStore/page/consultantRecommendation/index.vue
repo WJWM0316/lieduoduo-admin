@@ -210,8 +210,8 @@
                       class="companyName"
                     >{{scope.row.interview.address}}{{scope.row.interview.doorplate}}</p>
                     <p
-                      v-if="scope.row.arrangementInfo"
-                    >面试时间:{{scope.row.arrangementInfo.appointment_time}}</p>
+                      v-if="scope.row.interview.arrangementInfo"
+                    >面试时间:{{scope.row.interview.arrangementInfo.appointment.substr(0, 16)}}</p>
                   </div>
                 </div>
 

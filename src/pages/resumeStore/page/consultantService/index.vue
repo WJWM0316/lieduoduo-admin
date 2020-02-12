@@ -674,7 +674,7 @@ export default class invitPro extends Vue {
   tableHeight = 700;
   resumetypeList = [{ id: 0, name: '全部类型' }, { id: 1, name: '普通简历' }, { id: 2, name: '热门推荐简历' }]
   lqyoutList = [{ id: 0, name: '全部' }, { id: 1, name: '见面聊' }, { id: 2, name: '电话聊' }]
-  pointsList = [{ realname: '全部', id: 99 }, { realname: '未扣点', id: 0 }, { realname: '预扣点', id: 1 }, { realname: '已扣点', id: 2 }, { realname: '已返点', id: 3 }]
+  pointsList = [{ realname: '全部', id: 99 }, { realname: '预扣点', id: 1 }, { realname: '已扣点', id: 2 }, { realname: '已返点', id: 3 }]
   advisorUserList = []
   /**
    * @Author   小书包
