@@ -11,11 +11,11 @@
         <div class="formReasult">
           <el-form ref="form" :inline="true" :model="form" class="form">
             <!-- 简历类型筛选条件 -->
-            <el-form-item label-width="77px" label="简历类型" prop="resumeType">
-              <el-select v-model="form.resumeType" placeholder="全部类型233">
+            <!-- <el-form-item label-width="77px" label="简历类型" prop="resumeType">
+              <el-select v-model="form.resumeType" placeholder="全部类型">
                 <el-option :label="item.name" :value="item.id" v-for="item in resumetypeList" :key="item.id"></el-option>
               </el-select>
-            </el-form-item>
+            </el-form-item> -->
              <!-- 其他一些筛选条件 -->
             <div class="searchTab">
               <el-input type="text" placeholder="请输入" v-model="form.commonKey1" class="inputSelect">
