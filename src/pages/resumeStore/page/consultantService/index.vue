@@ -539,6 +539,7 @@ import {
 } from 'API/position'
 import {
   interviewRetractApi,
+  confirmInterviewApi,
   confirmvaletInterview,
   mvaletnoConsider,
   confirmArrangementInfo,
@@ -977,6 +978,10 @@ export default class invitPro extends Vue {
     let reason = this.model.reason.map(field => field.id).join(',')
     switch (type) {
       case 'recipe':
+        this.model.type = type
+        this.confirmInterview({ interviewId: data.interviewId })
+        break
+      case 'notConsider':
         this.handlervale(item)
         break
       case 'confirmSchedule':
@@ -1131,6 +1136,9 @@ export default class invitPro extends Vue {
   }
   interviewRetract (params) {
     return interviewRetractApi(params).then(() => this.init())
+  }
+  confirmInterview (params) {
+    return confirmInterviewApi(params).then(() => this.init())
   }
   getTime (e) {
     this.model.dateLists.push({
