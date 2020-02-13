@@ -11,11 +11,11 @@
         <div class="formReasult">
           <el-form ref="form" :inline="true" :model="form" class="form">
             <!-- 简历类型筛选条件 -->
-            <!-- <el-form-item label-width="77px" label="简历类型" prop="resumeType">
-              <el-select v-model="form.resumeType" placeholder="全部类型">
+            <el-form-item label-width="77px" label="简历类型" prop="RecruiterResumeSource">
+              <el-select v-model="form.RecruiterResumeSource" placeholder="全部类型">
                 <el-option :label="item.name" :value="item.id" v-for="item in resumetypeList" :key="item.id"></el-option>
               </el-select>
-            </el-form-item> -->
+            </el-form-item>
              <!-- 其他一些筛选条件 -->
             <div class="searchTab">
               <el-input type="text" placeholder="请输入" v-model="form.commonKey1" class="inputSelect">
@@ -384,7 +384,7 @@ export default class invitPro extends Vue {
     followAdvisorUid: '',
     chargeStatus: '',
     applyType: '',
-    resumeType: '',
+    RecruiterResumeSource: '',
     address: {
       mobile: '',
       title: '',
@@ -474,9 +474,9 @@ export default class invitPro extends Vue {
     page: 1
   };
   tableHeight = 700;
-  resumetypeList = [{ id: 0, name: '全部类型' }, { id: 1, name: '普通简历' }, { id: 2, name: '热门推荐简历' }]
+  resumetypeList = [{ id: -1, name: '全部类型' }, { id: 0, name: '普通简历' }, { id: 100, name: '热门推荐简历' }]
   applyTypeList = [{ id: 0, name: '全部' }, { id: 1, name: '候选人' }, { id: 2, name: '面试官' }]
-  pointsList = [{ realname: '全部', id: 99 }, { realname: '未扣点', id: 0 }, { realname: '预扣点', id: 1 }, { realname: '已扣点', id: 2 }, { realname: '已返点', id: 3 }]
+  pointsList = [{ realname: '全部', id: 99 }, { realname: '预扣点', id: 1 }, { realname: '已扣点', id: 2 }, { realname: '已返点', id: 3 }, { realname: '无需扣点', id: -1 }]
   advisorUserList = []
   /**
    * @Author   小书包
@@ -502,7 +502,7 @@ export default class invitPro extends Vue {
     this.form.commonKey1 = ''
     this.form.dealStatusId = ''
     this.form.applyType = ''
-    this.form.resumeType = ''
+    this.form.RecruiterResumeSource = ''
     this.form.interviewNotSuitTypeId = ''
     this.form.startTime = ''
     this.form.endTime = ''
@@ -531,7 +531,7 @@ export default class invitPro extends Vue {
       followAdvisorUid: form.followAdvisorUid,
       chargeStatus: form.chargeStatus,
       applyType: form.applyType,
-      resumeType: form.resumeType,
+      RecruiterResumeSource: form.RecruiterResumeSource,
       isJobhunterApply: form.isJobhunterApply
     }
     param[this.searchType.key1] = this.form.commonKey1
@@ -549,7 +549,7 @@ export default class invitPro extends Vue {
     if (!obj.followAdvisorUid) delete obj.followAdvisorUid
     if (obj.chargeStatus === '') delete obj.chargeStatus
     if (obj.applyType === '') delete obj.applyType
-    if (obj.resumeType === '') delete obj.resumeType
+    if (obj.RecruiterResumeSource === '') delete obj.RecruiterResumeSource
     if (!obj.startTime || !obj.endTime) {
       delete obj.startTime
       delete obj.endTime
