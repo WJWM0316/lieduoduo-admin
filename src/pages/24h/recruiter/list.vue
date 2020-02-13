@@ -1,7 +1,7 @@
 <template>
   <div>
     <layout-content
-      :leftcontent="{ title: '24h招聘官'}"
+      :leftcontent="{ title: '24h招聘官' }"
       :isShowbtn="true">
       <router-link slot="text" target="_blank" :to="{name: '24h_recruiter_add'}" v-if="AdminShow != 4 && AdminShow != 5 && AdminShow != 6">
         <el-button type="primary">新增</el-button>
@@ -83,7 +83,7 @@
           </el-table-column>
         </el-table>
       </template>
-      <template slot="pageList"  v-if="total > form.count">
+      <template slot="pageList">
         <el-pagination
         layout="prev, pager, next, slot"
         :total="total"

@@ -242,7 +242,7 @@
                       v-if="scope.row.interview.sourceTypeDesc"
                     >约面形式：{{scope.row.interview.sourceTypeDesc}}</p>
                     <p
-                      v-if="scope.row.interview.arrangementInfo"
+                      v-if="scope.row.interview.arrangementInfo && scope.row.interview.arrangementInfo.appointmentTime > 0 "
                     >面试时间:{{scope.row.interview.arrangementInfo.appointment.substr(0, 16)}}</p>
                   </div>
                 </div>
@@ -673,7 +673,7 @@ export default class invitPro extends Vue {
     page: 1
   };
   tableHeight = 700;
-  resumetypeList = [{ id: -1, name: '全部类型' }, { id: 0, name: '普通简历' }, { id: 100, name: '热门推荐简历' }]
+  resumetypeList = [{ id: -1, name: '全部类型' }, { id: 0, name: '普通简历' }, { id: 100, name: '热门推荐简历' }, { id: 500, name: '顾问精选简历' }]
   lqyoutList = [{ id: 0, name: '全部' }, { id: 1, name: '见面聊' }, { id: 2, name: '电话聊' }]
   pointsList = [{ realname: '全部', id: 99 }, { realname: '预扣点', id: 1 }, { realname: '已扣点', id: 2 }, { realname: '已返点', id: 3 }]
   advisorUserList = []
@@ -994,6 +994,7 @@ export default class invitPro extends Vue {
         this.model.address.addressId = data.interview.addressId
         let arr = data.interview.arrangementInfo.appointmentList
         arr.push({ appointment: '以上时间都不合适我，请联系我', id: 0 })
+        console.log(arr, '233')
         this.appointmentId = arr[0].id
         this.arrangementlist = arr
         break

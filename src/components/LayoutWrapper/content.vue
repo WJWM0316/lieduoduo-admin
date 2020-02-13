@@ -100,6 +100,7 @@ export default class lyoutContent extends Vue {
     this.$emit('handlePageChange', nowPage)
   }
   mounted () {
+    console.log(this.leftcontent)
     // this.$nextTick(() => this.clientHeight())
   }
 }

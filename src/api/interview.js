@@ -180,6 +180,7 @@ export const mvaletnoConsider = data => request({
 export const confirmArrangementInfo = data => request({
   url: `/interview/jobhunter/confirmArrangementInfo/${data.interviewId}`,
   type: 'post',
+  data,
   noGlobalLoading: false
 })
 

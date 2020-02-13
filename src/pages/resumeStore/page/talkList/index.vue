@@ -474,7 +474,7 @@ export default class invitPro extends Vue {
     page: 1
   };
   tableHeight = 700;
-  resumetypeList = [{ id: -1, name: '全部类型' }, { id: 0, name: '普通简历' }, { id: 100, name: '热门推荐简历' }]
+  resumetypeList = [{ id: -1, name: '全部类型' }, { id: 0, name: '普通简历' }, { id: 100, name: '热门推荐简历' }, { id: 500, name: '顾问精选简历' }]
   applyTypeList = [{ id: 0, name: '全部' }, { id: 1, name: '候选人' }, { id: 2, name: '面试官' }]
   pointsList = [{ realname: '全部', id: 99 }, { realname: '预扣点', id: 1 }, { realname: '已扣点', id: 2 }, { realname: '已返点', id: 3 }, { realname: '无需扣点', id: -1 }]
   advisorUserList = []
@@ -715,11 +715,7 @@ export default class invitPro extends Vue {
       cancelButtonText: '取消',
       type: 'warning'
     }).then(() => {
-      if (this.btntext === '不感兴趣') {
-        this.jobhunteracceptchatApi()
-      } else {
-        this.recruiteracceptchatApi()
-      }
+      this.jobhunteracceptchatApi()
     }).catch(() => {
     })
   }
@@ -767,12 +763,16 @@ export default class invitPro extends Vue {
   }
   todoAction (item) {
     this.chatid = item.id
-    if (item.status === 501) {
-      this.btntext = '不感兴趣'
+    if (item.type === 1) {
+      this.recruiteracceptchatApi()
     } else {
-      this.btntext = '不合适'
+      if (item.status === 501) {
+        this.btntext = '不感兴趣'
+      } else {
+        this.btntext = '不合适'
+      }
+      this.handlervale(item)
     }
-    this.handlervale(item)
   }
   // 不感兴趣
   darenotinterestApi () {
