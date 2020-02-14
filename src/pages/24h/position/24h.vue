@@ -203,7 +203,7 @@ export default class H24 extends Vue {
     bottom: 0;
     left: 190px;
     padding: 8px;
-    width: 100%;
+    width: calc(100vw - 200px);
     background-color: #ffffff;
     border: 1px solid #e8e9eb;
 }
