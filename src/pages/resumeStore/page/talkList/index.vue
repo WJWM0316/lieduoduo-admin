@@ -309,12 +309,14 @@
       <div class="resoncontent clearfix">
         <span class="active" :key="i" v-for="(item, i) in seeresonlist">{{item}}</span> 
       </div>
+      <div v-if="extraDesc">
       <el-input
       type="textarea"
       :disabled="true"
       :rows="2"
       v-model="extraDesc">
     </el-input>
+    </div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="seeresonVisible = false">确定</el-button>
       </span>
