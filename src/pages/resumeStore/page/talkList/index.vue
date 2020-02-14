@@ -309,6 +309,12 @@
       <div class="resoncontent clearfix">
         <span class="active" :key="i" v-for="(item, i) in seeresonlist">{{item}}</span> 
       </div>
+      <el-input
+      type="textarea"
+      :disabled="true"
+      :rows="2"
+      v-model="extraDesc">
+    </el-input>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="seeresonVisible = false">确定</el-button>
       </span>
@@ -369,6 +375,7 @@ export default class invitPro extends Vue {
   resonVisible = false
   seeresonVisible = false
   seeresonlist = []
+  extraDesc = ''
   resonlist = []
   tableHeight = 0;
   showSecond = false; /* 当选择不合适才出现第二级 */
@@ -732,6 +739,7 @@ export default class invitPro extends Vue {
   }
   watchreson (item) {
     this.seeresonVisible = true
+    this.extraDesc = item.extraDesc
     this.seeresonlist = item.reason
   }
   confirereson () {
