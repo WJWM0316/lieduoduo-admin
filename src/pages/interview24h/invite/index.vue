@@ -228,15 +228,17 @@
             </div>
             <div
               class="info"
+              v-if="props.scope.row.sourceType === 1"
               @mousemove="showAddress($event, props.scope.row.address)"
               @mouseout="debounce(100)"
             >
               <span>地址：{{props.scope.row.address || '未设置面试地址'}}</span>
             </div>
+            <div>面试形式：{{props.scope.row.sourceTypeDesc}}</div>
             <div
               class="btn"
               v-if="props.scope.row.arrangementInfo && props.scope.row.arrangementInfo.appointmentTime"
-            >时间：{{props.scope.row.arrangementInfo.appointmentTime *1000 | date}}</div>
+            >面试时间：{{props.scope.row.arrangementInfo.appointmentTime *1000 | date}}</div>
           </div>
           <div class="jobhunter" v-else-if="props.scope.column.property === 'adminInfo'">
             {{props.scope.row.adminInfo.realname || ''}}

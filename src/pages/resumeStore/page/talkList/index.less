@@ -177,6 +177,11 @@
       line-height: 14px;
     }
   }
+  .valethandler{
+    margin-left: 40px;
+    color: #652791;
+    cursor: pointer;
+  }
 }
 .positionRow {
   display: flex;
@@ -399,4 +404,201 @@
   color: #409eff;
   font-size: 14px;
   cursor: pointer;
+}
+.position{
+  margin-bottom: 10px;
+  i{
+    color: #ccc;
+    margin-right: 16px;
+  }
+}
+.cpname{
+  i{
+    color: #ccc;
+    margin-right: 16px;
+  }
+}
+.html_content {
+  .row{
+    height: 40px;
+    line-height: 40px;
+    display: block;
+    overflow: hidden;
+  }
+  .label{
+    display: inline-block;
+    width: 80px;
+    float: left;
+  }
+  .value{
+    display: inline-block;
+    position: relative;
+    width: calc(100% - 80px);
+    float: left;
+  }
+  .user_input{
+    display: block;
+    width: 80%;
+    border: none;
+    outline: none;
+    height: 40px;
+    background: transparent;
+    line-height: 40px;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .position_item{
+    height: 40px;
+    line-height: 40px;
+    display: flex;
+    position: relative;
+  }
+  .name{
+    padding-left: 20px;
+    max-width: 80%;
+    overflow: hidden;
+    line-height: 40px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .edit{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 20px;
+    color: #652791;
+    cursor: pointer;
+  }
+  .icon_circle_my{
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #606266;
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 1px;
+    cursor: pointer;
+  }
+  .el-icon-success{
+    font-size: 14px;
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    cursor: pointer;
+    color: #3a8ee6;
+  }
+  .improper{
+    padding-bottom: 5px;
+  }
+  .reason_item{
+    height: 28px;
+    line-height: 28px;
+    padding: 0 15px;
+    border-radius: 5px;
+    display: inline-block;
+    border-radius: 17px;
+    border: 1px solid rgba(228, 228, 228, 1);
+    margin-bottom: 8px;
+    margin-right: 8px;
+    color: #999;
+    cursor: pointer;
+  }
+  .reason_item_active{
+    color: #3a8ee6;
+    border-color: #3a8ee6;
+  }
+  h2{
+    color: #666;
+    margin-bottom: 5px;
+  }
+}
+.position_ul .p_ul{
+  max-height: 300px;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+.position_ul .p_ul::-webkit-scrollbar {
+ width: 4px;
+}
+ .position_ul .p_ul::-webkit-scrollbar-track {
+ background:rgba(0,0,0,.1);
+ -webkit-border-radius: 20px;
+ -moz-border-radius: 20px;
+ border-radius:20px;
+}
+ .position_ul .p_ul::-webkit-scrollbar-thumb {
+ background:rgba(0,0,0,1);
+ -webkit-border-radius: 20px;
+ -moz-border-radius: 20px;
+ border-radius:20px;
+}
+.time_row{
+  height: 30px;
+  line-height: 30px;
+  cursor: pointer;
+  position: relative;
+  i{
+    margin-right: 10px;
+    color: red;
+  }
+  .circle{
+    border: 1px solid #dcdfe6;
+    border-radius: 100%;
+    width: 14px;
+    height: 14px;
+    background-color: #fff;
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0;
+  }
+  .active{
+    border-color: #3e294d;
+    background: #3e294d;
+  }
+}
+.add_time{
+  position: relative;
+  overflow: hidden;
+  .el-date-editor{
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 100%;
+    opacity: 0;
+  }
+}
+.dialog-footer{
+  text-align: left;
+}
+.strong_name{
+  cursor: pointer;
+  color: #652791;
+}
+.resoncontent {
+ span {
+  padding: 5px;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  float: left;
+  cursor: pointer;
+ }
+ .active{
+   border-color: #652791;
+   background: #652791;
+   color: #fff;
+ }
 }

@@ -83,7 +83,7 @@ export default List
     left: 200px;
     bottom: 0;
     padding: 8px;
-    width: 100%;
+    width: calc(100vw - 200px);
     background-color: #ffffff;
     box-shadow: 0px -1px 0px 0px rgba(232, 233, 235, 1);
     border: 1px solid #e8e9eb;

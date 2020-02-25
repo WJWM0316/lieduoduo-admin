@@ -18,17 +18,19 @@
       <slot name="dataList" ref="tableHeight"></slot>
 
       <!-- 分页 -->
-      <div class="pageList" slot="pageList">
-        <!-- v-if="hasPagination" v-show="total > 0" -->
-        <footer class="list-footer" v-if="leftcontent.page && leftcontent.total">
-          <el-pagination
-            layout="prev, pager, next, slot"
-            :current-page="leftcontent.page"
-            :page-size="20"
-            :total="leftcontent.total"
-            @current-change="handlePageChange"
-          ></el-pagination>
-          <span class="total">共 {{leftcontent.lastPage}} 页，{{leftcontent.total}} 条记录</span>
+      <div class="pageList">
+        <footer class="list-footer">
+          <slot name="pageList" >
+            <el-pagination
+              v-if="leftcontent.page && leftcontent.total"
+              layout="prev, pager, next, slot"
+              :current-page="leftcontent.page"
+              :page-size="20"
+              :total="leftcontent.total"
+              @current-change="handlePageChange"
+            ></el-pagination>
+            <span class="total">共 {{leftcontent.lastPage}} 页，{{leftcontent.total}} 条记录</span>
+          </slot>
         </footer>
       </div>
       <!-- 遮罩层，如有需要可在遮罩层添加块 -->
@@ -100,6 +102,7 @@ export default class lyoutContent extends Vue {
     this.$emit('handlePageChange', nowPage)
   }
   mounted () {
+    console.log(this.leftcontent)
     // this.$nextTick(() => this.clientHeight())
   }
 }
@@ -168,8 +171,8 @@ export default class lyoutContent extends Vue {
   position: fixed;
   left: 200px;
   bottom: 0;
+  width: calc(100vw - 200px);
   padding: 8px;
-  width: 100%;
   background-color: #ffffff;
   box-shadow: 0px -1px 0px 0px rgba(232, 233, 235, 1);
   border: 1px solid #e8e9eb;

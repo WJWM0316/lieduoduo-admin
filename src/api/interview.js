@@ -161,3 +161,71 @@ export const testDeleteApi = data => request({
   url: `/interview/getApplyNotSuitTypeList`,
   type: 'delete'
 })
+
+/* 代客操作接受邀约 */
+export const confirmvaletInterview = data => request({
+  url: `/interview/jobhunter/confirm/${data.interviewId}`,
+  type: 'post',
+  noGlobalLoading: false
+})
+
+/* 代客操作暂不考虑 */
+export const mvaletnoConsider = data => request({
+  url: `/interview/jobhunter/refuse/${data.interviewId}`,
+  type: 'post',
+  noGlobalLoading: false
+})
+
+/* 代客操作确认面试安排信息 */
+export const confirmArrangementInfo = data => request({
+  url: `/interview/jobhunter/confirmArrangementInfo/${data.interviewId}`,
+  type: 'post',
+  data,
+  noGlobalLoading: false
+})
+
+/* 代客操作修改面试时间 */
+export const editScheduletime = data => request({
+  url: `/interview/schedule/time/${data.interviewId}`,
+  type: 'post',
+  data,
+  noGlobalLoading: false
+})
+
+/* 代客操作约聊列表代求职者设置约聊不感兴趣 */
+export const darenotinterestApi = data => request({
+  url: `/chat/jobhunter_not_interest/${data.chatId}`,
+  type: 'post',
+  data,
+  noGlobalLoading: false
+})
+
+/* 代客操作约聊列表代招聘官设置约聊不合适 */
+export const inappropriateApi = data => request({
+  url: `/chat/recruiter_not_interest/${data.chatId}`,
+  type: 'post',
+  data,
+  noGlobalLoading: false
+})
+
+/* 代客操作约聊列表代求职者聊一聊 */
+export const jobhunteracceptchatApi = data => request({
+  url: `/chat/jobhunter_accept/${data.chatId}`,
+  type: 'put',
+  data,
+  noGlobalLoading: false
+})
+
+/* 代客操作约聊列表代招聘官聊一聊 */
+export const recruiteracceptchatApi = data => request({
+  url: `/chat/recruiter_accept/${data.chatId}`,
+  type: 'put',
+  data,
+  noGlobalLoading: false
+})
+
+/* 获取约聊不合适原因列表 */
+export const chatresonlist = data => request({
+  url: '/chat/not_interest/all_reason',
+  type: 'get'
+})

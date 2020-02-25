@@ -148,6 +148,8 @@
                       class="icon iconfont iconjiantouzuo"
                       v-if="scope.row.dealStatus==2||scope.row.dealStatus==0"
                     ></i>
+                    <!-- <div class="valethandler" @click="handlervale('accept')">代客操作</div>
+                    <div class="valethandler" v-if="0">修改时间</div> -->
                   </div>
                   <p class="companyName">
                     <span
@@ -208,8 +210,8 @@
                       class="companyName"
                     >{{scope.row.interview.address}}{{scope.row.interview.doorplate}}</p>
                     <p
-                      v-if="scope.row.arrangementInfo"
-                    >时间:{{scope.row.arrangementInfo.appointment_time}}</p>
+                      v-if="scope.row.interview.arrangementInfo"
+                    >面试时间:{{scope.row.interview.arrangementInfo.appointment.substr(0, 16)}}</p>
                   </div>
                 </div>
 
