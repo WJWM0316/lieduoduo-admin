@@ -148,6 +148,9 @@ export default class lyoutContent extends Vue {
          margin-right: 110px;
       }
     }
+    & /deep/ .el-select {
+      vertical-align: middle;
+    }
   }
 }
 

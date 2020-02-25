@@ -114,7 +114,7 @@ export const getRapidCompanyById = data => request({
 
 /** 获取24h公司标签 */
 export const getRapidlyLabels = data => request({
-  url: `/surfaceRapidlyCompanyLabel/label/lists`,
+  url: '/surfaceRapidlyCompanyLabel/label/lists',
   type: 'get',
   data
 })
@@ -128,7 +128,7 @@ export const getRapidlyLabelById = data => request({
 
 /** 获取24h公司标签 */
 export const addRapidlyLabel = data => request({
-  url: `/surfaceRapidlyCompanyLabel/label`,
+  url: '/surfaceRapidlyCompanyLabel/label',
   type: 'post',
   data
 })

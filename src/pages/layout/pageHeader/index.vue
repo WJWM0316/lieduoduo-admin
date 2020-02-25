@@ -28,14 +28,21 @@ export default {
       return this.$store.getters.getUserinfo || {}
     },
     breadCrumbs () {
-      let matched = this.$route.matched
-      matched = matched.map((val, index) => ({
-        index,
-        path: val.path,
-        name: val.name,
-        title: (val.meta && val.meta.title) || '',
-        redirect: val.redirect
-      }))
+      let { matched, params } = this.$route
+      const keys = Object.keys(params)
+      matched = matched.map((val, index) => {
+        let path = val.path
+        for (let item in keys) {
+          path = path.replace(`:${keys[item]}`, params[keys[item]])
+        }
+        return {
+          index,
+          path: path,
+          name: val.name,
+          title: (val.meta && val.meta.title) || '',
+          redirect: val.redirect
+        }
+      })
       return matched.filter(val => {
         if (val.index) return true
         if (val.name) return true

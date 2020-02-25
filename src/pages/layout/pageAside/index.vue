@@ -44,6 +44,7 @@ export default {
   },
   computed: {
     itemList () {
+      // return routelist
       return this.$store.state.common.menuList || []
     },
     currentRoute () {

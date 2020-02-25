@@ -14,7 +14,7 @@ import Resume from './resume'
 import User from './user'
 import Category from './category'
 import Operation from './operation'
-
+import Activity from './activity'
 Vue.use(Router)
 
 const router = new Router({
@@ -30,7 +30,8 @@ const router = new Router({
     ...Interview,
     ...PositionManage,
     ...Resume,
-    ...Operation
+    ...Operation,
+    ...Activity
   ],
   // linkActiveClass:'pathactive',
   scrollBehavior (to, from, savedPosition) {
