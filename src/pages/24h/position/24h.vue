@@ -87,7 +87,6 @@
       prev-text="上一页"
       next-text="下一页"
       :current-page="Number(form.page)"
-      v-if="total > pageSize"
       @current-change="(val) => handleSearch(val, 'page')">
       <span class="total">共{{ Math.ceil(total/20) }}页, {{total}}条记录</span>
     </el-pagination>
@@ -204,7 +203,7 @@ export default class H24 extends Vue {
     bottom: 0;
     left: 190px;
     padding: 8px;
-    width: 100%;
+    width: calc(100vw - 200px);
     background-color: #ffffff;
     border: 1px solid #e8e9eb;
 }

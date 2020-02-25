@@ -131,21 +131,19 @@
 	}]
 }, {
 	"path": "/operation",
-	"name": "",
+	"name": "operation",
 	"title": "运营位管理",
 	"isShow": true,
 	"icon": "el-icon-s-help",
 	"children": []
-},
-{
+}, {
 	"path": "/activity",
 	"name": "activity_list",
 	"title": "活动管理",
 	"isShow": true,
 	"icon": "el-icon-s-shop",
 	"children": []
-},
-{
+}, {
 	"path": "",
 	"title": "类别管理",
 	"name": "categoryList",

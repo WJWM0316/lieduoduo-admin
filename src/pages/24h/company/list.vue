@@ -99,7 +99,7 @@
           </el-table-column>
         </el-table>
       </template>
-      <template slot="pageList"  v-if="total > form.count">
+      <template slot="pageList">
         <el-pagination
         layout="prev, pager, next, slot"
         :total="total"

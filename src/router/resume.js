@@ -104,6 +104,24 @@ export default [
             '@/pages/resumeStore/page/hotRecommendation/index.vue'
           ], resolve)
       },
+      {
+        path: 'consultantService',
+        name: 'consultantService',
+        meta: { title: '顾问服务进展' },
+        component: resolve =>
+          require([
+            '@/pages/resumeStore/page/consultantService/index.vue'
+          ], resolve)
+      },
+      {
+        path: 'talkList',
+        name: 'talkList',
+        meta: { title: '约聊列表' },
+        component: resolve =>
+          require([
+            '@/pages/resumeStore/page/talkList/index.vue'
+          ], resolve)
+      },
       /* 简历详情 */
       {
         path: 'resumeDetails',
