@@ -11,7 +11,7 @@
         <el-form ref="form" :model="params" style="margin-left: 12px" :inline="true">
           <el-form-item>
             <el-input placeholder="请输入内容" v-model="params.typeValue">
-              <el-select v-model="params.type" slot="prepend" style="width:110px" placeholder="请选择">
+              <el-select @change="params.typeValue = ''" v-model="params.type" slot="prepend" style="width:110px" placeholder="请选择">
                 <el-option label="活动名称" value="title"></el-option>
                 <el-option label="活动ID" value="zt_id"></el-option>
               </el-select>
@@ -87,16 +87,18 @@
         </el-table>
       </template>
       <template slot="pageList">
-        <el-pagination
-          layout="prev, pager, next, slot"
-          :total="total"
-          :page-size="params.count"
-          prev-text="上一页"
-          next-text="下一页"
-          :current-page="Number(params.page)"
-          @current-change="(val) => handleSearch(val, 'page')">
-          <span class="total">共{{ Math.ceil(total/20) }}页, {{total}}条记录</span>
-        </el-pagination>
+        <div class="list-footer">
+          <el-pagination
+            layout="prev, pager, next, slot"
+            :total="total"
+            :page-size="params.count"
+            prev-text="上一页"
+            next-text="下一页"
+            :current-page="Number(params.page)"
+            @current-change="(val) => handleSearch(val, 'page')">
+            <span class="total">共{{ Math.ceil(total/20) }}页, {{total}}条记录</span>
+          </el-pagination>
+        </div>
       </template>
     </layout-content>
   </div>

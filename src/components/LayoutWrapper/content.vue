@@ -18,21 +18,18 @@
       <slot name="dataList" ref="tableHeight"></slot>
 
       <!-- 分页 -->
-      <div class="pageList">
-        <footer class="list-footer">
-          <slot name="pageList" >
-            <el-pagination
-              v-if="leftcontent.page && leftcontent.total"
-              layout="prev, pager, next, slot"
-              :current-page="leftcontent.page"
-              :page-size="20"
-              :total="leftcontent.total"
-              @current-change="handlePageChange"
-            ></el-pagination>
-            <span class="total">共 {{leftcontent.lastPage}} 页，{{leftcontent.total}} 条记录</span>
-          </slot>
+      <slot name="pageList">
+        <footer class="list-footer" v-if="leftcontent.page && leftcontent.total">
+          <el-pagination
+            layout="prev, pager, next, slot"
+            :current-page="leftcontent.page"
+            :page-size="20"
+            :total="leftcontent.total"
+            @current-change="handlePageChange"
+          ></el-pagination>
+          <span class="total">共 {{leftcontent.lastPage}} 页，{{leftcontent.total}} 条记录</span>
         </footer>
-      </div>
+      </slot>
       <!-- 遮罩层，如有需要可在遮罩层添加块 -->
       <!-- <div class="Mark" v-if="isShowMark"></div> -->
     </section>

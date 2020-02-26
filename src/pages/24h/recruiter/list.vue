@@ -84,16 +84,18 @@
         </el-table>
       </template>
       <template slot="pageList">
-        <el-pagination
-        layout="prev, pager, next, slot"
-        :total="total"
-        :page-size="form.count"
-        prev-text="上一页"
-        next-text="下一页"
-        :current-page="Number(form.page)"
-        @current-change="(val) => handleSearch(val, 'page')">
-        <span class="total">共{{ Math.ceil(total/20) }}页, {{total}}条记录</span>
-      </el-pagination>
+        <div class="list-footer">
+          <el-pagination
+            layout="prev, pager, next, slot"
+            :total="total"
+            :page-size="form.count"
+            prev-text="上一页"
+            next-text="下一页"
+            :current-page="Number(form.page)"
+            @current-change="(val) => handleSearch(val, 'page')">
+          <span class="total">共{{ Math.ceil(total/20) }}页, {{total}}条记录</span>
+          </el-pagination>
+        </div>
       </template>
     </layout-content>
   </div>
