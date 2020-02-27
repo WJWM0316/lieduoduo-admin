@@ -161,7 +161,11 @@ export default {
     },
     getListQrCode (row) {
       if (row.qrcode || !row.miniUrl) return
-      getActivityQrcode({ path: row.miniUrl }).then(({ data }) => {
+      let path = row.miniUrl || ''
+      let qIndex = path.indexOf('?')
+      let url = path.slice(0, qIndex - 1)
+      let param = path.slice(qIndex + 1, path.length)
+      getActivityQrcode({ path: url, params: param }).then(({ data }) => {
         this.$set(row, 'qrcode', data.data.url)
       })
     },
@@ -181,6 +185,7 @@ export default {
         typeValue: ''
       }
       this.$refs.dateFilter.clear()
+      this.handleSearch()
     }
   }
 }

@@ -32,7 +32,7 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item prop="mini_url" label="小程序链接">
-        <el-input :disabled="isEdit" placeholder="请输入" v-model="baseForm.mini_url">
+        <el-input :disabled="isEdit"  placeholder="请输入" v-model="baseForm.mini_url">
           <template slot="prepend">{{baseLink.mini}}</template>
         </el-input>
         <el-popover
@@ -95,7 +95,7 @@ export default {
       params: { aid: null, vkey: '' },
       baseLink: {
         web: 'https://www.lieduoduo.com/',
-        mini: 'page/common/pages/webView/webView?type='
+        mini: 'page/common/pages/webView/webView?p='
       },
       baseForm: {
         title: '', // 活动名称
@@ -159,7 +159,7 @@ export default {
               ...form,
               title,
               vkey,
-              mini_url: this.baseLink.mini + mini_url,
+              mini_url: this.baseLink.mini + encodeURIComponent(mini_url),
               web_url: this.baseLink.web + web_url,
               intro,
               mini_share_txt
@@ -174,7 +174,7 @@ export default {
               ...form,
               title,
               vkey,
-              mini_url: this.baseLink.mini + mini_url,
+              mini_url: this.baseLink.mini + encodeURIComponent(mini_url),
               web_url: this.baseLink.web + web_url,
               intro,
               mini_share_txt
@@ -200,7 +200,7 @@ export default {
           device: device, // 端口
           client: client, // 用户端
           time: [activityData.startTime, activityData.endTime],
-          mini_url: activityData.miniUrl.replace(this.baseLink.mini, ''),
+          mini_url: decodeURIComponent(activityData.miniUrl.replace(this.baseLink.mini, '')),
           web_url: activityData.webUrl.replace(this.baseLink.web, ''),
           intro: activityData.intro
         })
@@ -219,7 +219,7 @@ export default {
         return
       }
       if (this.showQrcode) return
-      getActivityQrcode({ path: this.baseLink.mini + this.baseForm.mini_url }).then(({ data }) => {
+      getActivityQrcode({ path: 'page/common/pages/webView/webView', params: `p=${encodeURIComponent(this.baseForm.mini_url)}` }).then(({ data }) => {
         if (data.httpStatus === 200) {
           this.qrCodeImage = data.data.url
         }

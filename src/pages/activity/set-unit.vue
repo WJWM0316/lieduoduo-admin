@@ -195,6 +195,7 @@ export default {
           })
           this.currentTabName = tabName
           this.setTabName = titleName
+          this.tabContents = []
         }
       }).catch(() => {
         this.addTabLoading = false
@@ -216,7 +217,13 @@ export default {
         deleteUnitTab({ id: current.tid }).then(({ data }) => {
           if (data.httpStatus === 200) {
             this.$message.success('删除成功！')
-            this.getTabs()
+            // 判断是否
+            if (current.tid === this.currentTab.tid && this.tabsList[0]) {
+              this.currentTabName = this.tabsList[0].name
+              this.getTabs()
+            } else {
+              this.tabsList = this.tabsList.filter(val => val.name !== name)
+            }
           }
         })
       })
