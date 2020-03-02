@@ -1,0 +1,403 @@
+.formReasult {
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    padding: 0 30px;
+    position: relative;
+    .form {
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      align-items: center;
+      width: 1400px;
+      .searchTab {
+        margin-right: 20px;
+        margin-bottom: 10px;
+      }
+      .formItem {
+        display: flex;
+        margin-right: 20px;
+        margin-bottom: 10px;
+      }
+    }
+  }
+  .el-form-item__label {
+    text-align: left;
+  }
+  .inquire {
+    background: #652791;
+    color: #fff;
+  }
+  .BtnList {
+    width: 180px;
+    height: 50px;
+  }
+  .time {
+    margin-bottom: 10px;
+  }
+  .col_position {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    span {
+      text-align: left;
+      &:nth-child(1) {
+        font-size: 14px;
+        color: #000;
+        line-height: 14px;
+        margin-right: 8px;
+        width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      &:nth-child(2) {
+        display: inline-block;
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 14px;
+        line-height: 14px;
+      }
+    }
+  }
+  .TabView {
+    padding: 20px 20px 0px 20px;
+    background: #fff;
+    .tabList {
+      text-align: left;
+      border: 1px solid #cccccc;
+      .active {
+        background: #652791 !important;
+        color: #fff !important;
+      }
+      .tabItem {
+        cursor: pointer;
+        line-height: 80px;
+        border: 1px solid #cccccc;
+        width: 100px;
+        height: 100%;
+        display: inline-block;
+        background: #fff;
+        border: none;
+        color: #000;
+        text-align: center;
+        border-right: 1px solid #ccc;
+      }
+    }
+  }
+  .OrderDetail {
+    padding: 0 32px;
+    margin-top: 32px;
+    .createTime {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1px solid #ebeef5;
+      padding-bottom: 16px;
+      margin-bottom: 32px;
+      span {
+        &:nth-child(1) {
+          font-weight: 700;
+          font-size: 20px;
+          color: #354048;
+          text-align: left;
+        }
+        &:nth-child(2) {
+          font-size: 14px;
+          color: #000;
+        }
+      }
+    }
+    .result {
+      text-align: left;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: flex-start;
+      align-content: center;
+      flex-wrap: wrap;
+      .success {
+        display: inline-block;
+        margin-right: 20px;
+        text-align: left;
+        margin-bottom: 10px;
+        &:last-child {
+          color: #652791;
+          cursor: pointer;
+        }
+        span {
+          &:nth-child(2n + 1) {
+            font-size: 15px;
+            color: #000;
+          }
+          &:nth-child(2) {
+            color: red;
+            font-size: 15px;
+            font-weight: 700;
+            padding: 0 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 11px;
+          }
+        }
+      }
+    }
+    .OrderId {
+      .msg {
+        display: inline-block;
+      }
+    }
+  }
+  .col_position {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    span {
+      text-align: left;
+      &:nth-child(1) {
+        font-size: 14px;
+        color: #000;
+        line-height: 14px;
+        margin-right: 8px;
+        width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      &:nth-child(2) {
+        display: inline-block;
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 14px;
+        line-height: 14px;
+      }
+    }
+  }
+  .positionRow {
+    display: flex;
+    justify-content:flex-start;
+    align-items: flex-start;
+    span {
+      &:nth-child(1) {
+        font-size: 14px;
+        color: #000;
+      }
+      &:nth-child(2) {
+        color: #000;
+        font-size: 14px;
+        color: #000;
+        font-size: 14px;
+        color: #652791;
+        cursor: pointer;
+        font-size: 14px;
+        padding: 0 10px;
+        width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: inline-block;
+      }
+    }
+  }
+  .companyName {
+    font-size: 14px;
+    color: #000;
+    margin-top: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 200px;
+    position: relative;
+    .StatusResult {
+      color: #409eff;
+      font-size: 14px;
+      position: absolute;
+      right: 30px;
+      top: 0px;
+      cursor: pointer;
+    }
+    span {
+      color: #652791;
+      cursor: pointer;
+      font-size: 14px;
+    }
+  }
+  .operation {
+    margin-top: 15px;
+    position: relative;
+    .phone {
+      background: url("../../../../assets/number_bg.png") no-repeat;
+      background-size: 100% 100%;
+      width: 144px;
+      height: 76px;
+      position: absolute;
+      right: 48px;
+      top: -70px;
+      text-align: center;
+      p {
+        font-size: 14px;
+        color: #000;
+        line-height: 75px;
+      }
+    }
+    span {
+      color: #652791;
+      cursor: pointer;
+      &:nth-child(1) {
+        margin-right: 30px;
+      }
+    }
+  }
+  .PopForm {
+    cursor: pointer;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 500;
+    .allRusule {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 1200px;
+      height: 600px;
+      background: rgba(255, 255, 255, 1);
+      border-radius: 15px;
+      z-index: 10000;
+  
+      .title {
+        text-align: center;
+        color: #000;
+        font-size: 20px;
+        font-weight: 700;
+        margin-top: 20px;
+      }
+      .resumeNums {
+        text-align: left;
+        padding: 0 30px;
+        margin-top: 20px;
+        span {
+          margin-right: 30px;
+          &:nth-child(1) {
+            font-size: 20px;
+            color: #000;
+          }
+          &:nth-child(2) {
+            font-size: 20px;
+            color: red;
+          }
+        }
+      }
+      .resultList {
+        padding: 0 30px;
+      }
+    }
+  }
+  .resultBtn {
+    cursor: pointer;
+    color: #409eff;
+  }
+  .resultDetail {
+    p {
+      color: #000;
+      font-size: 14px;
+    }
+    span {
+      margin-top: 10px;
+      display: inline-block;
+    }
+  }
+  .phone,
+  .qrCode {
+    text-align: center;
+    width: 150px;
+    height: 75px;
+    border-radius: 4px;
+    transform: translateY(-90%) translateX(-20%);
+    color: #652791;
+    position: absolute;
+    top: -999px;
+    left: -999px;
+    z-index: 300;
+    line-height: 60px;
+    .phoneBg {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 5%;
+      z-index: -1;
+    }
+  }
+  .qrCode {
+    width: 300px;
+    height: 300px;
+    /*background-color: #CCCCCC;*/
+    transform: translateY(-100%) translateX(-50%);
+    .Qr {
+      width: 200px;
+      height: 200px;
+      margin-top: 30px;
+    }
+    .bg {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+    .txt {
+      line-height: normal;
+      color: #5c565d;
+      margin-top: 5px;
+    }
+  }
+  .Self-operation {
+    border-radius: 5px;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .list-footer {
+    box-sizing: border-box;
+    z-index: 999;
+    position: fixed;
+    left: 200px;
+    bottom: 0;
+    padding: 8px;
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0px -1px 0px 0px rgba(232, 233, 235, 1);
+    border: 1px solid #e8e9eb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .itemIcon {
+    border-radius: 10px;
+    background: #652791;
+    color: #fff;
+    font-size: 14px;
+    display: inline-block;
+    padding: 2px 6px;
+    margin-right: 8px;
+    &:last-child {
+      margin-right: 0px;
+    }
+  }
+  .opeatingBtn {
+    display: block;
+    color: #409eff;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  

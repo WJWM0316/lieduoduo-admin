@@ -157,6 +157,18 @@
 			"title": "顾问服务进展",
 			"name": "consultantService",
 			"isShow": true
+		},
+		{
+			"path": "/resumeStore/poorresumeManagement",
+			"title": "劣质简历管理",
+			"name": "poorresumeManagement",
+			"isShow": true
+		},
+		{
+			"path": "/resumeStore/resumesensitiveWords",
+			"title": "简历敏感词",
+			"name": "resumesensitiveWords",
+			"isShow": true
 		}
 	]
 }
