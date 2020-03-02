@@ -60,7 +60,7 @@
 
         <el-form-item label="弹窗" prop="is_popup">
           <el-radio v-model="form.is_popup" :label="1" :disabled="$route.name === 'operationEdit'">是</el-radio>
-          <el-radio v-model="form.is_popup" :label="0" :disabled="$route.name === 'operationEdit'">否</el-radio>
+          <!-- <el-radio v-model="form.is_popup" :label="0" :disabled="$route.name === 'operationEdit'">否</el-radio> -->
         </el-form-item>
 
         <el-form-item label="弹出页面" prop="popup_type">
@@ -109,7 +109,13 @@
           </el-option>
         </el-select>
       </el-form-item>
-
+  	  <el-form-item prop="user_visible" label="可见用户">
+        <el-radio-group  v-model="form.user_visible">
+          <el-radio :label="1">全部</el-radio>
+          <el-radio :label="2">B端</el-radio>
+          <el-radio :label="3">C端</el-radio>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item label="落地页页面">
         <el-input
           type="text"
@@ -271,6 +277,7 @@ export default {
         device: '', // 推送端：miniProgram, pc, app
         location: '', // banner运营位
         type: '', // 落地页类型
+        user_visible: 1, // 用户可见
         type_id: '', // 落地页ID
         url: '', // 落地页链接
         h5_url: '', // 落地页H5链接
@@ -290,7 +297,7 @@ export default {
         status: 1,
         inputAny: '',
         client: '',
-        is_popup: 0,
+        is_popup: 1,
         popup_type: '',
         popup_num: ''
       },
@@ -307,6 +314,9 @@ export default {
         ],
         location: [
           { required: true, message: '请选择运营位', trigger: 'change' }
+        ],
+        user_visible: [
+          { required: true, type: 'number', message: '请选择可见用户类型', trigger: 'change' }
         ],
         area_id: [
           { required: true, message: '请选择城市', trigger: 'change' }
@@ -452,6 +462,7 @@ export default {
       let form = {
         name: '', // 广告图名称
         type: '', // 落地页类型
+        user_visible: 1,
         type_id: '', // 落地页ID
         url: '', // 落地页链接
         h5_url: '', // 落地页H5链接
@@ -470,7 +481,7 @@ export default {
         status: 1,
         inputAny: '',
         location: '',
-        is_popup: 0,
+        is_popup: 1,
         popup_type: '',
         popup_num: ''
       }
@@ -487,6 +498,7 @@ export default {
       let form = {
         name: '', // 广告图名称
         type: '', // 落地页类型
+        user_visible: 1,
         type_id: '', // 落地页ID
         url: '', // 落地页链接
         h5_url: '', // 落地页H5链接
@@ -506,7 +518,7 @@ export default {
         inputAny: '',
         location: '',
         client: '',
-        is_popup: 0,
+        is_popup: 1,
         popup_type: 0
       }
       if (this.$route.name === 'operationAdd') {
@@ -557,6 +569,7 @@ export default {
           this.form.type = form.type
           this.form.area_id = form.areaId
           this.form.is_popup = form.isPopup
+          this.form.user_visible = form.userVisible
           this.form.popup_num = form.popupNum
           this.form.popup_type = form.popupType
           // console.log(this.form, form.vkey)

@@ -37,37 +37,38 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import Component from 'vue-class-component'
 import { loginApi } from 'API/common'
 // import {permission} from "UTIL/js/permissionRoute.js"
-@Component({
-  name: 'login'
-})
-export default class login extends Vue {
-  loginForm = {
-    email: '',
-    password: ''
-  };
-  login () {
-    loginApi(this.loginForm).then(res => {
-      const userinfo = res.data.data || {}
-      // 保存userinfo 到vuex
-      this.$store.dispatch('update_userinfo', { userinfo }).then(() => {
-        this.$router.push({
-          name: 'index'
+export default {
+  data () {
+    return {
+      loginForm: {
+        email: '',
+        password: ''
+      }
+    }
+  },
+  methods: {
+    login () {
+      loginApi(this.loginForm).then(res => {
+        const userinfo = res.data.data || {}
+        // 保存userinfo 到vuex
+        this.$store.dispatch('update_userinfo', { userinfo }).then(() => {
+          this.$router.push({
+            name: 'index'
+          })
         })
       })
-    })
-      .catch(err => {
-        console(err)
+        .catch(err => {
+          console(err)
         // this.$message.error(`用户账号或密码错误`);
-      })
-  }
-  resetForm (formName) {
-    this.$refs[formName].resetFields()
-    this.loginForm.email = ''
-  }
+        })
+    },
+    resetForm (formName) {
+      this.$refs[formName].resetFields()
+      this.loginForm.email = ''
+    }
+  },
   created () {
     const email = sessionStorage.getItem('email') || ''
     if (email) {
