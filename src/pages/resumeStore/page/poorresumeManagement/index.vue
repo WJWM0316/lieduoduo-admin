@@ -518,9 +518,6 @@
         }
       })
     }
-    getResumeLevel () {
-      return getResumeLevelApi().then(res => (this.resumeLevel = res.data.data))
-    }
     editResume (item) {
       this.$router.push({
         path: '/resumeStore/list/postResume',
@@ -785,12 +782,10 @@
         this.getAuditreasons()
       let AdminShow = Number(+sessionStorage.getItem('AdminShow'))
       this.ManageList().then(() => {
-        this.degreeData()
         this.jobhuntStatus()
         this.CityData()
         this.getData()
         this.field()
-        this.getResumeLevel()
       })
       this.isSales = !/(3|4)/.test(AdminShow)
       this.AdminShow = AdminShow
@@ -868,12 +863,6 @@
           }
         })
       }
-    }
-    // 学历列表
-    degreeData () {
-      degreeListAPI().then(res => {
-        this.degreeList = res.data.data
-      })
     }
   
     getDetail (uid, index) {
