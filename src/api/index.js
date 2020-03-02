@@ -65,7 +65,22 @@ export const request = ({
     err => {
       /* 通用的错误捕获可以在这里操作 */
       // Message.error(`啊，好像出错了，数据跑到银河系外面去了。`)
-      if (globalTips) Message.error((err.data && err.data.msg) || '请求失败')
+      if (globalTips) {
+        // 相同提示不重复提示
+        let message = err.response.data.msg || err.response.data.message
+        if (!window.messagequeue[message]) {
+          window.messagequeue[message] = 1
+          Message({
+            type: 'error',
+            message: (err.data && err.data.msg) || '请求失败',
+            onClose: () => {
+              // 移除队列
+              window.messagequeue[message] = 0
+              delete window.messagequeue[message]
+            }
+          })
+        }
+      }
       return Promise.reject(err)
     }
   )

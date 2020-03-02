@@ -16,8 +16,8 @@
               <template v-if="![3, 4, 5, 6].includes(AdminShow)">
                 <p class="table-link" @click="handleSet('edit', row)">栏目编辑</p>
                 <router-link class="table-link" tag="p" :to="{name: 'unit_set', params: {aid: row.ztId,lid: row.id}}">内容编辑</router-link>
+                <p class="table-error-link" @click="handleDelete(row)">删除</p>
               </template>
-              <p class="table-error-link" @click="handleDelete(row)">删除</p>
             </template>
           </el-table-column>
         </el-table>
