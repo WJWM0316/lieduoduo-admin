@@ -607,6 +607,7 @@ export default {
         device: form.device, // 推送端：miniProgram, pc, app
         // location: form.location, // banner运营位
         // type: form.type, // 落地页类型
+        user_visible: form.user_visible,
         // type_id: form.type_id, // 落地页ID
         // url: form.url, // 落地页链接
         // h5_url: form.h5_url, // 落地页H5链接
