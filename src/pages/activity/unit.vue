@@ -4,7 +4,7 @@
   <layout-content
     :leftcontent="{ title: '栏目列表'}"
     :isShowbtn="true">
-    <template slot="text" v-if="![3, 4, 5, 6].includes(AdminShow)">
+    <template slot="text" v-if="![1, 2, 3, 4, 5, 6].includes(AdminShow)">
       <el-button type="primary" @click="handleSet('add')">新增</el-button>
     </template>
     <template slot="dataList">
@@ -13,7 +13,7 @@
           <el-table-column label="栏目介绍" prop="intro"></el-table-column>
           <el-table-column label="操作" width="220">
             <template slot-scope="{row}">
-              <template v-if="![3, 4, 5, 6].includes(AdminShow)">
+              <template v-if="![1,2, 3, 4, 5, 6].includes(AdminShow)">
                 <p class="table-link" @click="handleSet('edit', row)">栏目编辑</p>
                 <router-link class="table-link" tag="p" :to="{name: 'unit_set', params: {aid: row.ztId,lid: row.id}}">内容编辑</router-link>
                 <p class="table-error-link" @click="handleDelete(row)">删除</p>

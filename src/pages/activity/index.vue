@@ -4,7 +4,7 @@
     <layout-content
       :leftcontent="{ title: '活动列表'}"
       :isShowbtn="true">
-      <router-link v-if="![3, 4, 5, 6].includes(AdminShow)" slot="text" :to="{name: 'activity_add'}">
+      <router-link v-if="![1, 2, 3, 4, 5, 6].includes(AdminShow)" slot="text" :to="{name: 'activity_add'}">
         <el-button type="primary">新增</el-button>
       </router-link>
       <template slot="formContent">
@@ -70,7 +70,7 @@
           <el-table-column label="操作" width="220">
             <template slot-scope="{row}">
               <router-link v-if="AdminShow !== 6" class="table-link" tag="p" :to="{name: 'unit_list', params: {aid: row.id}}">栏目</router-link>
-              <template v-if="![3, 4, 5, 6].includes(AdminShow)">
+              <template v-if="![1, 2, 3, 4, 5, 6].includes(AdminShow)">
                 <router-link class="table-link" tag="p" :to="{name: 'activity_edit', query: {aid: row.id, vkey: row.vkey}}">编辑</router-link>
               </template>
               <el-popover
