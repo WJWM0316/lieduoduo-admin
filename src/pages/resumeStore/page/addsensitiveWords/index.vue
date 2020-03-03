@@ -3,39 +3,21 @@
   <div class="officerManage">
     <el-container class="container" style="border: 1px solid #eee">
       <el-header class="header" style="text-align: right; font-size: 15px">
-        <div class="title">简历敏感词({{total}})</div>
+        <div class="title">新建/编辑简历敏感词</div>
       </el-header>
       <el-main>
         <!--筛选-->
         <div class="selectionBox">
           <el-form ref="form" label-width="90px">
-            <el-form-item label="敏感词名称" prop="keyword">
-              <el-input v-model="form.name" placeholder="请输入敏感词名称"></el-input>
-              <el-button style="margin-left:30px;" type="primary" @click="getsensitivelists">查询</el-button>
+            <el-form-item label="敏感词名称" prop="name">
+              <el-input v-model="name" placeholder="请输入敏感词名称" maxlength="20"></el-input>
             </el-form-item>
-            <el-form-item class="btn">
-              <el-button type="primary" @click="newlyBuild">新建</el-button>
+            <el-form-item>
+              <el-button @click="cancel">取消</el-button>
+              <el-button type="primary" @click="onSubmit">确定</el-button>
             </el-form-item>
           </el-form>
         </div>
-        <!--筛选-->
-        <list
-          :fields="fields"
-          :list="list"
-          :total="total"
-          :page="form.page"
-          :page-count="pageCount"
-          @page-change="handlePageChange">
-          <template slot-scope="props" slot="columns">
-            <!-- 操作列 -->
-            <div style="flex-wrap: wrap;" class="btn-container" v-if="props.scope.column.property === 'id'">
-              <div>
-                <span class="check" @click="editsensitiveWords(props.scope.row)">编辑</span>
-              </div>
-              <div style="width: 100%; cursor: pointer; color: #652791;" @click.stop="deletesensitiveWords(props.scope.row)">删除</div>
-            </div>
-          </template>
-        </list>
       </el-main>
     </el-container>
   </div>
@@ -44,89 +26,43 @@
 <script>
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import List from '@/components/list'
-import { getsensitivelist, deleteSensitiveApi } from 'API/resumesensitiveWords'
+import { AddSensitiveAPI, GetSensitiveinfoAPI, putSensitiveEditApi } from 'API/resumesensitiveWords'
 @Component({
-  name: 'officerManage',
-  components: {
-    List
-  }
+  name: 'officerManage'
 })
 export default class officerManage extends Vue {
-  total = 0
-  pageCount = 0
-  form = {
-    name: '',
-    page: 1,
-    count: 20
-  }
-  fields = [
-    {
-      prop: 'sensitiveWord',
-      label: '简历敏感词名称'
-      // width: 150
-    },
-    {
-      prop: 'createdAt',
-      label: '创建时间'
-      // width: 200
-    },
-    {
-      prop: 'id',
-      fixed: 'right',
-      // width: 150,
-      label: '操作'
-    }
-  ]
-  list = []
-  newlyBuild () {
-    this.$router.push({
-      path: '/resumeStore/resumesensitiveWords/addsensitiveWords'
-    })
-  }
-  editsensitiveWords (data) {
-    this.$router.push({
-      path: '/resumeStore/resumesensitiveWords/addsensitiveWords',
-      query: { id: data.id }
-    })
-  }
-  deletesensitiveWords (data) {
-    this.$confirm('删除后将无法恢复', '是否删除该敏感词', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning'
-    }).then(() => {
-      let data1 = { id: data.id }
-      deleteSensitiveApi(data1).then((res) => {
-        this.getsensitivelists()
+  name = ''
+  onSubmit () {
+    if (this.$route.query.id) {
+      let data = { id: this.$route.query.id, name: this.name }
+      putSensitiveEditApi(data).then((res) => {
         this.$message({
-          type: 'success',
-          message: '删除成功!'
+          message: '编辑成功',
+          type: 'success'
         })
+        this.$router.go(-1)
       })
-    }).catch(() => {
-      this.$message({
-        type: 'info',
-        message: '已取消删除'
-      })        
-    })
+    } else {
+      AddSensitiveAPI({ name: this.name }).then((res) => {
+        this.$message({
+          message: '恭喜你，创建成功',
+          type: 'success'
+        })
+        this.$router.go(-1)
+      })
+    }
   }
-  getsensitivelists () {
-    getsensitivelist(this.form).then((res) => {
-      this.list = res.data.data
-      this.total = res.data.meta.total
-      this.pageCount = res.data.meta.lastPage
-    })
-  }
-  /* 翻页 */
-  handlePageChange (nowPage) {
-    this.$route.meta.scrollY = 0
-    window.scrollTo(0, 0)
-    this.form.page = nowPage
-    this.getsensitivelists()
+  cancel () {
+    this.$router.go(-1)
   }
   created () {
-    this.getsensitivelists()
+    if (this.$route.query.id) {
+      let data = { id: this.$route.query.id }
+      GetSensitiveinfoAPI(data).then((res) => {
+        this.name = res.data.data.sensitiveWord
+        this.id = res.data.data.id
+      })
+    }
   }
 }
 </script>
@@ -190,11 +126,7 @@ export default class officerManage extends Vue {
       clear: both;
     }
   }
-  .el-form-item{
-    float: left;
-  }
   .btn{
-    float: right;
     .inquire{
       color: #FFFFFF;
       background-color: #652791;

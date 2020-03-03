@@ -126,10 +126,26 @@ export default [
         path: 'resumesensitiveWords',
         name: 'resumesensitiveWords',
         meta: { title: '简历敏感词' },
-        component: resolve =>
-          require([
-            '@/pages/resumeStore/page/resumesensitiveWords/index.vue'
-          ], resolve)
+        component: { render (c) { return c('router-view') } },
+        children: [
+          {
+            path: '',
+            name: 'resumesensitiveWords',
+            meta: { title: '简历敏感词' },
+            component: resolve =>
+              require(['@/pages/resumeStore/page/resumesensitiveWords/index.vue'], resolve)
+          },
+          /* 新建/编辑简历敏感词 */
+          {
+            path: 'addsensitiveWords',
+            name: 'addsensitiveWords',
+            meta: {
+              title: '新建/编辑简历敏感词'
+            },
+            component: resolve =>
+              require(['@/pages/resumeStore/page/addsensitiveWords/index.vue'], resolve)
+          }
+        ]
       },
       {
         path: 'talkList',

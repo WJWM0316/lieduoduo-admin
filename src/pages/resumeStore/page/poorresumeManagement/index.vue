@@ -16,13 +16,22 @@
               </ul>
           <div class="formReasult">
             <el-form ref="form" :model="form" class="form">
-                <el-form-item label="入选原因" class="formItem">
-                    
+                <el-form-item label="入选原因" class="formItem" v-if="form.inferiorStatus === 1">  
                 <el-select v-model="form.reasonId" placeholder="请选择">
                     <el-option
                         v-for="item in reasonlist"
                         :key="item.id"
                         :label="item.value"
+                        :value="item.id">
+                  </el-option>
+                </el-select>
+                </el-form-item>
+                <el-form-item label="审核原因" class="formItem" v-else>  
+                <el-select v-model="form.auditReasonId" placeholder="请选择">
+                    <el-option
+                        v-for="item in auditlist"
+                        :key="item.id"
+                        :label="item.reason"
                         :value="item.id">
                   </el-option>
                 </el-select>
@@ -291,7 +300,7 @@
     AdminShow = true
     startrules = false;
     nowCheckListTab = []; /* 添加标签数组 */
-    inferiorStatus = [{name: '待审核', cur: true, id: 1}, {name: '申诉简历', cur: false, id: 2}, {name: '待劣质简历审核', cur: false, id: 3}]
+    inferiorStatus = [{name: '待审核', cur: true, id: 1}, {name: '申诉简历', cur: false, id: 2}, {name: '劣质简历', cur: false, id: 3}]
     dialogVisible = false;
     closeSelectStore = false;
     diyTabName = ''; /* 自定义标签名 */
@@ -467,10 +476,12 @@
     getCityList = []; // 省市列表
     jobhuntStatusList = []; // 求职状态
     reasonlist = []
+    auditlist = []
     form = {
       keyword: '' /* 模糊搜索 */,
       inferiorStatus: 1,
       reasonId: 0,
+      auditReasonId: '',
       name: '',
       updateTimeLower: '' /* 简历更新时间下限 */,
       updateTimeUpper: '' /* 简历更新时间上限  */,
@@ -702,6 +713,7 @@
       this.form.expectFieldId = ''
       this.form.keyword = ''
       this.form.reasonId = 0
+      this.form.auditReasonId = ''
       this.form.isStudent = ''
       this.form.workExpLower = ''
       this.form.workExpUpper = ''
@@ -774,7 +786,9 @@
     }
     getAuditreasons () {
         GetInferiorAuditreasonsAPI().then((res) => {
-            console.log(res)
+          let arr = res.data.data
+          arr.unshift({ id: '', reason: '全部' })
+            this.auditlist = arr
         })
     }
     created () {
@@ -932,6 +946,9 @@
       }
       if(this.form.reasonId) {
         params1 = Object.assign(params1, {reasonId: this.form.reasonId})
+      }
+      if(this.form.auditReasonId) {
+        params1 = Object.assign(params1, {auditReasonId: this.form.auditReasonId})
       }
       if(this.form.inferiorStatus) {
         params1 = Object.assign(params1, {inferiorStatus: this.form.inferiorStatus})
