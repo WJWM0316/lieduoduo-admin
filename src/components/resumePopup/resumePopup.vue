@@ -256,6 +256,20 @@
               </div>
             </div>
           </div>
+          <div class="auditButton">
+              <div class="btn-status" v-if="nowResumeMsg.inferior === 20">
+                <div>审核为劣质简历</div>
+              </div>
+              <!-- <div v-if="nowResumeMsg.inferior === 20">
+                <div class="tip">入选原因： 静静的静静的</div>
+                <div class="status" style="width:160px;">取消标记为劣质简历</div>
+              </div> -->
+              <!-- <div v-if="nowResumeMsg.inferior === 20">
+                <div class="tip">入选原因： 静静的静静的</div>
+                <div class="status marleft">审核为劣质简历</div>
+                <div class="status">审核通过</div>
+              </div> -->
+          </div>
         </div>
         <!-- 历史记录 -->
         <div class="nowResume" v-show="nowCheck==1">
