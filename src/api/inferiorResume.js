@@ -23,4 +23,11 @@ export const GetInferiorResumeAPI = data =>
     type: 'get',
     data
   })
+
   
+// 设置劣质简历状态（审核劣质简历)
+export const setinferiorresumeApi = (uid, data) => request({
+  url: `/resume/inferior/${uid}`,
+  type: 'put',
+  data
+})

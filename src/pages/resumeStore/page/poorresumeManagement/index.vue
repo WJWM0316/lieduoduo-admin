@@ -1,5 +1,5 @@
 <template>
-    <div class="resumeStore" @click.stop="closeSubEvent">
+    <div class="resumeStore">
       <lyout-content
         :leftcontent="leftcontent"
         :isShowbtn="true && isShowResumeHandle"
@@ -221,7 +221,9 @@
         :resumeId="resumeId"
         :typeList="typeList"
         :itemList="itemList"
+        :isbtnstatus="true"
         @SwitchResume="SwitchResume"
+        @handlerResume="handlerResume"
         @updata="getData"
         ref="resume"
       ></resume-popup>
@@ -242,6 +244,23 @@
           <el-button @click="checkMobile('form')" class="inquire">下一步</el-button>
         </span>
       </el-dialog>
+
+      <el-dialog
+      title="请选择审核原因"
+      :visible.sync="resondialogVisible"
+      width="30%">
+      <template>
+        <el-radio-group v-model="statusform.auditReasonId">
+          <div v-for="item in diggleauditlist" style="margin-bottom: 15px;">
+            <el-radio :label="item.id">{{item.reason}}</el-radio>
+          </div>
+        </el-radio-group>
+      </template>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="resondialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="surereson">确 定</el-button>
+      </span>
+    </el-dialog>
     </div>
   </template>
   
@@ -253,7 +272,7 @@
   import CustomSelect from '../../components/CustomSelect/index.vue'
   import filterAnswer from 'COMPONENTS/filterAnswer/index.vue'
   import { getLabelPositionListApi } from 'API/position'
-  import { GetInferiorResumeAPI, GetInferiorAllreasonAPI, GetInferiorAuditreasonsAPI } from 'API/inferiorResume'
+  import { GetInferiorResumeAPI, GetInferiorAllreasonAPI, GetInferiorAuditreasonsAPI, setinferiorresumeApi } from 'API/inferiorResume'
   import { getCityApi } from 'API/company'
   import { fieldApi } from 'API/common'
   import {
@@ -297,6 +316,7 @@
   })
   export default class resumeStore extends Vue {
     canDownloadData = true
+    resondialogVisible = false
     AdminShow = true
     startrules = false;
     nowCheckListTab = []; /* 添加标签数组 */
@@ -477,6 +497,12 @@
     jobhuntStatusList = []; // 求职状态
     reasonlist = []
     auditlist = []
+    diggleauditlist = []
+    statusform = {
+      uid: '',
+      inferior: '',
+      auditReasonId: ''
+    }
     form = {
       keyword: '' /* 模糊搜索 */,
       inferiorStatus: 1,
@@ -677,14 +703,6 @@
       this.$refs['age'].checkTime = e.value
       this.$refs['age'].closeSelect()
     }
-  
-    /* 手动关闭事件 */
-    closeSubEvent () {
-      this.closelift = false
-      this.$refs['diywork'].closeSelect()
-      this.$refs['Money'].closeSelect()
-      this.$refs['age'].closeSelect()
-    }
     checkType (e) {
       this.form[`${e}`] = ''
     }
@@ -791,9 +809,15 @@
             this.auditlist = arr
         })
     }
+    getdiggleAuditreasons () {
+        GetInferiorAuditreasonsAPI().then((res) => {
+          this.diggleauditlist =  res.data.data
+        })
+    }
     created () {
         this.getAllreason()
         this.getAuditreasons()
+        this.getdiggleAuditreasons()
       let AdminShow = Number(+sessionStorage.getItem('AdminShow'))
       this.ManageList().then(() => {
         this.jobhuntStatus()
@@ -903,6 +927,42 @@
         this.$refs['resume'].getResume()
       })
     }
+    handlerResume (data, num) {
+      this.statusform.uid = data.uid
+      if (num === 1) {
+        this.statusform.inferior = 30
+        this.setresumestatus()
+      }
+      if (num === 2 || num === 3 || num === 5) {
+        this.statusform.inferior = 10
+        this.$confirm('是否审核通过', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.setresumestatus()
+        })
+      }
+      if (num === 4) {
+        this.resondialogVisible = true
+        this.statusform.inferior = 20
+      }
+      this.statusform.auditReasonId = data.inferiorReasonId
+    }
+    surereson () {
+      this.setresumestatus()
+    }
+    setresumestatus () {
+      setinferiorresumeApi(this.statusform.uid, this.statusform).then((res) => {
+        this.resondialogVisible = false
+        this.$message({
+          type: 'success',
+          message: '操作成功!'
+        })
+        this.getData()
+        this.$refs['resume'].closeMark()
+      })
+    }
     getData () {
       let params1 = {
         page: this.form.page,
@@ -997,7 +1057,6 @@
       }
       if (params1.resumeGrades === '') delete params.resumeGrades
       GetInferiorResumeAPI(params1).then(res => {
-        console.log(res.data.data)
         this.itemList = res.data.data
         this.leftcontent.total = parseInt(res.data.meta.total)
         this.leftcontent.lastPage = parseInt(res.data.meta.lastPage)
@@ -1010,7 +1069,6 @@
       this.form.page = nowPage
       this.form.page = nowPage
       this.getData()
-      console.log(nowPage)
     }
     changeGrade (e, uid) {
       setResumeLevelApi({ grade: e, uid })
