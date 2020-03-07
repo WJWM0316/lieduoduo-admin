@@ -945,7 +945,7 @@
       }
       if (num === 4) {
         this.resondialogVisible = true
-        this.statusform.inferior = 20
+        this.statusform.inferior = 30
       }
       this.statusform.auditReasonId = data.inferiorReasonId
     }
@@ -959,7 +959,8 @@
           type: 'success',
           message: '操作成功!'
         })
-        this.getData()
+        this.leftcontent.total = this.leftcontent.total - 1
+        this.itemList.splice(0, 1)
         this.$refs['resume'].closeMark()
       })
     }
