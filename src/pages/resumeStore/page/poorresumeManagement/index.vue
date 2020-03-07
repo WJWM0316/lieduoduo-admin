@@ -947,7 +947,11 @@
         this.resondialogVisible = true
         this.statusform.inferior = 30
       }
-      this.statusform.auditReasonId = data.inferiorReasonId
+      if (data.inferiorReasonId) {
+        this.statusform.auditReasonId = data.inferiorReasonId
+      } else {
+        this.statusform.auditReasonId = this.diggleauditlist[0].id
+      }
     }
     surereson () {
       this.setresumestatus()
