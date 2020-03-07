@@ -28,6 +28,16 @@
           @page-change="handlePageChange">
           <template slot-scope="props" slot="columns">
             <!-- 操作列 -->
+            <div style="flex-wrap: wrap;" class="btn-container" v-if="props.scope.column.property === 'sensitiveWord'">
+              <div>
+                {{props.scope.row.sensitiveWord}}
+              </div>
+            </div>
+            <div style="flex-wrap: wrap;" class="btn-container" v-if="props.scope.column.property === 'createdAt'">
+              <div>
+                {{props.scope.row.createdAt}}
+              </div>
+            </div>
             <div style="flex-wrap: wrap;" class="btn-container" v-if="props.scope.column.property === 'id'">
               <div>
                 <span class="check" @click="editsensitiveWords(props.scope.row)">编辑</span>
