@@ -260,14 +260,17 @@
               <div class="btn-status" v-if="nowResumeMsg.inferior === 10" @click="confirnResume(nowResumeMsg, 1)">
                 <div>审核为劣质简历</div>
               </div>
-              <div v-if="nowResumeMsg.inferior === 30 || nowResumeMsg.inferiorAppeal">
+              <!-- 劣质简历 -->
+              <div v-if="nowResumeMsg.inferior === 30 && nowResumeMsg.inferiorAppeal === 0">
                 <div class="tip">审核原因： {{nowResumeMsg.inferiorAuditReason}}</div>
                 <div class="status" style="width:160px;" @click="confirnResume(nowResumeMsg, 2)">取消标记为劣质简历</div>
               </div>
-              <!-- <div v-if="nowResumeMsg.inferiorAppeal">
+              <!-- 申诉简历 -->
+              <div v-if="nowResumeMsg.inferior === 30 && nowResumeMsg.inferiorAppeal === 1">
                 <div class="tip">审核原因： {{nowResumeMsg.inferiorAuditReason}}</div>
-                <div class="status" style="width:160px;" @click="confirnResume(nowResumeMsg, 3)">取消标记为劣质简历</div>
-              </div> -->
+                <div class="status marleft" @click="confirnResume(nowResumeMsg, 4)">审核不通过</div>
+                <div class="status" @click="confirnResume(nowResumeMsg, 3)">取消标记为劣质简历</div>
+              </div>
               <div v-if="nowResumeMsg.inferior === 20">
                 <div class="tip">入选原因： {{nowResumeMsg.inferiorReason}}</div>
                 <div class="status marleft" @click="confirnResume(nowResumeMsg, 4)">审核为劣质简历</div>
