@@ -114,6 +114,40 @@ export default [
           ], resolve)
       },
       {
+        path: 'poorresumeManagement',
+        name: 'poorresumeManagement',
+        meta: { title: '劣质简历管理' },
+        component: resolve =>
+          require([
+            '@/pages/resumeStore/page/poorresumeManagement/index.vue'
+          ], resolve)
+      },
+      {
+        path: 'resumesensitiveWords',
+        name: 'resumesensitiveWords',
+        meta: { title: '简历敏感词' },
+        component: { render (c) { return c('router-view') } },
+        children: [
+          {
+            path: '',
+            name: 'resumesensitiveWords',
+            meta: { title: '简历敏感词' },
+            component: resolve =>
+              require(['@/pages/resumeStore/page/resumesensitiveWords/index.vue'], resolve)
+          },
+          /* 新建/编辑简历敏感词 */
+          {
+            path: 'addsensitiveWords',
+            name: 'addsensitiveWords',
+            meta: {
+              title: '新建/编辑简历敏感词'
+            },
+            component: resolve =>
+              require(['@/pages/resumeStore/page/addsensitiveWords/index.vue'], resolve)
+          }
+        ]
+      },
+      {
         path: 'talkList',
         name: 'talkList',
         meta: { title: '约聊列表' },

@@ -256,6 +256,24 @@
               </div>
             </div>
           </div>
+          <div class="auditButton" v-if="isbtnstatus">
+              <div class="btn-status" v-if="nowResumeMsg.inferior === 10" @click="confirnResume(nowResumeMsg, 1)">
+                <div>审核为劣质简历</div>
+              </div>
+              <div v-if="nowResumeMsg.inferior === 30 || nowResumeMsg.inferiorAppeal">
+                <div class="tip">审核原因： {{nowResumeMsg.inferiorAuditReason}}</div>
+                <div class="status" style="width:160px;" @click="confirnResume(nowResumeMsg, 2)">取消标记为劣质简历</div>
+              </div>
+              <!-- <div v-if="nowResumeMsg.inferiorAppeal">
+                <div class="tip">审核原因： {{nowResumeMsg.inferiorAuditReason}}</div>
+                <div class="status" style="width:160px;" @click="confirnResume(nowResumeMsg, 3)">取消标记为劣质简历</div>
+              </div> -->
+              <div v-if="nowResumeMsg.inferior === 20">
+                <div class="tip">入选原因： {{nowResumeMsg.inferiorReason}}</div>
+                <div class="status marleft" @click="confirnResume(nowResumeMsg, 4)">审核为劣质简历</div>
+                <div class="status" @click="confirnResume(nowResumeMsg, 5)">审核通过</div>
+              </div>
+          </div>
         </div>
         <!-- 历史记录 -->
         <div class="nowResume" v-show="nowCheck==1">
@@ -302,6 +320,10 @@ import {
     resumeId: {
       type: String,
       default: ''
+    },
+    isbtnstatus: {
+      type: Boolean,
+      default: false
     },
     /* 是否需要左右切换，如传入数组，则显示左右箭头，否则只显示当前简历 */
     itemList: {
@@ -354,6 +376,9 @@ export default class resumePopup extends Vue {
   }
   testingAdmin (admin) {
     this.isSales = !/(3|4)/.test(admin)
+  }
+  confirnResume (data, num) {
+    this.$emit('handlerResume', data, num)
   }
   /* 初始化简历状态 */
   initResume () {

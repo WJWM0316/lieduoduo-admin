@@ -459,6 +459,48 @@
           }
         }
       }
+      .auditButton{
+        position: absolute;
+        bottom: 0;
+        width: 300px;
+        height: 100px;
+        background: #000;
+        opacity: 0.8;
+        left: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: translate(-50%,-50%);
+        .btn-status{
+          background: red;
+          width: 160px;
+          height: 40px;
+          border-radius: 4px;
+          text-align: center;
+          line-height: 40px;
+          color: #fff;
+          cursor: pointer;
+        }
+        .tip{
+          color: #fff;
+          margin-bottom: 13px;
+        }
+        .status{
+          background: #00c4cd;
+          width: 120px;
+          height: 40px;
+          border-radius: 4px;
+          text-align: center;
+          line-height: 40px;
+          color: #fff;
+          float: left;
+          cursor: pointer;
+        }
+        .marleft{
+          margin-right: 20px;
+          background: red;
+        }
+      }
 
       .intention {
         text-align: left;
