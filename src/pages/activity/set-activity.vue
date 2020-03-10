@@ -6,8 +6,8 @@
       <el-form-item prop="title" label="活动名称">
         <el-input v-model="baseForm.title" placeholder="请输入活动名称"  />
       </el-form-item>
-      <el-form-item prop="vkey" label="活动译文">
-        <el-input :disabled="isEdit" v-model="baseForm.vkey" placeholder="请填写活动英文/拼音译文及活动渠道码，用于生成链接及数据统计"  />
+      <el-form-item label="活动译文">
+        <el-input v-model="baseForm.translation" placeholder="请填写活动英文/拼音译文"  />
       </el-form-item>
       <el-form-item prop="device" label="端口">
         <el-checkbox-group v-model="baseForm.device">
@@ -31,9 +31,12 @@
           end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
-      <el-form-item prop="mini_url" label="小程序链接">
-        <el-input :disabled="isEdit"  placeholder="请输入" v-model="baseForm.mini_url">
+      <el-form-item prop="wap_url" label="小程序链接">
+        <el-input placeholder="请输入渠道码" v-model="baseForm.mini_sourceType">
           <template slot="prepend">{{baseLink.mini}}</template>
+        </el-input>
+        <el-input placeholder="请输入H5链接" v-model="baseForm.wap_url">
+          <template slot="prepend">&p=</template>
         </el-input>
         <el-popover
           placement="top"
@@ -46,7 +49,7 @@
         </el-popover>
       </el-form-item>
       <el-form-item prop="web_url" label="网页链接">
-        <el-input :disabled="isEdit" placeholder="请输入" v-model="baseForm.web_url">
+        <el-input placeholder="请输入" v-model="baseForm.web_url">
           <template slot="prepend">{{baseLink.web}}</template>
         </el-input>
       </el-form-item>
@@ -95,15 +98,16 @@ export default {
       params: { aid: null, vkey: '' },
       baseLink: {
         web: 'https://www.lieduoduo.com/',
-        mini: 'page/common/pages/webView/webView?p='
+        mini: 'page/common/pages/webView/webView?sourceType='
       },
       baseForm: {
         title: '', // 活动名称
-        vkey: '', // 译文
+        translation: '', // 译文
         device: [], // 端口
         client: [], // 用户端
         time: [],
-        mini_url: '',
+        mini_sourceType: 'shr', // 小程序渠道统计
+        wap_url: '',
         web_url: '',
         intro: ''
       },
@@ -116,7 +120,7 @@ export default {
       },
       baseFormRules: {
         title: [{ required: true, message: '请填写活动名称', trigger: 'blur' }],
-        vkey: [{ required: true, message: '请填写活动译文', trigger: 'blur' }],
+        translation: [{ required: true, message: '请填写活动译文', trigger: 'blur' }],
         device: [{ required: true, type: 'array', message: '请选择设备端', trigger: 'change' }],
         client: [{ required: true, type: 'array', message: '请选择用户端', trigger: 'change' }],
         time: [{ required: true, type: 'array', message: '请选择活动时间段', trigger: 'change' }],
@@ -125,9 +129,17 @@ export default {
       }
     }
   },
+  watch: {
+    'baseForm.translation' :function(val,oldval){
+      this.baseForm['web_url'] = val
+    }
+  },
   computed: {
     isEdit () {
       return this.$route.name === 'activity_edit'
+    },
+    mini_url () {
+      return `${this.baseLink.mini}${this.baseForm.mini_sourceType}&p=${encodeURIComponent(this.baseForm.wap_url)}`
     }
   },
   created () {
@@ -144,7 +156,7 @@ export default {
       this.$refs.baseForm.validate(valid => {
         if (valid) {
           let form = { pc: 2, app: 2, mini_program: 2, b: 2, c: 2 }
-          const { title, vkey, device, client, time, mini_url, web_url, intro } = this.baseForm
+          const { title, translation, device, client, time, web_url, intro } = this.baseForm
           const { img, mini_img, mini_share_txt } = this.shareForm
           if (img) form.img = img
           if (mini_img) form.mini_url = mini_img
@@ -158,8 +170,8 @@ export default {
               id: this.params.aid,
               ...form,
               title,
-              vkey,
-              mini_url: this.baseLink.mini + encodeURIComponent(mini_url),
+              translation,
+              mini_url: this.mini_url,
               web_url: this.baseLink.web + web_url,
               intro,
               mini_share_txt
@@ -173,8 +185,8 @@ export default {
             addActivity({
               ...form,
               title,
-              vkey,
-              mini_url: this.baseLink.mini + encodeURIComponent(mini_url),
+              translation,
+              mini_url: this.mini_url,
               web_url: this.baseLink.web + web_url,
               intro,
               mini_share_txt
@@ -196,11 +208,11 @@ export default {
         const client = [activityData.b === 1 && 'b', activityData.c === 1 && 'c'].filter(val => val)
         Object.assign(this.baseForm, {
           title: activityData.title, // 活动名称
-          vkey: activityData.vkey, // 译文
+          translation: activityData.translation, // 译文
           device: device, // 端口
           client: client, // 用户端
           time: [activityData.startTime, activityData.endTime],
-          mini_url: decodeURIComponent(activityData.miniUrl.replace(this.baseLink.mini, '')),
+          wap_url: decodeURIComponent(activityData.miniUrl.split("&")[1].replace('p=', "")),
           web_url: activityData.webUrl.replace(this.baseLink.web, ''),
           intro: activityData.intro
         })
@@ -214,12 +226,11 @@ export default {
       })
     },
     handleShowQrCode () {
-      if (!this.baseForm.mini_url) {
-        this.$message.warning('请输入正确的参数')
+      if (!this.baseForm.wap_url) {
+        this.$message.warning('请输入H5链接')
         return
       }
-      if (this.showQrcode) return
-      getActivityQrcode({ path: 'page/common/pages/webView/webView', params: `p=${encodeURIComponent(this.baseForm.mini_url)}` }).then(({ data }) => {
+      getActivityQrcode({ path: 'page/common/pages/webView/webView', params: this.mini_url.split('?')[1] }).then(({ data }) => {
         if (data.httpStatus === 200) {
           this.qrCodeImage = data.data.url
         }
