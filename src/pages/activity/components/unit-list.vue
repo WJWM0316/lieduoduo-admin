@@ -112,6 +112,7 @@ export default {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           inputPattern: /^[0-9]+$/,
+          inputValue: this.item.sort || '',
           inputErrorMessage: '格式不正确, 请输入数字'
         }).then(({ value }) => {
           setUnitTabDetails({ id, sort: value }).then(({ data }) => {
