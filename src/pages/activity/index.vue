@@ -171,6 +171,7 @@ export default {
     },
     handleSearch (value, type) {
       if (type !== 'page') this.params.page = 1
+      this.params[type] = value
       this.getPageList()
     },
     handleReset () {

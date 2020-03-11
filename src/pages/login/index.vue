@@ -53,10 +53,9 @@ export default {
       loginApi(this.loginForm).then(res => {
         const userinfo = res.data.data || {}
         // 保存userinfo 到vuex
-        this.$store.dispatch('update_userinfo', { userinfo }).then(() => {
-          this.$router.push({
-            name: 'index'
-          })
+        this.$store.dispatch('update_userinfo', { userinfo })
+        this.$router.push({
+          name: 'index'
         })
       })
         .catch(err => {

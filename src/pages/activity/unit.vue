@@ -22,6 +22,20 @@
           </el-table-column>
         </el-table>
       </template>
+      <template slot="pageList">
+        <div class="list-footer">
+          <el-pagination
+            layout="prev, pager, next, slot"
+            :total="total"
+            :page-size="params.count"
+            prev-text="上一页"
+            next-text="下一页"
+            :current-page="Number(params.page)"
+            @current-change="(val) => handleSearch(val, 'page')">
+            <span class="total">共{{ Math.ceil(total/20) }}页, {{total}}条记录</span>
+          </el-pagination>
+        </div>
+      </template>
   </layout-content>
   <set-unit
     :aid="params.zt_id"
@@ -43,9 +57,14 @@ export default {
       setUnitDialogStatus: false,
       currentUnit: {},
       isAdd: true,
-      params: { zt_id: null },
+      params: {
+        zt_id: null,
+        page: 1,
+        count: 10
+      },
       lists: [],
-      AdminShow: ''
+      AdminShow: '',
+      total: 0
     }
   },
   created () {
@@ -59,6 +78,7 @@ export default {
       getUnitList(this.params).then(({ data }) => {
         this.getLoading = false
         this.lists = data.data || []
+        this.total = data.meta.total
       }).catch(() => {
         this.getLoading = false
       })
@@ -81,6 +101,11 @@ export default {
       this.isAdd = type === 'add'
       if (value) this.currentUnit = value
       this.setUnitDialogStatus = true
+    },
+    handleSearch (value, type) {
+      if (type !== 'page') this.params.page = 1
+      this.params[type] = value
+      this.getUnits()
     }
   }
 }
