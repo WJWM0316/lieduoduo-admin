@@ -5,7 +5,7 @@ import router from '@/router/index'
 // const Version=107;
 import { getAccessToken, removeAccessToken } from './cacheService'
 let loadingInstance = null
-
+let messagequeue = {} // 错误消息管理
 // 开发状态
 export const API_ROOT = process.env.VUE_APP_API
 
@@ -67,16 +67,15 @@ export const request = ({
       // Message.error(`啊，好像出错了，数据跑到银河系外面去了。`)
       if (globalTips) {
         // 相同提示不重复提示
-        let message = err.response.data.msg || err.response.data.message
-        if (!window.messagequeue[message]) {
-          window.messagequeue[message] = 1
+        let msg = err.data.msg || err.data.message
+        if (!messagequeue[msg]) {
+          messagequeue[msg] = 1
           Message({
             type: 'error',
             message: (err.data && err.data.msg) || '请求失败',
             onClose: () => {
               // 移除队列
-              window.messagequeue[message] = 0
-              delete window.messagequeue[message]
+              delete messagequeue[msg]
             }
           })
         }

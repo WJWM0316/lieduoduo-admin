@@ -59,7 +59,6 @@ export default {
         })
       })
         .catch(err => {
-          console(err)
         // this.$message.error(`用户账号或密码错误`);
         })
     },
