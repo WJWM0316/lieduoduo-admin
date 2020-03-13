@@ -156,3 +156,10 @@ export const setUnitPositions = data => request({
   type: 'post',
   data
 })
+
+// 删除栏目tab详情职位
+export const setDeleteUnitPositions = data => request({
+  url: `/zt/category/type/position/delete/${data.id}`,
+  type: 'delete',
+  data
+})

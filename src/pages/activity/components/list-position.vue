@@ -24,7 +24,7 @@
   </el-dialog>
 </template>
 <script>
-import { getUnitPositions, setUnitPositions } from 'API/activity'
+import { getUnitPositions, setUnitPositions, setDeleteUnitPositions } from 'API/activity'
 export default {
   props: {
     visible: Boolean,
@@ -68,9 +68,10 @@ export default {
       this.lists.forEach(val => {
         if (row.id !== val.id) strIds.push(val.id)
       })
-      setUnitPositions({
-        id: this.current.id,
-        position_id: strIds.join(',')
+      setDeleteUnitPositions({
+        id: row.id
+        // id: this.current.id,
+        // position_id: strIds.join(',')
       }).then(({ data }) => {
         this.$message.success('移除成功！')
         this.lists.splice(index, 1)
