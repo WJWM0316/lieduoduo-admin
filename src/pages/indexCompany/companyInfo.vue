@@ -45,6 +45,10 @@
           <span>{{companyInfo.companyShortname}}</span>
         </el-form-item>
 
+        <el-form-item label="公司类型" prop="company_shortname">
+          <span>{{companyInfo.type === 1 ? '普通公司' : '猎头公司'}}</span>
+        </el-form-item>
+
         <el-form-item label="所属行业" prop="industry_id">
           <span>{{companyInfo.industry}}</span>
         </el-form-item>
