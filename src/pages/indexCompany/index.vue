@@ -199,6 +199,13 @@
                 <el-option :label="industryItem.name" :value="industryItem.labelId" v-for="(industryItem, industryIndex)  in industryFieldlists" :key="industryIndex"></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label-width="90px" label="公司类型">
+              <el-select v-model="form.companyType" placeholder="全部">
+                <el-option label="全部" value=''></el-option>
+                <el-option label="普通公司" value='1'></el-option>
+                <el-option label="猎头公司" value='2'></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item class="btn">
               <el-button type="primary" @click="onSubmit">查询</el-button>
               <el-button @click.stop="resetForm('form')">重置</el-button>
@@ -281,6 +288,15 @@
             <div v-else-if="props.scope.column.property === 'jobOffers'">
               <p>{{props.scope.row.recruiterNum + '个面试官'}}</p>
               <p>{{props.scope.row.positionNum + '个上线职位'}}</p>
+            </div>
+            <!-- 公司类型 -->
+            <div
+              class="btn-container"
+              v-else-if="props.scope.column.property === 'status' || props.scope.column.property === 'companyType'"
+            >
+              <div>
+                <span>{{ props.scope.row.typeDesc }}</span>
+              </div>
             </div>
             <!--认证状态-->
             <div
@@ -380,7 +396,8 @@ export default class indexPage extends Vue {
     companyId: '',
     mobile: '',
     content: '',
-    industry_id: ''
+    industry_id: '',
+    companyType: ''
   };
   rightList = []; // 权益列表
   salerLis = []; // 销售人员列表
@@ -399,6 +416,11 @@ export default class indexPage extends Vue {
       label: '申请信息',
       width: 350
       //    align: 'left'
+    },
+    {
+      prop: 'companyType',
+      label: '公司类型',
+      width: 100
     },
     {
       prop: 'address',
@@ -451,8 +473,8 @@ export default class indexPage extends Vue {
   companyCustomerLevelRange = []
   advisorUserList = []
   industryFieldlists = []
-  getFieldLists() {
-    fieldApi().then(({data}) => this.industryFieldlists = data.data)
+  getFieldLists () {
+    fieldApi().then(({ data }) => this.industryFieldlists = data.data)
   }
   changeSearchMethods (e) {
     this.form.content = ''
@@ -504,7 +526,8 @@ export default class indexPage extends Vue {
     this.form[this.form.searchType] = this.form.content
     let params = {
       page: this.form.page,
-      count: this.form.count
+      count: this.form.count,
+      type: this.form.companyType
     }
     if (this.form.wherefrom) {
       params = Object.assign(params, { wherefrom: this.form.wherefrom })
@@ -552,8 +575,8 @@ export default class indexPage extends Vue {
         params = Object.assign(params, { exportStart: this.form.exportStart, exportEnd: this.form.exportEnd })
       }
     }
-    if(this.form.industry_id) {
-      params = Object.assign(params, {industry_id: this.form.industry_id})
+    if (this.form.industry_id) {
+      params = Object.assign(params, { industry_id: this.form.industry_id })
     }
     // if(this.form.exportStart && this.form.exportEnd) {
     //   params = Object.assign(params, {exportStart: this.form.exportStart, exportEnd: this.form.exportEnd})
@@ -566,10 +589,10 @@ export default class indexPage extends Vue {
         params = Object.assign(params, { firstAreaId: this.form.firstAreaId, area_id: this.form.area_id })
       }
     }
-    if(this.form.high_quality) {
+    if (this.form.high_quality) {
       params = Object.assign(params, { high_quality: this.form.high_quality })
     }
-    if(this.form.online_position) {
+    if (this.form.online_position) {
       params = Object.assign(params, { online_position: this.form.online_position })
     }
     this.getLoading = true
@@ -741,7 +764,7 @@ export default class indexPage extends Vue {
           url += `&firstAreaId=${this.form.firstAreaId}&area_id=${this.form.area_id}`
         }
       }
-      if(this.form.industry_id) {
+      if (this.form.industry_id) {
         url += `&industry_id=${this.form.industry_id}`
       }
       this.canDownloadData = false

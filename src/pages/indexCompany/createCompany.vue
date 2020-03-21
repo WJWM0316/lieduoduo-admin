@@ -68,6 +68,13 @@
           ></el-input>
         </el-form-item>
 
+        <el-form-item label="公司类型">
+          <el-select style="width: 400px;" v-model="companyInfo.type" placeholder="请选择公司类型">
+            <el-option label="普通公司" value="1"></el-option>
+            <el-option label="猎头公司" value="2"></el-option>
+          </el-select>
+        </el-form-item>
+
         <el-form-item label="所属行业" prop="industry_id">
           <el-select
             style="width: 400px;"
@@ -477,7 +484,8 @@ export default class createCompany extends Vue {
     adminName: '',
     one_sentence_intro: '',
     images: '',
-    product: []
+    product: [],
+    type: '1'
   };
   dialogImageUrl = ''
   dialogVisible = false
@@ -618,31 +626,31 @@ export default class createCompany extends Vue {
 
         if (this.isEdit) {
           let params = this.companyInfo
-          if(this.commonList) {
+          if (this.commonList) {
             let images = this.commonList.map(field => field.id).join(',')
             params = Object.assign(params, { images })
           }
           // 编辑正式库
           if (id) {
             delete this.companyInfo.adminUid
-            if(!params.logo) {
+            if (!params.logo) {
               this.$message({ message: '必须上传logo图片', type: 'warning' })
               return
             }
-            if(!params.intro) {
+            if (!params.intro) {
               this.$message({ message: '必须填写公司简介', type: 'warning' })
               return
             }
             await editCompanyApi(id, params)
-            this.$message({message: '编辑成功', type: 'success'})
+            this.$message({ message: '编辑成功', type: 'success' })
           } else {
             /* 编辑审核库 */
             delete this.companyInfo.admin_uid
-            if(!params.logo) {
+            if (!params.logo) {
               this.$message({ message: '必须上传logo图片', type: 'warning' })
               return
             }
-            if(!params.intro) {
+            if (!params.intro) {
               this.$message({ message: '必须填写公司简介', type: 'warning' })
               return
             }
@@ -668,6 +676,7 @@ export default class createCompany extends Vue {
     })
   }
   mounted () {
+    console.log(this.companyInfo.type)
     this.AdminShow = +sessionStorage.getItem('AdminShow')
     this.getAdvisorUserList()
     if (this.$route.query.isCreated) {
@@ -828,7 +837,8 @@ export default class createCompany extends Vue {
       advisorName: newCompanyInfo.advisorName === '无' ? '' : newCompanyInfo.advisorName,
       advisorGroupId: newCompanyInfo.advisorGroupId,
       one_sentence_intro: newCompanyInfo.oneSentenceIntro,
-      product: productList
+      product: productList,
+      type: newCompanyInfo.type.toString()
     }
     this.temProductList = [].concat(productList)
     this.commonList = newCompanyInfo.albumInfo || []
